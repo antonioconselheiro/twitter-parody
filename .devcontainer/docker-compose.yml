@@ -16,6 +16,9 @@ services:
       context: ../.
       dockerfile: ./.devcontainer/Dockerfile
     working_dir: /twitter-parody
+    ports:
+      - "9229:9229"
+      - "4200:4200"
     volumes:
       - ..:/twitter-parody:cached
       - node_modules_vol:/twitter-parody/node_modules
