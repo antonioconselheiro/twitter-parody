@@ -1,0 +1,23 @@
+{
+  "name": "Existing Docker Compose (Extend)",
+  "dockerComposeFile": [
+    "docker-compose.yml"
+  ],
+  "service": "twitter-parody-dev",
+	"workspaceFolder": "/twitter-parody",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"AbubakerSiddique.palmy",
+				"Angular.ng-template",
+				"ms-vscode.vscode-typescript-next",
+				"dbaeumer.vscode-eslint",
+				"eamodio.gitlens",
+				"ms-azuretools.vscode-docker",
+				"jgclark.vscode-todo-highlight",
+				"naumovs.color-highlight",
+				"SimonSiefke.svg-preview"
+			]
+		}
+	}
+}

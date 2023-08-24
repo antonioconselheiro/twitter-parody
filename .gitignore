@@ -7,9 +7,14 @@
 /bazel-out
 
 # Node
-/node_modules
+**/node_modules
+**/dist
 npm-debug.log
 yarn-error.log
+
+# Git
+**/.ssh
+**/.gitconfig
 
 # IDEs and editors
 .idea/
