@@ -8,6 +8,9 @@ import { NetworkComponent } from './network.component';
   ],
   imports: [
     CommonModule
+  ],
+  exports: [
+    NetworkComponent
   ]
 })
 export class NetworkModule { }

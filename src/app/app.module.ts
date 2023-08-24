@@ -7,6 +7,7 @@ import { MessagesModule } from './messages/messages.module';
 import { NetworkModule } from './network/network.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { TimelineModule } from './timeline/timeline.module';
+import { ExploreModule } from './explore/explore.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { TimelineModule } from './timeline/timeline.module';
     NotificationsModule,
     BookmarksModule,
     NetworkModule,
-    MessagesModule
+    MessagesModule,
+    ExploreModule
   ],
   bootstrap: [
     AppComponent
