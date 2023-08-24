@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-bookmarks',
+  selector: 'tw-bookmarks',
   templateUrl: './bookmarks.component.html',
   styleUrls: ['./bookmarks.component.scss']
 })

@@ -8,6 +8,7 @@ import { NetworkModule } from './network/network.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { TimelineModule } from './timeline/timeline.module';
 import { ExploreModule } from './explore/explore.module';
+import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,10 @@ import { ExploreModule } from './explore/explore.module';
     BookmarksModule,
     NetworkModule,
     MessagesModule,
-    ExploreModule
+    ExploreModule,
+
+    //  shared
+    MenuSidebarModule
   ],
   bootstrap: [
     AppComponent

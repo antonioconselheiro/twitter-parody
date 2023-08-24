@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-menu-sidebar',
+  selector: 'tw-menu-sidebar',
   templateUrl: './menu-sidebar.component.html',
   styleUrls: ['./menu-sidebar.component.scss']
 })
