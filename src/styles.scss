@@ -1,3 +1,8 @@
+:host {
+  --mobile: 768px;
+  --small-desktop: 1200px;
+}
+
 // themes
 @import url(styles/themes/dark.scss);
 @import url(styles/themes/light.scss);
@@ -8,3 +13,4 @@
 
 // components
 @import url(styles/components/button.scss);
+

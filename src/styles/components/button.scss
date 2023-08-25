@@ -6,9 +6,10 @@ button {
   display: block;
   cursor: pointer;
   font-weight: bold;
+  font-size: 19px;
 
   &.primary {
     background-color: var(--primary);
-    color: var(--contrast)
+    color: var(--contrast);
   }
 }
