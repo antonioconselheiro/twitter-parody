@@ -133,6 +133,7 @@ button.tweet {
   cursor: pointer;
   user-select: none;
   margin: .5rem;
+  min-width: 72px;
 
   &:hover, &:focus {
     background-color: var(--baseHover);
@@ -172,6 +173,7 @@ button.tweet {
   }
 
   .ellipsis {
+    display: var(--menusidebar-display-labels);
     background: var(--contrast);
     mask-image: url('/assets/profile/ellipsis.svg');
     min-width: 19px;
