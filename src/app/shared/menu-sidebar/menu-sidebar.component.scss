@@ -3,9 +3,12 @@
   --menusidebar-display-labels: none;
   --menusidebar-display-tweet-button-icon: block;
 
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   font-size: 20px;
   max-width: var(--menusidebar-width);
+  height: 100%;
 
   @media screen and (min-width: 1200px) {
     --menusidebar-width: 275px;
@@ -43,10 +46,10 @@ ul {
     border-radius: 45px;
     display: inline-flex;
     align-items: center;
+    cursor: pointer;
 
     &:hover {
-      cursor: pointer;
-      background-color: rgba(231, 233,234, 0.1);
+      background-color: var(--baseHover);      
     }
 
     span {
@@ -114,10 +117,67 @@ button.tweet {
 
   > div.tweet {
     display: var(--menusidebar-display-tweet-button-icon);
+    background: var(--primary-text);
     mask-image: url('/assets/sidemenu/tweet.svg');
   }
 
   > span {
     display: var(--menusidebar-display-labels);
+  }
+}
+
+.profile-menu {
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  margin: .5rem;
+
+  &:hover, &:focus {
+    background-color: var(--baseHover);
+  }
+
+  &:active {
+    background-color: var(--baseActive);
+  }
+
+  .picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 1rem;
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    white-space: nowrap;
+    font-size: 15px;
+    flex: 1 1 0px;
+    overflow: hidden;
+
+    > span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-name {
+      font-weight: bold;
+    }
+
+    .user-nip5 {
+      color: var(--lowContrast);
+    }
+  }
+
+  .ellipsis {
+    background: var(--contrast);
+    mask-image: url('/assets/profile/ellipsis.svg');
+    min-width: 19px;
+    min-height: 19px;
+    max-width: 19px;
+    max-height: 19px;
+    margin: 0.5rem;
   }
 }

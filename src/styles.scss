@@ -4,12 +4,14 @@
 }
 
 // themes
+@import url(styles/themes/darker.scss);
 @import url(styles/themes/dark.scss);
 @import url(styles/themes/light.scss);
+
 @import url(styles/themes/blue.scss);
 
 // elements
-@import url(styles/elements/general.scss);
+@import url(styles/elements/body.scss);
 
 // components
 @import url(styles/components/button.scss);

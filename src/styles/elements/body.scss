@@ -1,7 +1,13 @@
+html,
+body,
+app-root {
+  width: 100%;
+  height: 100%;
+}
+
 body {
   font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background-color: var(--base);
   color: var(--contrast);
   margin: 0;
 }
-

@@ -10,6 +10,17 @@ button {
 
   &.primary {
     background-color: var(--primary);
-    color: var(--contrast);
+    color: var(--primary-text);
+
+    &:hover,
+    &:active,
+    &:focus {
+      outline: none;
+    }
+
+    &:hover,
+    &:active {
+      background-color: var(--primaryHover);
+    }
   }
 }

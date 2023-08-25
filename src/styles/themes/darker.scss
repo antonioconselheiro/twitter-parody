@@ -1,0 +1,8 @@
+body[theme=darker] {
+  --base: black;
+  --contrast: white;
+  --lowContrast: rgb(139, 152, 165);
+
+  --baseHover: rgba(231, 233, 234, 0.1);
+  --baseActive: rgba(231, 233, 234, 0.2);
+}
