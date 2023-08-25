@@ -1,4 +1,10 @@
-html,
-body {
-  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
+// themes
+@import url(styles/themes/dark.scss);
+@import url(styles/themes/light.scss);
+@import url(styles/themes/blue.scss);
+
+// elements
+@import url(styles/elements/general.scss);
+
+// components
+@import url(styles/components/button.scss);

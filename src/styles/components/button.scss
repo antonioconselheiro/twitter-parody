@@ -1,0 +1,14 @@
+button {
+  border-radius: 50px;
+  border: none;
+  padding: 1rem;
+  background-color: var(--base);
+  display: block;
+  cursor: pointer;
+  font-weight: bold;
+
+  &.primary {
+    background-color: var(--primary);
+    color: var(--contrast)
+  }
+}
