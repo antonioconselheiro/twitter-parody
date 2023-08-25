@@ -2,4 +2,9 @@ main {
   max-width: 1265px;
   margin: 0 auto;
   height: 100%;
+  display: flex;
+
+  .main {
+    width: 600px;
+  }
 }

@@ -30,6 +30,12 @@ const routes: Routes = [
   {
     path: 'messages',
     component: MessagesComponent
+  },
+
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full'
   }
 ];
 

@@ -1,0 +1,10 @@
+:host {
+  --communitybar-display: none;
+
+  width: 350px;
+  display: var(--communitybar-display);
+
+  @media screen and (min-width: 1015px) {
+    --communitybar-display: block;
+  }
+}
