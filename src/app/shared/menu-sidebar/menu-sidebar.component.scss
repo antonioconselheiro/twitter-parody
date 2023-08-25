@@ -1,0 +1,56 @@
+:host {
+  width: 275px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    padding: 1.5rem;
+
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(231, 233,234, 0.1);
+    }
+
+    .menuico {
+      width: 30px;
+      height: 30px;
+      background-repeat: no-repeat;
+      background-size: contain;
+      float: left;
+      color: black;
+    }
+
+    .home {
+      background-image: url('/assets/sidemenu/home.svg');
+    }
+
+    .explore {
+      background-image: url('/assets/sidemenu/explore.svg');
+    }
+
+    .notifications {
+      background-image: url('/assets/sidemenu/notifications.svg');
+    }
+
+    .messages {
+      background-image: url('/assets/sidemenu/messages.svg');
+    }
+
+    .bookmark {
+      background-image: url('/assets/sidemenu/bookmark.svg');
+    }
+
+    .profile {
+      background-image: url('/assets/sidemenu/profile.svg');
+    }
+
+    .more {
+      background-image: url('/assets/sidemenu/more.svg');
+    }
+
+  }
+}
