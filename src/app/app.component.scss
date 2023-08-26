@@ -6,5 +6,7 @@ main {
 
   .main {
     width: 600px;
+    border-left: 1px solid var(--separator);
+    border-right: 1px solid var(--separator);
   }
 }

@@ -1,1 +1,27 @@
-<p>timeline works!</p>
+<header class="separator">
+  <h1>Home</h1>
+
+  <nav class="tweet-list-menu">
+    <a class="active">
+      <span>Following</span>
+      <div class="underscore"></div>
+    </a>
+    <a>
+      <span>Global</span>
+      <div class="underscore"></div>
+    </a>
+  </nav>
+</header>
+
+<div>
+  <div class="write-tweet separator">
+    <img class="picture" src="/assets/profile/default_profile.png" />
+    <textarea placeholder="What's on your mind?" autocomplete="off" autocorrect="off"></textarea>
+  </div>
+  
+  <div role="link" class="show-more separator">
+    Show 280 posts
+  </div>
+  
+  <tw-tweet-list></tw-tweet-list>
+</div>
