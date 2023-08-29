@@ -195,6 +195,11 @@ button.tweet {
     }
   }
 
+  .user-verified {
+    position: relative;
+    top: -0.5rem;
+  }
+
   .ellipsis {
     display: var(--menusidebarDisplayLabels);
     background: var(--highContrast);
