@@ -1,0 +1,49 @@
+.read-tweet {
+  padding: .75rem;
+}
+
+.tweet-button-group {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+
+  button {
+    min-height: 17px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    
+    > div[role=img] {
+      mask-size: cover;
+      width: 17.2px;
+      min-height: 17px;
+      background-color: var(--lowContrast);
+    }
+
+    > span {
+      color: var(--lowContrast);
+      font-size: 12px;
+      margin-left: 1rem;
+    }
+
+    .reply {
+      mask-image: url('/assets/read-tweet/reply.svg');
+    }
+    
+    .retweet {
+      mask-image: url('/assets/read-tweet/retweet.svg');
+    }
+    
+    .like {
+      mask-image: url('/assets/read-tweet/like.svg');
+    }
+    
+    .view {
+      mask-image: url('/assets/read-tweet/view.svg');
+    }
+    
+    .share {
+      mask-image: url('/assets/read-tweet/share.svg');
+    }
+  }
+}

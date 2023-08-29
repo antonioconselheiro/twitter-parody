@@ -1,1 +1,25 @@
-<p>tweet-list works!</p>
+<article class="read-tweet separator" *ngFor="let tweet of tweets; trackBy: trackByTweetId">
+  <span>{{tweet.content}}</span>
+
+  <div class="tweet-button-group">
+    <button>
+      <div class="reply" role="img"></div>
+      <span>{{10_000_000 | amount}}</span>
+    </button>
+    <button>
+      <div class="retweet" role="img"></div>
+      <span>{{354545454 | amount}}</span>
+    </button>
+    <button>
+      <div class="like" role="img"></div>
+      <span>{{63_231 | amount}}</span>
+    </button>
+    <button>
+      <div class="view" role="img"></div>
+      <span>{{12353 | amount}}</span>
+    </button>
+    <button>
+      <div class="share" role="img"></div>
+    </button>
+  </div>
+</article>
