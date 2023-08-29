@@ -1,35 +1,5 @@
 <article class="read-tweet separator" *ngFor="let tweet of tweets; trackBy: trackByTweetId">
   <span>{{tweet.content}}</span>
 
-  <div class="tweet-button-group">
-    <button class="reply">
-      <div class="clickable-svg-wrapper">
-        <div role="img"></div>
-      </div>
-      <span class="amount">{{10_000_000 | amount}}</span>
-    </button>
-    <button class="retweet active">
-      <div class="clickable-svg-wrapper">
-        <div role="img"></div>
-      </div>
-      <span class="amount">{{354545454 | amount}}</span>
-    </button>
-    <button class="like active">
-      <div class="clickable-svg-wrapper">
-        <div role="img"></div>
-      </div>
-      <span class="amount">{{63_231 | amount}}</span>
-    </button>
-    <button class="view">
-      <div class="clickable-svg-wrapper">
-        <div role="img"></div>
-      </div>
-      <span class="amount">{{12353 | amount}}</span>
-    </button>
-    <button class="share">
-      <div class="clickable-svg-wrapper">
-        <div role="img"></div>
-      </div>
-    </button>
-  </div>
+  <tw-tweet-button-group></tw-tweet-button-group>
 </article>

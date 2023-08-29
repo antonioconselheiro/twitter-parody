@@ -1,0 +1,136 @@
+:host {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+
+  button {
+    min-height: 17px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    > .amount {
+      color: var(--lowContrast);
+      font-size: 12px;
+      margin-left: .5rem;
+    }
+
+    .clickable-svg-wrapper {
+      border-radius: 50%;
+      padding: .5rem;
+
+      div[role=img] {
+        mask-size: cover;
+        width: 17.2px;
+        min-height: 17px;
+        background-color: var(--lowContrast);
+      }
+
+      &:hover,
+      &:active {
+        div[role=img] {
+          background-color: var(--imgButtonDefault);
+        }
+      }
+
+      &:hover {
+        background-color: var(--imgButtonDefaultHover);
+      }
+
+      &:active {
+        background-color: var(--imgButtonDefaultActive);
+      }
+    }
+
+    &.reply {
+      div[role=img] {
+        mask-image: url('/assets/read-tweet/reply.svg');
+      }
+    }
+
+    &.retweet {
+      div[role=img] {
+        mask-image: url('/assets/read-tweet/retweet.svg');
+      }
+
+      &.active {
+        .amount {
+          color: var(--imgButtonRetweet);
+        }
+
+        div[role=img] {
+          mask-image: url('/assets/read-tweet/retweet-active.svg');
+          background-color: var(--imgButtonRetweet);
+        }
+      }
+
+      &:hover,
+      &:active {
+        div[role=img] {
+          background-color: var(--imgButtonRetweet) !important;
+        }
+      }
+
+      &:hover {
+        .clickable-svg-wrapper {
+          background-color: var(--imgButtonRetweetHover);
+        }
+      }
+  
+      &:active {
+        .clickable-svg-wrapper {
+          background-color: var(--imgButtonRetweetActive);
+        }
+      }
+    }
+
+    &.like {
+      div[role=img] {
+        mask-image: url('/assets/read-tweet/like.svg');
+      }
+
+      &.active {
+        .amount {
+          color: var(--imgButtonLike);
+        }
+
+        div[role=img] {
+          mask-image: url('/assets/read-tweet/like-active.svg');
+          background-color: var(--imgButtonLike);
+        }
+      }
+
+      &:hover,
+      &:active {
+        div[role=img] {
+          background-color: var(--imgButtonLike) !important;
+        }
+      }
+
+      &:hover {
+        .clickable-svg-wrapper {
+          background-color: var(--imgButtonLikeHover);
+        }
+      }
+
+      &:active {
+        .clickable-svg-wrapper {
+          background-color: var(--imgButtonLikeActive);
+        }
+      }
+    }
+
+    &.view {
+      div[role=img] {
+        mask-image: url('/assets/read-tweet/view.svg');
+      }
+    }
+    
+    &.share {
+      div[role=img] {
+        mask-image: url('/assets/read-tweet/share.svg');
+      }
+    }
+  }
+}
