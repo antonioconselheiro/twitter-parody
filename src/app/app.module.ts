@@ -3,13 +3,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BookmarksModule } from './bookmarks/bookmarks.module';
+import { ExploreModule } from './explore/explore.module';
 import { MessagesModule } from './messages/messages.module';
 import { NetworkModule } from './network/network.module';
 import { NotificationsModule } from './notifications/notifications.module';
-import { TimelineModule } from './timeline/timeline.module';
-import { ExploreModule } from './explore/explore.module';
+import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.module';
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
-import { CommunitySidebarModule } from './shared/community-sidebar/community-sidebar.module';
+import { TimelineModule } from './timeline/timeline.module';
 
 @NgModule({
   declarations: [
@@ -29,7 +29,7 @@ import { CommunitySidebarModule } from './shared/community-sidebar/community-sid
 
     //  shared
     MenuSidebarModule,
-    CommunitySidebarModule
+    ExploreSidebarModule
   ],
   bootstrap: [
     AppComponent

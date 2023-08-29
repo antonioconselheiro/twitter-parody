@@ -1,13 +1,15 @@
 body[theme=dark] {
   --base: rgb(21, 32, 43);
+  --lowBase: rgb(39, 51, 64);
+
   --highContrast: white;
   --contrast: rgb(231, 233, 234);
   --lowContrast: rgb(139, 152, 165);
   --lowestContrast: rgb(113, 118, 123);
-
+  
   --baseHover: rgba(247, 249, 249, 0.1);
   --baseActive: rgba(247, 249, 249, 0.2);
-
+  
   --separator: rgb(47, 51, 54);
-  --headerColor: rgba(21, 32, 43, 0.75)
+  --headerColor: rgba(21, 32, 43, 0.75);
 }

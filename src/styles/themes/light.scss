@@ -1,5 +1,7 @@
 body[theme=light] {
   --base: white;
+  --lowBase: rgb(239, 243, 244);
+
   --highContrast: black;
   --contrast: rgb(15, 20, 25);
   --lowContrast: rgb(83, 100, 113);
@@ -8,6 +10,6 @@ body[theme=light] {
   --baseHover: rgba(15, 20, 25, 0.1);
   --baseActive: rgba(15, 20, 25, 0.2);
 
-  --separator: rgb(239, 243, 244);
+  --separator: var(--lowBase);
   --headerColor: rgba(255, 255, 255, 0.85)
 }

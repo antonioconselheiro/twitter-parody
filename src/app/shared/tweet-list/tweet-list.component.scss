@@ -1,6 +1,11 @@
 .read-tweet {
   padding: .25rem;
   padding-right: .75rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--baseHover);
+  }
 
   .retweet-origin {
     color: var(--lowestContrast);
