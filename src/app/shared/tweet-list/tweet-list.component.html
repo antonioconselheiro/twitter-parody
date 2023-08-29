@@ -1,5 +1,29 @@
 <article class="read-tweet separator" *ngFor="let tweet of tweets; trackBy: trackByTweetId">
-  <span>{{tweet.content}}</span>
+  <a href="javascript:void(0)" class="retweet-origin">
+    Example has retweeted
+  </a>
 
-  <tw-tweet-button-group></tw-tweet-button-group>
+  <div class="tweet-structure">
+    <div>
+      <img class="picture" src="/assets/profile/default_profile.png" />
+    </div>
+    <div class="tweet-content">
+      <header>
+        <address class="author">
+          <span class="user-name">José Exemplo dos Santos Silva Nelson Pereira Oliveira</span>
+          <span class="user-nip5">@nelson</span>
+          <time datetime="2023-08-29T12:00:00">3h</time>
+        </address>
+
+        <button class="svg-button ellipsis">
+          <div class="svg-wrapper">
+            <div role="img"></div>
+          </div>
+        </button>
+      </header>
+
+      <span>{{tweet.content}}</span>
+      <tw-tweet-button-group></tw-tweet-button-group>
+    </div>
+  </div>
 </article>

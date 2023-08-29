@@ -1,4 +1,85 @@
 .read-tweet {
   padding: .25rem;
-}
+  padding-right: .75rem;
 
+  .retweet-origin {
+    color: var(--lowestContrast);
+    font-weight: bold;
+    font-size: 13px;
+    text-decoration: none;
+    display: inline-flex;
+    margin-left: 1.75rem;
+    margin-top: .25rem;
+    margin-bottom: .25rem;
+
+    &:before {
+      content: '';
+      margin-right: .5rem;
+      background-color: var(--lowestContrast);
+      display: inline-block;
+      width: 17px;
+      height: 17px;
+      mask-image: url('/assets/read-tweet/retweet.svg');
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .tweet-structure {
+    display: flex;
+
+    .tweet-content {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      width: 100%;
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .author {
+          font-style: normal;
+          display: flex;
+          width: 90%;
+  
+          .user-name {
+            font-weight: bold;
+            color: var(--contrast);
+            max-width: 65%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: .5rem;
+          }
+
+          .user-nip5 {
+            overflow: hidden;
+            max-width: 20%;
+            text-overflow: ellipsis;
+          }
+
+          time,
+          .user-nip5 {
+            color: var(--lowestContrast);
+          }
+  
+          time:before {
+            content: '·';
+            margin-left: .25rem;
+            margin-right: .25rem;
+          }
+        }
+
+        .ellipsis {
+          div[role=img] {
+            mask-image: url('/assets/ellipsis.svg');
+          }
+        }
+      }
+    }
+  }
+}

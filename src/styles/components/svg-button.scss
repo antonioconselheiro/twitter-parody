@@ -1,0 +1,34 @@
+button.svg-button {
+  min-height: 17px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  .svg-wrapper {
+    border-radius: 50%;
+    padding: .5rem;
+
+    div[role=img] {
+      mask-size: cover;
+      width: 17.2px;
+      min-height: 17px;
+      background-color: var(--lowContrast);
+    }
+  }
+
+  &:hover,
+  &:active {
+    div[role=img] {
+      background-color: var(--imgButtonDefault) !important;
+    }
+  }
+
+  &:hover .svg-wrapper {
+    background-color: var(--imgButtonDefaultHover);
+  }
+
+  &:active .svg-wrapper {
+    background-color: var(--imgButtonDefaultActive);
+  }
+}

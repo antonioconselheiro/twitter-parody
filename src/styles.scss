@@ -1,24 +1,25 @@
 // default colors
-@import url(styles/themes/defaults.scss);
+@import 'styles/themes/defaults';
 
 // dark/light themes
-@import url(styles/themes/darker.scss);
-@import url(styles/themes/dark.scss);
-@import url(styles/themes/light.scss);
+@import 'styles/themes/darker';
+@import 'styles/themes/dark';
+@import 'styles/themes/light';
 
 //  colored themes
-@import url(styles/themes/blue.scss);
-@import url(styles/themes/yellow.scss);
-@import url(styles/themes/magenta.scss);
-@import url(styles/themes/purple.scss);
-@import url(styles/themes/orange.scss);
-@import url(styles/themes/green.scss);
+@import 'styles/themes/blue';
+@import 'styles/themes/yellow';
+@import 'styles/themes/magenta';
+@import 'styles/themes/purple';
+@import 'styles/themes/orange';
+@import 'styles/themes/green';
 
 // elements
-@import url(styles/elements/body.scss);
-@import url(styles/elements/button.scss);
+@import 'styles/elements/body';
+@import 'styles/elements/button';
 
 // components
-@import url(styles/components/button.scss);
-@import url(styles/components/separator.scss);
-
+@import 'styles/components/button';
+@import 'styles/components/separator';
+@import 'styles/components/picture';
+@import 'styles/components/svg-button';

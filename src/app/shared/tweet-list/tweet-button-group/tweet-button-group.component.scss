@@ -3,44 +3,11 @@
   display: flex;
   justify-content: space-between;
 
-  button {
-    min-height: 17px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-
+  button.svg-button {
     > .amount {
       color: var(--lowContrast);
       font-size: 12px;
       margin-left: .5rem;
-    }
-
-    .clickable-svg-wrapper {
-      border-radius: 50%;
-      padding: .5rem;
-
-      div[role=img] {
-        mask-size: cover;
-        width: 17.2px;
-        min-height: 17px;
-        background-color: var(--lowContrast);
-      }
-
-      &:hover,
-      &:active {
-        div[role=img] {
-          background-color: var(--imgButtonDefault);
-        }
-      }
-
-      &:hover {
-        background-color: var(--imgButtonDefaultHover);
-      }
-
-      &:active {
-        background-color: var(--imgButtonDefaultActive);
-      }
     }
 
     &.reply {
@@ -73,13 +40,13 @@
       }
 
       &:hover {
-        .clickable-svg-wrapper {
+        .svg-wrapper {
           background-color: var(--imgButtonRetweetHover);
         }
       }
   
       &:active {
-        .clickable-svg-wrapper {
+        .svg-wrapper {
           background-color: var(--imgButtonRetweetActive);
         }
       }
@@ -109,13 +76,13 @@
       }
 
       &:hover {
-        .clickable-svg-wrapper {
+        .svg-wrapper {
           background-color: var(--imgButtonLikeHover);
         }
       }
 
       &:active {
-        .clickable-svg-wrapper {
+        .svg-wrapper {
           background-color: var(--imgButtonLikeActive);
         }
       }

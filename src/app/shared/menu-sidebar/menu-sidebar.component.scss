@@ -30,7 +30,7 @@ header {
   background-repeat: no-repeat;
   background-size: contain;
   float: left;
-  background: var(--contrast);
+  background: var(--highContrast);
 }
 
 ul {
@@ -180,13 +180,6 @@ button.tweet {
     background-color: var(--baseActive);
   }
 
-  .picture {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin: 1rem;
-  }
-
   .user-info {
     display: flex;
     flex-direction: column;
@@ -201,6 +194,7 @@ button.tweet {
     }
 
     .user-name {
+      color: var(--contrast);
       font-weight: bold;
     }
 
@@ -211,8 +205,8 @@ button.tweet {
 
   .ellipsis {
     display: var(--menusidebarDisplayLabels);
-    background: var(--contrast);
-    mask-image: url('/assets/profile/ellipsis.svg');
+    background: var(--highContrast);
+    mask-image: url('/assets/ellipsis.svg');
     min-width: 19px;
     min-height: 19px;
     max-width: 19px;
