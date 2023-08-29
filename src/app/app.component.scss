@@ -1,12 +1,18 @@
 main {
   max-width: 1265px;
   margin: 0 auto;
-  height: 100%;
   display: flex;
-
+  
   .main {
-    width: 600px;
+    position: relative;
+    left: var(--menusidebarWidth);
     border-left: 1px solid var(--separator);
     border-right: 1px solid var(--separator);
+    width: 600px;
+  }
+
+  tw-community-sidebar {
+    position: relative;
+    left: var(--menusidebarWidth);
   }
 }

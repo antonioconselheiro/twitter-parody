@@ -1,20 +1,11 @@
 :host {
-  --menusidebarWidth: 59px;
-  --menusidebarDisplayLabels: none;
-  --menusidebarDisplayTweetButtonIcon: block;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   font-size: 20px;
   max-width: var(--menusidebarWidth);
   height: 100%;
-
-  @media screen and (min-width: 1200px) {
-    --menusidebarWidth: 275px;
-    --menusidebarDisplayLabels: block;
-    --menusidebarDisplayTweetButtonIcon: none;
-  }
+  position: fixed;
 }
 
 header {
@@ -77,7 +68,7 @@ ul {
 
     span {
       display: var(--menusidebarDisplayLabels);
-      margin: .5rem 0 .5rem 3rem;
+      margin: .5rem 0 .5rem 1.5rem;
     }
 
     .home {
@@ -147,8 +138,9 @@ ul {
 }
 
 button.tweet {
-  margin-top: 1rem;
-  width: 90%;
+  margin: 1rem auto;
+  width: var(--menusidebarTweetButtonWidth);
+  height: 55px;
 
   > div.tweet {
     display: var(--menusidebarDisplayTweetButtonIcon);

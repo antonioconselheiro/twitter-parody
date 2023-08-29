@@ -1,0 +1,13 @@
+body {
+  --menusidebarWidth: 59px;
+  --menusidebarDisplayLabels: none;
+  --menusidebarDisplayTweetButtonIcon: block;
+  --menusidebarTweetButtonWidth: 55px;
+
+  @media screen and (min-width: 1200px) {
+    --menusidebarWidth: 275px;
+    --menusidebarDisplayLabels: block;
+    --menusidebarDisplayTweetButtonIcon: none;
+    --menusidebarTweetButtonWidth: 90%;
+  }
+}
