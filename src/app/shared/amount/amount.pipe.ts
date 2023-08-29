@@ -14,11 +14,13 @@ export class AmountPipe implements PipeTransform {
     if (value < minimalToFormat) {
       return String(value);
     } else if (value < secondFormatStyle) {
-      return String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      const valueStr = String(value)
+      return `${valueStr.substring(0, 1)}.${valueStr.substring(1)}`;
     } else if (value < thirdFormatStyle) {
       const commaBase = 10;
+      const reduceSize = 1_000;
       const mil = new Calc(value)
-        .divide(secondFormatStyle)
+        .divide(reduceSize)
         .multiply(commaBase)
         .pipe(n => Math.floor(n))
         .divide(commaBase)
@@ -28,7 +30,7 @@ export class AmountPipe implements PipeTransform {
         return `${milFormatted} mil`;
     } else {
       const commaBase = 10;
-      let mi = new Calc(value)
+      let mi = new Calc(value) 
         .divide(thirdFormatStyle)
         .multiply(commaBase)
         .pipe(n => Math.floor(n))
