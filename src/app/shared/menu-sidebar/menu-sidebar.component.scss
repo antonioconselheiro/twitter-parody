@@ -1,19 +1,19 @@
 :host {
-  --menusidebar-width: 59px;
-  --menusidebar-display-labels: none;
-  --menusidebar-display-tweet-button-icon: block;
+  --menusidebarWidth: 59px;
+  --menusidebarDisplayLabels: none;
+  --menusidebarDisplayTweetButtonIcon: block;
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   font-size: 20px;
-  max-width: var(--menusidebar-width);
+  max-width: var(--menusidebarWidth);
   height: 100%;
 
   @media screen and (min-width: 1200px) {
-    --menusidebar-width: 275px;
-    --menusidebar-display-labels: block;
-    --menusidebar-display-tweet-button-icon: none;
+    --menusidebarWidth: 275px;
+    --menusidebarDisplayLabels: block;
+    --menusidebarDisplayTweetButtonIcon: none;
   }
 }
 
@@ -56,7 +56,7 @@ ul {
 
     .has-updates {
       background-color: var(--primary);
-      color: var(--primary-text);
+      color: var(--primaryText);
       border-radius: 50%;
       float: left;
       font-size: 13px;
@@ -71,12 +71,12 @@ ul {
       &:empty {
         height: 7px;
         width: 7px;
-        left: 35px;
+        left: 33px;
       }
     }
 
     span {
-      display: var(--menusidebar-display-labels);
+      display: var(--menusidebarDisplayLabels);
       margin: .5rem 0 .5rem 3rem;
     }
 
@@ -151,13 +151,13 @@ button.tweet {
   width: 90%;
 
   > div.tweet {
-    display: var(--menusidebar-display-tweet-button-icon);
-    background: var(--primary-text);
+    display: var(--menusidebarDisplayTweetButtonIcon);
+    background: var(--primaryText);
     mask-image: url('/assets/sidemenu/tweet.svg');
   }
 
   > span {
-    display: var(--menusidebar-display-labels);
+    display: var(--menusidebarDisplayLabels);
   }
 }
 
@@ -210,7 +210,7 @@ button.tweet {
   }
 
   .ellipsis {
-    display: var(--menusidebar-display-labels);
+    display: var(--menusidebarDisplayLabels);
     background: var(--contrast);
     mask-image: url('/assets/profile/ellipsis.svg');
     min-width: 19px;

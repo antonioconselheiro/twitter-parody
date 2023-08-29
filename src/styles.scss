@@ -1,12 +1,22 @@
-// themes
+// default colors
+@import url(styles/themes/defaults.scss);
+
+// dark/light themes
 @import url(styles/themes/darker.scss);
 @import url(styles/themes/dark.scss);
 @import url(styles/themes/light.scss);
 
+//  colored themes
 @import url(styles/themes/blue.scss);
+@import url(styles/themes/yellow.scss);
+@import url(styles/themes/magenta.scss);
+@import url(styles/themes/purple.scss);
+@import url(styles/themes/orange.scss);
+@import url(styles/themes/green.scss);
 
 // elements
 @import url(styles/elements/body.scss);
+@import url(styles/elements/button.scss);
 
 // components
 @import url(styles/components/button.scss);

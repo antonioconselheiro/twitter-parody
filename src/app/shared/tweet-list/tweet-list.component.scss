@@ -1,5 +1,5 @@
 .read-tweet {
-  padding: .75rem;
+  padding: .25rem;
 }
 
 .tweet-button-group {
@@ -13,48 +13,128 @@
     display: flex;
     align-items: center;
     cursor: pointer;
-    
-    > div[role=img] {
-      mask-size: cover;
-      width: 17.2px;
-      min-height: 17px;
-      background-color: var(--lowContrast);
-    }
 
-    > span {
+    > .amount {
       color: var(--lowContrast);
       font-size: 12px;
-      margin-left: 1rem;
+      margin-left: .5rem;
     }
-  }
 
-  .reply {
-    > div[role=img] {
-      mask-image: url('/assets/read-tweet/reply.svg');
+    .clickable-svg-wrapper {
+      border-radius: 50%;
+      padding: .5rem;
+
+      div[role=img] {
+        mask-size: cover;
+        width: 17.2px;
+        min-height: 17px;
+        background-color: var(--lowContrast);
+      }
+
+      &:hover,
+      &:active {
+        div[role=img] {
+          background-color: var(--imgButtonDefault);
+        }
+      }
+
+      &:hover {
+        background-color: var(--imgButtonDefaultHover);
+      }
+
+      &:active {
+        background-color: var(--imgButtonDefaultActive);
+      }
     }
-  }
-  
-  .retweet {
-    > div[role=img] {
-      mask-image: url('/assets/read-tweet/retweet.svg');
+
+    &.reply {
+      div[role=img] {
+        mask-image: url('/assets/read-tweet/reply.svg');
+      }
     }
-  }
+
+    &.retweet {
+      div[role=img] {
+        mask-image: url('/assets/read-tweet/retweet.svg');
+      }
+
+      &.active {
+        .amount {
+          color: var(--imgButtonRetweet);
+        }
+
+        div[role=img] {
+          mask-image: url('/assets/read-tweet/retweet-active.svg');
+          background-color: var(--imgButtonRetweet);
+        }
+      }
+
+      &:hover,
+      &:active {
+        div[role=img] {
+          background-color: var(--imgButtonRetweet) !important;
+        }
+      }
+
+      &:hover {
+        .clickable-svg-wrapper {
+          background-color: var(--imgButtonRetweetHover);
+        }
+      }
   
-  .like {
-    > div[role=img] {
-      mask-image: url('/assets/read-tweet/like.svg');
+      &:active {
+        .clickable-svg-wrapper {
+          background-color: var(--imgButtonRetweetActive);
+        }
+      }
     }
-  }
-  
-  .view {
-    > div[role=img] {
-      mask-image: url('/assets/read-tweet/view.svg');
+
+    &.like {
+      div[role=img] {
+        mask-image: url('/assets/read-tweet/like.svg');
+      }
+
+      &.active {
+        .amount {
+          color: var(--imgButtonLike);
+        }
+
+        div[role=img] {
+          mask-image: url('/assets/read-tweet/like-active.svg');
+          background-color: var(--imgButtonLike);
+        }
+      }
+
+      &:hover,
+      &:active {
+        div[role=img] {
+          background-color: var(--imgButtonLike) !important;
+        }
+      }
+
+      &:hover {
+        .clickable-svg-wrapper {
+          background-color: var(--imgButtonLikeHover);
+        }
+      }
+
+      &:active {
+        .clickable-svg-wrapper {
+          background-color: var(--imgButtonLikeActive);
+        }
+      }
     }
-  }
-  
-  .share {
-    > div[role=img] {
-      mask-image: url('/assets/read-tweet/share.svg');
+
+    &.view {
+      div[role=img] {
+        mask-image: url('/assets/read-tweet/view.svg');
+      }
+    }
+    
+    &.share {
+      div[role=img] {
+        mask-image: url('/assets/read-tweet/share.svg');
+      }
     }
   }
 }

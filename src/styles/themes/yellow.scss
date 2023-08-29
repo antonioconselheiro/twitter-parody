@@ -1,0 +1,12 @@
+body[color=yellow] {
+  --primary: rgb(255, 212, 0);
+  --primaryHover: rgb(230, 191, 0);
+  --primaryActive: rgb(204, 170, 0);
+
+  --primaryClear: rgb(255, 234, 128);
+  --primaryText: white;
+
+  --imgButtonPrimary: var(--primary);
+  --imgButtonPrimaryHover: rgba(255, 212, 0, 0.1);
+  --imgButtonPrimaryActive: rgba(255, 212, 0, 0.2);
+}
