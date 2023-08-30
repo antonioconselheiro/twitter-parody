@@ -13,13 +13,13 @@ export class TweetHtmlfyService {
   safify(content: string): SafeHtml {
     content = this.stripTags(content);
     const urls = this.extractUrls(content);
-    debugger;
-    content = this.proxifyImage(content, urls);
+    const wrapper = this.proxifyImage(content, urls);
+    content = wrapper.content;
     content = this.htmlfyLink(content, urls);
     content = this.htmlfyHashtag(content);
     content = this.htmlfyParagraph(content);
 
-    return content;
+    return `${content}<figure>${wrapper.imgs.join('')}</figure>`;
   }
 
   private extractUrls(content: string): string[] {
@@ -53,20 +53,22 @@ export class TweetHtmlfyService {
     return imgLinks;
   }
 
-  private proxifyImage(content: string, links: string[]): string {
-
+  private proxifyImage(content: string, links: string[]): { content: string, imgs: string[] } {
+    const imgs: string[] = [];
     const imgLinks = this.filterImageLinksFromLinks(links);
     const isSecureOrigin = new RegExp(`^(${this.safeOrigins.join('|')})`);
     imgLinks.forEach(imgSrc => {
       const imgSrcRegex = this.regexFromLink(imgSrc);
       if (isSecureOrigin.test(imgSrc)) {
-        content = content.replace(imgSrcRegex, `<img class='tweet-img' src="${imgSrc}" />`);
+        content = content.replace(imgSrcRegex, '');
+        imgs.push(`<img src="${imgSrc}" />`);
       } else {
-        content = content.replace(imgSrcRegex, `<img class='tweet-img' src="https://imgproxy.iris.to/insecure/plain/${imgSrc}" />`);
+        content = content.replace(imgSrcRegex, '');
+        imgs.push(`<img src="https://imgproxy.iris.to/insecure/plain/${imgSrc}" />`);
       }
     });
 
-    return content;
+    return { content,imgs };
   }
 
   private htmlfyLink(content: string, links: string[]): string {
@@ -87,7 +89,7 @@ export class TweetHtmlfyService {
   }
 
   private htmlfyHashtag(content: string): string {
-    return content.replace(/(#[^ ]+)/g, "<a class='hashtag' href='#/explore?q=$1'>$1</a>");
+    return content.replace(/\b(#[^ ]+)/g, "<a class='hashtag' href='#/explore?q=$1'>$1</a>");
   }
 
   private htmlfyParagraph(content: string): string {
@@ -95,7 +97,7 @@ export class TweetHtmlfyService {
     return content
       .replace(multipleBreakLineRegex, '\n')
       .split('\n')
-      .map(p =>  `<p>${p}</p>`)
+      .map(p => `<p>${p}</p>`)
       .join('');
   }
 
