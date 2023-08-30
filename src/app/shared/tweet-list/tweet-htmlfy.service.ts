@@ -7,41 +7,78 @@ export class TweetHtmlfyService {
   private readonly safeOrigins = [
     'https://imgur.com/',
     'https://i.imgur.com/',
-    'https://imgproxy.iris.to/',
+    'https://imgproxy.iris.to/'
   ];
 
   safify(content: string): SafeHtml {
     content = this.stripTags(content);
-    content = this.proxifyImage(content);
+    const urls = this.extractUrls(content);
+    debugger;
+    content = this.proxifyImage(content, urls);
+    content = this.htmlfyLink(content, urls);
     content = this.htmlfyHashtag(content);
-    content = this.htmlfyLink(content);
+    content = this.htmlfyParagraph(content);
 
     return content;
   }
 
-  private proxifyImage(content: string): string {
-    const secureImageMatch = this.regexForSecureImage();
-    const enimagified = `<img src="$1" />`;
+  private extractUrls(content: string): string[] {
+    const getUrlsRegex = /(\bhttps?\:\/\/[^"\s]+\b)/g;
+    const matches = content.match(getUrlsRegex);
+    if (!matches || !matches.length) {
+      return [];
+    }
 
-    const otherImageMatch = /(\shttps?\:\/\/([^ ])+\.(png|jpg|jpeg|gif|svg|webp)\s)/g;
-    const enproxified = `<img src="https://imgproxy.iris.to/insecure/plain/$1" />`;
-  
-    return content.replace(
-      secureImageMatch, enimagified
-    ).replace(
-      otherImageMatch, enproxified
-    );
+    return Array.from(matches);
   }
 
-  private regexForSecureImage(): RegExp {
-    const safes = this.safeOrigins.join('|');
-    debugger;
-    return new RegExp(
-      `(\s(${safes})[^ ]+\\.(png|jpg|jpeg|gif|svg|webp)\s)|\sdata:image([^ ])+\s`, 'g'
-    );
+  //  changes array
+  private filterImageLinksFromLinks(links: string[]): string[] {
+    const isImgRegex = /\.(png|jpg|jpeg|gif|svg|webp)$/;
+    const imgsIndex: number[] = [];
+    const imgLinks = links.filter((link, index) => {
+      const is = isImgRegex.test(link);
+      if (is) {
+        imgsIndex.push(index);
+        return true;
+      }
+
+      return false;
+    });
+
+    imgLinks.forEach(imgLink => {
+      links.splice(links.indexOf(imgLink), 1);
+    });
+
+    return imgLinks;
   }
 
-  private stripTags(content: string | string): string {
+  private proxifyImage(content: string, links: string[]): string {
+
+    const imgLinks = this.filterImageLinksFromLinks(links);
+    const isSecureOrigin = new RegExp(`^(${this.safeOrigins.join('|')})`);
+    imgLinks.forEach(imgSrc => {
+      const imgSrcRegex = this.regexFromLink(imgSrc);
+      if (isSecureOrigin.test(imgSrc)) {
+        content = content.replace(imgSrcRegex, `<img class='tweet-img' src="${imgSrc}" />`);
+      } else {
+        content = content.replace(imgSrcRegex, `<img class='tweet-img' src="https://imgproxy.iris.to/insecure/plain/${imgSrc}" />`);
+      }
+    });
+
+    return content;
+  }
+
+  private htmlfyLink(content: string, links: string[]): string {
+    links.forEach(link => {
+      const linkRegex = this.regexFromLink(link);
+      content = content.replace(linkRegex, `<a class='raw-link' target="_BLANK" href="${link}">${link}</a>`);
+    });
+
+    return content;
+  }
+
+  private stripTags(content: string): string {
     return content
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
@@ -49,15 +86,20 @@ export class TweetHtmlfyService {
       .replace("'", '&#39;');
   }
 
-  private htmlfyHashtag(content: string | string): string {
-    return content.replace(/(#[^ ]+)/g, "<a href='#/explore?q=$1'>$1</a>");
+  private htmlfyHashtag(content: string): string {
+    return content.replace(/(#[^ ]+)/g, "<a class='hashtag' href='#/explore?q=$1'>$1</a>");
   }
 
-  //  run proxifyImage before 
-  private htmlfyLink(content: string | string): string {
-    const linkMath = /(\shttps?\:\/\/([^ ])+\s)/g;
-    const ahrefify = `<a target="_BLANK" href="$1">$1</a>`;
+  private htmlfyParagraph(content: string): string {
+    const multipleBreakLineRegex = /[\n\r]+/g;
+    return content
+      .replace(multipleBreakLineRegex, '\n')
+      .split('\n')
+      .map(p =>  `<p>${p}</p>`)
+      .join('');
+  }
 
-    return content.replace(linkMath, ahrefify);
+  private regexFromLink(link: string): RegExp {
+    return new RegExp(link.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
   }
 }
