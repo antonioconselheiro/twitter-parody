@@ -17,6 +17,7 @@ export class TweetHtmlfyService {
     content = wrapper.content;
     content = this.htmlfyLink(content, urls);
     content = this.htmlfyHashtag(content);
+    content = this.htmlfyMention(content);
     content = this.htmlfyParagraph(content);
 
     return `${content}<figure>${wrapper.imgs.join('')}</figure>`;
@@ -88,8 +89,12 @@ export class TweetHtmlfyService {
       .replace("'", '&#39;');
   }
 
+  private htmlfyMention(content: string): string {
+    return content.replace(/nostr:npub(\w+)/g, "<a class='mention' href='/npub$1'>npub$1</a>");
+  }
+
   private htmlfyHashtag(content: string): string {
-    return content.replace(/\b(#[^ ]+)/g, "<a class='hashtag' href='#/explore?q=$1'>$1</a>");
+    return content.replace(/#(\w+)/g, "<a class='hashtag' href='#/explore?q=$1'>$1</a>");
   }
 
   private htmlfyParagraph(content: string): string {
@@ -97,6 +102,7 @@ export class TweetHtmlfyService {
     return content
       .replace(multipleBreakLineRegex, '\n')
       .split('\n')
+      .filter(has => !!has.trim())
       .map(p => `<p>${p}</p>`)
       .join('');
   }
