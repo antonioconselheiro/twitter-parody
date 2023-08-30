@@ -23,7 +23,7 @@
         </button>
       </header>
 
-      <span>{{tweet.content}}</span>
+      <span [innerHTML]="tweet.content | tweetHtmlfy"></span>
       <tw-tweet-button-group></tw-tweet-button-group>
     </div>
   </div>
