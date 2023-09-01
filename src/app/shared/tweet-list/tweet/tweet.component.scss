@@ -1,0 +1,25 @@
+:host {
+  display: block;
+}
+
+figure {
+  margin: 0;
+  height: 255px;
+  display: flex;
+  border-radius: 15px;
+  overflow: hidden;
+  border: 1px solid var(--separator);
+  width: calc(100% - 6px);
+  margin: 0 auto;
+
+  &.focus {
+    outline: 3px solid var(--primary);
+  }
+
+  > .img-wrapper {
+    flex: 1 1 0;
+    background-position: center;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+  }
+}

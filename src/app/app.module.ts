@@ -10,6 +10,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.module';
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
 import { TimelineModule } from './timeline/timeline.module';
+import { UtilModule } from '@shared/util/util.module';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { TimelineModule } from './timeline/timeline.module';
 
     //  shared
     MenuSidebarModule,
-    ExploreSidebarModule
+    ExploreSidebarModule,
+    UtilModule
   ],
   bootstrap: [
     AppComponent

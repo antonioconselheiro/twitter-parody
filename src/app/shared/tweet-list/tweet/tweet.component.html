@@ -1,0 +1,13 @@
+<ng-container *ngIf="isFull">
+  <span [innerHTML]="fullView | tweetHtmlfy"></span>
+</ng-container>
+<ng-container *ngIf="!isFull">
+  <span [innerHTML]="smallView | tweetHtmlfy"></span>
+  <span class="showMore" *ngIf="showMoreTextButton()">Show more</span>
+</ng-container>
+
+<figure *ngIf="imgs.length">
+  <div *ngFor="let img of imgs" class="img-wrapper"
+    [style.background-image]="'url(' + (img | proxifyImage) + ')'"
+  ></div>
+</figure>

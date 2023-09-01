@@ -1,0 +1,23 @@
+.tweet-content {
+  p {
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+  }
+
+  a, .showMore {
+    color: var(--primary);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  a.raw-link {
+    max-width: 280px;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    text-overflow: ellipsis;
+  }
+}

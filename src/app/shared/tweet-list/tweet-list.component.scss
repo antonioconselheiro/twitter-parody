@@ -4,7 +4,8 @@
   cursor: pointer;
 
   &:hover {
-    background-color: var(--baseHover);
+    background-color: rgba(255, 255, 255, 0.03);
+    transition: background-color 0.3s;
   }
 
   .retweet-origin {
@@ -35,7 +36,7 @@
   .tweet-structure {
     display: flex;
 
-    .tweet-content {
+    .tweet-metadata {
       display: flex;
       flex-direction: column;
       overflow: hidden;

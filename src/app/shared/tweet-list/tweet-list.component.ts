@@ -1,4 +1,4 @@
- import { Component } from '@angular/core';
+ import { Component, ViewEncapsulation } from '@angular/core';
 import { NostrEventKind } from '@domain/nostr-event-kind';
 import { NostrUser } from '@domain/nostr-user';
 import { Event, SimplePool } from 'nostr-tools';
@@ -6,7 +6,8 @@ import { Event, SimplePool } from 'nostr-tools';
 @Component({
   selector: 'tw-tweet-list',
   templateUrl: './tweet-list.component.html',
-  styleUrls: ['./tweet-list.component.scss']
+  styleUrls: ['./tweet-list.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class TweetListComponent {
   readonly relays = [

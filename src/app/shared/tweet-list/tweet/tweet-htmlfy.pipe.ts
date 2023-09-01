@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { TweetHtmlfyService } from './tweet-htmlfy.service';
-import { SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Pipe({
   name: 'tweetHtmlfy'
@@ -8,11 +8,13 @@ import { SafeHtml } from '@angular/platform-browser';
 export class TweetHtmlfyPipe implements PipeTransform {
 
   constructor(
-    private service: TweetHtmlfyService
+    private service: TweetHtmlfyService,
+    private sanitized: DomSanitizer
   ) {}
 
   transform(value: string): SafeHtml {
-    return this.service.safify(value);
+    const secureHtml = this.service.safify(value);
+    return this.sanitized.bypassSecurityTrustHtml(secureHtml);
   }
 
 }

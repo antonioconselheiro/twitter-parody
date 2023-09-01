@@ -7,7 +7,7 @@
     <div>
       <img class="picture" src="/assets/profile/default_profile.png" />
     </div>
-    <div class="tweet-content">
+    <div class="tweet-metadata">
       <header>
         <address class="author">
           <span class="user-name">José Exemplo dos Santos Silva Nelson Pereira Oliveira</span>
@@ -23,7 +23,7 @@
         </button>
       </header>
 
-      <span [innerHTML]="tweet.content | tweetHtmlfy"></span>
+      <tw-tweet class="tweet-content" [tweet]="tweet.content"></tw-tweet>
       <tw-tweet-button-group></tw-tweet-button-group>
     </div>
   </div>
