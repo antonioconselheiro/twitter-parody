@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+textarea {
+  background-color: var(--base);
+  color: var(--highContrast);
+  width: 522px;
+  height: 70px;
+  resize: none;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  box-sizing: border-box;
+  padding: 1.25rem 0.25rem;
+}

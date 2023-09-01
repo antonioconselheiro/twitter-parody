@@ -9,13 +9,13 @@
       margin-left: .5rem;
     }
 
-    &.reply {
+    &.icon-reply {
       div[role=img] {
         mask-image: url('/assets/read-tweet/reply.svg');
       }
     }
 
-    &.retweet {
+    &.icon-retweet {
       div[role=img] {
         mask-image: url('/assets/read-tweet/retweet.svg');
       }
@@ -51,7 +51,7 @@
       }
     }
 
-    &.like {
+    &.icon-like {
       div[role=img] {
         mask-image: url('/assets/read-tweet/like.svg');
       }
@@ -87,13 +87,13 @@
       }
     }
 
-    &.view {
+    &.icon-view {
       div[role=img] {
         mask-image: url('/assets/read-tweet/view.svg');
       }
     }
     
-    &.share {
+    &.icon-share {
       div[role=img] {
         mask-image: url('/assets/read-tweet/share.svg');
       }

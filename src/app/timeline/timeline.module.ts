@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { TweetListModule } from '../shared/tweet-list/tweet-list.module';
+import { TweetModule } from '../shared/tweet/tweet.module';
 import { TimelineComponent } from './timeline.component';
 
 @NgModule({
@@ -9,7 +9,7 @@ import { TimelineComponent } from './timeline.component';
   ],
   imports: [
     CommonModule,
-    TweetListModule
+    TweetModule
   ]
 })
 export class TimelineModule { }

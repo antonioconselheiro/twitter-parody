@@ -19,6 +19,7 @@
     "@angular/platform-browser": "^16.2.0",
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
+    "@ctrl/ngx-emoji-mart": "^9.2.0",
     "calc-js": "^2.0.7",
     "nostr-tools": "^1.14.2",
     "rxjs": "~7.8.0",

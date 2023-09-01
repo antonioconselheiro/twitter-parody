@@ -16,22 +16,31 @@ button.svg-button {
       background-color: var(--lowContrast);
     }
   }
-  
-  &:hover,
-  &:active {
+
+  &:disabled {
     div[role=img] {
-      background-color: var(--imgButtonDefault) !important;
-      transition: background-color 0.3s;
+      opacity: .5;
+      cursor: default;
     }
   }
-
-  &:hover .svg-wrapper {
-    background-color: var(--imgButtonDefaultHover);
-    transition: background-color 0.3s;
-  }
-
-  &:active .svg-wrapper {
-    background-color: var(--imgButtonDefaultActive);
-    transition: background-color 0.3s;
+  
+  &:not([disabled]) {
+    &:hover,
+    &:active {
+      div[role=img] {
+        background-color: var(--imgButtonDefault) !important;
+        transition: background-color 0.3s;
+      }
+    }
+  
+    &:hover .svg-wrapper {
+      background-color: var(--imgButtonDefaultHover);
+      transition: background-color 0.3s;
+    }
+  
+    &:active .svg-wrapper {
+      background-color: var(--imgButtonDefaultActive);
+      transition: background-color 0.3s;
+    }
   }
 }

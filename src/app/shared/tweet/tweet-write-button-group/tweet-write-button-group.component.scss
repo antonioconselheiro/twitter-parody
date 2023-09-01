@@ -1,0 +1,56 @@
+:host {
+  display: flex;
+  justify-content: space-between;
+}
+
+.writing-tweet-button-tray {
+  display: flex;
+  justify-content: space-between;
+  width: 180px;
+  margin: 0 0 0.5rem 60px;
+
+  button.svg-button {
+    div[role=img] {
+      background-color: var(--primary);
+      width: 18.2px;
+      min-height: 19px;
+    }
+
+    &.icon-upload-image {
+      div[role=img] {
+        mask-image: url('/assets/write-tweet/upload-image.svg');
+      }
+    }
+
+    &.icon-gif {
+      div[role=img] {
+        mask-image: url('/assets/write-tweet/gif.svg');
+      }
+    }
+
+    &.icon-poll {
+      div[role=img] {
+        mask-image: url('/assets/write-tweet/poll.svg');
+      }
+    }
+
+    &.icon-emoticon {
+      div[role=img] {
+        mask-image: url('/assets/write-tweet/emoticon.svg');
+      }
+    }
+
+    &.icon-location {
+      div[role=img] {
+        mask-image: url('/assets/write-tweet/location.svg');
+      }
+    }
+  }
+}
+
+button.tweet {
+  margin-right: 1rem;
+  margin-bottom: 5px;
+  padding: 0.2rem 1rem;
+  font-size: 16px;
+}
