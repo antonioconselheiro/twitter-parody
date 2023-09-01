@@ -17,7 +17,7 @@
     </div>
   </button>
   
-  <button type="button" class="icon-emoticon svg-button">
+  <button (click)="toggleEmojiMart()" type="button" class="icon-emoticon svg-button">
     <div class="svg-wrapper">
       <div role="img"></div>
     </div>
@@ -31,3 +31,12 @@
 </div>  
 
 <button type="button" class="button tweet">Tweet</button>
+<emoji-mart
+  #emojiMart
+  set="twitter"
+  [class.hidden]="!emojiMartOpen"
+  class="emoji-mart"
+  (emojiSelect)="addEmoji($event)"
+  [darkMode]="isDarkMode()"
+  [emojiTooltip]="true"
+></emoji-mart>

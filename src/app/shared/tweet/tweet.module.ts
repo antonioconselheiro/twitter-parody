@@ -9,6 +9,8 @@ import { TweetHtmlfyService } from './tweet/tweet-htmlfy.service';
 import { TweetComponent } from './tweet/tweet.component';
 import { TweetWriteComponent } from './tweet-write/tweet-write.component';
 import { TweetWriteButtonGroupComponent } from './tweet-write-button-group/tweet-write-button-group.component';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { TweetWriteButtonGroupComponent } from './tweet-write-button-group/tweet
   imports: [
     CommonModule,
     AmountModule,
-    SecurityWidgetModule
+    SecurityWidgetModule,
+    PickerComponent,
+    FormsModule
   ],
   exports: [
     TweetListComponent,

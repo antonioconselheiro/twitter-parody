@@ -1,4 +1,5 @@
 :host {
+  position: relative;
   display: flex;
   justify-content: space-between;
 }
@@ -50,7 +51,20 @@
 
 button.tweet {
   margin-right: 1rem;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   padding: 0.2rem 1rem;
   font-size: 16px;
+}
+
+.emoji-mart {
+  position: absolute;
+  z-index: 200;
+  top: 3rem;
+  left: 2rem;
+  transition: .3s opacity;
+
+  &.hidden {
+    opacity: 0;
+    display: none; // FIXME: como preservar o transition mas no final dar display: none? setTimeout é a única saida? :s
+  }
 }

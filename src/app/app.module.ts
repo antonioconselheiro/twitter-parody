@@ -11,6 +11,7 @@ import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.m
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
 import { TimelineModule } from './timeline/timeline.module';
 import { UtilModule } from '@shared/util/util.module';
+import { ThemeModule } from '@shared/theme/theme.module';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { UtilModule } from '@shared/util/util.module';
     //  shared
     MenuSidebarModule,
     ExploreSidebarModule,
-    UtilModule
+    UtilModule,
+    ThemeModule
   ],
   bootstrap: [
     AppComponent
