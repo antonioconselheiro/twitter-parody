@@ -1,0 +1,52 @@
+<header>
+  <button type="button" class="icon-back svg-button">
+    <div class="svg-wrapper">
+      <div role="img"></div>
+    </div>
+  </button>
+  <div class="user-info">
+    <span class="user-name">João Cleber dos Santos Sauro</span>
+    <span class="user-nip5">@nelson</span>
+  </div>
+  <button type="button" (click)="collapsed = !collapsed" [class.icon-down]="!collapsed" [class.icon-up]="collapsed" class="svg-button">
+    <div class="svg-wrapper">
+      <div role="img"></div>
+    </div>
+  </button>
+</header>
+<ng-container *ngIf="!collapsed">
+  <section>
+    <article class="send message">
+      <!-- Conteúdo da mensagem -->
+    </article>
+    <time class="message-time" datetime="2023-09-01T14:30:00">Hoje, 14:30</time>
+  
+    <article class="received message">
+      <!-- Conteúdo da mensagem -->
+    </article>
+    <time class="message-time" datetime="2023-09-01T14:30:00">Hoje, 14:30</time>
+  </section>
+  <footer>
+    <button type="button" class="icon-upload-image svg-button">
+      <div class="svg-wrapper">
+        <div role="img"></div>
+      </div>
+    </button>
+    
+    <button type="button" class="icon-gif svg-button">
+      <div class="svg-wrapper">
+        <div role="img"></div>
+      </div>
+    </button>
+  
+    <div class="chat-input">
+      <input type="text" placeholder="Start a new message" />
+    
+      <button type="button" class="icon-emoticon svg-button">
+        <div class="svg-wrapper">
+          <div role="img"></div>
+        </div>
+      </button>
+    </div>
+  </footer>
+</ng-container>

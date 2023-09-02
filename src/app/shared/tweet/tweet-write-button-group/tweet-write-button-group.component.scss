@@ -16,36 +16,6 @@
       width: 18.2px;
       min-height: 19px;
     }
-
-    &.icon-upload-image {
-      div[role=img] {
-        mask-image: url('/assets/write-tweet/upload-image.svg');
-      }
-    }
-
-    &.icon-gif {
-      div[role=img] {
-        mask-image: url('/assets/write-tweet/gif.svg');
-      }
-    }
-
-    &.icon-poll {
-      div[role=img] {
-        mask-image: url('/assets/write-tweet/poll.svg');
-      }
-    }
-
-    &.icon-emoticon {
-      div[role=img] {
-        mask-image: url('/assets/write-tweet/emoticon.svg');
-      }
-    }
-
-    &.icon-location {
-      div[role=img] {
-        mask-image: url('/assets/write-tweet/location.svg');
-      }
-    }
   }
 }
 

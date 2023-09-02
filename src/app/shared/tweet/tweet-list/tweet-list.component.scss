@@ -53,12 +53,7 @@
           width: 90%;
   
           .user-name {
-            font-weight: bold;
-            color: var(--contrast);
             max-width: 65%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
           }
 
           .user-verified {
@@ -66,21 +61,19 @@
           }
 
           .user-nip5 {
-            overflow: hidden;
             max-width: 20%;
-            text-overflow: ellipsis;
           }
 
-          time,
-          .user-nip5 {
+          time {
             color: var(--lowestContrast);
+
+            &:before {
+              content: '·';
+              margin-left: .25rem;
+              margin-right: .25rem;
+            }
           }
   
-          time:before {
-            content: '·';
-            margin-left: .25rem;
-            margin-right: .25rem;
-          }
         }
 
         .ellipsis {

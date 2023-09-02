@@ -12,6 +12,7 @@ import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
 import { TimelineModule } from './timeline/timeline.module';
 import { UtilModule } from '@shared/util/util.module';
 import { ThemeModule } from '@shared/theme/theme.module';
+import { FloatingChatModule } from '@shared/chat/floating-chat.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ThemeModule } from '@shared/theme/theme.module';
     MenuSidebarModule,
     ExploreSidebarModule,
     UtilModule,
-    ThemeModule
+    ThemeModule,
+    FloatingChatModule
   ],
   bootstrap: [
     AppComponent
