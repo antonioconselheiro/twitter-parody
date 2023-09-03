@@ -1,0 +1,9 @@
+body {
+  //  default, mobile
+  --embededWriteTweetDisplay: none;
+
+  //  not mobile
+  @media screen and (min-width: 800px) {
+    --embededWriteTweetDisplay: block;
+  }
+}

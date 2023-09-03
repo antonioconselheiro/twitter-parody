@@ -1,0 +1,9 @@
+body {
+  //  default, mobile
+  --floatingChatDisplay: none;
+
+  //  not mobile
+  @media screen and (min-width: 800px) {
+    --floatingChatDisplay: block;
+  }
+}

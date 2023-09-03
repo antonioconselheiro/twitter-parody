@@ -1,11 +1,24 @@
 body {
-  --menusidebarWidth: 59px;
+  //  default, mobile
+  --menusidebarWidth: 0px;
+  --menusidebarDisplay: none;
   --menusidebarDisplayLabels: none;
-  --menusidebarDisplayTweetButtonIcon: block;
-  --menusidebarTweetButtonWidth: 55px;
+  --menusidebarDisplayTweetButtonIcon: none;
+  --menusidebarTweetButtonWidth: 0px;
 
+  //  intermediary
+  @media screen and (min-width: 800px) and (max-width: 1200px) {
+    --menusidebarWidth: 59px;
+    --menusidebarDisplay: flex;
+    --menusidebarDisplayLabels: none;
+    --menusidebarDisplayTweetButtonIcon: block;
+    --menusidebarTweetButtonWidth: 55px;
+  }
+
+  //  desktop
   @media screen and (min-width: 1200px) {
     --menusidebarWidth: 275px;
+    --menusidebarDisplay: flex;
     --menusidebarDisplayLabels: block;
     --menusidebarDisplayTweetButtonIcon: none;
     --menusidebarTweetButtonWidth: 90%;

@@ -1,5 +1,5 @@
 :host {
-  display: block;
+  display: var(--floatingChatDisplay);
   background-color: var(--base);
   position: fixed;
   right: 9%;

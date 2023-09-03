@@ -13,6 +13,7 @@ import { TimelineModule } from './timeline/timeline.module';
 import { UtilModule } from '@shared/util/util.module';
 import { ThemeModule } from '@shared/theme/theme.module';
 import { FloatingChatModule } from '@shared/chat/floating-chat.module';
+import { MainErrorModule } from '@shared/main-error/main-error.module';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { FloatingChatModule } from '@shared/chat/floating-chat.module';
     MenuSidebarModule,
     ExploreSidebarModule,
     UtilModule,
+    MainErrorModule,
     ThemeModule,
     FloatingChatModule
   ],

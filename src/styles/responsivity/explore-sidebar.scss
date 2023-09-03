@@ -1,0 +1,9 @@
+body {
+  //  default, mobile
+  --exploreSidebarDisplay: none;
+
+  //  not mobile
+  @media screen and (min-width: 800px) {
+    --exploreSidebarDisplay: block;
+  }
+}

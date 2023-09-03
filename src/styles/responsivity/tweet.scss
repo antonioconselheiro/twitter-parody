@@ -1,0 +1,9 @@
+body {
+  //  default, mobile
+  --mainWidth: 100%;
+
+  //  not mobile
+  @media screen and (min-width: 800px) {
+    --mainWidth: 600px;
+  }
+}

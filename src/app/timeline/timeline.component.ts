@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractEntitledComponent } from '../shared/abstract-entitled/abstract-entitled.component';
-import { SimplePool, Filter } from 'nostr-tools';
-import { NostrEventKind } from '@domain/nostr-event-kind';
-import { NostrUser } from '@domain/nostr-user';
 
 @Component({
   selector: 'tw-timeline',

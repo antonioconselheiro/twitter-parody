@@ -1,4 +1,5 @@
 :host {
+  display: var(--exploreSidebarDisplay);
   position: relative;
   left: var(--menusidebarWidth);
   margin: .25rem 2rem;

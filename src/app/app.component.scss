@@ -8,6 +8,6 @@ main {
     left: var(--menusidebarWidth);
     border-left: 1px solid var(--separator);
     border-right: 1px solid var(--separator);
-    width: 600px;
+    width: var(--mainWidth);
   }
 }

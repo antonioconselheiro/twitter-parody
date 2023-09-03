@@ -1,8 +1,8 @@
 header {
   position: fixed;
-  width: 600px;
-  background-color:  var(--headerColor);
+  background-color: var(--headerColor);
   backdrop-filter: blur(12px);
+  width: var(--mainWidth);
   z-index: 10;
 
   h1 {
@@ -44,6 +44,10 @@ header {
       }
     }
   }
+}
+
+tw-tweet-write {
+  display: var(--embededWriteTweetDisplay);
 }
 
 .header-height {
