@@ -4,6 +4,7 @@
 
   button.svg-button {
     > .amount {
+      white-space: nowrap;
       color: var(--lowContrast);
       font-size: 12px;
       margin-left: .5rem;
