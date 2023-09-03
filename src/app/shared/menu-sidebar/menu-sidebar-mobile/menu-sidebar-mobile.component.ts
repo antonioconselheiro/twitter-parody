@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostBinding, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MenuSidebarMobileObservable } from './menu-sidebar-mobile.observable';
 
@@ -14,6 +14,8 @@ export class MenuSidebarMobileComponent implements OnInit, OnDestroy {
   @HostBinding('class.active')
   showing = false;
 
+  touchStart = 0;
+
   constructor(
     private menuSidebarMobile$: MenuSidebarMobileObservable
   ) { }
@@ -24,11 +26,25 @@ export class MenuSidebarMobileComponent implements OnInit, OnDestroy {
     }));
   }
 
+  @HostListener('document:touchstart', ['$event'])
+  onTouchStart(e: TouchEvent): void {
+    this.touchStart = e.touches[0].clientX;
+  }
+  
+  @HostListener('document:touchend', ['$event'])
+  onTouchEnd(e: TouchEvent): void {
+    const touches = e.touches[0] || e.changedTouches[0];
+
+    if (touches.clientX > (this.touchStart + 200)) {
+      this.menuSidebarMobile$.open();
+    }
+  }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
   close(): void {
-    this.showing = false;
+    this.menuSidebarMobile$.close();
   }
 }

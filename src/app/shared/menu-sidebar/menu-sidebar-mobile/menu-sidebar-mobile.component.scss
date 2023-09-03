@@ -42,8 +42,8 @@
       display: block;
       float: left;
       position: absolute;
-      right: 7px;
-      top: 56px;
+      right: 10px;
+      top: 60px;
       z-index: 60;
     }
   }
@@ -57,7 +57,6 @@
     border-bottom: 1px solid var(--separator);
   }
 }
-
 
 .profile-menu {
   flex-direction: column;

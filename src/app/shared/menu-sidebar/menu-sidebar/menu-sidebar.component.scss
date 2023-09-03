@@ -24,11 +24,20 @@ button.tweet {
   > div.tweet {
     display: var(--menusidebarDisplayTweetButtonIcon);
     background: var(--primaryText);
-    mask-image: url('/assets/sidemenu/tweet.svg');
+    mask-image: url('/assets/menu-sidebar/tweet.svg');
   }
 
   > span {
     display: var(--menusidebarDisplayLabels);
+  }
+}
+
+.menu-sidebar {
+  li {
+    span {
+      display: var(--menusidebarDisplayLabels);
+      margin: .5rem 0 .5rem 1.5rem;
+    }
   }
 }
 
