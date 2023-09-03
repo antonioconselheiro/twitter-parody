@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractEntitledComponent } from '../shared/abstract-entitled/abstract-entitled.component';
+import { MenuSidebarMobileObservable } from '@shared/menu-sidebar/menu-sidebar-mobile/menu-sidebar-mobile.observable';
 
 @Component({
   selector: 'tw-timeline',
@@ -9,5 +10,13 @@ import { AbstractEntitledComponent } from '../shared/abstract-entitled/abstract-
 export class TimelineComponent extends AbstractEntitledComponent implements OnInit {
   title = 'Home';
 
+  constructor(
+    private menuSidebarMobile$: MenuSidebarMobileObservable
+  ) {
+    super();
+  }
 
+  openSideMenu() {
+    this.menuSidebarMobile$.open();
+  }
 }

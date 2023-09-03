@@ -1,66 +1,165 @@
 nav.menu-sidebar {
+
+  .menu-icon {
+    width: 27px;
+    height: 27px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    float: left;
+    background: var(--highContrast);
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+  
+    li {
+      padding: .84rem;
+      height: 2rem;
+      border-radius: 45px;
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+  
+      &:hover {
+        background-color: var(--baseHover);      
+      }
+  
+      .has-updates {
+        background-color: var(--primary);
+        color: var(--primaryText);
+        border-radius: 50%;
+        float: left;
+        font-size: 13px;
+        position: absolute;
+        top: 12px;
+        left: 25px;
+        height: 17px;
+        width: 17px;
+        text-align: center;
+        z-index: 5;
+  
+        &:empty {
+          height: 7px;
+          width: 7px;
+          left: 33px;
+        }
+      }
+  
+      span {
+        display: block;
+        margin: .5rem 0 .5rem 1.5rem;
+      }
+    }
+  }
+  
+  .profile-menu {
+    border-radius: 50px;
+    display: flex;
+    cursor: pointer;
+    user-select: none;
+    margin: .5rem;
+    min-width: 72px;
+    transition: background-color 0.3s;
+  
+    &:hover,
+    &:focus {
+      background-color: var(--baseHover);
+    }
+  
+    &:active {
+      background-color: var(--baseActive);
+    }
+  
+    .user-info {
+      flex-direction: column;
+      white-space: nowrap;
+      font-size: 15px;
+      overflow: hidden;
+      position: relative;
+  
+      > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+
   li {
     .home {
-      mask-image: url('/assets/sidemenu/home.svg');
+      mask-image: url('/assets/menu-sidebar/home.svg');
     }
     
     .explore {
-      mask-image: url('/assets/sidemenu/explore.svg');
+      mask-image: url('/assets/menu-sidebar/explore.svg');
     }
     
     .notifications {
-      mask-image: url('/assets/sidemenu/notifications.svg');
+      mask-image: url('/assets/menu-sidebar/notifications.svg');
     }
     
     .messages {
-      mask-image: url('/assets/sidemenu/messages.svg');
+      mask-image: url('/assets/menu-sidebar/messages.svg');
+    }
+
+    .lists {
+      mask-image: url('/assets/menu-sidebar/lists.svg');
     }
     
     .bookmark {
-      mask-image: url('/assets/sidemenu/bookmark.svg');
+      mask-image: url('/assets/menu-sidebar/bookmark.svg');
     }
     
     .communities {
-      mask-image: url('/assets/sidemenu/communities.svg');
+      mask-image: url('/assets/menu-sidebar/communities.svg');
     }
     
     .profile {
-      mask-image: url('/assets/sidemenu/profile.svg');
+      mask-image: url('/assets/menu-sidebar/profile.svg');
     }
     
     .more {
-      mask-image: url('/assets/sidemenu/more.svg');
+      mask-image: url('/assets/menu-sidebar/more.svg');
     }
 
     &.active {
       font-weight: bolder;
   
       .home {
-        mask-image: url('/assets/sidemenu/home-active.svg');
+        mask-image: url('/assets/menu-sidebar/home-active.svg');
       }
     
       .explore {
-        mask-image: url('/assets/sidemenu/explore-active.svg');
+        mask-image: url('/assets/menu-sidebar/explore-active.svg');
       }
     
       .notifications {
-        mask-image: url('/assets/sidemenu/notifications-active.svg');
+        mask-image: url('/assets/menu-sidebar/notifications-active.svg');
       }
     
       .messages {
-        mask-image: url('/assets/sidemenu/messages-active.svg');
+        mask-image: url('/assets/menu-sidebar/messages-active.svg');
+      }
+
+      .lists {
+        mask-image: url('/assets/menu-sidebar/lists-active.svg');
       }
     
       .bookmark {
-        mask-image: url('/assets/sidemenu/bookmark-active.svg');
+        mask-image: url('/assets/menu-sidebar/bookmark-active.svg');
       }
     
       .communities {
-        mask-image: url('/assets/sidemenu/communities-active.svg');
+        mask-image: url('/assets/menu-sidebar/communities-active.svg');
       }
     
       .profile {
-        mask-image: url('/assets/sidemenu/profile-active.svg');
+        mask-image: url('/assets/menu-sidebar/profile-active.svg');
       }
     }
   }

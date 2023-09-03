@@ -1,0 +1,11 @@
+footer.terms {
+  color: var(--lowestContrast);
+  text-align: center;
+  margin: 1rem;
+  font-size: 13px;
+  cursor: pointer;
+
+  span:hover {
+    text-decoration: underline;
+  }
+}
