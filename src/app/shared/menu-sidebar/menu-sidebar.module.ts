@@ -4,11 +4,13 @@ import { RouterModule } from '@angular/router';
 import { MenuSidebarComponent } from './menu-sidebar/menu-sidebar.component';
 import { MenuSidebarMobileComponent } from './menu-sidebar-mobile/menu-sidebar-mobile.component';
 import { MenuSidebarMobileObservable } from './menu-sidebar-mobile/menu-sidebar-mobile.observable';
+import { MobileBottomNavigationComponent } from './mobile-bottom-navigation/mobile-bottom-navigation.component';
 
 @NgModule({
   declarations: [
     MenuSidebarComponent,
-    MenuSidebarMobileComponent
+    MenuSidebarMobileComponent,
+    MobileBottomNavigationComponent
   ],
   imports: [
     CommonModule,
@@ -16,7 +18,8 @@ import { MenuSidebarMobileObservable } from './menu-sidebar-mobile/menu-sidebar-
   ],
   exports: [
     MenuSidebarComponent,
-    MenuSidebarMobileComponent
+    MenuSidebarMobileComponent,
+    MobileBottomNavigationComponent
   ],
   providers: [
     MenuSidebarMobileObservable

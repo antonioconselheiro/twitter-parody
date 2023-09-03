@@ -1,0 +1,29 @@
+:host {
+  display: var(--menusidebarMobileDisplay);
+  background-color: var(--base);
+  border-top: 1px solid var(--separator);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.menu-bottombar {
+  width: 100%;
+
+  ul {
+    justify-content: space-evenly;
+    width: 100%;
+    padding: 1rem 0;
+    box-sizing: border-box;
+
+    li {
+      position: relative;
+
+      .has-updates {
+        top: -3px;
+        left: 15px;
+      }
+    }
+  }
+}
