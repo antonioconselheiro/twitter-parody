@@ -1,18 +1,10 @@
-@import 'import-tools-settings';
-@import 'settings-local';
-
-h1 {
-  font-size: font-size(large);
-  font-weight: font-weight(bold);
-  margin-bottom: space(medium);
-}
 
 .buttons-container {
   display: flex;
   flex-direction: column;
-  margin-top: space(xlarge);
+  margin-top: 1mre;
 
   button + button {
-    margin-top: space(small);
+    margin-top: .5rem;
   }
 }

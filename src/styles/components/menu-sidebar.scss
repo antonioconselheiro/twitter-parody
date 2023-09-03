@@ -1,0 +1,63 @@
+.home {
+  mask-image: url('/assets/sidemenu/home.svg');
+}
+
+.explore {
+  mask-image: url('/assets/sidemenu/explore.svg');
+}
+
+.notifications {
+  mask-image: url('/assets/sidemenu/notifications.svg');
+}
+
+.messages {
+  mask-image: url('/assets/sidemenu/messages.svg');
+}
+
+.bookmark {
+  mask-image: url('/assets/sidemenu/bookmark.svg');
+}
+
+.communities {
+  mask-image: url('/assets/sidemenu/communities.svg');
+}
+
+.profile {
+  mask-image: url('/assets/sidemenu/profile.svg');
+}
+
+.more {
+  mask-image: url('/assets/sidemenu/more.svg');
+}
+
+&.active {
+  font-weight: bolder;
+
+  .home {
+    mask-image: url('/assets/sidemenu/home-active.svg');
+  }
+
+  .explore {
+    mask-image: url('/assets/sidemenu/explore-active.svg');
+  }
+
+  .notifications {
+    mask-image: url('/assets/sidemenu/notifications-active.svg');
+  }
+
+  .messages {
+    mask-image: url('/assets/sidemenu/messages-active.svg');
+  }
+
+  .bookmark {
+    mask-image: url('/assets/sidemenu/bookmark-active.svg');
+  }
+
+  .communities {
+    mask-image: url('/assets/sidemenu/communities-active.svg');
+  }
+
+  .profile {
+    mask-image: url('/assets/sidemenu/profile-active.svg');
+  }
+}

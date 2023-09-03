@@ -1,9 +1,8 @@
 :host {
-  display: var(--menusidebarDisplay);
+  display: block;
   flex-direction: column;
   justify-content: space-between;
   font-size: 20px;
-  max-width: var(--menusidebarWidth);
   height: 100%;
   position: fixed;
 }
@@ -73,22 +72,6 @@ ul {
   }
 }
 
-button.tweet {
-  margin: 1rem auto;
-  width: var(--menusidebarTweetButtonWidth);
-  height: 55px;
-  padding: 1rem;
-
-  > div.tweet {
-    display: var(--menusidebarDisplayTweetButtonIcon);
-    background: var(--primaryText);
-    mask-image: url('/assets/sidemenu/tweet.svg');
-  }
-
-  > span {
-    display: var(--menusidebarDisplayLabels);
-  }
-}
 
 .profile-menu {
   border-radius: 50px;

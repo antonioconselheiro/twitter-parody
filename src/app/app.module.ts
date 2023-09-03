@@ -14,6 +14,7 @@ import { UtilModule } from '@shared/util/util.module';
 import { ThemeModule } from '@shared/theme/theme.module';
 import { FloatingChatModule } from '@shared/chat/floating-chat.module';
 import { MainErrorModule } from '@shared/main-error/main-error.module';
+import { ModalModule } from '@shared/modal/modal.module';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { MainErrorModule } from '@shared/main-error/main-error.module';
     UtilModule,
     MainErrorModule,
     ThemeModule,
-    FloatingChatModule
+    FloatingChatModule,
+    ModalModule
   ],
   bootstrap: [
     AppComponent

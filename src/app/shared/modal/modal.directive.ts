@@ -26,7 +26,6 @@ export abstract class ModalDirective implements OnInit, OnDestroy {
   }
 
   checkCloseClick(event: KeyboardEvent): void {
-    // foi utilizado o 'as' para converter o elemento html em string
     const element = event.target as HTMLElement;
     const tagNameElementClose = this.tagNameElement.toUpperCase();
 
@@ -39,12 +38,6 @@ export abstract class ModalDirective implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.modalInject$.subscribe({
         next: modalMetaData => {
-          /**
-           * O modal será iniciado no próximo tick de processamento para caso haja um modal
-           * anterior a este completando seu ciclo de fechamento. Isso evita problemas quando
-           * um modal é aberto e ainda há um modal aberto, o primeeiro modal completa o ciclo
-           * de fechamento e este inicia o ciclo de abertura no proximo tick de processamento.
-           */
           setTimeout(() =>{
             this.isOpen = true;
             this.isVisible = true;
@@ -91,10 +84,6 @@ export abstract class ModalDirective implements OnInit, OnDestroy {
   closeModal(error?: unknown): void {
     const container = this.container;
     if (container) {
-      //  Este nextTick vai impedir o lançamento de ExpressionChangedAfterItHasBeenCheckedError
-      //  para situações onde o complete do modal estiver dentro do ngOnInit (por mais esquisito
-      //  que seja alguém fazer isso)
-      // eslint-disable-next-line
       setTimeout(() => {
         container.clear();
         this.isOpen = false;
