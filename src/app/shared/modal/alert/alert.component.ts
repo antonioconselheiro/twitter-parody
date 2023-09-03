@@ -32,7 +32,7 @@ export class AlertComponent extends ModalableDirective<{
     }
   }
 
-  close(): void {
+  override close(): void {
     this.response.next();
     super.close();
   }

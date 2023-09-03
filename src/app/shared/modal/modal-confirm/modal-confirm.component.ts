@@ -49,4 +49,9 @@ export class ModalConfirmComponent extends ModalableDirective<{
     this.response.next(false);
     super.close();
   }
+
+  override close(): void {
+    this.response.next(false);
+    super.close();
+  }
 }
