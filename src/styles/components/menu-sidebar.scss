@@ -57,38 +57,6 @@ nav.menu-sidebar {
       }
     }
   }
-  
-  .profile-menu {
-    border-radius: 50px;
-    display: flex;
-    cursor: pointer;
-    user-select: none;
-    margin: .5rem;
-    min-width: 72px;
-    transition: background-color 0.3s;
-  
-    &:hover,
-    &:focus {
-      background-color: var(--baseHover);
-    }
-  
-    &:active {
-      background-color: var(--baseActive);
-    }
-  
-    .user-info {
-      flex-direction: column;
-      white-space: nowrap;
-      font-size: 15px;
-      overflow: hidden;
-      position: relative;
-  
-      > span {
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-    }
-  }
 
   li {
     .home {
@@ -161,6 +129,39 @@ nav.menu-sidebar {
       .profile {
         mask-image: url('/assets/menu-sidebar/profile-active.svg');
       }
+    }
+  }
+}
+
+.menu-sidebar ~ .profile-menu,
+.menu-sidebar .profile-menu {
+  border-radius: 50px;
+  display: flex;
+  cursor: pointer;
+  user-select: none;
+  margin: .5rem;
+  min-width: 72px;
+  transition: background-color 0.3s;
+
+  &:hover,
+  &:focus {
+    background-color: var(--baseHover);
+  }
+
+  &:active {
+    background-color: var(--baseActive);
+  }
+
+  .user-info {
+    flex-direction: column;
+    white-space: nowrap;
+    font-size: 15px;
+    overflow: hidden;
+    position: relative;
+
+    > span {
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }

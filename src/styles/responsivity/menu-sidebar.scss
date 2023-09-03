@@ -2,6 +2,7 @@ body {
   //  default, mobile
   --menusidebarWidth: 0px;
   --menusidebarDisplay: none;
+  --menusidebarMobileDisplay: block;
   --menusidebarDisplayLabels: none;
   --menusidebarDisplayFlexLabels: none;
   --menusidebarDisplayTweetButtonIcon: none;
@@ -12,6 +13,7 @@ body {
   //  intermediary
   @media screen and (min-width: 800px) and (max-width: 1200px) {
     --menusidebarWidth: 59px;
+    --menusidebarMobileDisplay: none;
     --menusidebarDisplay: flex;
     --menusidebarDisplayTweetButtonIcon: block;
     --menusidebarTweetButtonWidth: 55px;
@@ -21,6 +23,7 @@ body {
   @media screen and (min-width: 1200px) {
     --menusidebarWidth: 275px;
     --menusidebarDisplay: flex;
+    --menusidebarMobileDisplay: none;
     --menusidebarDisplayLabels: block;
     --menusidebarDisplayFlexLabels: flex;
     --menusidebarDisplayTweetButtonIcon: none;

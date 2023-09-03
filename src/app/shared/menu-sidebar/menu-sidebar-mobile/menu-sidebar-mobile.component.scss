@@ -1,5 +1,5 @@
 :host {
-  display: block;
+  display: var(--menusidebarMobileDisplay);
   font-size: 20px;
   height: 100%;
   position: fixed;
