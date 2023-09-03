@@ -6,7 +6,26 @@ header {
   z-index: 10;
 
   h1 {
+    display: var(--headingDesktopDisplay);
     padding: 23px 16px;
+  }
+
+  .mobile-header {
+    display: var(--headingMobileDisplay);
+
+    .picture {
+      position: absolute;
+      float: left;
+      width: 30px;
+      height: 30px;
+      margin: 1rem;
+    }
+
+    .logo {
+      height: 25px;
+      margin: 1rem auto;
+      display: block;
+    }
   }
 
   .tweet-list-menu {

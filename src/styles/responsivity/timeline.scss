@@ -1,9 +1,13 @@
 body {
   //  default, mobile
   --embededWriteTweetDisplay: none;
+  --headingDesktopDisplay: none;
+  --headingMobileDisplay: flex;
 
   //  not mobile
   @media screen and (min-width: 800px) {
     --embededWriteTweetDisplay: block;
+    --headingDesktopDisplay: block;
+    --headingMobileDisplay: none;
   }
 }
