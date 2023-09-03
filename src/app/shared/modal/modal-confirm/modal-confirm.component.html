@@ -1,0 +1,17 @@
+<h1>{{titulo}}</h1>
+
+<p>{{mensagem}}</p>
+
+<div class="buttons-container">
+  <button
+    type="button"
+    class="button--selected qa-modal-confirm-button-ok-click"
+    (click)="onClickButtonOk()"
+  >{{buttonOk}}</button>
+
+  <button
+    type="button"
+    class="qa-modal-confirm-button-cancel-click"
+    (click)="onClickButtonCancel()"
+  >{{buttonCancel}}</button>
+</div>

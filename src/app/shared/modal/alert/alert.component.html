@@ -1,0 +1,21 @@
+<div>
+  <svg
+    width="48"
+    height="48"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <use xlink:href="./assets/images/svg-sprite-icones.svg#checked" />
+  </svg>
+</div>
+<h2>{{titulo ? titulo : mensagem}}</h2>
+<p *ngIf="titulo && mensagem">{{mensagem}}</p>
+<div class="dimmer-actions">
+  <button
+    type="button"
+    class="button--selected qa-vend-office-button-voltar-link-modal-click"
+    (click)="close()"
+  >
+    Ok
+  </button>
+</div>
