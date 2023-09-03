@@ -3,7 +3,7 @@ body {
   --exploreSidebarDisplay: none;
 
   //  not mobile
-  @media screen and (min-width: 800px) {
+  @media screen and (min-width: 1050px) {
     --exploreSidebarDisplay: block;
   }
 }

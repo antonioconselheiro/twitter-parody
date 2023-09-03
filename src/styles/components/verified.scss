@@ -2,5 +2,7 @@
   mask-image: url('/assets/profile/verified.svg');
   height: 17px;
   width: 17px;
+  min-height: 17px;
+  min-width: 17px;
   background-color: var(--imgButtonDefault);
 }

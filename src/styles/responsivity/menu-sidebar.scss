@@ -3,14 +3,16 @@ body {
   --menusidebarWidth: 0px;
   --menusidebarDisplay: none;
   --menusidebarDisplayLabels: none;
+  --menusidebarDisplayFlexLabels: none;
   --menusidebarDisplayTweetButtonIcon: none;
   --menusidebarTweetButtonWidth: 0px;
+  --menusidebarProfileMinWidth: 0px;
+  --menusidebarProfileMargin: 0 3px .75rem;
 
   //  intermediary
   @media screen and (min-width: 800px) and (max-width: 1200px) {
     --menusidebarWidth: 59px;
     --menusidebarDisplay: flex;
-    --menusidebarDisplayLabels: none;
     --menusidebarDisplayTweetButtonIcon: block;
     --menusidebarTweetButtonWidth: 55px;
   }
@@ -20,7 +22,10 @@ body {
     --menusidebarWidth: 275px;
     --menusidebarDisplay: flex;
     --menusidebarDisplayLabels: block;
+    --menusidebarDisplayFlexLabels: flex;
     --menusidebarDisplayTweetButtonIcon: none;
     --menusidebarTweetButtonWidth: 90%;
+    --menusidebarProfileMinWidth: 72px;
+    --menusidebarProfileMargin: .75rem;
   }
 }

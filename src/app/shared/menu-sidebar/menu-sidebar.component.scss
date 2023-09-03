@@ -173,12 +173,16 @@ button.tweet {
     background-color: var(--baseActive);
   }
 
+  .picture {
+    margin: var(--menusidebarProfileMargin);
+  }
+
   .user-info {
-    display: flex;
+    display: var(--menusidebarDisplayFlexLabels);
     flex-direction: column;
+    flex: 1 1 0px;
     white-space: nowrap;
     font-size: 15px;
-    flex: 1 1 0px;
     overflow: hidden;
 
     > span {
@@ -188,6 +192,7 @@ button.tweet {
   }
 
   .user-verified {
+    display: var(--menusidebarDisplayLabels);
     position: relative;
     top: -.5rem;
   }
