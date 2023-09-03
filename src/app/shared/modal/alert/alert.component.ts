@@ -22,7 +22,7 @@ export class AlertComponent extends ModalableDirective<{
   mensagem: string | null = null;
   alertType: AlertType | null = null;
 
-  onInjectData(data: { message: string, title?: string, alertType: AlertType } | null): void {
+  override onInjectData(data: { message: string, title?: string, alertType: AlertType } | null): void {
     if (data) {
       this.mensagem = data.message;
       this.alertType = data.alertType;

@@ -21,7 +21,7 @@ export class ModalConfirmComponent extends ModalableDirective<{
   buttonOk = 'Ok';
   buttonCancel = 'Cancelar';
 
-  onInjectData(data: { message: string, title?: string, buttonOk?: string, buttonCancel?: string } | null): void {
+  override onInjectData(data: { message: string, title?: string, buttonOk?: string, buttonCancel?: string } | null): void {
     if (data) {
       this.mensagem = data.message;
 

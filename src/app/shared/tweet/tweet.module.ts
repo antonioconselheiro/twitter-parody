@@ -11,6 +11,7 @@ import { TweetWriteComponent } from './tweet-write/tweet-write.component';
 import { TweetWriteButtonGroupComponent } from './tweet-write-button-group/tweet-write-button-group.component';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { FormsModule } from '@angular/forms';
+import { CompositeTweetPopoverComponent } from './composite-tweet-popover/composite-tweet-popover.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { FormsModule } from '@angular/forms';
     TweetHtmlfyPipe,
     TweetComponent,
     TweetWriteComponent,
-    TweetWriteButtonGroupComponent
+    TweetWriteButtonGroupComponent,
+    CompositeTweetPopoverComponent
   ],
   imports: [
     CommonModule,
@@ -31,7 +33,8 @@ import { FormsModule } from '@angular/forms';
   exports: [
     TweetListComponent,
     TweetWriteComponent,
-    TweetComponent
+    TweetComponent,
+    CompositeTweetPopoverComponent
   ],
   providers: [
     TweetHtmlfyService

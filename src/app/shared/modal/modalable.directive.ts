@@ -6,7 +6,7 @@ export abstract class ModalableDirective<EntryType, ReturnType> implements OnIni
 
   abstract response: Subject<ReturnType | void>;
 
-  abstract onInjectData(data: EntryType): void;
+  onInjectData?(data: EntryType): void;
 
   protected removeBodyModalClass(): void {
     document.body.classList.remove('has-menu-active');

@@ -8,12 +8,12 @@
   display: flex;
   justify-content: space-between;
   width: 180px;
-  margin: 0 0 0.5rem 60px;
+  margin: 0 0 0.5rem 10px;
 
   button.svg-button {
     div[role=img] {
       background-color: var(--primary);
-      width: 18.2px;
+      width: 20.2px;
       min-height: 19px;
     }
   }

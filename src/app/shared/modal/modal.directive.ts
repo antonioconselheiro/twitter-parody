@@ -1,6 +1,5 @@
 // eslint-disable-next-line max-len
 import { Directive, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
-import { MainErrorObservable } from '@shared/main-error/main-error.observable';
 import { Observable, Subscription } from 'rxjs';
 import { IModalMetadata } from './modal-metadata.interface';
 import { ModalableDirective } from './modalable.directive';
@@ -11,15 +10,12 @@ export abstract class ModalDirective implements OnInit, OnDestroy {
   abstract tagNameElement: string;
   abstract modalInject$: Observable<IModalMetadata<unknown, unknown>>;
 
-  isVisible = false;
   isOpen = false;
   content: ModalableDirective<unknown, unknown> | null = null;
   classes: string[] = [];
   subscriptions = new Subscription();
 
   abstract container: ViewContainerRef | null;
-
-  protected abstract error$: MainErrorObservable;
 
   ngOnInit(): void {
     this.listenModalInjection();
@@ -40,11 +36,9 @@ export abstract class ModalDirective implements OnInit, OnDestroy {
         next: modalMetaData => {
           setTimeout(() =>{
             this.isOpen = true;
-            this.isVisible = true;
             this.openModal(modalMetaData);
           })
-        },
-        error: error => this.error$.next(error)
+        }
       }));
   }
 
@@ -73,7 +67,7 @@ export abstract class ModalDirective implements OnInit, OnDestroy {
     }
 
     content.response = modalMetaData.response;
-    content.onInjectData(modalMetaData.data || null);
+    content.onInjectData && content.onInjectData(modalMetaData.data || null);
 
     modalMetaData.response.subscribe({
       error: this.closeModal.bind(this),
