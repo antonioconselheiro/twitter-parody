@@ -42,7 +42,6 @@ export class NostrUser {
     } else {
       throw new Error('Invalid argument, NostrUser expect nsec or npub string');
     }
-
   }
 
   toString(): string {

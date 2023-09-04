@@ -1,6 +1,7 @@
  import { Component, ViewEncapsulation } from '@angular/core';
 import { NostrEventKind } from '@domain/nostr-event-kind';
 import { NostrUser } from '@domain/nostr-user';
+import { ApiService } from '@shared/api-service/api.service';
 import { Event, SimplePool } from 'nostr-tools';
 
 @Component({
@@ -43,30 +44,19 @@ export class TweetListComponent {
 
   tweets: Event<NostrEventKind.Text>[] = [];
 
+  constructor(
+    private apiService: ApiService
+  ) { }
+
   ngOnInit(): void {
-    //  TODO: este código deve ser centralizado num serviço que agrupa os eventos em tweets
-    //  TODO: este código deve ser executado em um Resolve
-    const pool = new SimplePool();
-    let sub = pool.sub(
-      this.relays,
-      [
-        {
-          kinds: [NostrEventKind.Text],
-          authors: [
-            String(new NostrUser('npub1lafcm7zm35l9q06mnaqk5ykt2530ylnwm5j8xaykflppfstv6vysxg4ryf'))
-          ]
-        }
-      ]
-    );
-
-    sub.on('event', event => {
-      this.tweets.push(event);
-      console.info(event);
-    });
-
-    sub.on('eose', () => {
-      console.info(' :::::: EOSE :::::: ');
-    });
+    this.apiService.get([
+      {
+        kinds: [NostrEventKind.Text],
+        authors: [
+          String(new NostrUser('npub1lafcm7zm35l9q06mnaqk5ykt2530ylnwm5j8xaykflppfstv6vysxg4ryf'))
+        ]
+      }
+    ]).then(tweets => this.tweets = tweets);
   }
 
   trackByTweetId(i: number, tweet: Event<NostrEventKind.Text>): string {

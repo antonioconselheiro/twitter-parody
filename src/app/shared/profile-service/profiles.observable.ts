@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { IProfile } from './profile.interface';
+import { NostrUser } from '@domain/nostr-user';
 
 /**
  * O observable principal da classe emite os metadados do perfil autenticado
@@ -22,6 +23,6 @@ export class ProfilesObservable extends Subject<IProfile | null> {
   }
 
   getMetadataFromNostrPublic(npub: string): IProfile {
-    return { npub };
+    return { npub, user: new NostrUser(npub) };
   }
 }
