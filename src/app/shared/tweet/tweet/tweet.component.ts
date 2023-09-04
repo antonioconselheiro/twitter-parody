@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { UrlUtil } from '@shared/util/url.service';
-import { TweetHtmlfyService } from './tweet-htmlfy.service';
+import { TweetHtmlfyService } from '../tweet-htmlfy/tweet-htmlfy.service';
 
 @Component({
   selector: 'tw-tweet',

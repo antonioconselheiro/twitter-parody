@@ -15,6 +15,8 @@ import { BookmarksModule } from './pages/bookmarks/bookmarks.module';
 import { NetworkModule } from './pages/network/network.module';
 import { MessagesModule } from './pages/messages/messages.module';
 import { ExploreModule } from './pages/explore/explore.module';
+import { ListsModule } from './pages/lists/lists.module';
+import { ProfileModule } from './pages/profile/profile.module';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { ExploreModule } from './pages/explore/explore.module';
     NetworkModule,
     MessagesModule,
     ExploreModule,
+    ProfileModule,
+    ListsModule,
 
     //  shared
     MenuSidebarModule,

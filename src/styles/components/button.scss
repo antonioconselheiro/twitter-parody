@@ -12,4 +12,9 @@ button.button {
   &:active {
     background-color: var(--primaryHover);
   }
+
+  &.secondary {
+    background-color: var(--base);
+    border: 1px solid var(--lowestContrast);
+  }
 }
