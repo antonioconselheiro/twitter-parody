@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TimelineComponent } from './timeline/timeline.component';
-import { BookmarksComponent } from './bookmarks/bookmarks.component';
-import { NotificationsComponent } from './notifications/notifications.component';
-import { ExploreComponent } from './explore/explore.component';
-import { MessagesComponent } from './messages/messages.component';
+import { TimelineComponent } from './pages/timeline/timeline.component';
+import { BookmarksComponent } from './pages/bookmarks/bookmarks.component';
+import { NotificationsComponent } from './pages/notifications/notifications.component';
+import { MessagesComponent } from './pages/messages/messages.component';
+import { ExploreComponent } from './pages/explore/explore.component';
+import { ListsComponent } from './pages/lists/lists.component';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 const routes: Routes = [
   {
@@ -15,6 +17,16 @@ const routes: Routes = [
   {
     path: 'bookmarks',
     component: BookmarksComponent
+  },
+
+  {
+    path: 'lists',
+    component: ListsComponent
+  },
+
+  {
+    path: 'profile',
+    component: ProfileComponent
   },
 
   {
