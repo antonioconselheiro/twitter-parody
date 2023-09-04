@@ -27,11 +27,13 @@
 @import 'styles/elements/heading';
 
 // components
+@import 'styles/components/colors';
 @import 'styles/components/button';
 @import 'styles/components/separator';
-@import 'styles/components/picture';
+@import 'styles/components/profile';
 @import 'styles/components/svg-button';
 @import 'styles/components/verified';
+@import 'styles/components/header-backable';
 @import 'styles/components/side-container';
 @import 'styles/components/menu-sidebar';
 @import 'styles/components/menu-bottombar';

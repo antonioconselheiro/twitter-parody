@@ -52,74 +52,74 @@ nav.menu-bottombar {
   }
 
   li {
-    .home {
+    .icon-home {
       mask-image: url('/assets/menu-sidebar/home.svg');
     }
     
-    .explore {
+    .icon-explore {
       mask-image: url('/assets/menu-sidebar/explore.svg');
     }
     
-    .notifications {
+    .icon-notifications {
       mask-image: url('/assets/menu-sidebar/notifications.svg');
     }
     
-    .messages {
+    .icon-messages {
       mask-image: url('/assets/menu-sidebar/messages.svg');
     }
 
-    .lists {
+    .icon-lists {
       mask-image: url('/assets/menu-sidebar/lists.svg');
     }
     
-    .bookmark {
+    .icon-bookmark {
       mask-image: url('/assets/menu-sidebar/bookmark.svg');
     }
     
-    .communities {
+    .icon-communities {
       mask-image: url('/assets/menu-sidebar/communities.svg');
     }
     
-    .profile {
+    .icon-profile {
       mask-image: url('/assets/menu-sidebar/profile.svg');
     }
     
-    .more {
+    .icon-more {
       mask-image: url('/assets/menu-sidebar/more.svg');
     }
 
     &.active {
       font-weight: bolder;
   
-      .home {
+      .icon-home {
         mask-image: url('/assets/menu-sidebar/home-active.svg');
       }
     
-      .explore {
+      .icon-explore {
         mask-image: url('/assets/menu-sidebar/explore-active.svg');
       }
     
-      .notifications {
+      .icon-notifications {
         mask-image: url('/assets/menu-sidebar/notifications-active.svg');
       }
     
-      .messages {
+      .icon-messages {
         mask-image: url('/assets/menu-sidebar/messages-active.svg');
       }
 
-      .lists {
+      .icon-lists {
         mask-image: url('/assets/menu-sidebar/lists-active.svg');
       }
     
-      .bookmark {
+      .icon-bookmark {
         mask-image: url('/assets/menu-sidebar/bookmark-active.svg');
       }
     
-      .communities {
+      .icon-communities {
         mask-image: url('/assets/menu-sidebar/communities-active.svg');
       }
     
-      .profile {
+      .icon-profile {
         mask-image: url('/assets/menu-sidebar/profile-active.svg');
       }
     }

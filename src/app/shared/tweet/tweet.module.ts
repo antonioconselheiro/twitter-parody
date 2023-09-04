@@ -36,6 +36,7 @@ import { TweetImageViewerComponent } from './tweet-image-viewer/tweet-image-view
     TweetListComponent,
     TweetWriteComponent,
     TweetComponent,
+    TweetHtmlfyPipe,
     CompositeTweetPopoverComponent
   ],
   providers: [

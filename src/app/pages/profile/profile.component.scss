@@ -1,0 +1,41 @@
+header {
+  margin: 10px;
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+
+    .color-lowest-contrast {
+      font-size: 13px;
+    }
+
+    .user-verified {
+      display: block;
+      float: left;
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+    }
+  }
+}
+
+.profile-container {
+
+  img.profile {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    left: 1rem;
+    top: -4rem;
+  }
+
+  .cover {
+    height: 150px;
+
+    img {
+      max-height: 100%;
+      margin: 0 auto;
+      display: block;
+    }
+  }
+}

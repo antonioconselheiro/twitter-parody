@@ -21,7 +21,7 @@ button.tweet {
   height: 55px;
   padding: 1rem;
 
-  > div.tweet {
+  > div.icon-tweet {
     display: var(--menusidebarDisplayTweetButtonIcon);
     background: var(--primaryText);
     mask-image: url('/assets/menu-sidebar/tweet.svg');
