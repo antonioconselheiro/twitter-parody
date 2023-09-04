@@ -75,6 +75,6 @@ export class TweetHtmlfyService {
   }
 
   private regexFromLink(link: string): RegExp {
-    return new RegExp(link.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    return new RegExp(link.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')+'\/?');
   }
 }
