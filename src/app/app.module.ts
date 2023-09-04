@@ -17,6 +17,7 @@ import { MessagesModule } from './pages/messages/messages.module';
 import { ExploreModule } from './pages/explore/explore.module';
 import { ListsModule } from './pages/lists/lists.module';
 import { ProfileModule } from './pages/profile/profile.module';
+import { ProfileServiceModule } from '@shared/profile-service/profile-service.module';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { ProfileModule } from './pages/profile/profile.module';
     //  shared
     MenuSidebarModule,
     ExploreSidebarModule,
+    ProfileServiceModule,
     UtilModule,
     MainErrorModule,
     ThemeModule,

@@ -16,5 +16,10 @@ button.button {
   &.secondary {
     background-color: var(--base);
     border: 1px solid var(--lowestContrast);
+
+    &:hover,
+    &:active {
+      background-color: var(--baseHover);
+    }
   }
 }

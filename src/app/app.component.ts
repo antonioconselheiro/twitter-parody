@@ -15,7 +15,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     private theme$: ThemeObservable
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.bindThemes();

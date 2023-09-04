@@ -44,7 +44,7 @@ export class TweetHtmlfyService {
   private htmlfyLink(content: string, links: string[]): string {
     links.forEach(link => {
       const linkRegex = this.regexFromLink(link);
-      content = content.replace(linkRegex, `<a class="raw-link" target="_BLANK" title="${link}" href="${link}">${link}</a>`);
+      content = content.replace(linkRegex, `<a class="raw" target="_BLANK" title="${link}" href="${link}">${link}</a>`);
     });
 
     return content;
@@ -57,7 +57,7 @@ export class TweetHtmlfyService {
   }
 
   private htmlfyMention(content: string): string {
-    return content.replace(/nostr:npub(\w+)/g, "<a class='mention' href='/npub$1'>npub$1</a>");
+    return content.replace(/nostr:npub(\w+)/g, "<a class='mention' href='/p/npub$1'>npub$1</a>");
   }
 
   private htmlfyHashtag(content: string): string {

@@ -45,6 +45,19 @@ button.svg-button {
   }
 }
 
+.inline-icon {
+  display: inline-flex;
+  height: 20px;
+  width: 20px;
+
+  [role=img] {
+    height: 20px;
+    width: 20px;
+    background-color: var(--lowContrast);
+    display: inline-block;
+  }
+}
+
 // generic icons
 .icon-back {
   div[role=img] {
@@ -78,7 +91,19 @@ button.svg-button {
 
 .icon-location {
   div[role=img] {
-    mask-image: url('/assets/write-tweet/location.svg');
+    mask-image: url('/assets/location.svg');
+  }
+}
+
+.icon-calendar {
+  div[role=img] {
+    mask-image: url('/assets/calendar.svg');
+  }
+}
+
+.icon-link {
+  div[role=img] {
+    mask-image: url('/assets/link.svg');
   }
 }
 
