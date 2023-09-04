@@ -12,6 +12,7 @@ import { TweetWriteButtonGroupComponent } from './tweet-write-button-group/tweet
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { FormsModule } from '@angular/forms';
 import { CompositeTweetPopoverComponent } from './composite-tweet-popover/composite-tweet-popover.component';
+import { TweetImageViewerComponent } from './tweet-image-viewer/tweet-image-viewer.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { CompositeTweetPopoverComponent } from './composite-tweet-popover/compos
     TweetComponent,
     TweetWriteComponent,
     TweetWriteButtonGroupComponent,
-    CompositeTweetPopoverComponent
+    CompositeTweetPopoverComponent,
+    TweetImageViewerComponent
   ],
   imports: [
     CommonModule,
