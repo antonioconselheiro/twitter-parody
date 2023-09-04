@@ -4,7 +4,7 @@ import { ModalableDirective } from '../modalable.directive';
 import { AlertType } from './alert-type.enum';
 
 @Component({
-  selector: 'vho-alert',
+  selector: 'tw-alert',
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.scss']
 })

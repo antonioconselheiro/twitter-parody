@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { ModalableDirective } from '../modalable.directive';
 
 @Component({
-  selector: 'vho-modal-confirm',
+  selector: 'tw-modal-confirm',
   templateUrl: './modal-confirm.component.html',
   styleUrls: ['./modal-confirm.component.scss']
 })

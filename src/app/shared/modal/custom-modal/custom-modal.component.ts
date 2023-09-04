@@ -15,7 +15,18 @@ export class CustomModalComponent extends ModalDirective {
   @ViewChild('modalContainer', { read: ViewContainerRef })
   container: ViewContainerRef | null = null;
 
-  override isOpen = false; 
+  @HostBinding('style.display')
+  display = 'none';
+
+  override open(): void {
+    super.open();
+    this.display = 'block';
+  }
+
+  override close(): void {
+    super.close();
+    this.display = 'none';  
+  }
 
   @HostListener('document:keydown.escape')
   override closeModal(): void {

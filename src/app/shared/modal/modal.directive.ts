@@ -3,9 +3,11 @@ import { Directive, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { IModalMetadata } from './modal-metadata.interface';
 import { ModalableDirective } from './modalable.directive';
+import { IOpenable } from '@shared/util/openable.interface';
+import { ICloseable } from '@shared/util/closeable.interface';
 
 @Directive()
-export abstract class ModalDirective implements OnInit, OnDestroy {
+export abstract class ModalDirective implements OnInit, OnDestroy, IOpenable, ICloseable {
 
   abstract tagNameElement: string;
   abstract modalInject$: Observable<IModalMetadata<unknown, unknown>>;
@@ -35,11 +37,19 @@ export abstract class ModalDirective implements OnInit, OnDestroy {
       this.modalInject$.subscribe({
         next: modalMetaData => {
           setTimeout(() =>{
-            this.isOpen = true;
+            this.open();
             this.openModal(modalMetaData);
           })
         }
       }));
+  }
+
+  open(): void {
+    this.isOpen = true;
+  }
+
+  close(): void {
+    this.isOpen = false;
   }
 
   getClasses(classes?: string[]): string {
@@ -80,8 +90,7 @@ export abstract class ModalDirective implements OnInit, OnDestroy {
     if (container) {
       setTimeout(() => {
         container.clear();
-        this.isOpen = false;
-        document.body.classList.remove('has-menu-active');
+        this.close();
         this.content?.response.complete();
       });
     } else {

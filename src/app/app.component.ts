@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ModalBuilder } from '@shared/modal/modal.builder';
 import { ITheme } from '@shared/theme/theme.interface';
 import { ThemeObservable } from '@shared/theme/theme.observable';
 import { Subscription } from 'rxjs';
@@ -19,16 +18,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.bindCustomModal();
     this.bindThemes();
-  }
-  
-  private bindCustomModal(): void {
-    this.subscriptions.add(
-      ModalBuilder.modalInject$.subscribe({
-        next: is => this.isModalOpen = !!is
-      })
-    );
   }
 
   private bindThemes(): void {
