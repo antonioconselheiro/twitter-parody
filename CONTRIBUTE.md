@@ -2,6 +2,7 @@
 _working from individuals to individuals_
 
 ![destroy the levithan](./docs/destroy-leviathan.jpg)
+
 _against the Beast and his Antichrist_
 
 ## da rules
