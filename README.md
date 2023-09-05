@@ -22,3 +22,6 @@ There's still a lot of work to do.
 Lighting donate:
 
 Bitcoin onchain donate:
+
+## Contribute
+[CONTRIBUTE.md](./CONTRIBUTE.md)
