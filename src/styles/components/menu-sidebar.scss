@@ -15,14 +15,14 @@ nav.menu-bottombar {
     margin: 0;
     padding: 0;
     display: flex;
-  
+
     li {
 
-  
+
       &:hover {
-        background-color: var(--baseHover);      
+        background-color: var(--baseHover);
       }
-  
+
       .has-updates {
         background-color: var(--primary);
         color: var(--primaryText);
@@ -36,14 +36,14 @@ nav.menu-bottombar {
         width: 17px;
         text-align: center;
         z-index: 5;
-  
+
         &:empty {
           height: 7px;
           width: 7px;
           left: 33px;
         }
       }
-  
+
       span {
         display: block;
         margin: .5rem 0 .5rem 1.5rem;
@@ -55,15 +55,15 @@ nav.menu-bottombar {
     .icon-home {
       mask-image: url('/assets/menu-sidebar/home.svg');
     }
-    
+
     .icon-explore {
       mask-image: url('/assets/menu-sidebar/explore.svg');
     }
-    
+
     .icon-notifications {
       mask-image: url('/assets/menu-sidebar/notifications.svg');
     }
-    
+
     .icon-messages {
       mask-image: url('/assets/menu-sidebar/messages.svg');
     }
@@ -71,38 +71,38 @@ nav.menu-bottombar {
     .icon-lists {
       mask-image: url('/assets/menu-sidebar/lists.svg');
     }
-    
+
     .icon-bookmark {
       mask-image: url('/assets/menu-sidebar/bookmark.svg');
     }
-    
+
     .icon-communities {
       mask-image: url('/assets/menu-sidebar/communities.svg');
     }
-    
+
     .icon-profile {
       mask-image: url('/assets/menu-sidebar/profile.svg');
     }
-    
+
     .icon-more {
       mask-image: url('/assets/menu-sidebar/more.svg');
     }
 
     &.active {
       font-weight: bolder;
-  
+
       .icon-home {
         mask-image: url('/assets/menu-sidebar/home-active.svg');
       }
-    
+
       .icon-explore {
         mask-image: url('/assets/menu-sidebar/explore-active.svg');
       }
-    
+
       .icon-notifications {
         mask-image: url('/assets/menu-sidebar/notifications-active.svg');
       }
-    
+
       .icon-messages {
         mask-image: url('/assets/menu-sidebar/messages-active.svg');
       }
@@ -110,15 +110,15 @@ nav.menu-bottombar {
       .icon-lists {
         mask-image: url('/assets/menu-sidebar/lists-active.svg');
       }
-    
+
       .icon-bookmark {
         mask-image: url('/assets/menu-sidebar/bookmark-active.svg');
       }
-    
+
       .icon-communities {
         mask-image: url('/assets/menu-sidebar/communities-active.svg');
       }
-    
+
       .icon-profile {
         mask-image: url('/assets/menu-sidebar/profile-active.svg');
       }
@@ -143,7 +143,7 @@ nav.menu-sidebar {
   }
 }
 
-.menu-sidebar ~ .profile-menu,
+.menu-sidebar~.profile-menu,
 .menu-sidebar .profile-menu {
   border-radius: 50px;
   display: flex;
@@ -151,7 +151,7 @@ nav.menu-sidebar {
   user-select: none;
   margin: .5rem;
   min-width: 72px;
-  transition: background-color 0.3s;
+  transition: background-color .3s;
 
   &:hover,
   &:focus {
@@ -169,7 +169,7 @@ nav.menu-sidebar {
     overflow: hidden;
     position: relative;
 
-    > span {
+    >span {
       overflow: hidden;
       text-overflow: ellipsis;
     }

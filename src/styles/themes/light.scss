@@ -7,9 +7,9 @@ body[data-theme=light] {
   --lowContrast: rgb(83, 100, 113);
   --lowestContrast: var(--lowContrast);
 
-  --baseHover: rgba(15, 20, 25, 0.1);
-  --baseActive: rgba(15, 20, 25, 0.2);
+  --baseHover: rgba(15, 20, 25, .1);
+  --baseActive: rgba(15, 20, 25, .2);
 
   --separator: var(--lowBase);
-  --headerColor: rgba(255, 255, 255, 0.85)
+  --headerColor: rgba(255, 255, 255, .85);
 }

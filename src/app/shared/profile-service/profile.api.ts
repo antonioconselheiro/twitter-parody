@@ -36,6 +36,8 @@ export class ProfileApi {
 
   private castResultsetToTweets(events: Event<NostrEventKind>[]): ITweet[] {
     const tweets: { [id: string]: ITweet } = {};
+    //  FIXME: débito técnico, resolver complexidade ciclomática
+    // eslint-disable-next-line complexity
     events.forEach(event => {
       if (event.kind === NostrEventKind.Text) {
         const lazyLoaded = tweets[event.id];
@@ -73,7 +75,7 @@ export class ProfileApi {
       }
 
       if (event.kind === NostrEventKind.Reaction) {
-        const [ [x, idEvent], [y, pubkey] ] = event.tags.find(tag => tag[0] === 'e') || [];
+        const [ [, idEvent], [, pubkey] ] = event.tags.find(tag => tag[0] === 'e') || [];
 
         const reaction: IReaction = {
           author: this.profiles$.getFromPubKey(pubkey),

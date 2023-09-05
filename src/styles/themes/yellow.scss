@@ -4,9 +4,9 @@ body[data-color=yellow] {
   --primaryActive: rgb(204, 170, 0);
 
   --primaryClear: rgb(255, 234, 128);
-  --primaryText: white;
+  --primaryText: #ffffff;
 
   --imgButtonPrimary: var(--primary);
-  --imgButtonPrimaryHover: rgba(255, 212, 0, 0.1);
-  --imgButtonPrimaryActive: rgba(255, 212, 0, 0.2);
+  --imgButtonPrimaryHover: rgba(255, 212, 0, .1);
+  --imgButtonPrimaryActive: rgba(255, 212, 0, .2);
 }

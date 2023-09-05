@@ -13,7 +13,7 @@
     &:hover {
       background-color: var(--baseHover);
     }
-    
+
     .underscore {
       display: none;
       background-color: var(--primary);
@@ -27,7 +27,7 @@
     &.active {
       font-weight: bold;
 
-      > .underscore {
+      >.underscore {
         display: block;
       }
     }

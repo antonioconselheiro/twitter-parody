@@ -23,24 +23,25 @@ button.svg-button {
       cursor: default;
     }
   }
-  
+
   &:not([disabled]) {
+
     &:hover,
     &:active {
       div[role=img] {
         background-color: var(--imgButtonDefault) !important;
-        transition: background-color 0.3s;
+        transition: background-color .3s;
       }
     }
-  
+
     &:hover .svg-wrapper {
       background-color: var(--imgButtonDefaultHover);
-      transition: background-color 0.3s;
+      transition: background-color .3s;
     }
-  
+
     &:active .svg-wrapper {
       background-color: var(--imgButtonDefaultActive);
-      transition: background-color 0.3s;
+      transition: background-color .3s;
     }
   }
 }
@@ -112,4 +113,3 @@ button.svg-button {
     mask-image: url('/assets/close.svg');
   }
 }
-

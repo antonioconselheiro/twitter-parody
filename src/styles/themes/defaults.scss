@@ -1,13 +1,13 @@
 body {
   --imgButtonDefault: rgb(29, 155, 240);
-  --imgButtonDefaultHover: rgba(29, 155, 240, 0.1);
-  --imgButtonDefaultActive: rgba(29, 155, 240, 0.2);
-  
+  --imgButtonDefaultHover: rgba(29, 155, 240, .1);
+  --imgButtonDefaultActive: rgba(29, 155, 240, .2);
+
   --imgButtonRetweet: rgb(0, 186, 124);
-  --imgButtonRetweetHover: rgb(0, 186, 124, 0.1);
-  --imgButtonRetweetActive: rgb(0, 186, 124, 0.2);
+  --imgButtonRetweetHover: rgb(0, 186, 124, .1);
+  --imgButtonRetweetActive: rgb(0, 186, 124, .2);
 
   --imgButtonLike: rgb(249, 24, 128);
-  --imgButtonLikeHover: rgba(249, 24, 128, 0.1);
-  --imgButtonLikeActive: rgba(249, 24, 128, 0.2);
+  --imgButtonLikeHover: rgba(249, 24, 128, .1);
+  --imgButtonLikeActive: rgba(249, 24, 128, .2);
 }

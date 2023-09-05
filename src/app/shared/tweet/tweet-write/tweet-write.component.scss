@@ -8,11 +8,11 @@ textarea {
   width: 522px;
   height: 70px;
   resize: none;
-  border: none;
+  border: 0;
   outline: none;
   font-size: 15px;
   box-sizing: border-box;
-  padding: 1.25rem 0.25rem;
+  padding: 1.25rem .25rem;
   border-bottom: 1px solid var(--separator);
   margin-bottom: .5rem;
 }

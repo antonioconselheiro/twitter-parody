@@ -4,8 +4,8 @@
   cursor: pointer;
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.03);
-    transition: background-color 0.3s;
+    background-color: rgba(255, 255, 255, .03);
+    transition: background-color .3s;
   }
 
   .retweet-origin {
@@ -18,7 +18,7 @@
     margin-top: .25rem;
     margin-bottom: .25rem;
 
-    &:before {
+    &::before {
       content: '';
       margin-right: .5rem;
       background-color: var(--lowestContrast);
@@ -51,7 +51,7 @@
           font-style: normal;
           display: flex;
           width: 90%;
-  
+
           .user-name {
             max-width: 65%;
           }
@@ -67,13 +67,13 @@
           time {
             color: var(--lowestContrast);
 
-            &:before {
+            &::before {
               content: '·';
               margin-left: .25rem;
               margin-right: .25rem;
             }
           }
-  
+
         }
 
         .ellipsis {

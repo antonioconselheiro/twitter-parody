@@ -58,6 +58,7 @@ export class TweetWriteButtonGroupComponent implements OnInit, OnDestroy {
     //  ele fechará; o timeout está com 0 millisegundos, então está como
     //  primeiro da fila após todos os processos disparados neste tick sejam
     //  executado
+    // eslint-disable-next-line ban/ban
     setTimeout(() => this.emojiMartOpen = !this.emojiMartOpen);
   }
 

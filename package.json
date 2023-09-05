@@ -8,7 +8,13 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "lint:scss": "sass-lint -c ./.sass-lint.yml -v -q"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run lint && npm run lint:scss && npm run build"
+    }
   },
   "private": true,
   "dependencies": {

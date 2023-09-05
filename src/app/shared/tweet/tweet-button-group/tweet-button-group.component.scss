@@ -3,7 +3,7 @@
   justify-content: space-between;
 
   button.svg-button {
-    > .amount {
+    >.amount {
       white-space: nowrap;
       color: var(--lowContrast);
       font-size: 12px;
@@ -44,7 +44,7 @@
           background-color: var(--imgButtonRetweetHover);
         }
       }
-  
+
       &:active {
         .svg-wrapper {
           background-color: var(--imgButtonRetweetActive);
@@ -93,7 +93,7 @@
         mask-image: url('/assets/read-tweet/view.svg');
       }
     }
-    
+
     &.icon-share {
       div[role=img] {
         mask-image: url('/assets/read-tweet/share.svg');

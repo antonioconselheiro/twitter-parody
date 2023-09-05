@@ -3,15 +3,15 @@
   font-size: 20px;
   height: 100%;
   position: fixed;
-  top: 0px;
-  left: calc(0px - 18rem);
+  top: 0;
+  left: calc(0 - 18rem);
   background-color: var(--base);
   width: 18rem;
   z-index: 50;
   transition: .3s left;
-  
+
   &.active {
-    left: 0px;
+    left: 0;
 
     .background {
       display: block;
@@ -20,15 +20,15 @@
 }
 
 .background {
-  background-color: rgba(0,0,0,0.3);
+  background-color: rgba(0, 0, 0, .3);
   position: fixed;
   width: calc(100% - 18rem);
   display: none;
   cursor: pointer;
   height: 100%;
-  top: 0px;
-  bottom: 0px;
-  right: 0px;
+  top: 0;
+  bottom: 0;
+  right: 0;
 }
 
 .menu-sidebar {

@@ -22,7 +22,7 @@
     mask-image: url('/assets/search/search.svg');
     width: 20px;
     background-color: var(--lowContrast);
-    margin: 0.75rem;
+    margin: .75rem;
     margin-left: 1rem;
   }
 
@@ -30,7 +30,7 @@
     outline: none;
     appearance: none;
     background-color: var(--lowBase);
-    border: none;
+    border: 0;
 
     &::placeholder {
       color: var(--lowContrast);

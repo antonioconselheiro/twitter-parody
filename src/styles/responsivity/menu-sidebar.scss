@@ -1,14 +1,14 @@
 body {
   //  default, mobile
-  --menusidebarWidth: 0px;
+  --menusidebarWidth: 0;
   --menusidebarDisplay: none;
   --menusidebarMobileDisplay: block;
   --menusidebarDisplayLabels: none;
   --menusidebarDisplayFlexLabels: none;
   --menusidebarDisplayTweetButtonIcon: none;
-  --menusidebarTweetButtonWidth: 0px;
-  --menusidebarProfileMinWidth: 0px;
-  --menusidebarProfileMargin: 0.6rem;
+  --menusidebarTweetButtonWidth: 0;
+  --menusidebarProfileMinWidth: 0;
+  --menusidebarProfileMargin: .6rem;
 
   //  intermediary
   @media screen and (min-width: 800px) and (max-width: 1200px) {

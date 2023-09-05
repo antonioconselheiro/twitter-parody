@@ -36,6 +36,8 @@ export abstract class ModalDirective implements OnInit, OnDestroy, IOpenable, IC
     this.subscriptions.add(
       this.modalInject$.subscribe({
         next: modalMetaData => {
+          //  jogando processamento no próximo tick
+          // eslint-disable-next-line ban/ban
           setTimeout(() =>{
             this.open();
             this.openModal(modalMetaData);
@@ -90,6 +92,8 @@ export abstract class ModalDirective implements OnInit, OnDestroy, IOpenable, IC
   closeModal(error?: unknown): void {
     const container = this.container;
     if (container) {
+      //  jogando processamento no próximo tick
+      // eslint-disable-next-line ban/ban
       setTimeout(() => {
         container.clear();
         this.close();

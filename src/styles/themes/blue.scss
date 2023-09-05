@@ -7,6 +7,6 @@ body[data-color=blue] {
   --primaryText: white;
 
   --imgButtonPrimary: var(--primary);
-  --imgButtonPrimaryHover: rgba(29, 155, 240, 0.1);
-  --imgButtonPrimaryActive: rgba(29, 155, 240, 0.2);
+  --imgButtonPrimaryHover: rgba(29, 155, 240, .1);
+  --imgButtonPrimaryActive: rgba(29, 155, 240, .2);
 }

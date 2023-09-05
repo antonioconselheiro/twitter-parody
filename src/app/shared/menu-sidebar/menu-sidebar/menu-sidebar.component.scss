@@ -50,7 +50,7 @@ button.tweet {
 
   .user-info {
     display: var(--menusidebarDisplayFlexLabels);
-    flex: 1 1 0px;
+    flex: 1 1 0;
   }
 
   .user-verified {
@@ -67,6 +67,6 @@ button.tweet {
     min-height: 19px;
     max-width: 19px;
     max-height: 19px;
-    margin: 0.5rem;
+    margin: .5rem;
   }
 }
