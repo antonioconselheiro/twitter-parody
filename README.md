@@ -12,6 +12,9 @@ what's so funny about this parody?
 
 ![you wouldn't get it](./docs/you-wouldnt-get-it-joker.gif)
 
+## How the parody is implemented technically
+angular (scss + rxjs) + nostr-tools
+
 ## Donate
 Do you want more protests in favor of free speech, freedom of software and freedom of work similar to this one?
 

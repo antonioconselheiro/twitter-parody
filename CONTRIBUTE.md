@@ -55,7 +55,7 @@ Follow the steps:
 # Tools
 ## Devcontainer
 I do know if this work on Windows or Mac, but surely run on linux.
-If you suffer of Windows or Mac and want to contribute to the functioning of the devcontainer for these platforms, feel free to open an issue and start the task.
+If you _suffer of_ Windows or Mac and want to contribute to the functioning of the devcontainer for these platforms, feel free to open an issue and start the task.
 
 ### Para os brasileiros (pt-BR)
 Veja como o instalar docker, docker-compose e devcontainer em [meu vídeo em português](https://odysee.com/@anarcanudos:5/instalacao-do-docker-docker-compose-e-devcontainer:9)
@@ -88,8 +88,11 @@ Start the Docker containers:
 ## documentations
 and interesting technologies to master to enhance your ability to contribute:
 
-- https://www.typescriptlang.org/
+- https://www.typescriptlang.org/docs/handbook/typescript-from-scratch.html
+- https://www.typescriptlang.org/docs/handbook/intro.html
 - https://angular.io/guide/developer-guide-overview
 - https://rxjs.dev/guide/observable
 - https://docs.docker.com/get-started/
 - https://code.visualstudio.com/docs/remote/devcontainer-cli
+- https://github.com/nostr-protocol/nips
+- https://github.com/nbd-wtf/nostr-tools
