@@ -1,12 +1,18 @@
 # Contribute
+_working again't the Beast and it antichrist_
+![destroy the levithan](./docs/destroy-leviathan.jpg)
+
 ## da rules
 
 The purpose of the main repository is to maintain the as-is layout and functionality of twitter in its last version before becoming X.
- _Ba Dum Tss!_
-All new functionality that is not contemplated in the final version of twitter and that compromises its appearance and experience in some way must be included in a configurable way and disabled by default, not following this rule, your contribution becomes a hardfork of your authorship and under your governance but will not be accepted in this repository.
+
  _Ba Dum Tss!_
 
-All code should be write intechnical english, you can write commit text and comments in your native language.
+All new functionality that is not contemplated in the final version of twitter and that compromises its appearance and experience in some way must be included in a configurable way and disabled by default, not following this rule, your contribution becomes a hardfork of your authorship and under your governance but will not be accepted in this repository.
+
+ _Ba Dum Tss!_
+
+All code should be write in technical english, you can write commit text and comments in your native language.
 
 ### Small changes and Bugs
 Small changes and bugs should have a Pull Request associated with the open issue (just paste the issue link in the pull request body).

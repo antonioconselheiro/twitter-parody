@@ -4,6 +4,8 @@ Gênesis 8:11
 # Twitter (Parody)
  _don't thread on Twitter_
 
+![twitter](./src/assets/twitter.ico)
+
 ## Parody
 
 what's so funny about this parody?
