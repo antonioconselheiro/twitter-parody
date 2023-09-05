@@ -7,6 +7,7 @@ import { MessagesComponent } from './pages/messages/messages.component';
 import { ExploreComponent } from './pages/explore/explore.component';
 import { ListsComponent } from './pages/lists/lists.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { profileResolverFn, profileTweetListResolverFn } from './pages/profile/profile-tweet-list.resolve-fn';
 
 const routes: Routes = [
   {
@@ -25,8 +26,12 @@ const routes: Routes = [
   },
 
   {
-    path: 'profile',
-    component: ProfileComponent
+    path: 'p/:npub',
+    component: ProfileComponent,
+    resolve: {
+      tweets: profileTweetListResolverFn,
+      profile: profileResolverFn
+    }
   },
 
   {

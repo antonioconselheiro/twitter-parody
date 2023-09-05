@@ -2,7 +2,7 @@
   <header>
     <span class="user-verified"></span>
     <div class="profile-menu">
-      <img class="profile" src="/assets/profile/default_profile.png" />
+      <img class="profile" src="/assets/profile/default-profile.png" />
       <div class="user-info">
         <span class="user-name">José Exemplo dos Santos Silva Nelson Pereira Oliveira</span>
         <span class="user-nip5">@nelson</span>
@@ -14,7 +14,7 @@
     </div>
   </header>
   <ul>
-    <li role="link" routerLink="/profile">
+    <li role="link" routerLink="/p/{{currentProfile?.npub}}">
       <div title="Profile" class="menu-icon icon-profile"></div>
       <span>Profile</span>
     </li>

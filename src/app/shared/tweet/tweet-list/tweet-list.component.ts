@@ -2,7 +2,7 @@
 import { NostrEventKind } from '@domain/nostr-event-kind';
 import { NostrUser } from '@domain/nostr-user';
 import { ApiService } from '@shared/api-service/api.service';
-import { Event, SimplePool } from 'nostr-tools';
+import { Event } from 'nostr-tools';
 
 @Component({
   selector: 'tw-tweet-list',

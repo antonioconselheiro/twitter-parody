@@ -36,9 +36,9 @@ export class ApiService {
     'wss://nostr.milou.lol'
   ];
 
-  get(filters: Filter[]): Promise<Array<Event<number>>> {
+  get<K extends number>(filters: Filter<K>[]): Promise<Array<Event<K>>> {
     const pool = new SimplePool();
-    const events = new Array<Event<number>>();
+    const events = new Array<Event<K>>();
     let sub = pool.sub(
       this.relays, filters
     );
@@ -48,8 +48,9 @@ export class ApiService {
     
     return new Promise(resolve => {
       sub.on('eose', () => {
+        console.info(JSON.stringify(events));
         resolve(events);
-        sub.unsub();
+        //  sub.unsub(); FIXME: should unsubscribe each interaction?
       });
     });
   }

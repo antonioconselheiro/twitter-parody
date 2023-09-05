@@ -12,8 +12,8 @@ export class TweetHtmlfyPipe implements PipeTransform {
     private sanitized: DomSanitizer
   ) {}
 
-  transform(value: string): SafeHtml {
-    const secureHtml = this.service.safify(value);
+  transform(value: string | undefined): SafeHtml {
+    const secureHtml = this.service.safify(value || '');
     return this.sanitized.bypassSecurityTrustHtml(secureHtml);
   }
 

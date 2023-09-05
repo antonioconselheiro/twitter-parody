@@ -1,79 +1,81 @@
-<header class="header-backable">
-  <div>
-    <button title="back" type="button" class="icon-back svg-button">
-      <div class="svg-wrapper">
-        <div role="img"></div>
-      </div>
-    </button>
-  </div>
-  <div class="user-info">
-    <span class="user-name">
-      José Exemplo dos Santos Silva Nelson Pereira Oliveira
-      <span class="user-verified"></span>
-    </span>
-    <span class="color-lowest-contrast">13,5 mil tweets</span>
-  </div>
-</header>
-<section class="profile-container">
-  <div class="cover">
-    <img src="/assets/profile/default-cover.jpg" />
-  </div>
-  <div class="edit-profile-container">
-    <img class="profile" src="/assets/profile/default_profile.png" />
-
-    <button class="button secondary">Edit profile</button>
-  </div>
-  <div class="user-info">
-    <span class="user-name">
-      José Exemplo dos Santos Silva Nelson Pereira Oliveira
-      <span class="user-verified"></span>
-    </span>
-    <span class="user-nip5">@nelson</span>
-  </div>
-  <div class="bio" [innerHTML]="bio | tweetHtmlfy"></div>
-  <div class="additional-information">
-    <span>
-      <div class="inline-icon icon-location">
-        <div role="img"></div>
-      </div>
-      <span>belo monte 2</span>
-    </span>
-    <span>
-      <div class="inline-icon icon-link">
-        <div role="img"></div>
-      </div>
-      <a href="https://www.site.com.br/">https://www.site.com.br/</a>
-    </span>
-    <span>
-      <div class="inline-icon icon-calendar">
-        <div role="img"></div>
-      </div>
-      <span>Joined in August 2021</span>
-    </span>
-  </div>
-  <div class="follow-container">
-    <a role="button"><strong>2.324</strong><span> following</span></a>
-    <a role="button"><strong>2.324</strong><span> followers</span></a>
-  </div>
-</section>
-<nav class="list-menu separator">
-  <a class="active">
-    <span>Tweets</span>
-    <div class="underscore"></div>
-  </a>
-  <a>
-    <span>Replies</span>
-    <div></div>
-  </a>
-  <a>
-    <span>Midia</span>
-    <div></div>
-  </a>
-  <a>
-    <span>Likes</span>
-    <div></div>
-  </a>
-</nav>
-<section>
-  <tw-tweet-list></tw-tweet-list>
-</section>
+<ng-container *ngIf="profile">
+  <header class="header-backable">
+    <div>
+      <button title="back" type="button" class="icon-back svg-button">
+        <div class="svg-wrapper">
+          <div role="img"></div>
+        </div>
+      </button>
+    </div>
+    <div class="user-info">
+      <span class="user-name">
+        {{profile.name}}
+        <span class="user-verified"></span>
+      </span>
+      <span class="color-lowest-contrast">13,5 mil tweets</span>
+    </div>
+  </header>
+  <section class="profile-container">
+    <div class="banner">
+      <img [src]="profile.picture || '/assets/profile/default-banner.jpg'" />
+    </div>
+    <div class="edit-profile-container">
+      <img class="profile" [src]="profile.banner + '/assets/profile/default-profile.png'" />
+  
+      <button class="button secondary">Edit profile</button>
+    </div>
+    <div class="user-info">
+      <span class="user-name">
+        {{profile.name}}
+        <span class="user-verified"></span>
+      </span>
+      <span class="user-nip5">{{profile.nip05}}</span>
+    </div>
+    <div class="bio" [innerHTML]="profile.about | tweetHtmlfy"></div>
+    <div class="additional-information">
+      <span *ngIf="profile.location">
+        <div class="inline-icon icon-location">
+          <div role="img"></div>
+        </div>
+        <span>{{profile.location}}</span>
+      </span>
+      <span *ngIf="profile.website">
+        <div class="inline-icon icon-link">
+          <div role="img"></div>
+        </div>
+        <a [href]="profile.website">{{profile.website}}</a>
+      </span>
+      <span *ngIf="profile.created_at">
+        <div class="inline-icon icon-calendar">
+          <div role="img"></div>
+        </div>
+        <span>Joined in August 2021</span>
+      </span>
+    </div>
+    <div class="follow-container">
+      <a role="button"><strong>2.324</strong><span> following</span></a>
+      <a role="button"><strong>2.324</strong><span> followers</span></a>
+    </div>
+  </section>
+  <nav class="list-menu separator">
+    <a class="active">
+      <span>Tweets</span>
+      <div class="underscore"></div>
+    </a>
+    <a>
+      <span>Replies</span>
+      <div></div>
+    </a>
+    <a>
+      <span>Midia</span>
+      <div></div>
+    </a>
+    <a>
+      <span>Likes</span>
+      <div></div>
+    </a>
+  </nav>
+  <section>
+    <tw-tweet-list></tw-tweet-list>
+  </section>
+</ng-container>
