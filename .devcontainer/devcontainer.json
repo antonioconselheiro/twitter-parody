@@ -13,12 +13,13 @@
 				"dbaeumer.vscode-eslint",
 				"eamodio.gitlens",
 				"ms-azuretools.vscode-docker",
-				"jgclark.vscode-todo-highlight",
 				"naumovs.color-highlight",
 				"SimonSiefke.svg-preview",
 				"Entytaiment25.CleanWater",
 				"connieth.bubblegum",
-				"manishsencha.readme-preview"
+				"manishsencha.readme-preview",
+				"wix.vscode-import-cost",
+				"aaron-bond.better-comments"
 			]
 		}
 	}
