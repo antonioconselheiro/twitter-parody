@@ -36,15 +36,14 @@ So you can contribute by proposing features through issues or assigning yourself
 
 Follow the steps:
 
- * Create a [fork](https://guides.github.com/activities/forking/) from our repository by [clicking here](https://github.com/antonioconselheiro/twitter-parody/fork), install [node](https://nodejs.org/), do a `git clone` of your forked repository and run `npm install` in the application folder;
+ * Create a [fork](https://guides.github.com/activities/forking/) from our repository by [clicking here](https://github.com/antonioconselheiro/twitter-parody/fork), do a `git clone` of your forked repository and run `devcontainer open .` in the application folder;
  * Create a branch in your forked repository, then code the feature or fix the bug;
  * Run `npm run lint` and `npm run build` in the repository;
  * Create a Pull Request from your repository to this one, with the issue in the body and some information you think could be usefull to the reviewer (print or a gif of it working will be appreciated (tools: [windows](https://www.screentogif.com/), [linux](https://linuxhint.com/install-peek-animated-gif-recorder-linux/)));
  * The reviewer can ask some changes, always expect for this and don't be mad when ask changes, this is the GIT Flow process;
- * You get approved and your branch with the feature / fix 
+ * When you get approved your branch can be merged, if you don't merge it, we will do.
 
 # Tools
-
 ## Devcontainer
 I do know if this work on Windows or Mac, but surely run on linux.
 If you suffer of Windows or Mac and want to contribute to the functioning of the devcontainer for these platforms, feel free to open an issue and start the task.
@@ -85,5 +84,3 @@ and interesting technologies to master to enhance your ability to contribute:
 - https://rxjs.dev/guide/observable
 - https://docs.docker.com/get-started/
 - https://code.visualstudio.com/docs/remote/devcontainer-cli
-
-
