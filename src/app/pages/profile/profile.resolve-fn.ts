@@ -4,4 +4,4 @@ import { IProfile } from "@shared/profile-service/profile.interface";
 import { ProfilesObservable } from "@shared/profile-service/profiles.observable";
 
 export const profileResolverFn: ResolveFn<IProfile> =
-    (route: ActivatedRouteSnapshot) => inject(ProfilesObservable).get(route.params['npub']);
+    (route: ActivatedRouteSnapshot) => inject(ProfilesObservable).load(route.params['npub']);

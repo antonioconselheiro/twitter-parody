@@ -18,6 +18,7 @@ rules:
   force-pseudo-nesting: 0
   no-qualifying-elements: 0
   quotes: 0
+  zero-unit: 0
   border-zero: 2
   hex-length:
     - 1

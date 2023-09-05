@@ -16,7 +16,7 @@ export class MenuSidebarMobileComponent implements OnInit, OnDestroy {
   @HostBinding('class.active')
   showing = false;
 
-  currentProfile: IProfile | null = null;
+  profile: IProfile | null = null;
 
   touchStart = 0;
 
@@ -38,7 +38,7 @@ export class MenuSidebarMobileComponent implements OnInit, OnDestroy {
 
   private bindProfileSubscription(): void {
     this.subscriptions.add(this.profile$.subscribe(
-      profile => this.currentProfile = profile
+      profile => this.profile = profile
     ));
   }
 

@@ -15,7 +15,7 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
 
   private subscriptions = new Subscription();
 
-  currentProfile: IProfile | null = null;
+  profile: IProfile | null = null;
 
   constructor(
     private modalService: ModalService,
@@ -25,7 +25,7 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.add(this.profile$.subscribe(
-      profile => this.currentProfile = profile
+      profile => this.profile = profile
     ));
   }
 

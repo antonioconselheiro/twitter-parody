@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TimelineComponent } from './pages/timeline/timeline.component';
 import { BookmarksComponent } from './pages/bookmarks/bookmarks.component';
-import { NotificationsComponent } from './pages/notifications/notifications.component';
-import { MessagesComponent } from './pages/messages/messages.component';
 import { ExploreComponent } from './pages/explore/explore.component';
 import { ListsComponent } from './pages/lists/lists.component';
+import { MessagesComponent } from './pages/messages/messages.component';
+import { NotificationsComponent } from './pages/notifications/notifications.component';
 import { ProfileComponent } from './pages/profile/profile.component';
-import { profileResolverFn, profileTweetListResolverFn } from './pages/profile/profile-tweet-list.resolve-fn';
+import { TimelineComponent } from './pages/timeline/timeline.component';
+import { profileResolverFn } from './pages/profile/profile.resolve-fn';
 
 const routes: Routes = [
   {
@@ -29,7 +29,6 @@ const routes: Routes = [
     path: 'p/:npub',
     component: ProfileComponent,
     resolve: {
-      tweets: profileTweetListResolverFn,
       profile: profileResolverFn
     }
   },

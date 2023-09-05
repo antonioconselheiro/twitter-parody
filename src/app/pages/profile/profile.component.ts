@@ -18,7 +18,16 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.tweets = this.activatedRoute.snapshot.data['tweets'];
+    this.bindTweetSubscription();
+    this.getProfileFromActivatedRoute();
+  }
+  
+  private bindTweetSubscription(): void {
+    const npub = this.activatedRoute.snapshot.params['npub'];
+    
+  }
+  
+  private getProfileFromActivatedRoute(): void {
     this.profile = this.activatedRoute.snapshot.data['profile'];
   }
 }

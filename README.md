@@ -27,9 +27,11 @@ Any open source that has its code physically decentralized around the world is l
 
 There's still a lot of work to do.
 
-Lighting donate:
+Lighting donate: <a href="lightning:peevedbeer57@walletofsatoshi.com">lightning:peevedbeer57@walletofsatoshi.com</a>
 
-Bitcoin onchain donate:
+Bitcoin onchain donate: bc1qrm99lmmpwk7zsh7njpgthw87yvdm38j2lzpq7q
+
+![zap me](./docs/qrcode-wallet.png)
 
 ## Contribute
 [CONTRIBUTE.md](./CONTRIBUTE.md)

@@ -88,10 +88,10 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
   private cacheProfile(profile: IProfile | Event<NostrEventKind>): IProfile {
     if ('sig' in profile) {
       const metadata = JSON.parse(profile.content);
+      const npub = nip19.npubEncode(profile.pubkey);
       return {
-        npub: profile.pubkey,
-        user: new NostrUser(profile.pubkey),
-        createdAt: metadata['created_at'],
+        npub: npub,
+        user: new NostrUser(npub),
         ...metadata,
         
       }

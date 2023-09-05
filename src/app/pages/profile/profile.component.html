@@ -1,4 +1,5 @@
 <ng-container *ngIf="profile">
+  {{profile|json}}
   <header class="header-backable">
     <div>
       <button title="back" type="button" class="icon-back svg-button">
@@ -9,27 +10,27 @@
     </div>
     <div class="user-info">
       <span class="user-name">
-        {{profile.name}}
-        <span class="user-verified"></span>
+        {{profile.display_name || profile.name}}
+        <span *ngIf="profile.nip05valid" class="user-verified"></span>
       </span>
       <span class="color-lowest-contrast">13,5 mil tweets</span>
     </div>
   </header>
   <section class="profile-container">
     <div class="banner">
-      <img alt="profile picture" title="profile picture" [src]="profile.picture || '/assets/profile/default-banner.jpg'" />
+      <img alt="banner picture" title="banner picture" [src]="profile.banner || '/assets/profile/default-banner.jpg'" />
     </div>
     <div class="edit-profile-container">
-      <img alt="profile banner" title="profile banner" class="profile" [src]="profile.banner + '/assets/profile/default-profile.png'" />
+      <img alt="profile picture" title="profile picture" class="profile" [src]="profile.picture || '/assets/profile/default-profile.png'" />
   
       <button class="button secondary">Edit profile</button>
     </div>
     <div class="user-info">
       <span class="user-name">
-        {{profile.name}}
-        <span class="user-verified"></span>
+        {{profile.display_name || profile.name}}
+        <span *ngIf="profile.nip05valid" class="user-verified"></span>
       </span>
-      <span class="user-nip5">{{profile.nip05}}</span>
+      <span *ngIf="profile.nip05" class="user-nip5">{{profile.nip05}}</span>
     </div>
     <div class="bio" [innerHTML]="profile.about | tweetHtmlfy"></div>
     <div class="additional-information">
@@ -45,7 +46,7 @@
         </div>
         <a [href]="profile.website">{{profile.website}}</a>
       </span>
-      <span *ngIf="profile.createdAt">
+      <span *ngIf="profile.created_at">
         <div class="inline-icon icon-calendar">
           <div role="img"></div>
         </div>

@@ -1,11 +1,11 @@
-<nav class="menu-sidebar">
+<nav class="menu-sidebar" *ngIf="profile">
   <header>
-    <span class="user-verified"></span>
+    <span *ngIf="profile.nip05valid" class="user-verified"></span>
     <div class="profile-menu">
-      <img alt="profile picture" title="profile picture" class="profile" src="/assets/profile/default-profile.png" />
+      <img alt="profile picture" title="profile picture" class="profile" [src]="profile.picture || '/assets/profile/default-profile.png'" />
       <div class="user-info">
-        <span class="user-name">José Exemplo dos Santos Silva Nelson Pereira Oliveira</span>
-        <span class="user-nip5">@nelson</span>
+        <span class="user-name">{{profile.display_name || profile.name}}</span>
+        <span *ngIf="profile.nip05" class="user-nip5">{{profile.nip05}}</span>
       </div>
       <div class="following">
         <span>345 following</span>
@@ -14,7 +14,7 @@
     </div>
   </header>
   <ul>
-    <li role="link" routerLink="/p/{{currentProfile?.npub}}">
+    <li *ngIf="profile && profile.npub" role="link" routerLink="/p/{{profile.npub}}">
       <div title="Profile" class="menu-icon icon-profile"></div>
       <span>Profile</span>
     </li>

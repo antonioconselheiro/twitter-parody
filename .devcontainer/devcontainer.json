@@ -19,7 +19,8 @@
 				"connieth.bubblegum",
 				"manishsencha.readme-preview",
 				"wix.vscode-import-cost",
-				"aaron-bond.better-comments"
+				"aaron-bond.better-comments",
+				"stylelint.vscode-stylelint"
 			]
 		}
 	}
