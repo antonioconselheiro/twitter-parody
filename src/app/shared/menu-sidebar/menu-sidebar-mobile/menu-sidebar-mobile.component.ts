@@ -51,7 +51,8 @@ export class MenuSidebarMobileComponent implements OnInit, OnDestroy {
   onTouchEnd(e: TouchEvent): void {
     const touches = e.touches[0] || e.changedTouches[0];
 
-    if (touches.clientX > (this.touchStart + 200)) {
+    const amountToDetectDrag = 200;
+    if (touches.clientX > (this.touchStart + amountToDetectDrag)) {
       this.menuSidebarMobile$.open();
     }
   }

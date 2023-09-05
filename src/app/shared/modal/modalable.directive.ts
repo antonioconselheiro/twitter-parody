@@ -1,4 +1,4 @@
-import { Directive, OnDestroy, OnInit } from '@angular/core';
+import { Directive } from '@angular/core';
 import { ICloseable } from '@shared/util/closeable.interface';
 import { Subject } from 'rxjs';
 

@@ -4,7 +4,7 @@ import { ThemeObservable } from '@shared/theme/theme.observable';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-root',
+  selector: 'tw-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

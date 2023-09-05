@@ -3,7 +3,7 @@
     <div>
       <button title="back" type="button" class="icon-back svg-button">
         <div class="svg-wrapper">
-          <div role="img"></div>
+          <div alt="back" role="img"></div>
         </div>
       </button>
     </div>
@@ -17,10 +17,10 @@
   </header>
   <section class="profile-container">
     <div class="banner">
-      <img [src]="profile.picture || '/assets/profile/default-banner.jpg'" />
+      <img alt="profile picture" title="profile picture" [src]="profile.picture || '/assets/profile/default-banner.jpg'" />
     </div>
     <div class="edit-profile-container">
-      <img class="profile" [src]="profile.banner + '/assets/profile/default-profile.png'" />
+      <img alt="profile banner" title="profile banner" class="profile" [src]="profile.banner + '/assets/profile/default-profile.png'" />
   
       <button class="button secondary">Edit profile</button>
     </div>

@@ -77,7 +77,9 @@ export abstract class ModalDirective implements OnInit, OnDestroy, IOpenable, IC
     }
 
     content.response = modalMetaData.response;
-    content.onInjectData && content.onInjectData(modalMetaData.data || null);
+    if (content.onInjectData) {
+      content.onInjectData(modalMetaData.data || null);
+    }
 
     modalMetaData.response.subscribe({
       error: this.closeModal.bind(this),

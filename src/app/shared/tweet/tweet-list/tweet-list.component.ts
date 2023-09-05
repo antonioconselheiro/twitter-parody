@@ -1,7 +1,8 @@
- import { Component, ViewEncapsulation } from '@angular/core';
+ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { NostrEventKind } from '@domain/nostr-event-kind';
 import { NostrUser } from '@domain/nostr-user';
 import { ApiService } from '@shared/api-service/api.service';
+import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
 import { Event } from 'nostr-tools';
 
 @Component({
@@ -10,7 +11,7 @@ import { Event } from 'nostr-tools';
   styleUrls: ['./tweet-list.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class TweetListComponent {
+export class TweetListComponent implements OnInit {
   readonly relays = [
     'wss://relay.damus.io',
     'wss://nos.lol',
@@ -45,7 +46,8 @@ export class TweetListComponent {
   tweets: Event<NostrEventKind.Text>[] = [];
 
   constructor(
-    private apiService: ApiService
+    private apiService: ApiService,
+    private networkError$: NetworkErrorObservable
   ) { }
 
   ngOnInit(): void {
@@ -56,7 +58,8 @@ export class TweetListComponent {
           String(new NostrUser('npub1lafcm7zm35l9q06mnaqk5ykt2530ylnwm5j8xaykflppfstv6vysxg4ryf'))
         ]
       }
-    ]).then(tweets => this.tweets = tweets);
+    ]).then(tweets => this.tweets = tweets)
+    .catch(e => this.networkError$.next(e));
   }
 
   trackByTweetId(i: number, tweet: Event<NostrEventKind.Text>): string {

@@ -74,7 +74,7 @@ The files for this environment are in the `.devcontainer` folder, where you can 
 - In `.devcontainer/devcontainer.json` you can see a set of extensions for vscode libraries and tools used in the project.
 
 ### Devcontainer VSCode Extensions
-If you contribute code you can suggest including extensions to the development environment vscode.
+If you contribute code you can suggest including extensions to the development environment vscode and request changes in linter rules.
 
 ### Volumes
 To start the Docker development environment, ensure that all dependent volumes have been created by running `.devcontainer/setup.sh`. You can verify if the volumes have been mounted successfully by executing the following commands:

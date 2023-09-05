@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { IProfile } from './profile.interface';
-import { Event, nip19 } from 'nostr-tools';
-import { NostrUser } from '@domain/nostr-user';
 import { NostrEventKind } from '@domain/nostr-event-kind';
+import { NostrUser } from '@domain/nostr-user';
 import { ApiService } from '@shared/api-service/api.service';
+import { Event, nip19 } from 'nostr-tools';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { IProfile } from './profile.interface';
 
 /**
  * O observable principal da classe emite os metadados do perfil autenticado
@@ -39,7 +39,7 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
   cache(profiles: IProfile[] | Event<NostrEventKind>[]): void {
     const profileList = (profiles as (IProfile | Event<NostrEventKind.Metadata>)[]);
     profileList.filter(profile => {
-      if ('sig' in profile && profile.kind != NostrEventKind.Metadata) {
+      if ('sig' in profile && profile.kind !== NostrEventKind.Metadata) {
         return false;
       }
 
@@ -53,7 +53,7 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
   async load(npubs: string): Promise<IProfile>;
   async load(npubs: string[]): Promise<IProfile[]>;
   async load(npubs: string[] | string): Promise<IProfile | IProfile[]> {
-    if (typeof npubs == 'string') {
+    if (typeof npubs === 'string') {
       return this.profiles[npubs] || this.loadProfile(npubs);
     } else {
       return this.loadProfiles(npubs);
@@ -87,10 +87,13 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
 
   private cacheProfile(profile: IProfile | Event<NostrEventKind>): IProfile {
     if ('sig' in profile) {
+      const metadata = JSON.parse(profile.content);
       return {
         npub: profile.pubkey,
         user: new NostrUser(profile.pubkey),
-        ...JSON.parse(profile.content)
+        createdAt: metadata['created_at'],
+        ...metadata,
+        
       }
     } else {
       //  TODO: validar se não estão incompletos para que sejam carregados em paralelo
@@ -106,7 +109,7 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
   get(npubs: string[]): IProfile[];
   get(npubs: string[] | string): IProfile | IProfile[] {
     //  TODO: incluir rotina para complementar com mais informações profiles vazios 
-    if (typeof npubs == 'string') {
+    if (typeof npubs === 'string') {
       return this.profiles[npubs];
     } else {
       return npubs.map(npub => this.profiles[npub]);

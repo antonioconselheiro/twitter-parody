@@ -11,7 +11,7 @@ export interface IProfile {
   website?: string;
   nip05?: string;
   //  format: 1684022601
-  created_at?: number;
+  createdAt?: number;
   nip05valid?: boolean;
   theme?: 'dark' | 'darken' | 'light';
   color?: 'blue' | 'yellow' | 'magenta' | 'purple' | 'orange' | 'green';

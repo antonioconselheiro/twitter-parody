@@ -16,7 +16,7 @@ export class TimelineComponent extends AbstractEntitledComponent implements OnIn
     super();
   }
 
-  openSideMenu() {
+  openSideMenu(): void {
     this.menuSidebarMobile$.open();
   }
 }

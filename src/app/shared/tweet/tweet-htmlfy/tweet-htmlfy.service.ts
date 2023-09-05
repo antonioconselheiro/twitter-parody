@@ -15,7 +15,7 @@ export class TweetHtmlfyService {
   }
 
   private extractUrls(content: string): string[] {
-    const getUrlsRegex = /(\bhttps?\:\/\/[^"\s]+\b)/g;
+    const getUrlsRegex = /(\bhttps?:\/\/[^"\s]+\b)/g;
     const matches = content.match(getUrlsRegex);
     if (!matches || !matches.length) {
       return [];
@@ -75,6 +75,6 @@ export class TweetHtmlfyService {
   }
 
   private regexFromLink(link: string): RegExp {
-    return new RegExp(link.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')+'\/?');
+    return new RegExp(link.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')+'/?');
   }
 }

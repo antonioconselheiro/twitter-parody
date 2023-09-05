@@ -1,0 +1,193 @@
+{
+  "root": true,
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "plugins": [
+    "ban"
+  ],
+  "ignorePatterns": [
+    "projects/**/*"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ],
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates"
+      ],
+      "rules": {
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "tw",
+            "style": "camelCase"
+          }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "tw",
+            "style": "kebab-case"
+          }
+        ],
+        "@typescript-eslint/naming-convention": [
+          "warn",
+          {
+            "selector": [
+              "classProperty",
+              "objectLiteralProperty",
+              "typeProperty",
+              "classMethod",
+              "objectLiteralMethod",
+              "typeMethod",
+              "accessor",
+              "enumMember"
+            ],
+            "format": [
+              "camelCase",
+              "PascalCase",
+              "UPPER_CASE"
+            ]
+          }
+        ],
+        "@typescript-eslint/member-ordering": "off",
+        "@typescript-eslint/member-delimiter-style": "off",
+        "prefer-arrow/prefer-arrow-functions": "off",
+        "@typescript-eslint/ban-types": [
+          "warn",
+          {
+            "extendDefaults": false,
+            "types": {
+              "Boolean": {
+                "message": "Avoid using the `Boolean` type.",
+                "fixWith": "boolean"
+              },
+              "Number": {
+                "message": "Avoid using the `Number` type.",
+                "fixWith": "number"
+              },
+              "String": {
+                "message": "Avoid using the `String` type.",
+                "fixWith": "string"
+              }
+            }
+          }
+        ],
+        "ban/ban": [
+          "error",
+          {
+            "name": "setTimeout",
+            "message": "Justify the use to disable the lint"
+          },
+          {
+            "name": "eval",
+            "message": "don't use eval"
+          }
+        ],
+        "max-lines": [
+          "error",
+          200
+        ],
+        "eqeqeq": "warn",
+        "@typescript-eslint/ban-ts-comment": [
+          "warn",
+          {
+            "ts-ignore": false
+          }
+        ],
+        "@typescript-eslint/explicit-member-accessibility": [
+          "error",
+          {
+            "accessibility": "no-public"
+          }
+        ],
+        "@angular-eslint/no-output-on-prefix": "off",
+        "@typescript-eslint/no-empty-function": "error",
+        "@typescript-eslint/no-floating-promises": "error",
+        "@typescript-eslint/prefer-for-of": "off",
+        "@typescript-eslint/unbound-method": "error",
+        "@typescript-eslint/adjacent-overload-signatures": "warn",
+        "@typescript-eslint/no-magic-numbers": [
+          "error",
+          {
+            "ignoreEnums": true,
+            "ignoreReadonlyClassProperties": true,
+            "ignoreNumericLiteralTypes": true,
+            "ignore": [
+              0,
+              1
+            ]
+          }
+        ],
+        "quotes": [
+          "off"
+        ],
+        "arrow-parens": [
+          "off",
+          "always"
+        ],
+        "complexity": [
+          "error",
+          {
+            "max": 5
+          }
+        ],
+        "import/order": "off",
+        "jsdoc/check-alignment": "off",
+        "jsdoc/newline-after-description": "off",
+        "no-empty": [
+          "error",
+          {
+            "allowEmptyCatch": true
+          }
+        ],
+        "no-unused-expressions": "warn",
+        "no-eval": "warn",
+        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/consistent-type-assertions": [
+          "warn",
+          {
+            "assertionStyle": "as",
+            "objectLiteralTypeAssertions": "allow-as-parameter"
+          }
+        ],
+        "@typescript-eslint/no-use-before-define": "warn",
+        "arrow-body-style": [
+          "off"
+        ],
+        "one-var": [
+          "off",
+          "never"
+        ],
+        "max-classes-per-file": [
+          "warn",
+          1
+        ],
+        "@typescript-eslint/explicit-function-return-type": [
+          "error",
+          {
+            "allowExpressions": true
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "*.html"
+      ],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended"
+//        "plugin:@angular-eslint/template/accessibility"
+      ],
+      "rules": {
+      }
+    }
+  ]
+}

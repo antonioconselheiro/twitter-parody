@@ -30,7 +30,7 @@ export class AmountPipe implements PipeTransform {
         return `${milFormatted} mil`;
     } else {
       const commaBase = 10;
-      let mi = new Calc(value) 
+      const mi = new Calc(value) 
         .divide(thirdFormatStyle)
         .multiply(commaBase)
         .pipe(n => Math.floor(n))

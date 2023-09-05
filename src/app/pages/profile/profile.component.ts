@@ -1,8 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ITweet } from '@domain/tweet.interface';
 import { IProfile } from '@shared/profile-service/profile.interface';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'tw-profile',

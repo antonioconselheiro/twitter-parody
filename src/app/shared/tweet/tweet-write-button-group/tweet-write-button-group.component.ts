@@ -1,5 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
-import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { ITheme } from '@shared/theme/theme.interface';
 import { ThemeObservable } from '@shared/theme/theme.observable';
 import { Subscription } from 'rxjs';
@@ -35,7 +34,7 @@ export class TweetWriteButtonGroupComponent implements OnInit, OnDestroy {
   }
 
   @HostListener('document:click', ['$event'])
-  onDocumentClick(event: PointerEvent) {
+  onDocumentClick(event: PointerEvent): void {
     const picker: HTMLElement = this.emojiMart.nativeElement;
     const target = event.target as HTMLElement;
     if (!picker.contains(target) && this.emojiMartOpen) {

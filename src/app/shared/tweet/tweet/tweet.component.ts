@@ -9,23 +9,23 @@ import { TweetHtmlfyService } from '../tweet-htmlfy/tweet-htmlfy.service';
 })
 export class TweetComponent {
 
-  get tweet(): string  {
-    return this.tweetText;
-  }
-
   @Input()
   isFull = false;
   
   @Input()
-  set tweet(tweet: string){
+  set tweet(tweet: string) {
     this.tweetText = tweet;
     this.onTweetUpdate(tweet);
   }
 
+  get tweet(): string  {
+    return this.tweetText;
+  }
+
   private tweetText = '';
   imgs: string[] = [];
-  smallView: string = '';
-  fullView: string = '';
+  smallView = '';
+  fullView = '';
 
   constructor(
     private urlUtil: UrlUtil,
@@ -33,7 +33,7 @@ export class TweetComponent {
   ) {}
 
   showMoreTextButton(): boolean {
-    return this.smallView.length != this.fullView.length;
+    return this.smallView.length !== this.fullView.length;
   }
 
   private onTweetUpdate(tweet: string): void {
