@@ -1,5 +1,5 @@
 # Contribute
-_working again't the Beast and it antichrist_
+_working from individuals to individuals_
 
 ![destroy the levithan](./docs/destroy-leviathan.jpg)
 
