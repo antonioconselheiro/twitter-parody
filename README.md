@@ -4,7 +4,7 @@ Gênesis 8:11
 # Twitter (Parody)
  _don't thread on Twitter_
 
-![twitter](./src/assets/twitter.ico)
+![twitter](./docs/twitter-parody-meme.png)
 
 ## Parody
 
@@ -14,6 +14,11 @@ what's so funny about this parody?
 
 ## Install
 not yet
+
+## Still in development
+_Ebenézer_
+I got this far:
+![last test](./docs/testing-twitter-parody-responsivity.gif)
 
 ## How the parody is implemented technically
 angular (scss + rxjs) + nostr-tools
