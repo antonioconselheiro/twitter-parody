@@ -3,7 +3,7 @@
 </ng-container>
 <ng-container *ngIf="!isFull">
   <span [innerHTML]="smallView | tweetHtmlfy"></span>
-  <span class="show-more" *ngIf="showMoreTextButton()">Show more</span>
+  <a role="button" *ngIf="showMoreTextButton()">Show more</a>
 </ng-container>
 
 <figure *ngIf="imgs.length">

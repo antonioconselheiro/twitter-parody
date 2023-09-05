@@ -2,15 +2,14 @@
 /// Raw link
 ///
 /// @group Components
-/// @class raw link
+/// @class a
 ///
 /// @example
 /// ```
 ///   <a class="raw" target="_BLANK" title="${link}" href="${link}">${link}</a>
 /// ```
 ///
-a,
-.show-more {
+a {
   color: var(--primary);
   text-decoration: none;
 
