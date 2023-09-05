@@ -18,6 +18,7 @@ angular (scss + rxjs) + nostr-tools
 
 ## Still in development
 _Ebenézer_
+
 I got this far:
 ![last test](./docs/testing-twitter-parody-responsivity.gif)
 
