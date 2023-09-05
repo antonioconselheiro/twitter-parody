@@ -21,5 +21,6 @@ services:
       - "4200:4200"
     volumes:
       - ..:/twitter-parody:cached
+      - /var/run/docker.sock:/var/run/docker.sock
       - node_modules_vol:/twitter-parody/node_modules
     tty: true
