@@ -4,8 +4,6 @@ Gênesis 8:11
 # Twitter (Parody)
  _don't thread on Twitter_
 
-![twitter](./docs/twitter-parody-meme.png)
-
 ## Parody
 
 what's so funny about this parody?
@@ -15,13 +13,13 @@ what's so funny about this parody?
 ## Install
 not yet
 
+## How the parody is implemented technically
+angular (scss + rxjs) + nostr-tools
+
 ## Still in development
 _Ebenézer_
 I got this far:
 ![last test](./docs/testing-twitter-parody-responsivity.gif)
-
-## How the parody is implemented technically
-angular (scss + rxjs) + nostr-tools
 
 ## Donate
 Do you want more protests in favor of free speech, freedom of software and freedom of work similar to this one?
