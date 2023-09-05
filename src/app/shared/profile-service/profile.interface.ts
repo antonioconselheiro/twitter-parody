@@ -21,4 +21,5 @@ export interface IProfile {
   lang?: 'en' | 'pt-BR',
   fixed?: string; // eventid
   location?: string;
+  Twitter?: string;
 }

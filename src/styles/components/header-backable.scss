@@ -1,3 +1,25 @@
+///
+/// When header get a back button
+///
+/// @group Components
+/// @class header-backable
+///
+/// @example
+/// ```
+/// <header class="header-backable">
+///     <div>
+///       <button title="back" type="button" class="icon-back svg-button">
+///         <div class="svg-wrapper">
+///           <div alt="back" role="img"></div>
+///         </div>
+///       </button>
+///     </div>
+///     <div>
+///       ...
+///     </div>
+///   </header>
+/// ```
+///
 .header-backable {
   display: flex;
 

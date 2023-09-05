@@ -1,3 +1,18 @@
+///
+/// clickable svg
+///
+/// @group Components
+/// @class button.svg-button
+///
+/// @example
+/// ```
+/// <button title="upload image" type="button" class="icon-upload-image svg-button">
+///   <div class="svg-wrapper">
+///     <div role="img"></div>
+///   </div>
+/// </button>
+/// ```
+///
 button.svg-button {
   min-height: 17px;
   padding: 0;
@@ -46,6 +61,19 @@ button.svg-button {
   }
 }
 
+///
+/// svg as inline icon
+///
+/// @group Components
+/// @class .inline-icon
+/// 
+/// @example
+/// ```
+/// <div class="inline-icon icon-location">
+///   <div role="img"></div>
+/// </div>
+/// ```
+///
 .inline-icon {
   display: inline-flex;
   height: 20px;

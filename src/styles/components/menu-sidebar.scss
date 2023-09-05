@@ -1,9 +1,11 @@
+//  main menu for android and desktop
 nav.menu-sidebar,
 nav.menu-bottombar {
 
   .menu-icon {
     width: 27px;
     height: 27px;
+    min-width: 27px;
     mask-repeat: no-repeat;
     mask-size: contain;
     float: left;

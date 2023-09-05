@@ -1,3 +1,16 @@
+///
+/// Any new container in right sidebar
+///
+/// @group Components
+/// @class .side-container
+///
+/// @example
+/// ```
+///  <tw-live-spaces-shortcut class="side-container"></tw-live-spaces-shortcut>
+///  <tw-trending-topics-shortcut class="side-container"></tw-trending-topics-shortcut>
+///  <tw-follow-suggestions class="side-container"></tw-follow-suggestions>
+/// ```
+///
 .side-container {
   display: block;
   border-radius: 20px;

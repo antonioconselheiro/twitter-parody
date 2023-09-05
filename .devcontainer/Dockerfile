@@ -1,6 +1,7 @@
 FROM node:20
 
-RUN npm install husky eslint typescript @angular/cli sass-lint -g
+RUN npm install husky eslint typescript @angular/cli @compodoc/compodoc sass-lint sassdoc -g
+RUN npm install npx -g --force
 
 RUN apt update && apt install -y curl python && rm -rf /var/lib/apt/lists/*
 

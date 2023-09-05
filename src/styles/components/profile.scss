@@ -1,4 +1,14 @@
-
+///
+/// When header get a back button
+///
+/// @group Components
+/// @class img.profile
+///
+/// @example
+/// ```
+///   <img title="profile picture" alt="profile picture" class="profile" [src]="profile.picture || '/assets/profile/default-profile.png'" />
+/// ```
+///
 img.profile {
   width: 40px;
   height: 40px;

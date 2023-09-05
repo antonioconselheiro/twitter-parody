@@ -1,3 +1,23 @@
+///
+/// A button group
+///
+/// @group Components
+/// @class list-menu
+///
+/// @example
+/// ```
+/// <nav class="list-menu">
+///   <a class="active">
+///     <span>Following</span>
+///     <div class="underscore"></div>
+///   </a>
+///   <a>
+///     <span>Global</span>
+///     <div class="underscore"></div>
+///   </a>
+/// </nav>
+/// ```
+///
 .list-menu {
   height: 53px;
   display: flex;

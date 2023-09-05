@@ -4,7 +4,7 @@ Gênesis 8:11
 # Twitter (Parody)
  _don't thread on Twitter_
 
-![twitter](./src/assets/twitter.ico)
+![twitter](./src/assets/twitter.svg)
 
 ## Parody
 
@@ -28,10 +28,11 @@ Any open source that has its code physically decentralized around the world is l
 There's still a lot of work to do.
 
 Lighting donate: <a href="lightning:peevedbeer57@walletofsatoshi.com">lightning:peevedbeer57@walletofsatoshi.com</a>
+![zap me](./docs/qrcode-wallet-lighting.png)
 
-Bitcoin onchain donate: bc1qrm99lmmpwk7zsh7njpgthw87yvdm38j2lzpq7q
+Bitcoin onchain donate: <a href="bitcoin:bc1qrm99lmmpwk7zsh7njpgthw87yvdm38j2lzpq7q">bc1qrm99lmmpwk7zsh7njpgthw87yvdm38j2lzpq7q</a>
 
-![zap me](./docs/qrcode-wallet.png)
+![zap me](./docs/qrcode-wallet-bitcoin.png)
 
 ## Contribute
 [CONTRIBUTE.md](./CONTRIBUTE.md)

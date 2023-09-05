@@ -1,3 +1,14 @@
+///
+/// Raw link
+///
+/// @group Components
+/// @class raw link
+///
+/// @example
+/// ```
+///   <a class="raw" target="_BLANK" title="${link}" href="${link}">${link}</a>
+/// ```
+///
 a,
 .show-more {
   color: var(--primary);
