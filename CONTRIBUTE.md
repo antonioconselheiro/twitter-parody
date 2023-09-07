@@ -96,3 +96,4 @@ and interesting technologies to master to enhance your ability to contribute:
 - https://code.visualstudio.com/docs/remote/devcontainer-cli
 - https://github.com/nostr-protocol/nips
 - https://github.com/nbd-wtf/nostr-tools
+- https://nostr.how/en/the-protocol

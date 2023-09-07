@@ -5,6 +5,7 @@ import { MenuSidebarComponent } from './menu-sidebar/menu-sidebar.component';
 import { MenuSidebarMobileComponent } from './menu-sidebar-mobile/menu-sidebar-mobile.component';
 import { MenuSidebarMobileObservable } from './menu-sidebar-mobile/menu-sidebar-mobile.observable';
 import { MobileBottomNavigationComponent } from './mobile-bottom-navigation/mobile-bottom-navigation.component';
+import { MenuActiveObservable } from './menu-active.observable';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { MobileBottomNavigationComponent } from './mobile-bottom-navigation/mobi
     MobileBottomNavigationComponent
   ],
   providers: [
+    MenuActiveObservable,
     MenuSidebarMobileObservable
   ]
 })

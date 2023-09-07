@@ -1,0 +1,10 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'tw-communities',
+  templateUrl: './communities.component.html',
+  styleUrls: ['./communities.component.scss']
+})
+export class CommunitiesComponent {
+
+}

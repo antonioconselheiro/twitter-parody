@@ -3,38 +3,38 @@
     <img alt="twitter logo" title="twitter logo" src="/assets/logo/dark-logo.png" />
   </header>
   <ul>
-    <li class="active" role="link" routerLink="/home">
+    <li [class.active]="menuActive === MENU_TYPE_HOME" role="link" routerLink="/home">
       <div class="has-updates"></div>
       <div title="Home" class="menu-icon icon-home"></div>
       <span>Home</span>
     </li>
-    <li role="link" routerLink="/explore">
+    <li [class.active]="menuActive === MENU_TYPE_EXPLORE" role="link" routerLink="/explore">
       <div title="Explore" class="menu-icon icon-explore"></div>
       <span>Explore</span>
     </li>
-    <li role="link" routerLink="/notifications">
+    <li [class.active]="menuActive === MENU_TYPE_NOTIFICATIONS" role="link" routerLink="/notifications">
       <div class="has-updates">5</div>
       <div title="Notifications" class="menu-icon icon-notifications"></div>
       <span>Notifications</span>
     </li>
-    <li role="link" routerLink="/messages">
+    <li [class.active]="menuActive === MENU_TYPE_MESSAGES" role="link" routerLink="/messages">
       <div class="has-updates">3</div>
       <div title="Messages" class="menu-icon icon-messages"></div>
       <span>Messages</span>
     </li>
-    <li role="link" routerLink="/lists">
+    <li [class.active]="menuActive === MENU_TYPE_LISTS" role="link" routerLink="/lists">
       <div title="Lists" class="menu-icon icon-lists"></div>
       <span>Lists</span>
     </li>
-    <li role="link" routerLink="/bookmarks">
+    <li [class.active]="menuActive === MENU_TYPE_BOOKMARKS" role="link" routerLink="/bookmarks">
       <div title="Bookmark" class="menu-icon icon-bookmark"></div>
       <span>Bookmark</span>
     </li>
-    <li role="link" routerLink="/communities">
+    <li [class.active]="menuActive === MENU_TYPE_COMMUNITIES" role="link" routerLink="/communities">
       <div title="Communities" class="menu-icon icon-communities"></div>
       <span>Communities</span>
     </li>
-    <li *ngIf="profile && profile.npub" role="link" routerLink="/p/{{profile.npub}}">
+    <li *ngIf="profile && profile.npub" [class.active]="menuActive === MENU_TYPE_PROFILE" role="link" routerLink="/p/{{profile.npub}}">
       <div title="Profile" class="menu-icon icon-profile"></div>
       <span>Profile</span>
     </li>
