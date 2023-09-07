@@ -19,6 +19,7 @@ import { ListsModule } from './pages/lists/lists.module';
 import { ProfileModule } from './pages/profile/profile.module';
 import { ProfileServiceModule } from '@shared/profile-service/profile-service.module';
 import { ApiServiceModule } from '@shared/api-service/api-service.module';
+import { CommunitiesModule } from './pages/communities/communities.module';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { ApiServiceModule } from '@shared/api-service/api-service.module';
     ExploreModule,
     ProfileModule,
     ListsModule,
+    CommunitiesModule,
 
     //  shared
     MenuSidebarModule,
