@@ -3,6 +3,8 @@ import { Subscription } from 'rxjs';
 import { MenuSidebarMobileObservable } from './menu-sidebar-mobile.observable';
 import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
 import { IProfile } from '@shared/profile-service/profile.interface';
+import { MenuType } from '../menu-type.enum';
+import { MenuActiveObservable } from '../menu-active.observable';
 
 @Component({
   selector: 'tw-menu-sidebar-mobile',
@@ -13,21 +15,29 @@ export class MenuSidebarMobileComponent implements OnInit, OnDestroy {
 
   private subscriptions = new Subscription();
 
+  readonly MENU_TYPE_LISTS = MenuType.LISTS;
+  readonly MENU_TYPE_BOOKMARKS = MenuType.BOOKMARKS;
+  readonly MENU_TYPE_COMMUNITIES = MenuType.COMMUNITIES;
+  readonly MENU_TYPE_PROFILE = MenuType.PROFILE;
+
   @HostBinding('class.active')
   showing = false;
 
   profile: IProfile | null = null;
+  menuActive: MenuType | null = null;
 
   touchStart = 0;
 
   constructor(
     private profile$: ProfilesObservable,
+    private menuActive$: MenuActiveObservable,
     private menuSidebarMobile$: MenuSidebarMobileObservable
   ) { }
 
   ngOnInit(): void {
     this.bindProfileSubscription();
     this.bindMenuShowingSubscription();
+    this.bindMenuActiveSubscription();
   }
   
   private bindMenuShowingSubscription(): void {
@@ -39,6 +49,12 @@ export class MenuSidebarMobileComponent implements OnInit, OnDestroy {
   private bindProfileSubscription(): void {
     this.subscriptions.add(this.profile$.subscribe(
       profile => this.profile = profile
+    ));
+  }
+
+  private bindMenuActiveSubscription(): void {
+    this.subscriptions.add(this.menuActive$.subscribe(
+      menu => this.menuActive = menu
     ));
   }
 
