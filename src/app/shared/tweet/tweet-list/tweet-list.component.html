@@ -23,8 +23,9 @@
         </button>
       </header>
 
-      <tw-tweet class="tweet-content" [tweet]="tweet.content"></tw-tweet>
+      <tw-tweet (imgOpen)="onImgOpen($event)" class="tweet-content" [tweet]="tweet"></tw-tweet>
       <tw-tweet-button-group></tw-tweet-button-group>
     </div>
   </div>
 </article>
+<tw-tweet-image-viewer *ngIf="viewing" [tweet]="viewing.tweet" [activeImage]="viewing.img"></tw-tweet-image-viewer>

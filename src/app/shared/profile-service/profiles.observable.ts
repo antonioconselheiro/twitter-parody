@@ -5,6 +5,7 @@ import { ApiService } from '@shared/api-service/api.service';
 import { Event, nip19 } from 'nostr-tools';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IProfile } from './profile.interface';
+import { DataLoadType } from '@domain/data-load-type';
 
 /**
  * O observable principal da classe emite os metadados do perfil autenticado
@@ -25,7 +26,7 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
   ) {
     const npub = 'npub1lafcm7zm35l9q06mnaqk5ykt2530ylnwm5j8xaykflppfstv6vysxg4ryf';
 
-    super({ npub, user: new NostrUser(npub) });
+    super({ npub, user: new NostrUser(npub), load: DataLoadType.LAZY_LOADED });
 
     if (!ProfilesObservable.instance) {
       ProfilesObservable.instance = this;
@@ -38,16 +39,9 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
   cache(profiles: IProfile[]): void;
   cache(profiles: IProfile[] | Event<NostrEventKind>[]): void {
     const profileList = (profiles as (IProfile | Event<NostrEventKind.Metadata>)[]);
-    profileList.filter(profile => {
-      if ('sig' in profile && profile.kind !== NostrEventKind.Metadata) {
-        return false;
-      }
-
-      return true;
-    }).forEach(profile => {
-      const cachedProfile = this.cacheProfile(profile);
-      this.profiles[cachedProfile.npub] = cachedProfile;
-    });
+    profileList
+      .filter(profile => !('sig' in profile && profile.kind !== NostrEventKind.Metadata))
+      .forEach(profile => this.cacheProfile(profile));
   }
 
   async load(npubs: string): Promise<IProfile>;
@@ -89,15 +83,14 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
     if ('sig' in profile) {
       const metadata = JSON.parse(profile.content);
       const npub = nip19.npubEncode(profile.pubkey);
-      return {
+      return this.profiles[npub] = {
         npub: npub,
         user: new NostrUser(npub),
         ...metadata,
         
       }
     } else {
-      //  TODO: validar se não estão incompletos para que sejam carregados em paralelo
-      return profile;
+      return this.profiles[profile.npub] = profile;
     }
   }
 
@@ -108,12 +101,19 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
   get(npubs: string): IProfile;
   get(npubs: string[]): IProfile[];
   get(npubs: string[] | string): IProfile | IProfile[] {
-    //  TODO: incluir rotina para complementar com mais informações profiles vazios 
     if (typeof npubs === 'string') {
-      return this.profiles[npubs];
+      return this.getOrCreateLazyLoadProfiles(npubs);
     } else {
-      return npubs.map(npub => this.profiles[npub]);
+      return npubs.map(npub => this.getOrCreateLazyLoadProfiles(npub));
     }
+  }
+
+  private getOrCreateLazyLoadProfiles(npub: string): IProfile {
+    if (this.profiles[npub]) {
+      return this.profiles[npub];
+    }
+
+    return this.getMetadataFromNostrPublic(npub);
   }
 
   setAuthProfile(npub: string): void {
@@ -125,6 +125,6 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
   }
 
   getMetadataFromNostrPublic(npub: string): IProfile {
-    return { npub, user: new NostrUser(npub) };
+    return { npub, user: new NostrUser(npub), load: DataLoadType.LAZY_LOADED };
   }
 }

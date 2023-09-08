@@ -1,6 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { UrlUtil } from '@shared/util/url.service';
 import { TweetHtmlfyService } from '../tweet-htmlfy/tweet-htmlfy.service';
+import { ITweetImgViewing } from '../tweet-img-viewing.interface';
+import { ITweet } from '@domain/tweet.interface';
 
 @Component({
   selector: 'tw-tweet',
@@ -13,16 +15,19 @@ export class TweetComponent {
   isFull = false;
   
   @Input()
-  set tweet(tweet: string) {
-    this.tweetText = tweet;
+  set tweet(tweet: ITweet | null) {
+    this.interceptedTweet = tweet;
     this.onTweetUpdate(tweet);
   }
 
-  get tweet(): string  {
-    return this.tweetText;
+  get tweet(): ITweet | null {
+    return this.interceptedTweet;
   }
 
-  private tweetText = '';
+  @Output()
+  imgOpen = new EventEmitter<ITweetImgViewing | null>();
+
+  private interceptedTweet: ITweet | null = null;
   imgs: string[] = [];
   smallView = '';
   fullView = '';
@@ -36,12 +41,16 @@ export class TweetComponent {
     return this.smallView.length !== this.fullView.length;
   }
 
-  private onTweetUpdate(tweet: string): void {
-    const { imgs } = this.tweetHtmlfyService.separateImageAndLinks(tweet);
+  private onTweetUpdate(tweet: ITweet | null): void {
+    if (!tweet || !tweet.content) {
+      return;
+    }
+
+    const { imgs } = this.tweetHtmlfyService.separateImageAndLinks(tweet.content);
 
     this.imgs = imgs;
-    this.smallView = this.getSmallView(tweet, this.imgs);
-    this.fullView = this.getFullView(tweet, this.imgs);
+    this.smallView = this.getSmallView(tweet.content, this.imgs);
+    this.fullView = this.getFullView(tweet.content, this.imgs);
   }
 
   private getSmallView(tweet: string, imgs: string[]): string {

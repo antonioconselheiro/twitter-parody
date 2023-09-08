@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TweetModule } from '@shared/tweet/tweet.module';
-import { ProfileApi } from '../../shared/profile-service/profile.api';
+import { TweetApi } from '../../shared/profile-service/tweet.api';
 import { ProfileComponent } from './profile.component';
 
 @NgModule({
@@ -16,7 +16,7 @@ import { ProfileComponent } from './profile.component';
     ProfileComponent
   ],
   providers: [
-    ProfileApi
+    TweetApi
   ]
 })
 export class ProfileModule { }

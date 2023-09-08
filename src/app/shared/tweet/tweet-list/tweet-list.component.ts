@@ -4,6 +4,8 @@ import { NostrUser } from '@domain/nostr-user';
 import { ApiService } from '@shared/api-service/api.service';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
 import { Event } from 'nostr-tools';
+import { ITweetImgViewing } from '../tweet-img-viewing.interface';
+import { ITweet } from '@domain/tweet.interface';
 
 @Component({
   selector: 'tw-tweet-list',
@@ -12,46 +14,20 @@ import { Event } from 'nostr-tools';
   encapsulation: ViewEncapsulation.None,
 })
 export class TweetListComponent implements OnInit {
-  readonly relays = [
-    'wss://relay.damus.io',
-    'wss://nos.lol',
-    'wss://relay.snort.social',
-    'wss://nostr.orangepill.dev',
-    'wss://nostr-pub.wellorder.net',
-    'wss://offchain.pub',
-    'wss://relay.shitforce.one',
-    'wss://yabu.me',
-    'wss://relayable.org',
-    'wss://ca.relayable.org',
-    'wss://nostr.vulpem.com',
-    'wss://nostrich.friendship.tw',
-    'wss://n.xmr.se',
-    'wss://nostr-1.nbo.angani.co',
-    'wss://eden.nostr.land',
-    'wss://feeds.nostr.band',
-    'wss://nostr.wine',
-    'wss://e.nos.lol',
-    'wss://nostrue.com',
-    'wss://nostr.oxtr.dev',
-    'wss://relar.nostr.bg',
-    'wss://really.nostr.br',
-    'wss://nostr.mom',
-    'wss://nostr.fmt.wiz.biz',
-    'wss://relay.orangepill.dev',
-    'wss://relay.nostrati.com',
-    'wss://relay.nostr.com.au',
-    'wss://nostr.milou.lol'
-  ];
 
-  tweets: Event<NostrEventKind.Text>[] = [];
+  tweets: ITweet[] = [];
+//  Event<NostrEventKind.Text>[] = [];
+  viewing: ITweetImgViewing | null = null;
 
   constructor(
     private apiService: ApiService,
     private networkError$: NetworkErrorObservable
   ) { }
 
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
-    this.apiService.get([
+    /**
+     this.apiService.get([
       {
         kinds: [NostrEventKind.Text],
         authors: [
@@ -59,10 +35,14 @@ export class TweetListComponent implements OnInit {
         ]
       }
     ]).then(tweets => this.tweets = tweets)
-    .catch(e => this.networkError$.next(e));
+    .catch(e => this.networkError$.next(e)); */
   }
 
-  trackByTweetId(i: number, tweet: Event<NostrEventKind.Text>): string {
+  trackByTweetId(i: number, tweet: ITweet): string {
     return tweet.id;
+  }
+
+  onImgOpen(viewing: ITweetImgViewing | null): void {
+    this.viewing = viewing;
   }
 }
