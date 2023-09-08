@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ModalService } from '@shared/modal/modal.service';
 import { IProfile } from '@shared/profile-service/profile.interface';
 import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
-import { CompositeTweetPopoverComponent } from '@shared/tweet/composite-tweet-popover/composite-tweet-popover.component';
+import { CompositeTweetPopoverComponent } from '@shared/tweet-widget/composite-tweet-popover/composite-tweet-popover.component';
 import { Subscription } from 'rxjs';
 import { MenuActiveObservable } from '../menu-active.observable';
 import { MenuType } from '../menu-type.enum';

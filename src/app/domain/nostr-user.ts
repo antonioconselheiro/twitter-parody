@@ -26,7 +26,7 @@ export class NostrUser {
     /**
      * npub or nsec
      */
-    readonly nostrString: string
+    nostrString: string
   ) {
     const { type, data } = nip19.decode(nostrString);
     if (type === 'nsec') {

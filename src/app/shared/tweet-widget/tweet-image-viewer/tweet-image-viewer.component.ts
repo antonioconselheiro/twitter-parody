@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { ITweet } from '@domain/tweet.interface';
 
 @Component({
   selector: 'tw-tweet-image-viewer',
@@ -7,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class TweetImageViewerComponent {
 
+  @Input()
+  tweet: ITweet | null = null;
+
+  @Input()
+  activeImage = '';
 }

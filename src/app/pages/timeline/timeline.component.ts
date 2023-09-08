@@ -8,7 +8,7 @@ import { MenuSidebarMobileObservable } from '@shared/menu-sidebar/menu-sidebar-m
   styleUrls: ['./timeline.component.scss']
 })
 export class TimelineComponent extends AbstractEntitledComponent implements OnInit {
-  title = 'Home';
+  override title = 'Home';
 
   constructor(
     private menuSidebarMobile$: MenuSidebarMobileObservable

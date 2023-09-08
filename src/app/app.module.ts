@@ -9,17 +9,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.module';
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
-import { TimelineModule } from './pages/timeline/timeline.module';
 import { NotificationsModule } from './pages/notifications/notifications.module';
 import { BookmarksModule } from './pages/bookmarks/bookmarks.module';
 import { NetworkModule } from './pages/network/network.module';
 import { MessagesModule } from './pages/messages/messages.module';
 import { ExploreModule } from './pages/explore/explore.module';
 import { ListsModule } from './pages/lists/lists.module';
-import { ProfileModule } from './pages/profile/profile.module';
 import { ProfileServiceModule } from '@shared/profile-service/profile-service.module';
 import { ApiServiceModule } from '@shared/api-service/api-service.module';
 import { CommunitiesModule } from './pages/communities/communities.module';
+import { TimelineModule } from './pages/timeline/timeline.module';
+import { ProfileModule } from './pages/profile/profile.module';
+import { TweetServiceModule } from '@shared/tweet-service/tweet-service.module';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { CommunitiesModule } from './pages/communities/communities.module';
     MenuSidebarModule,
     ExploreSidebarModule,
     ProfileServiceModule,
+    TweetServiceModule,
     UtilModule,
     MainErrorModule,
     ThemeModule,

@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./explore-sidebar.component.scss']
 })
 export class ExploreSidebarComponent {
-
+  terms(): void {
+    alert('Ancestral Property of King Jesus Christ - may the Lord receive the fruit of our work');
+  }
 }

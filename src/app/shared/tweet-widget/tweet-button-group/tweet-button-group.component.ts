@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { ITweet } from '@domain/tweet.interface';
 
 @Component({
   selector: 'tw-tweet-button-group',
@@ -6,5 +7,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./tweet-button-group.component.scss']
 })
 export class TweetButtonGroupComponent {
-
+  @Input()
+  tweet: ITweet | null = null;
 }

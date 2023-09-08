@@ -19,7 +19,7 @@ nav.menu-bottombar {
     display: flex;
 
     li {
-
+      outline: 0;
 
       &:hover {
         background-color: var(--baseHover);

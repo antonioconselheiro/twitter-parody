@@ -1,3 +1,4 @@
+import { DataLoadType } from "@domain/data-load-type";
 import { NostrUser } from "@domain/nostr-user";
 
 export interface IProfile {
@@ -22,4 +23,5 @@ export interface IProfile {
   fixed?: string; // eventid
   location?: string;
   Twitter?: string;
+  load: DataLoadType;
 }
