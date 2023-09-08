@@ -6,6 +6,7 @@ import { Event, nip19 } from 'nostr-tools';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IProfile } from './profile.interface';
 import { DataLoadType } from '@domain/data-load-type';
+import { ThemeObservable } from '@shared/theme/theme.observable';
 
 /**
  * O observable principal da classe emite os metadados do perfil autenticado

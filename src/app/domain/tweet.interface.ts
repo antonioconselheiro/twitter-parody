@@ -9,8 +9,11 @@ export type ITweet = {
   reactions: IReaction[];
   reply: ITweet[];
   location?: { lat: number, lon: number };
+  retweeted?: ITweet[];
   retweeting?: ITweet;
+  replies?: ITweet[];
   created: number;
+  view?: number;
   load: DataLoadType.EAGER_LOADED;
 } | {
   id: string;
@@ -19,7 +22,10 @@ export type ITweet = {
   reactions: IReaction[];
   reply?: ITweet[];
   location?: { lat: number, lon: number };
+  retweeted?: ITweet[];
   retweeting?: ITweet;
+  replies?: ITweet[];
   created?: number;
+  view?: number;
   load: DataLoadType.LAZY_LOADED;
 }

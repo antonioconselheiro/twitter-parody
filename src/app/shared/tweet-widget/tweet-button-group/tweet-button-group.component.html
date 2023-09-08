@@ -2,25 +2,25 @@
   <div class="svg-wrapper">
     <div role="img"></div>
   </div>
-  <span class="amount">{{10_000_000 | amount}}</span>
+  <span class="amount">{{tweet?.replies?.length || 0 | amount}}</span>
 </button>
 <button type="button" class="icon-retweet svg-button active">
   <div class="svg-wrapper">
     <div role="img"></div>
   </div>
-  <span class="amount">{{354545454 | amount}}</span>
+  <span class="amount">{{tweet?.retweeted?.length || 0 | amount}}</span>
 </button>
 <button type="button" class="icon-like svg-button active">
   <div class="svg-wrapper">
     <div role="img"></div>
   </div>
-  <span class="amount">{{63_231 | amount}}</span>
+  <span class="amount">{{tweet?.reactions?.length || 0 | amount}}</span>
 </button>
-<button type="button" class="icon-view svg-button">
+<button *ngIf="tweet && tweet.view" type="button" class="icon-view svg-button">
   <div class="svg-wrapper">
     <div role="img"></div>
   </div>
-  <span class="amount">{{12353 | amount}}</span>
+  <span class="amount">{{tweet.view | amount}}</span>
 </button>
 <button type="button" class="icon-share svg-button">
   <div class="svg-wrapper">

@@ -5,15 +5,15 @@
 
   <div class="tweet-structure">
     <div>
-      <img title="profile picture" alt="profile picture" class="profile" src="/assets/profile/default-profile.png" />
+      <img title="profile picture" alt="profile picture" class="profile" [src]="tweet.author?.picture || '/assets/profile/default-profile.png'" />
     </div>
     <div class="tweet-metadata">
       <header>
         <address class="author user-info">
-          <span class="user-name">José Exemplo dos Santos Silva Nelson Pereira Oliveira</span>
-          <span class="user-verified"></span>
-          <span class="user-nip5">@nelson</span>
-          <time datetime="2023-08-29T12:00:00">3h</time>
+          <span class="user-name">{{tweet.author?.display_name || tweet.author?.name}}</span>
+          <span *ngIf="tweet.author?.nip05valid" class="user-verified"></span>
+          <span *ngIf="tweet.author?.nip05" class="user-nip5">{{tweet.author?.nip05}}</span>
+          <time datetime="2023-08-29T12:00:00">3h</time> <!-- TODO: remover mock -->
         </address>
 
         <button class="svg-button ellipsis">
@@ -24,7 +24,7 @@
       </header>
 
       <tw-tweet (imgOpen)="onImgOpen($event)" class="tweet-content" [tweet]="tweet"></tw-tweet>
-      <tw-tweet-button-group></tw-tweet-button-group>
+      <tw-tweet-button-group [tweet]="tweet"></tw-tweet-button-group>
     </div>
   </div>
 </article>

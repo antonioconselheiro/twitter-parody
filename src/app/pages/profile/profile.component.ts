@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ITweet } from '@domain/tweet.interface';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
+import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
 import { IProfile } from '@shared/profile-service/profile.interface';
+import { TweetApi } from '@shared/tweet-service/tweet.api';
 
 @Component({
   selector: 'tw-profile',
@@ -17,7 +19,9 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
   tweets: ITweet[] = [];
 
   constructor(
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private networkError$: NetworkErrorObservable,
+    private tweetApi: TweetApi
   ) {
     super();
   }
@@ -30,7 +34,12 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
   
   private bindTweetSubscription(): void {
     const npub = this.activatedRoute.snapshot.params['npub'];
-    
+    this.tweetApi.listTweetsFrom(npub)
+      .then(tweets => this.tweets = tweets)
+      .catch(e => {
+        debugger;
+        this.networkError$.next(e);
+      });
   }
   
   private getProfileFromActivatedRoute(): void {

@@ -13,6 +13,7 @@ import { TweetListComponent } from './tweet-list/tweet-list.component';
 import { TweetWriteButtonGroupComponent } from './tweet-write-button-group/tweet-write-button-group.component';
 import { TweetWriteComponent } from './tweet-write/tweet-write.component';
 import { TweetComponent } from './tweet/tweet.component';
+import { TweetApi } from '../tweet-service/tweet.api';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { TweetComponent } from './tweet/tweet.component';
     CompositeTweetPopoverComponent
   ],
   providers: [
-    TweetHtmlfyService
+    TweetHtmlfyService,
+    TweetApi
   ]
 })
-export class TweetModule { }
+export class TweetWidgetModule { }
