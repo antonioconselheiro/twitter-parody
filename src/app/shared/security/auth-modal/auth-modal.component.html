@@ -1,0 +1,33 @@
+<section *ngFor="let account of accounts" class="profile-container">
+  <img title="profile picture" alt="profile picture" class="profile" [src]="account.picture || '/assets/profile/default-profile.png'" />
+  <div class="user-info">
+    <span class="user-name">
+      {{account.displayName}}
+      <span *ngIf="account.nip05valid" class="user-verified"></span>
+    </span>
+    <span *ngIf="account.nip05" class="user-nip5">{{account.nip05}}</span>
+  </div>
+</section>
+
+<form autocomplete="off">
+  <h2>Add account</h2>
+  <div class="floating-label">
+    <input type="password" name="nsec" id="authModalNsecField" maxlength="64" />
+    <label for="authModalNsecField">Nostr Secret (nsec)</label>
+  </div>
+
+  <div class="floating-label">
+    <input type="password" name="pin" id="authModalPinField" maxlength="6" />
+    <label for="authModalPinField">Pin</label>
+  </div>
+  <button type="button" title="add account" class="button secondary iconed-button">
+    <button type="button" class="icon-add svg-button">
+      <div class="svg-wrapper">
+        <div role="img"></div>
+      </div>
+    </button>
+    <span>
+      Account
+    </span>
+  </button>
+</form>

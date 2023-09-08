@@ -21,6 +21,7 @@ import { CommunitiesModule } from './pages/communities/communities.module';
 import { TimelineModule } from './pages/timeline/timeline.module';
 import { ProfileModule } from './pages/profile/profile.module';
 import { TweetServiceModule } from '@shared/tweet-service/tweet-service.module';
+import { SecurityModule } from '@shared/security/security.module';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { TweetServiceModule } from '@shared/tweet-service/tweet-service.module';
     MenuSidebarModule,
     ExploreSidebarModule,
     ProfileServiceModule,
+    SecurityModule,
     TweetServiceModule,
     UtilModule,
     MainErrorModule,

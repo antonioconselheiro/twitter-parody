@@ -15,7 +15,7 @@ export abstract class ModalDirective implements OnInit, OnDestroy, IOpenable, IC
   isOpen = false;
   content: ModalableDirective<unknown, unknown> | null = null;
   classes: string[] = [];
-  subscriptions = new Subscription();
+  private subscriptions = new Subscription();
 
   abstract container: ViewContainerRef | null;
 

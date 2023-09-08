@@ -26,9 +26,12 @@
 @import 'styles/elements/button';
 @import 'styles/elements/heading';
 
+//  forms
+@import 'styles/components/forms/button';
+@import 'styles/components/forms/floating-label';
+
 // components
 @import 'styles/components/colors';
-@import 'styles/components/button';
 @import 'styles/components/separator';
 @import 'styles/components/profile';
 @import 'styles/components/svg-button';

@@ -18,5 +18,15 @@
 
   header {
     padding: .75rem;
+    display: flex;
+    align-items: center;
+
+    h1 {
+      margin-right: 1rem;
+    }
+  }
+
+  > div {
+    padding: 1rem;
   }
 }

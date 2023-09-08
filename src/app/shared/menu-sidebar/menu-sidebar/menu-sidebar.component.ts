@@ -7,6 +7,7 @@ import { CompositeTweetPopoverComponent } from '@shared/tweet-widget/composite-t
 import { Subscription } from 'rxjs';
 import { MenuActiveObservable } from '../menu-active.observable';
 import { MenuType } from '../menu-type.enum';
+import { AuthModalComponent } from '@shared/security/auth-modal/auth-modal.component';
 
 @Component({
   selector: 'tw-menu-sidebar',
@@ -55,6 +56,16 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  onProfileMenuClick(profile: IProfile | null): void {
+    if (!profile) {
+      this.modalService
+        .createModal(AuthModalComponent)
+        .setTitle('Accounts')
+        .setData(profile)
+        .build();
+    }
   }
 
   openTweetCompose(): void {

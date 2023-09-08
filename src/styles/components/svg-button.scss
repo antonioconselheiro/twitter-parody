@@ -141,3 +141,9 @@ button.svg-button {
     mask-image: url('/assets/close.svg');
   }
 }
+
+.icon-add {
+  div[role=img] {
+    mask-image: url('/assets/add.svg');
+  }
+}

@@ -38,4 +38,11 @@ button.button {
       background-color: var(--baseHover);
     }
   }
+
+  &.iconed-button {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    padding-right: 1rem;
+  }
 }
