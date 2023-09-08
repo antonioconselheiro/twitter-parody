@@ -3,9 +3,23 @@
   background-color: var(--base);
   border: 1px solid var(--separator);
   border-radius: 15px;
-  overflow: hidden;
   height: 3.5rem;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+
+  &.error {
+    border: 1px solid var(--error);
+
+    label {
+      color: var(--error);
+    }
+
+    .error {
+      display: block;
+      color: var(--error);
+      margin: 7px 0 0 10px;
+      font-size: 13px;
+    }
+  }
 
   label {
     position: absolute;
@@ -20,6 +34,7 @@
   input {
     width: 100%;
     padding: 10px;
+    border-radius: 15px;
     background-color: var(--base);
     color: var(--contrast);
     outline: none;
@@ -28,7 +43,8 @@
     box-sizing: border-box;
     border: 0;
 
-    &:focus + label {
+    &:focus + label,
+    &.has-value + label {
       top: 4px;
       left: 20px;
       font-size: 13px;

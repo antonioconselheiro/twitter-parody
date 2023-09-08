@@ -1,4 +1,4 @@
-<section *ngFor="let account of accounts" class="profile-container">
+<section *ngFor="let account of accounts" class="account-container">
   <img title="profile picture" alt="profile picture" class="profile" [src]="account.picture || '/assets/profile/default-profile.png'" />
   <div class="user-info">
     <span class="user-name">
@@ -7,20 +7,37 @@
     </span>
     <span *ngIf="account.nip05" class="user-nip5">{{account.nip05}}</span>
   </div>
+
+  <div class="space-between"></div>
+
+  <button title="logout" type="button" class="icon-logout svg-button">
+    <div class="svg-wrapper">
+      <div alt="logout" role="img"></div>
+    </div>
+  </button>
+
+  <button title="enter" type="button" class="icon-enter svg-button">
+    <div class="svg-wrapper">
+      <div alt="enter" role="img"></div>
+    </div>
+  </button>
 </section>
 
-<form autocomplete="off">
+<form [formGroup]="accountForm" (submit)="onAddAccountSubmit($event)" autocomplete="off">
   <h2>Add account</h2>
-  <div class="floating-label">
-    <input type="password" name="nsec" id="authModalNsecField" maxlength="64" />
+  <div [class.is]="submitted && getFormControlErrors('nsec')" class="floating-label">
+    <input [class.has-value]="nsec.value" #nsec type="password" name="nsec" formControlName="nsec" id="authModalNsecField" maxlength="64" />
     <label for="authModalNsecField">Nostr Secret (nsec)</label>
+    <span *ngIf="submitted && getFormControlErrors('nsec')" class="error">Nostr Secret cannot be blank</span>
   </div>
 
-  <div class="floating-label">
-    <input type="password" name="pin" id="authModalPinField" maxlength="6" />
+  <div [class.is]="submitted && getFormControlErrors('pin')" class="floating-label">
+    <input [class.has-value]="pin.value" #pin type="password" name="pin" formControlName="pin" id="authModalPinField" maxlength="6" />
     <label for="authModalPinField">Pin</label>
+    <span *ngIf="submitted && getFormControlErrors('nsec')" class="error">Include a Pin to improve your privacity</span>
   </div>
-  <button type="button" title="add account" class="button secondary iconed-button">
+
+  <button type="submit" title="add account" class="button secondary iconed-button">
     <button type="button" class="icon-add svg-button">
       <div class="svg-wrapper">
         <div role="img"></div>

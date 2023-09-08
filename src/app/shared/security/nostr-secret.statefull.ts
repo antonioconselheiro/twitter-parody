@@ -8,7 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class NostrSecretStatefull {
 
-  @LocalStorage()
+  //@LocalStorage()
   accounts: IUnauthenticatedUser[] = [];
 
   static instance: NostrSecretStatefull | null = null;
@@ -21,29 +21,30 @@ export class NostrSecretStatefull {
     return NostrSecretStatefull.instance;
   }
 
-  accounts$ = new BehaviorSubject<IUnauthenticatedUser[]>(this.accounts);
+  private accountsSubject = new BehaviorSubject<IUnauthenticatedUser[]>(this.accounts);
+  accounts$ = this.accountsSubject.asObservable();
 
   // eslint-disable-next-line complexity
-  addAccount(profile: IProfile, pin: number): void {
+  addAccount(profile: IProfile, pin: string): void {
     const nostrSecret = profile.user.nostrSecret;
     const displayName = profile.display_name || profile.name;
+    const picture = profile.picture || '/assets/profile/default-banner.jpg';
 
-    if (!nostrSecret || !displayName || !profile.picture || !profile.user.nostrSecret) {
+    if (!nostrSecret || !displayName) {
       return;
     }
 
-    const t = AES.encrypt(profile.user.nostrSecret, String(pin));
-debugger;
+    const nsecEncrypted = AES.encrypt(nostrSecret, String(pin));
     const unauthenticated: IUnauthenticatedUser = {
+      picture,
       displayName,
       npub: profile.user.nostrPublic,
-      picture: profile.picture,
       nip05: profile.nip05,
       nip05valid: profile.nip05valid,
-      nsecEncrypted: ''
+      nsecEncrypted: String(nsecEncrypted)
     };
 
-    this.accounts.push(unauthenticated);
-    this.accounts$.next(this.accounts);
+    this.accounts = [unauthenticated].concat(this.accounts).filter(a => a);
+    this.accountsSubject.next(this.accounts);
   }
 }
