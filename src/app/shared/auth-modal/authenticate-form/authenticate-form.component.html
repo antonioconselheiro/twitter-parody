@@ -12,7 +12,7 @@
 </section>
 
 <form [formGroup]="authenticateForm" (submit)="onAuthenticateSubmit($event)" novalidate autocomplete="off">
-  <div class="floating-label pin-field">
+  <div [class.error]="showErrors()" class="floating-label pin-field">
     <input
       #pin
       required
@@ -40,6 +40,11 @@
         <div role="img"></div>
       </div>
     </button>
+
+    <ng-container *ngIf="showErrors()">
+      <span *ngIf="getFormControlErrorStatus('required')" class="error">Include a Pin to improve your privacity</span>
+      <span *ngIf="getFormControlErrorStatus('invalid')" class="error">Invalid pin, nsec could not be open</span>
+    </ng-container>
   </div>
 
   <div class="button-group">

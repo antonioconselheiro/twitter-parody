@@ -18,6 +18,7 @@ export class AutenticateFormComponent {
   account: IUnauthenticatedUser | null = null;
 
   showPin = false;
+  submitted = false;
   loading = false;
 
   @Output()
@@ -35,9 +36,19 @@ export class AutenticateFormComponent {
     private networkError$: NetworkErrorObservable
   ) { }
 
+  getFormControlErrorStatus(error: string): boolean {
+    const errors = this.authenticateForm.controls.pin.errors || {};
+    return errors[error] || false;
+  }
+
+  showErrors(): boolean {
+    return this.submitted && !!this.authenticateForm.controls.pin.errors;
+  }
+
   onAuthenticateSubmit(event: SubmitEvent): void {
     event.stopPropagation();
     event.preventDefault();
+    this.submitted = true;
 
     const account = this.account;
     const { pin } = this.authenticateForm.getRawValue();
@@ -46,9 +57,19 @@ export class AutenticateFormComponent {
     }
 
     this.loading = true;
-    const nsec = String(AES.decrypt(account.nsecEncrypted, pin));
-    const user = new NostrUser(nsec);
+    try {
+      const nsec = String(AES.decrypt(account.nsecEncrypted, pin));
+      const user = new NostrUser(nsec);
+      this.updateAutenticatedAccount(user);
+    } catch {
+      this.loading = false;
+      this.authenticateForm.controls.pin.setErrors({
+        invalid: true
+      });
+    }
+  }
 
+  private updateAutenticatedAccount(user: NostrUser): void {
     this.profiles$
       .load(user.nostrPublic)
       .then(profile => this.profiles$.next({ ...profile, ...{ user }}))

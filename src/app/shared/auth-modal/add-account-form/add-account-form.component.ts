@@ -16,17 +16,6 @@ import { DataLoadType } from '@domain/data-load-type';
 })
 export class AddAccountFormComponent {
 
-  accountForm = this.fb.group({
-    nsec: ['', [
-      Validators.required.bind(this),
-      CustomValidator.nostrSecret
-    ]],
-
-    pin: ['', [
-      Validators.required.bind(this)
-    ]]
-  });
-
   loading = false;
   submitted = false;
 
@@ -37,6 +26,17 @@ export class AddAccountFormComponent {
   changeStep = new EventEmitter<AuthModalSteps>();
 
   readonly pinLength = 6;
+
+  accountForm = this.fb.group({
+    nsec: ['', [
+      Validators.required.bind(this),
+      CustomValidator.nostrSecret
+    ]],
+
+    pin: ['', [
+      Validators.required.bind(this)
+    ]]
+  });
 
   constructor(
     private fb: FormBuilder,
