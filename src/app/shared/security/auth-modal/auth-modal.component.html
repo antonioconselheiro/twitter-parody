@@ -10,13 +10,13 @@
 
   <div class="space-between"></div>
 
-  <button title="logout" type="button" class="icon-logout svg-button">
+  <button (click)="logout(account)" title="logout" type="button" class="bordered icon-logout svg-button">
     <div class="svg-wrapper">
       <div alt="logout" role="img"></div>
     </div>
   </button>
 
-  <button title="enter" type="button" class="icon-enter svg-button">
+  <button title="enter" type="button" class="bordered icon-enter svg-button">
     <div class="svg-wrapper">
       <div alt="enter" role="img"></div>
     </div>
@@ -26,19 +26,78 @@
 <form [formGroup]="accountForm" (submit)="onAddAccountSubmit($event)" autocomplete="off">
   <h2>Add account</h2>
   <div [class.is]="submitted && getFormControlErrors('nsec')" class="floating-label">
-    <input [class.has-value]="nsec.value" #nsec type="password" name="nsec" formControlName="nsec" id="authModalNsecField" maxlength="64" />
+    <input
+      #nsec
+      required
+      name="nsec"
+      tabindex="1"
+      maxlength="64"
+      formControlName="nsec"
+      id="authModalNsecField"
+      [class.has-value]="nsec.value"
+      [attr.type]="showNostrSecret ? 'text' : 'password'"
+    />
     <label for="authModalNsecField">Nostr Secret (nsec)</label>
+
+    <button
+      type="button"
+      tabindex="4"
+      [attr.title]="showNostrSecret ? 'show nostr secret' : 'hide nostr secret'"
+      [class.icon-show]="!showNostrSecret"
+      [class.icon-hide]="showNostrSecret"
+      (click)="showNostrSecret = !showNostrSecret"
+      class="bordered svg-button"
+    >
+
+      <div class="svg-wrapper">
+        <div role="img"></div>
+      </div>
+    </button>
+
     <span *ngIf="submitted && getFormControlErrors('nsec')" class="error">Nostr Secret cannot be blank</span>
   </div>
 
-  <div [class.is]="submitted && getFormControlErrors('pin')" class="floating-label">
-    <input [class.has-value]="pin.value" #pin type="password" name="pin" formControlName="pin" id="authModalPinField" maxlength="6" />
+  <div [class.is]="submitted && getFormControlErrors('pin')" class="floating-label pin-field">
+    <input
+      #pin
+      required
+      name="pin"
+      tabindex="2"
+      maxlength="6"
+      formControlName="pin"
+      id="authModalPinField"
+      [class.has-value]="pin.value"
+      [attr.type]="showPin ? 'text' : 'password'"
+    />
+
     <label for="authModalPinField">Pin</label>
+
+    <button type="button" tabindex="5" class="bordered icon-info svg-button">
+      <div class="svg-wrapper">
+        <div role="img"></div>
+      </div>
+    </button>
+    
+    <button
+      type="button"
+      tabindex="6"
+      [attr.title]="showPin ? 'show pin' : 'hide pin'"
+      [class.icon-show]="!showPin"
+      [class.icon-hide]="showPin"
+      (click)="showPin = !showPin"
+      class="bordered icon-info svg-button"
+    >
+
+      <div class="svg-wrapper">
+        <div role="img"></div>
+      </div>
+    </button>
+
     <span *ngIf="submitted && getFormControlErrors('nsec')" class="error">Include a Pin to improve your privacity</span>
   </div>
 
-  <button type="submit" title="add account" class="button secondary iconed-button">
-    <button type="button" class="icon-add svg-button">
+  <button type="submit" tabindex="3" title="add account" class="button secondary iconed-button">
+    <button type="button" class="bordered icon-add svg-button">
       <div class="svg-wrapper">
         <div role="img"></div>
       </div>

@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { IProfile } from '@shared/profile-service/profile.interface';
-import { LocalStorage } from '@shared/storage/localstorage.decorator';
 import { AES } from 'crypto-js';
-import { IUnauthenticatedUser } from './unauthenticated-user';
 import { BehaviorSubject } from 'rxjs';
+import { IUnauthenticatedUser } from './unauthenticated-user';
 
 @Injectable()
 export class NostrSecretStatefull {
 
-  //@LocalStorage()
-  accounts: IUnauthenticatedUser[] = [];
+  accounts: {
+    [npub: string]: IUnauthenticatedUser
+  } = JSON.parse(localStorage.getItem('NostrSecretStatefull_accounts') || '{}');
 
   static instance: NostrSecretStatefull | null = null;
 
@@ -21,7 +21,7 @@ export class NostrSecretStatefull {
     return NostrSecretStatefull.instance;
   }
 
-  private accountsSubject = new BehaviorSubject<IUnauthenticatedUser[]>(this.accounts);
+  private accountsSubject = new BehaviorSubject<IUnauthenticatedUser[]>(Object.values(this.accounts));
   accounts$ = this.accountsSubject.asObservable();
 
   // eslint-disable-next-line complexity
@@ -44,7 +44,19 @@ export class NostrSecretStatefull {
       nsecEncrypted: String(nsecEncrypted)
     };
 
-    this.accounts = [unauthenticated].concat(this.accounts).filter(a => a);
-    this.accountsSubject.next(this.accounts);
+    this.accounts[unauthenticated.npub] = unauthenticated;
+    this.update();
+  }
+
+  removeAccount(profile: IUnauthenticatedUser): void {
+    delete this.accounts[profile.npub];
+    this.update();
+  }
+  
+  private update(): void {
+    //  FIXME: criar um mecanismo que persita dados
+    //  automaticamente em localStorage ou no storage local
+    localStorage.setItem('NostrSecretStatefull_accounts', JSON.stringify(this.accounts))
+    this.accountsSubject.next(Object.values(this.accounts));
   }
 }

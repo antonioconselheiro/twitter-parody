@@ -18,15 +18,3 @@ header {
     }
   }
 }
-
-.list-menu {
-  a {
-    &:hover {
-      text-decoration: none;
-    }
-
-    span {
-      color: var(--contrast);
-    }
-  }
-}

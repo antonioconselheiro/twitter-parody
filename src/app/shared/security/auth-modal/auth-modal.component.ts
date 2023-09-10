@@ -19,8 +19,10 @@ export class AuthModalComponent
 extends ModalableDirective<IProfile | null, IProfile | null>
 implements OnInit, OnDestroy {
   
-  response = new Subject<void | IProfile | null>();
   private subscriptions = new Subscription();
+
+  response = new Subject<void | IProfile | null>();
+
   accountForm = this.fb.group({
     nsec: ['', [Validators.required]],
     pin: ['', [Validators.required]]
@@ -29,6 +31,9 @@ implements OnInit, OnDestroy {
   accounts: IUnauthenticatedUser[] = [];
   auth: IProfile | null = null;
   submitted = false;
+
+  showNostrSecret = false;
+  showPin = false;
 
   constructor(
     private fb: FormBuilder,
@@ -47,6 +52,10 @@ implements OnInit, OnDestroy {
     this.subscriptions.add(this.nostrSecretStatefull.accounts$.subscribe({
       next: accounts => this.accounts = accounts
     }));  
+  }
+
+  logout(account: IUnauthenticatedUser): void {
+    this.nostrSecretStatefull.removeAccount(account);
   }
 
   getFormControlErrors(fielName: 'nsec' | 'pin'): ValidationErrors | null {

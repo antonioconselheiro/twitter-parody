@@ -18,10 +18,10 @@
   .space-between {
     flex: 1 1 0;
   }
+}
 
-  .svg-button {
-    margin-right: 1rem;
-    border: 1px solid var(--separator);
-    border-radius: 50%;
+.pin-field {
+  .has-value {
+    letter-spacing: 20px;
   }
 }
