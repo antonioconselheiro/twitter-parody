@@ -13,8 +13,10 @@ export abstract class ModalDirective implements OnInit, OnDestroy, IOpenable, IC
   abstract modalInject$: Observable<IModalMetadata<unknown, unknown>>;
 
   isOpen = false;
+  title?: string;
   content: ModalableDirective<unknown, unknown> | null = null;
   classes: string[] = [];
+
   private subscriptions = new Subscription();
 
   abstract container: ViewContainerRef | null;
@@ -39,6 +41,7 @@ export abstract class ModalDirective implements OnInit, OnDestroy, IOpenable, IC
           //  jogando processamento no próximo tick
           // eslint-disable-next-line ban/ban
           setTimeout(() =>{
+            this.title = modalMetaData.title;
             this.open();
             this.openModal(modalMetaData);
           })

@@ -18,8 +18,6 @@ export class CustomModalComponent extends ModalDirective {
   @HostBinding('style.display')
   display = 'none';
 
-  title = '';
-
   override open(): void {
     super.open();
     this.display = 'block';

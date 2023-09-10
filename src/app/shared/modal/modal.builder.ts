@@ -52,7 +52,6 @@ export class ModalBuilder<EntryType, ReturnType> {
     const response = new Subject<ReturnType>();
     const data = this.injectData as unknown;
     const component = this.component as Type<ModalableDirective<unknown, unknown>>;
-    (component as any).title = this.title;
 
     if (this.router) {
 
@@ -77,7 +76,9 @@ export class ModalBuilder<EntryType, ReturnType> {
     }
 
     ModalBuilder.modalInjectSubject.next({
-      component, data, cssClasses: this.cssClasses,
+      component, data,
+      cssClasses: this.cssClasses,
+      title: this.title,
       response: response as Subject<unknown>
     });
 
