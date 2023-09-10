@@ -144,14 +144,14 @@ nav.menu-sidebar {
   }
 }
 
-.menu-sidebar~.profile-menu,
+.menu-sidebar ~ .profile-menu,
 .menu-sidebar .profile-menu {
   border-radius: 50px;
   display: flex;
   cursor: pointer;
   user-select: none;
   margin: .5rem;
-  min-width: 72px;
+  min-width: var(--menusidebarProfileMinWidth);
   transition: background-color .3s;
 
   &:hover,

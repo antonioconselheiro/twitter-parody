@@ -9,26 +9,31 @@
   width: 18rem;
   z-index: 50;
   transition: .3s left;
-
+  
   &.active {
     left: 0;
+    box-shadow: var(--contrast) 0px 0px 5px,
+      var(--contrast) 0px 1px 4px 1px;
 
     .background {
-      display: block;
+      background-color: var(--backgroundOverlap);
+      width: calc(100% - 18rem);
+      right: 0;
+      left: 18rem;
     }
   }
 }
 
 .background {
-  background-color: rgba(0, 0, 0, .3);
+  background-color: transparent;
   position: fixed;
-  width: calc(100% - 18rem);
-  display: none;
   cursor: pointer;
   height: 100%;
+  width: 0;
+  transition: .3s all;
   top: 0;
   bottom: 0;
-  right: 0;
+  left: 0;
 }
 
 .menu-sidebar {
@@ -62,8 +67,8 @@
   flex-direction: column;
   flex: 1 1 35px;
 
-  .picture {
-    margin: var(--menusidebarProfileMargin);
+  .profile {
+    margin: var(--menusidebarProfileMargin) !important;
   }
 
   .user-info {

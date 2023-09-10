@@ -1,13 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { IProfile } from '@shared/profile-service/profile.interface';
+import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'tw-tweet-write',
   templateUrl: './tweet-write.component.html',
   styleUrls: ['./tweet-write.component.scss']
 })
-export class TweetWriteComponent {
+export class TweetWriteComponent implements OnInit, OnDestroy {
+
+  private subscriptions = new Subscription();
 
   tweet = '';
+  profile: IProfile | null = null;
+  
+  constructor(
+    private profiles$: ProfilesObservable
+  ) { }
+
+  ngOnInit(): void {
+    this.subscriptions.add(this.profiles$.subscribe({
+      next: profile => this.profile = profile 
+    }));
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
 
   includeEmoji(textArea: HTMLTextAreaElement, emoji: string): void {
     const currentValue = textArea.value,

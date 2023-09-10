@@ -31,6 +31,14 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
     this.getProfileFromActivatedRoute();
     super.ngOnInit();
   }
+
+  getProfileBanner(): string {
+    if (this.profile && this.profile.banner) {
+      return `url("${this.profile.banner}")`;
+    } else {
+      return `url("/assets/profile/default-banner.jpg")`;
+    }
+  }
   
   private bindTweetSubscription(): void {
     const npub = this.activatedRoute.snapshot.params['npub'];

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NostrUser } from '@domain/nostr-user';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
@@ -12,17 +12,20 @@ import { AuthModalSteps } from '../auth-modal-steps.type';
   templateUrl: './authenticate-form.component.html',
   styleUrls: ['./authenticate-form.component.scss']
 })
-export class AuthenticateFormComponent {
+export class AuthenticateFormComponent implements AfterViewInit {
   
   @Input()
   account: IUnauthenticatedUser | null = null;
+  
+  @Output()
+  changeStep = new EventEmitter<AuthModalSteps>();
 
+  @ViewChild('pin')
+  pinField?: ElementRef;
+  
   showPin = false;
   submitted = false;
   loading = false;
-
-  @Output()
-  changeStep = new EventEmitter<AuthModalSteps>();
 
   authenticateForm = this.fb.group({
     pin: ['', [
@@ -35,6 +38,10 @@ export class AuthenticateFormComponent {
     private profiles$: ProfilesObservable,
     private networkError$: NetworkErrorObservable
   ) { }
+
+  ngAfterViewInit(): void {
+    this.pinField?.nativeElement?.focus();
+  }
 
   getFormControlErrorStatus(error: string): boolean {
     const errors = this.authenticateForm.controls.pin.errors || {};
