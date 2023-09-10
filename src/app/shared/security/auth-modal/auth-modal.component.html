@@ -23,6 +23,8 @@
   </button>
 </section>
 
+<tw-loading></tw-loading>
+
 <form [formGroup]="accountForm" (submit)="onAddAccountSubmit($event)" autocomplete="off">
   <h2>Add account</h2>
   <div [class.is]="submitted && getFormControlErrors('nsec')" class="floating-label">

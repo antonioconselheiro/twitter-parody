@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AuthModalComponent } from './auth-modal/auth-modal.component';
 import { NostrSecretStatefull } from './nostr-secret.statefull';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoadingModule } from '@shared/loading/loading.module';
 
 @NgModule({
   declarations: [
@@ -10,6 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   imports: [
     CommonModule,
+    LoadingModule,
     ReactiveFormsModule
   ],
   providers: [

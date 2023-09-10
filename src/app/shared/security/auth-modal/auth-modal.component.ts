@@ -16,8 +16,8 @@ import { IUnauthenticatedUser } from '../unauthenticated-user';
   styleUrls: ['./auth-modal.component.scss']
 })
 export class AuthModalComponent
-extends ModalableDirective<IProfile | null, IProfile | null>
-implements OnInit, OnDestroy {
+  extends ModalableDirective<IProfile | null, IProfile | null>
+  implements OnInit, OnDestroy {
   
   private subscriptions = new Subscription();
 

@@ -1,0 +1,28 @@
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+:host {
+  display: block;
+  min-width: 32px;
+  max-width: 32px;
+  max-height: 32px;
+  min-height: 32px;
+  animation: spin .8s linear infinite;
+}
+
+.base-circle {
+  opacity: 0.2;
+  stroke: var(--primary);
+}
+
+.spinning-circle {
+  stroke: var(--primary);
+  stroke-dasharray: 80;
+  stroke-dashoffset: 60;
+}
