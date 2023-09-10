@@ -1,0 +1,8 @@
+a,
+[tabindex],
+[role="link"],
+button {
+  &:focus-visible {
+    box-shadow: rgb(255, 234, 128) 0px 0px 0px 2px inset
+  }
+}

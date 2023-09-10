@@ -1,4 +1,6 @@
 .floating-label {
+  display: flex;
+  align-items: center;
   position: relative;
   background-color: var(--base);
   border: 1px solid var(--separator);

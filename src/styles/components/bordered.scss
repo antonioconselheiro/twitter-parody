@@ -1,0 +1,19 @@
+///
+/// Se a border to component
+///
+/// @group Components
+/// @class bordered
+///
+/// @example
+/// ```
+/// <button type="button" class="bordered icon-back svg-button">
+///   <div class="svg-wrapper">
+///     <div alt="back" role="img"></div>
+///   </div>
+/// </button>
+/// ```
+///
+.bordered {
+  margin-right: 1rem;
+  border: 1px solid var(--separator);
+}

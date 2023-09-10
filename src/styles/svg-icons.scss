@@ -69,3 +69,21 @@
     mask-image: url('/assets/logout.svg');
   }
 }
+
+.icon-info {
+  div[role=img] {
+    mask-image: url('/assets/info.svg');
+  }
+}
+
+.icon-show {
+  div[role=img] {
+    mask-image: url('/assets/show.svg');
+  }
+}
+
+.icon-hide {
+  div[role=img] {
+    mask-image: url('/assets/hide.svg');
+  }
+}
