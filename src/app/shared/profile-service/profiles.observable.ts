@@ -6,9 +6,11 @@ import { ApiService } from '@shared/api-service/api.service';
 import { Event, nip19 } from 'nostr-tools';
 import { BehaviorSubject } from 'rxjs';
 import { IProfile } from './profile.interface';
+import * as CryptoJS from 'crypto-js';
+import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-user';
 
 /**
- * O observable principal da classe emite os metadados do perfil autenticado
+ * Them main observable of this class emit the authenticated profile metadata
  */
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,10 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
 
   static instance: ProfilesObservable | null = null;
 
+  private readonly initializationVector = CryptoJS.enc.Hex.parse('be410fea41df7162a679875ec131cf2c');
+  private readonly mode = CryptoJS.mode.CBC;
+  private readonly padding = CryptoJS.pad.Pkcs7;
+
   profiles: {
     [npub: string]: IProfile
   } = {};
@@ -24,7 +30,10 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
   constructor(
     private apiService: ApiService
   ) {
-    super(null);
+    const authProfileSerialized = sessionStorage.getItem('ProfilesObservable_auth');
+    const authProfile = authProfileSerialized ? JSON.parse(authProfileSerialized) as IProfile : null;
+
+    super(authProfile);
 
     if (!ProfilesObservable.instance) {
       ProfilesObservable.instance = this;
@@ -114,15 +123,61 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
     return this.getMetadataFromNostrPublic(npub);
   }
 
-  setAuthProfile(npub: string): void {
-    this.next(this.get(npub));
-  }
-
   getAuthProfile(): IProfile | null {
     return this.getValue();
   }
 
   getMetadataFromNostrPublic(npub: string): IProfile {
     return { npub, user: new NostrUser(npub), load: DataLoadType.LAZY_LOADED };
+  }
+
+  encryptAccount(profile: IProfile, pin: string): IUnauthenticatedUser | null {
+    const nostrSecret = profile.user.nostrSecret;
+    const displayName = profile.display_name || profile.name;
+    const picture = profile.picture || '/assets/profile/default-profile.jpg';
+
+    if (!nostrSecret || !displayName) {
+      return null;
+    }
+
+    const nsecEncrypted = CryptoJS.AES.encrypt(nostrSecret, String(pin), {
+      iv: this.initializationVector,
+      mode: this.mode,
+      padding: this.padding
+    });
+
+    return {
+      picture,
+      displayName,
+      npub: profile.user.nostrPublic,
+      nip05: profile.nip05,
+      nip05valid: profile.nip05valid,
+      nsecEncrypted: String(nsecEncrypted)
+    };
+  }
+
+  authenticateAccount(account: IUnauthenticatedUser, pin: string): Promise<IProfile> {
+    const decrypted = CryptoJS.AES.decrypt(account.nsecEncrypted, pin, {
+      iv: this.initializationVector,
+      mode: this.mode,
+      padding: this.padding
+    });
+
+    const nsec = CryptoJS.enc.Utf8.stringify(decrypted);
+    const user = new NostrUser(nsec);
+
+    return this
+    .load(user.nostrPublic)
+    .then(profile => {
+      const authProfile = { ...profile, ...{ user } };
+      this.next(authProfile);
+      sessionStorage.setItem('ProfilesObservable_auth', JSON.stringify(authProfile));
+      return Promise.resolve(authProfile);
+    });
+  }
+
+  logout(): void {
+    this.next(null);
+    sessionStorage.clear();
   }
 }
