@@ -16,8 +16,7 @@
     </div>
   </header>
   <section class="profile-container">
-    <div class="banner">
-      <img alt="banner picture" title="banner picture" [src]="profile.banner || '/assets/profile/default-banner.jpg'" />
+    <div class="banner" [style.backgroundImage]="getProfileBanner()">
     </div>
     <div class="edit-profile-container">
       <img alt="profile picture" title="profile picture" class="profile" [src]="profile.picture || '/assets/profile/default-profile.png'" />

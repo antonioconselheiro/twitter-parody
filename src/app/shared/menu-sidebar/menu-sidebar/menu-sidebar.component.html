@@ -58,5 +58,13 @@
     </div>
     <span *ngIf="profile.nip05valid" class="user-verified"></span>
   </ng-container>
+  <ng-container *ngIf="!profile">
+    <button title="login" type="button" class="login-button icon-unlock svg-button bordered">
+      <div class="svg-wrapper">
+        <div alt="login" role="img"></div>
+      </div>
+    </button>
+    <div class="user-info">Authenticate</div>
+  </ng-container>
   <div class="ellipsis"></div>
 </div>
