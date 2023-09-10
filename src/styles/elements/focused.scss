@@ -1,0 +1,10 @@
+a,
+[tabindex]:not(input),
+[role="link"],
+[role="button"],
+[type="button"]
+button {
+  &:focus-visible {
+    box-shadow: var(--focused) 0px 0px 0px 2px inset
+  }
+}

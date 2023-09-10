@@ -7,6 +7,8 @@ export abstract class ModalableDirective<EntryType, ReturnType> implements IClos
 
   abstract response: Subject<ReturnType | void>;
 
+  title?: string;
+
   onInjectData?(data: EntryType): void;
 
   close(): void {

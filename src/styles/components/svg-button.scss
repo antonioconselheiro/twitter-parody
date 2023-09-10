@@ -15,6 +15,8 @@
 ///
 button.svg-button {
   min-height: 17px;
+  max-height: 33px;
+  border-radius: 50%;
   padding: 0;
   display: flex;
   align-items: center;
@@ -25,10 +27,11 @@ button.svg-button {
     padding: .5rem;
 
     div[role=img] {
-      mask-size: cover;
       width: 17.2px;
       min-height: 17px;
       background-color: var(--lowContrast);
+      mask-repeat: no-repeat;
+      mask-size: contain;
     }
   }
 
@@ -43,6 +46,10 @@ button.svg-button {
 
     &:hover,
     &:active {
+      &.bordered {
+        border: 1px solid var(--primary); 
+      }
+
       div[role=img] {
         background-color: var(--imgButtonDefault) !important;
         transition: background-color .3s;
@@ -84,60 +91,7 @@ button.svg-button {
     width: 20px;
     background-color: var(--lowContrast);
     display: inline-block;
-  }
-}
-
-// generic icons
-.icon-back {
-  div[role=img] {
-    mask-image: url('/assets/back.svg');
-  }
-}
-
-.icon-upload-image {
-  div[role=img] {
-    mask-image: url('/assets/write-tweet/upload-image.svg');
-  }
-}
-
-.icon-gif {
-  div[role=img] {
-    mask-image: url('/assets/write-tweet/gif.svg');
-  }
-}
-
-.icon-poll {
-  div[role=img] {
-    mask-image: url('/assets/write-tweet/poll.svg');
-  }
-}
-
-.icon-emoticon {
-  div[role=img] {
-    mask-image: url('/assets/write-tweet/emoticon.svg');
-  }
-}
-
-.icon-location {
-  div[role=img] {
-    mask-image: url('/assets/location.svg');
-  }
-}
-
-.icon-calendar {
-  div[role=img] {
-    mask-image: url('/assets/calendar.svg');
-  }
-}
-
-.icon-link {
-  div[role=img] {
-    mask-image: url('/assets/link.svg');
-  }
-}
-
-.icon-close {
-  div[role=img] {
-    mask-image: url('/assets/close.svg');
+    mask-repeat: no-repeat;
+    mask-size: contain;
   }
 }

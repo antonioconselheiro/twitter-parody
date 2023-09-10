@@ -13,6 +13,7 @@ export class ModalBuilder<EntryType, ReturnType> {
   private injectData: EntryType | null = null;
   private cssClasses: string[] = [];
   private router?: Router;
+  private title?: string;
 
   private subscription = new Subscription();
 
@@ -23,8 +24,13 @@ export class ModalBuilder<EntryType, ReturnType> {
     return this;
   }
 
+  setTitle(title: string): ModalBuilder<EntryType, ReturnType> {
+    this.title = title;
+    return this;
+  }
+
   /**
-   * Deixa o modal associado a rota, se a rota mudar, ele some.
+   * Close modal when route change
    */
   setBindToRoute(router: Router): ModalBuilder<EntryType, ReturnType> {
     this.router = router;
@@ -70,7 +76,9 @@ export class ModalBuilder<EntryType, ReturnType> {
     }
 
     ModalBuilder.modalInjectSubject.next({
-      component, data, cssClasses: this.cssClasses,
+      component, data,
+      cssClasses: this.cssClasses,
+      title: this.title,
       response: response as Subject<unknown>
     });
 

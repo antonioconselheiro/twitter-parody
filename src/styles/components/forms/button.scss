@@ -1,0 +1,76 @@
+///
+/// This is the primary button. Customize it size, padding and margin.
+///
+/// @group Components
+/// @class button
+///
+/// @example
+/// ```
+/// <button class="button">Click me</button>
+/// ```
+///
+/// @example
+/// ```
+/// <button class="secondary button">Click me</button>
+/// ```
+/// 
+/// @example
+/// ```
+/// <button class="secondary button">
+///   <div class=""></div>
+///   <span>Click me</span>
+/// </button>
+/// ```
+///
+button.button {
+  border-radius: 50px;
+  padding: 1rem;
+  background-color: var(--primary);
+  color: var(--primary-text);
+  display: block;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 19px;
+
+  &:hover,
+  &:active {
+    background-color: var(--primaryHover);
+  }
+
+  &.secondary {
+    background-color: var(--base);
+    border: 1px solid var(--lowestContrast);
+
+    &:hover,
+    &:active {
+      background-color: var(--baseHover);
+    }
+  }
+
+  &.iconed-button {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    padding-right: 1rem;
+  }
+}
+
+///
+/// Group of buttons, side by side
+///
+/// @group Components
+/// @class button-group
+///
+/// @example
+/// ```
+/// <div class="button-group">
+///   <button class="button">Click me</button>
+///   <button class="secondary button">Click me</button>
+/// </div>
+/// ```
+///
+.button-group > button,
+.button-group > [role=button] {
+  float: left;
+  margin: 0 1rem 1rem 0;
+}

@@ -30,7 +30,12 @@
     cursor: pointer;
     flex-direction: column;
 
+    > span {
+      color: var(--contrast);
+    }
+    
     &:hover {
+      text-decoration: none;
       background-color: var(--baseHover);
     }
 

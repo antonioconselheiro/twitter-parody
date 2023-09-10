@@ -1,0 +1,110 @@
+///
+/// This is a container for your input form field.
+/// The placeholder turn into label when the field is focused or when it has value.
+/// You can include buttons inside the input.
+/// You can show form erros.
+/// 
+/// @group Components
+/// @class floating-label
+/// 
+/// @example
+/// ```
+/// <div class="floating-label">
+///   <input
+///     required
+///     type="password"
+///     name="nsec"
+///     maxlength="64"
+///     formControlName="nsec"
+///   />
+///   <label for="authModalNsecField">Nostr Secret (nsec)</label>
+/// 
+///   <button type="button" class="bordered svg-button icon-show">
+///     <div class="svg-wrapper">
+///       <div role="img"></div>
+///     </div>
+///   </button>
+/// </div>
+/// ```
+///
+/// @example
+/// ```
+/// <div class="floating-label error">
+///   <input
+///     required
+///     type="password"
+///     name="nsec"
+///     maxlength="64"
+///     formControlName="nsec"
+///   />
+///   <label for="authModalNsecField">Nostr Secret (nsec)</label>
+/// 
+///   <button type="button" class="bordered svg-button icon-show">
+///     <div class="svg-wrapper">
+///       <div role="img"></div>
+///     </div>
+///   </button>
+/// 
+///   <span class="error">Nostr Secret cannot be blank</span>
+/// </div>
+/// ```
+
+.floating-label {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: var(--base);
+  border: 1px solid var(--separator);
+  border-radius: 15px;
+  height: 3.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.75rem;
+
+  &.error {
+    border: 1px solid var(--error);
+
+    label {
+      color: var(--error);
+    }
+
+    .error {
+      display: block;
+      color: var(--error);
+      font-size: 13px;
+      position: absolute;
+      top: 59px;
+      left: 20px;
+    }
+  }
+
+  label {
+    position: absolute;
+    font-size: 18px;
+    top: 20px;
+    left: 20px;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    color: var(--lowContrast);
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: var(--base);
+    color: var(--contrast);
+    outline: none;
+    margin-top: 1rem;
+    padding-left: 20px;
+    box-sizing: border-box;
+    border: 0;
+
+    &:focus + label,
+    &.has-value + label {
+      top: 4px;
+      left: 20px;
+      font-size: 13px;
+      color: var(--contrast);
+    }
+  }
+}

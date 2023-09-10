@@ -20,7 +20,7 @@ export class CustomModalComponent extends ModalDirective {
 
   override open(): void {
     super.open();
-    this.display = 'block';
+    this.display = 'flex';
   }
 
   override close(): void {

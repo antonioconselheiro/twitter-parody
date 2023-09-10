@@ -7,4 +7,14 @@ button {
   &:focus {
     outline: none;
   }
+
+  tw-loading {
+    max-width: 22px;
+    max-height: 22px;
+  }
+
+  tw-loading ~ span,
+  .inline-icon ~ span {
+    margin-left: 0.75rem;
+  }
 }

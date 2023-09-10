@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
+import { DataLoadType } from '@domain/data-load-type';
 import { NostrEventKind } from '@domain/nostr-event-kind';
 import { NostrUser } from '@domain/nostr-user';
 import { ApiService } from '@shared/api-service/api.service';
 import { Event, nip19 } from 'nostr-tools';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { IProfile } from './profile.interface';
-import { DataLoadType } from '@domain/data-load-type';
-import { ThemeObservable } from '@shared/theme/theme.observable';
 
 /**
  * O observable principal da classe emite os metadados do perfil autenticado
@@ -25,9 +24,7 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
   constructor(
     private apiService: ApiService
   ) {
-    const npub = 'npub1lafcm7zm35l9q06mnaqk5ykt2530ylnwm5j8xaykflppfstv6vysxg4ryf';
-
-    super({ npub, user: new NostrUser(npub), load: DataLoadType.LAZY_LOADED });
+    super(null);
 
     if (!ProfilesObservable.instance) {
       ProfilesObservable.instance = this;
@@ -39,9 +36,9 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
   cache(profiles: Event<NostrEventKind>[]): void;
   cache(profiles: IProfile[]): void;
   cache(profiles: IProfile[] | Event<NostrEventKind>[]): void {
-    const profileList = (profiles as (IProfile | Event<NostrEventKind.Metadata>)[]);
+    const profileList = (profiles as (IProfile | Event<NostrEventKind>)[]);
     profileList
-      .filter(profile => !('sig' in profile && profile.kind !== NostrEventKind.Metadata))
+      .filter((profile) => !('sig' in profile && profile.kind !== NostrEventKind.Metadata))
       .forEach(profile => this.cacheProfile(profile));
   }
 
@@ -87,8 +84,8 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
       return this.profiles[npub] = {
         npub: npub,
         user: new NostrUser(npub),
-        ...metadata,
-        
+        load: DataLoadType.EAGER_LOADED,
+        ...metadata
       }
     } else {
       return this.profiles[profile.npub] = profile;
@@ -121,8 +118,8 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
     this.next(this.get(npub));
   }
 
-  getAuthProfile(): Observable<IProfile | null> {
-    return this;
+  getAuthProfile(): IProfile | null {
+    return this.getValue();
   }
 
   getMetadataFromNostrPublic(npub: string): IProfile {
