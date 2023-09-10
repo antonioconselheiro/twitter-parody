@@ -23,11 +23,9 @@
   </button>
 </section>
 
-<tw-loading></tw-loading>
-
 <form [formGroup]="accountForm" (submit)="onAddAccountSubmit($event)" autocomplete="off">
   <h2>Add account</h2>
-  <div [class.is]="submitted && getFormControlErrors('nsec')" class="floating-label">
+  <div [class.error]="submitted && getFormControlErrors('nsec')" class="floating-label">
     <input
       #nsec
       required
@@ -37,6 +35,7 @@
       formControlName="nsec"
       id="authModalNsecField"
       [class.has-value]="nsec.value"
+      [attr.readonly]="loading ? 'readonly' : null"
       [attr.type]="showNostrSecret ? 'text' : 'password'"
     />
     <label for="authModalNsecField">Nostr Secret (nsec)</label>
@@ -44,7 +43,7 @@
     <button
       type="button"
       tabindex="4"
-      [attr.title]="showNostrSecret ? 'show nostr secret' : 'hide nostr secret'"
+      [attr.title]="showNostrSecret ? 'hide nostr secret' : 'show nostr secret'"
       [class.icon-show]="!showNostrSecret"
       [class.icon-hide]="showNostrSecret"
       (click)="showNostrSecret = !showNostrSecret"
@@ -56,25 +55,31 @@
       </div>
     </button>
 
-    <span *ngIf="submitted && getFormControlErrors('nsec')" class="error">Nostr Secret cannot be blank</span>
+    <ng-container *ngIf="submitted">
+      <span *ngIf="getFormControlErrorStatus('nsec', 'required')" class="error">Nostr Secret cannot be blank</span>
+      <span *ngIf="getFormControlErrorStatus('nsec', 'invalidNostrPublicGivenInstead')" class="error">Nostr Public given instead Nostr Secret</span>
+      <span *ngIf="getFormControlErrorStatus('nsec', 'invalidNostrSecret')" class="error">Invalid Nostr Secret</span>
+    </ng-container>
   </div>
 
-  <div [class.is]="submitted && getFormControlErrors('pin')" class="floating-label pin-field">
+  <div [class.error]="submitted && getFormControlErrors('pin')" class="floating-label pin-field">
     <input
       #pin
       required
       name="pin"
       tabindex="2"
-      maxlength="6"
+      [maxlength]="pinLength"
       formControlName="pin"
       id="authModalPinField"
       [class.has-value]="pin.value"
+      [attr.readonly]="loading ? 'readonly' : null"
       [attr.type]="showPin ? 'text' : 'password'"
     />
 
     <label for="authModalPinField">Pin</label>
 
-    <button type="button" tabindex="5" class="bordered icon-info svg-button">
+    <!-- TODO: incluir popover ao clique com explicação do porquê do pin -->
+    <button title="tap for information" type="button" tabindex="5" class="bordered icon-info svg-button">
       <div class="svg-wrapper">
         <div role="img"></div>
       </div>
@@ -83,7 +88,7 @@
     <button
       type="button"
       tabindex="6"
-      [attr.title]="showPin ? 'show pin' : 'hide pin'"
+      [attr.title]="showPin ? 'hide pin' : 'show pin'"
       [class.icon-show]="!showPin"
       [class.icon-hide]="showPin"
       (click)="showPin = !showPin"
@@ -95,15 +100,20 @@
       </div>
     </button>
 
-    <span *ngIf="submitted && getFormControlErrors('nsec')" class="error">Include a Pin to improve your privacity</span>
+    <ng-container *ngIf="submitted">
+      <span *ngIf="getFormControlErrorStatus('pin', 'required')" class="error">Include a Pin to improve your privacity</span>
+    </ng-container>
   </div>
 
   <button type="submit" tabindex="3" title="add account" class="button secondary iconed-button">
-    <button type="button" class="bordered icon-add svg-button">
+    <button *ngIf="!loading" type="button" class="bordered icon-add svg-button">
       <div class="svg-wrapper">
         <div role="img"></div>
       </div>
     </button>
+
+    <tw-loading *ngIf="loading"></tw-loading>
+
     <span>
       Account
     </span>

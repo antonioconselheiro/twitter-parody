@@ -2,6 +2,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 import { NostrUser } from '@domain/nostr-user';
+import { CustomValidator } from '@shared/custom-validator/custom-validator';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
 import { ModalableDirective } from '@shared/modal/modalable.directive';
 import { IProfile } from '@shared/profile-service/profile.interface';
@@ -22,14 +23,23 @@ export class AuthModalComponent
   private subscriptions = new Subscription();
 
   response = new Subject<void | IProfile | null>();
+  readonly pinLength = 6;
 
   accountForm = this.fb.group({
-    nsec: ['', [Validators.required]],
-    pin: ['', [Validators.required]]
+    nsec: ['', [
+      Validators.required,
+      CustomValidator.nostrSecret
+    ]],
+
+    pin: ['', [
+      Validators.required
+    ]]
   });
 
   accounts: IUnauthenticatedUser[] = [];
   auth: IProfile | null = null;
+
+  loading = false;
   submitted = false;
 
   showNostrSecret = false;
@@ -58,8 +68,13 @@ export class AuthModalComponent
     this.nostrSecretStatefull.removeAccount(account);
   }
 
-  getFormControlErrors(fielName: 'nsec' | 'pin'): ValidationErrors | null {
-    return this.accountForm.controls[fielName].errors;
+  getFormControlErrors(fieldName: 'nsec' | 'pin'): ValidationErrors | null {
+    return this.accountForm.controls[fieldName].errors;
+  }
+
+  getFormControlErrorStatus(fieldName: 'nsec' | 'pin', error: string): boolean {
+    const errors = this.accountForm.controls[fieldName].errors || {};
+    return errors[error] || false;
   }
 
   onAddAccountSubmit(event: SubmitEvent): void {
@@ -70,17 +85,23 @@ export class AuthModalComponent
     if (!this.accountForm.valid) {
       return;
     }
-
+    
     const { nsec, pin } = this.accountForm.getRawValue();
     if (!nsec || !pin) {
       return;
     }
+    
+    this.accountForm.reset();
+    this.submitted = false;
 
     const user = new NostrUser(nsec);
+    this.loading = true;
     this.profiles$
       .load(user.nostrPublic)
       .then(profile => this.nostrSecretStatefull.addAccount({ ...profile, user }, pin))
-      .catch(e => this.networkError$.next(e));
+      //  FIXME: consigo centralizar o tratamento de catch para promises?
+      .catch(e => this.networkError$.next(e))
+      .finally(() => this.loading = false);
   }
 
   ngOnDestroy(): void {
