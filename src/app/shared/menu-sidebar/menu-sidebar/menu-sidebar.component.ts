@@ -7,7 +7,7 @@ import { CompositeTweetPopoverComponent } from '@shared/tweet-widget/composite-t
 import { Subscription } from 'rxjs';
 import { MenuActiveObservable } from '../menu-active.observable';
 import { MenuType } from '../menu-type.enum';
-import { AuthModalComponent } from '@shared/security/auth-modal/auth-modal.component';
+import { AuthModalComponent } from '@shared/auth-modal/auth-modal.component';
 
 @Component({
   selector: 'tw-menu-sidebar',

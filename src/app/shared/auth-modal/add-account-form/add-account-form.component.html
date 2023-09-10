@@ -1,28 +1,3 @@
-<section *ngFor="let account of accounts" class="account-container">
-  <img title="profile picture" alt="profile picture" class="profile" [src]="account.picture || '/assets/profile/default-profile.png'" />
-  <div class="user-info">
-    <span class="user-name">
-      {{account.displayName}}
-      <span *ngIf="account.nip05valid" class="user-verified"></span>
-    </span>
-    <span *ngIf="account.nip05" class="user-nip5">{{account.nip05}}</span>
-  </div>
-
-  <div class="space-between"></div>
-
-  <button (click)="logout(account)" title="logout" type="button" class="bordered icon-logout svg-button">
-    <div class="svg-wrapper">
-      <div alt="logout" role="img"></div>
-    </div>
-  </button>
-
-  <button title="enter" type="button" class="bordered icon-enter svg-button">
-    <div class="svg-wrapper">
-      <div alt="enter" role="img"></div>
-    </div>
-  </button>
-</section>
-
 <form [formGroup]="accountForm" (submit)="onAddAccountSubmit($event)" autocomplete="off">
   <h2>Add account</h2>
   <div [class.error]="submitted && getFormControlErrors('nsec')" class="floating-label">
@@ -42,7 +17,7 @@
 
     <button
       type="button"
-      tabindex="4"
+      tabindex="5"
       [attr.title]="showNostrSecret ? 'hide nostr secret' : 'show nostr secret'"
       [class.icon-show]="!showNostrSecret"
       [class.icon-hide]="showNostrSecret"
@@ -59,6 +34,7 @@
       <span *ngIf="getFormControlErrorStatus('nsec', 'required')" class="error">Nostr Secret cannot be blank</span>
       <span *ngIf="getFormControlErrorStatus('nsec', 'invalidNostrPublicGivenInstead')" class="error">Nostr Public given instead Nostr Secret</span>
       <span *ngIf="getFormControlErrorStatus('nsec', 'invalidNostrSecret')" class="error">Invalid Nostr Secret</span>
+      <span *ngIf="getFormControlErrorStatus('nsec', 'nostrSecretNotFound')" class="error">Could not found this account in current relay pool</span>
     </ng-container>
   </div>
 
@@ -79,7 +55,7 @@
     <label for="authModalPinField">Pin</label>
 
     <!-- TODO: incluir popover ao clique com explicação do porquê do pin -->
-    <button title="tap for information" type="button" tabindex="5" class="bordered icon-info svg-button">
+    <button title="tap for information" type="button" tabindex="6" class="bordered icon-info svg-button">
       <div class="svg-wrapper">
         <div role="img"></div>
       </div>
@@ -87,7 +63,7 @@
     
     <button
       type="button"
-      tabindex="6"
+      tabindex="7"
       [attr.title]="showPin ? 'hide pin' : 'show pin'"
       [class.icon-show]="!showPin"
       [class.icon-hide]="showPin"
@@ -105,7 +81,7 @@
     </ng-container>
   </div>
 
-  <button type="submit" tabindex="3" title="add account" class="button secondary iconed-button">
+  <button type="submit" tabindex="3" title="add account" class="action-button button secondary iconed-button">
     <button *ngIf="!loading" type="button" class="bordered icon-add svg-button">
       <div class="svg-wrapper">
         <div role="img"></div>
@@ -116,6 +92,18 @@
 
     <span>
       Account
+    </span>
+  </button>
+
+  <button (click)="changeStep.next('select-account')" type="button" tabindex="4" title="back" class="action-button button secondary iconed-button">
+    <button type="button" class="bordered icon-back svg-button">
+      <div class="svg-wrapper">
+        <div role="img"></div>
+      </div>
+    </button>
+
+    <span>
+      Back
     </span>
   </button>
 </form>

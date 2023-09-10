@@ -1,0 +1,34 @@
+<section *ngFor="let account of accounts" class="account-container">
+  <img title="profile picture" alt="profile picture" class="profile" [src]="account.picture || '/assets/profile/default-profile.png'" />
+  <div class="user-info">
+    <span class="user-name">
+      {{account.displayName}}
+      <span *ngIf="account.nip05valid" class="user-verified"></span>
+    </span>
+    <span *ngIf="account.nip05" class="user-nip5">{{account.nip05}}</span>
+  </div>
+
+  <div class="space-between"></div>
+
+  <button (click)="logout(account)" title="logout" type="button" class="bordered icon-logout svg-button">
+    <div class="svg-wrapper">
+      <div alt="logout" role="img"></div>
+    </div>
+  </button>
+
+  <button (click)="selectAccount(account)" title="enter" type="button" class="bordered icon-enter svg-button">
+    <div class="svg-wrapper">
+      <div alt="enter" role="img"></div>
+    </div>
+  </button>
+</section>
+
+<button (click)="changeStep.next('add-account')" type="button" class="add-account">
+  <button title="add account" type="button" class="bordered icon-add svg-button">
+    <div class="svg-wrapper">
+      <div alt="add account" role="img"></div>
+    </div>
+  </button>
+
+  <div>Add Account</div>
+</button>

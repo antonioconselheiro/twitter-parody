@@ -1,0 +1,16 @@
+<tw-loading *ngIf="!currentStep"></tw-loading>
+<tw-add-account-form
+  *ngIf="currentStep === 'add-account'"
+  (changeStep)="onChangeStep($event)"
+></tw-add-account-form>
+<tw-select-account-list
+  *ngIf="currentStep === 'select-account'"
+  (changeStep)="onChangeStep($event)"
+  (selected)="autenticatingAccount = $event"
+  [accounts]="accounts"
+></tw-select-account-list>
+<tw-autenticate-form
+  *ngIf="currentStep === 'autenticate' && autenticatingAccount"
+  (changeStep)="onChangeStep($event)"
+  [account]="autenticatingAccount"
+></tw-autenticate-form>
