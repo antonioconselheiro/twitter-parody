@@ -6,6 +6,7 @@ import { NostrSecretStatefull } from '@shared/security-service/nostr-secret.stat
 import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-user';
 import { Subject, Subscription } from 'rxjs';
 import { AuthModalSteps } from './auth-modal-steps.type';
+import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
 
 @Component({
   selector: 'tw-auth-modal',
@@ -22,10 +23,11 @@ export class AuthModalComponent
   auth: IProfile | null = null;
   accounts: IUnauthenticatedUser[] = [];
   
-  autenticatingAccount: IUnauthenticatedUser | null = null;
+  authenticatingAccount: IUnauthenticatedUser | null = null;
   currentStep: AuthModalSteps | null = null;
 
   constructor(
+    private profiles$: ProfilesObservable,
     private nostrSecretStatefull: NostrSecretStatefull
   ) {
     super();
@@ -33,7 +35,20 @@ export class AuthModalComponent
 
   ngOnInit(): void {
     this.bindAccountsSubscription();
+    this.bindProfilesSubscription();
     this.setInitialScreen();
+  }
+
+  private bindAccountsSubscription(): void {
+    this.subscriptions.add(this.nostrSecretStatefull.accounts$.subscribe({
+      next: accounts => this.accounts = accounts
+    }));
+  }
+
+  private bindProfilesSubscription(): void {
+    this.subscriptions.add(this.profiles$.subscribe({
+      next: auth => auth && this.close()
+    }));
   }
 
   onChangeStep(step: AuthModalSteps): void {
@@ -44,12 +59,6 @@ export class AuthModalComponent
 
   private setInitialScreen(): void {
     this.currentStep = this.accounts.length ? 'select-account' : 'add-account';
-  }
-
-  private bindAccountsSubscription(): void {
-    this.subscriptions.add(this.nostrSecretStatefull.accounts$.subscribe({
-      next: accounts => this.accounts = accounts
-    }));
   }
 
   ngOnDestroy(): void {

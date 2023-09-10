@@ -4,7 +4,7 @@ import { NostrUser } from '@domain/nostr-user';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
 import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
 import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-user';
-import { AES } from 'crypto-js';
+import * as CryptoJS from 'crypto-js';
 import { AuthModalSteps } from '../auth-modal-steps.type';
 
 @Component({
@@ -12,7 +12,7 @@ import { AuthModalSteps } from '../auth-modal-steps.type';
   templateUrl: './authenticate-form.component.html',
   styleUrls: ['./authenticate-form.component.scss']
 })
-export class AutenticateFormComponent {
+export class AuthenticateFormComponent {
   
   @Input()
   account: IUnauthenticatedUser | null = null;
@@ -58,9 +58,16 @@ export class AutenticateFormComponent {
 
     this.loading = true;
     try {
-      const nsec = String(AES.decrypt(account.nsecEncrypted, pin));
-      const user = new NostrUser(nsec);
-      this.updateAutenticatedAccount(user);
+      const decrypted = CryptoJS.AES.decrypt(account.nsecEncrypted, pin, {
+        iv: CryptoJS.enc.Hex.parse('be410fea41df7162a679875ec131cf2c'),
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+      });
+
+      const nsec = CryptoJS.enc.Utf8.stringify(decrypted);
+
+      const user = new NostrUser(String(nsec));
+      this.updateAuthenticatedAccount(user);
     } catch {
       this.loading = false;
       this.authenticateForm.controls.pin.setErrors({
@@ -69,7 +76,7 @@ export class AutenticateFormComponent {
     }
   }
 
-  private updateAutenticatedAccount(user: NostrUser): void {
+  private updateAuthenticatedAccount(user: NostrUser): void {
     this.profiles$
       .load(user.nostrPublic)
       .then(profile => this.profiles$.next({ ...profile, ...{ user }}))

@@ -25,10 +25,19 @@ export class SelectAccountListComponent {
 
   logout(account: IUnauthenticatedUser): void {
     this.nostrSecretStatefull.removeAccount(account);
+
+    //  wait the observable send centralizated
+    //  and updated info of account amount
+    // eslint-disable-next-line ban/ban
+    setTimeout(() => {
+      if (!this.accounts.length) {
+        this.changeStep.next('add-account');
+      }
+    });
   }
 
   selectAccount(account: IUnauthenticatedUser): void {
     this.selected.emit(account);
-    this.changeStep.next('autenticate');
+    this.changeStep.next('authenticate');
   }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 import { NostrUser } from '@domain/nostr-user';
 import { CustomValidator } from '@shared/custom-validator/custom-validator';
@@ -8,6 +8,7 @@ import { NostrSecretStatefull } from '@shared/security-service/nostr-secret.stat
 import { AuthModalSteps } from '../auth-modal-steps.type';
 import { IProfile } from '@shared/profile-service/profile.interface';
 import { DataLoadType } from '@domain/data-load-type';
+import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-user';
 
 @Component({
   selector: 'tw-add-account-form',
@@ -15,6 +16,9 @@ import { DataLoadType } from '@domain/data-load-type';
   styleUrls: ['./add-account-form.component.scss']
 })
 export class AddAccountFormComponent {
+
+  @Input()
+  accounts: IUnauthenticatedUser[] = [];
 
   loading = false;
   submitted = false;
@@ -24,6 +28,9 @@ export class AddAccountFormComponent {
 
   @Output()
   changeStep = new EventEmitter<AuthModalSteps>();
+
+  @Output()
+  selected = new EventEmitter<IUnauthenticatedUser>();
 
   readonly pinLength = 6;
 
@@ -85,8 +92,14 @@ export class AddAccountFormComponent {
   private addAccount(profile: IProfile, user: NostrUser, pin: string): void {
     if (profile.load === DataLoadType.EAGER_LOADED) {
       this.accountForm.reset();
-      this.nostrSecretStatefull.addAccount({ ...profile, user }, pin);
-      this.changeStep.next('autenticate');
+      const unauthenticatedAccount = this.nostrSecretStatefull.addAccount({ ...profile, user }, pin);
+      if (!unauthenticatedAccount) {
+        this.changeStep.next('select-account');
+      } else {
+        this.selected.next(unauthenticatedAccount);
+        this.changeStep.next('authenticate');
+      }
+
     } else {
       this.accountForm.controls['nsec'].setErrors({
         nostrSecretNotFound: true

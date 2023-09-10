@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IProfile } from '@shared/profile-service/profile.interface';
-import { AES } from 'crypto-js';
+import * as CryptoJS from 'crypto-js';
 import { BehaviorSubject } from 'rxjs';
 import { IUnauthenticatedUser } from './unauthenticated-user';
 
@@ -25,16 +25,21 @@ export class NostrSecretStatefull {
   accounts$ = this.accountsSubject.asObservable();
 
   // eslint-disable-next-line complexity
-  addAccount(profile: IProfile, pin: string): void {
+  addAccount(profile: IProfile, pin: string): IUnauthenticatedUser | null {
     const nostrSecret = profile.user.nostrSecret;
     const displayName = profile.display_name || profile.name;
-    const picture = profile.picture || '/assets/profile/default-banner.jpg';
+    const picture = profile.picture || '/assets/profile/default-profile.jpg';
 
     if (!nostrSecret || !displayName) {
-      return;
+      return null;
     }
 
-    const nsecEncrypted = AES.encrypt(nostrSecret, String(pin));
+    const nsecEncrypted = CryptoJS.AES.encrypt(nostrSecret, String(pin), {
+      iv: CryptoJS.enc.Hex.parse('be410fea41df7162a679875ec131cf2c'),
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7
+    });
+
     const unauthenticated: IUnauthenticatedUser = {
       picture,
       displayName,
@@ -46,6 +51,7 @@ export class NostrSecretStatefull {
 
     this.accounts[unauthenticated.npub] = unauthenticated;
     this.update();
+    return unauthenticated;
   }
 
   removeAccount(profile: IUnauthenticatedUser): void {

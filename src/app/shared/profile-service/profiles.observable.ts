@@ -36,9 +36,9 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
   cache(profiles: Event<NostrEventKind>[]): void;
   cache(profiles: IProfile[]): void;
   cache(profiles: IProfile[] | Event<NostrEventKind>[]): void {
-    const profileList = (profiles as (IProfile | Event<NostrEventKind.Metadata>)[]);
+    const profileList = (profiles as (IProfile | Event<NostrEventKind>)[]);
     profileList
-      .filter(profile => !('sig' in profile && profile.kind !== NostrEventKind.Metadata))
+      .filter((profile) => !('sig' in profile && profile.kind !== NostrEventKind.Metadata))
       .forEach(profile => this.cacheProfile(profile));
   }
 
@@ -84,8 +84,8 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
       return this.profiles[npub] = {
         npub: npub,
         user: new NostrUser(npub),
-        ...metadata,
-        
+        load: DataLoadType.EAGER_LOADED,
+        ...metadata
       }
     } else {
       return this.profiles[profile.npub] = profile;

@@ -1,5 +1,5 @@
+<h2>Add account</h2>
 <form [formGroup]="accountForm" (submit)="onAddAccountSubmit($event)" novalidate autocomplete="off">
-  <h2>Add account</h2>
   <div [class.error]="submitted && getFormControlErrors('nsec')" class="floating-label">
     <input
       #nsec
@@ -94,7 +94,14 @@
       </span>
     </button>
   
-    <button (click)="changeStep.next('select-account')" type="button" tabindex="3" title="back" class="button secondary iconed-button">
+    <button
+      *ngIf="accounts.length"
+      type="button"
+      tabindex="3"
+      title="back"
+      (click)="changeStep.next('select-account')"
+      class="button secondary iconed-button"
+    >
       <div class="inline-icon icon-back">
         <div role="img"></div>
       </div>

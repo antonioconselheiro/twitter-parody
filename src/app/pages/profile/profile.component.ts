@@ -36,10 +36,7 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
     const npub = this.activatedRoute.snapshot.params['npub'];
     this.tweetApi.listTweetsFrom(npub)
       .then(tweets => this.tweets = tweets)
-      .catch(e => {
-        debugger;
-        this.networkError$.next(e);
-      });
+      .catch(e => this.networkError$.next(e));
   }
   
   private getProfileFromActivatedRoute(): void {
