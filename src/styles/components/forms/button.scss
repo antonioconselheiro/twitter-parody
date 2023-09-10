@@ -6,12 +6,20 @@
 ///
 /// @example
 /// ```
-/// <button class="button">Clique em mim</button>
+/// <button class="button">Click me</button>
 /// ```
 ///
 /// @example
 /// ```
-/// <button class="secondary button">Clique em mim</button>
+/// <button class="secondary button">Click me</button>
+/// ```
+/// 
+/// @example
+/// ```
+/// <button class="secondary button">
+///   <div class=""></div>
+///   <span>Click me</span>
+/// </button>
 /// ```
 ///
 button.button {
@@ -45,4 +53,24 @@ button.button {
     padding: 0.5rem;
     padding-right: 1rem;
   }
+}
+
+///
+/// Group of buttons, side by side
+///
+/// @group Components
+/// @class button-group
+///
+/// @example
+/// ```
+/// <div class="button-group">
+///   <button class="button">Click me</button>
+///   <button class="secondary button">Click me</button>
+/// </div>
+/// ```
+///
+.button-group > button,
+.button-group > [role=button] {
+  float: left;
+  margin: 0 1rem 1rem 0;
 }

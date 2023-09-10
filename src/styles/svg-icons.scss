@@ -87,3 +87,9 @@
     mask-image: url('/assets/hide.svg');
   }
 }
+
+.icon-unlock {
+  div[role=img] {
+    mask-image: url('/assets/unlock.svg');
+  }
+}

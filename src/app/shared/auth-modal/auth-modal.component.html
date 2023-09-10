@@ -9,8 +9,8 @@
   (selected)="autenticatingAccount = $event"
   [accounts]="accounts"
 ></tw-select-account-list>
-<tw-autenticate-form
+<tw-authenticate-form
   *ngIf="currentStep === 'autenticate' && autenticatingAccount"
   (changeStep)="onChangeStep($event)"
   [account]="autenticatingAccount"
-></tw-autenticate-form>
+></tw-authenticate-form>

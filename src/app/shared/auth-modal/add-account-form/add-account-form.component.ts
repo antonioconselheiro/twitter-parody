@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 import { NostrUser } from '@domain/nostr-user';
@@ -19,12 +18,12 @@ export class AddAccountFormComponent {
 
   accountForm = this.fb.group({
     nsec: ['', [
-      Validators.required,
+      Validators.required.bind(this),
       CustomValidator.nostrSecret
     ]],
 
     pin: ['', [
-      Validators.required
+      Validators.required.bind(this)
     ]]
   });
 

@@ -7,4 +7,8 @@ button {
   &:focus {
     outline: none;
   }
+
+  .inline-icon ~ span {
+    margin-left: 0.75rem;
+  }
 }

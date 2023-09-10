@@ -27,10 +27,11 @@ button.svg-button {
     padding: .5rem;
 
     div[role=img] {
-      mask-size: cover;
       width: 17.2px;
       min-height: 17px;
       background-color: var(--lowContrast);
+      mask-repeat: no-repeat;
+      mask-size: contain;
     }
   }
 
@@ -90,5 +91,7 @@ button.svg-button {
     width: 20px;
     background-color: var(--lowContrast);
     display: inline-block;
+    mask-repeat: no-repeat;
+    mask-size: contain;
   }
 }

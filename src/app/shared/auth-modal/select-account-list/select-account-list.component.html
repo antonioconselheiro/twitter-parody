@@ -1,4 +1,4 @@
-<section *ngFor="let account of accounts" class="account-container">
+<section *ngFor="let account of accounts" class="unauthenticated-account">
   <img title="profile picture" alt="profile picture" class="profile" [src]="account.picture || '/assets/profile/default-profile.png'" />
   <div class="user-info">
     <span class="user-name">
@@ -23,12 +23,10 @@
   </button>
 </section>
 
-<button (click)="changeStep.next('add-account')" type="button" class="add-account">
-  <button title="add account" type="button" class="bordered icon-add svg-button">
-    <div class="svg-wrapper">
-      <div alt="add account" role="img"></div>
-    </div>
-  </button>
+<button (click)="changeStep.next('add-account')" title="add account" type="button" class="add-account">
+  <div class="inline-icon icon-add">
+    <div alt="add account" role="img"></div>
+  </div>
 
-  <div>Add Account</div>
+  <span>Add Account</span>
 </button>

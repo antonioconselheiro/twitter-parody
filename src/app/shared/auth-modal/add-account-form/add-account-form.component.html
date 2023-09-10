@@ -1,4 +1,4 @@
-<form [formGroup]="accountForm" (submit)="onAddAccountSubmit($event)" autocomplete="off">
+<form [formGroup]="accountForm" (submit)="onAddAccountSubmit($event)" novalidate autocomplete="off">
   <h2>Add account</h2>
   <div [class.error]="submitted && getFormControlErrors('nsec')" class="floating-label">
     <input
@@ -8,16 +8,16 @@
       tabindex="1"
       maxlength="64"
       formControlName="nsec"
-      id="authModalNsecField"
+      id="addAccountNsecField"
       [class.has-value]="nsec.value"
       [attr.readonly]="loading ? 'readonly' : null"
       [attr.type]="showNostrSecret ? 'text' : 'password'"
     />
-    <label for="authModalNsecField">Nostr Secret (nsec)</label>
+    <label for="addAccountNsecField">Nostr Secret (nsec)</label>
 
     <button
       type="button"
-      tabindex="5"
+      tabindex="4"
       [attr.title]="showNostrSecret ? 'hide nostr secret' : 'show nostr secret'"
       [class.icon-show]="!showNostrSecret"
       [class.icon-hide]="showNostrSecret"
@@ -46,13 +46,13 @@
       tabindex="2"
       [maxlength]="pinLength"
       formControlName="pin"
-      id="authModalPinField"
+      id="addAccountPinField"
       [class.has-value]="pin.value"
       [attr.readonly]="loading ? 'readonly' : null"
       [attr.type]="showPin ? 'text' : 'password'"
     />
 
-    <label for="authModalPinField">Pin</label>
+    <label for="addAccountPinField">Pin</label>
 
     <!-- TODO: incluir popover ao clique com explicação do porquê do pin -->
     <button title="tap for information" type="button" tabindex="6" class="bordered icon-info svg-button">
@@ -81,29 +81,27 @@
     </ng-container>
   </div>
 
-  <button type="submit" tabindex="3" title="add account" class="action-button button secondary iconed-button">
-    <button *ngIf="!loading" type="button" class="bordered icon-add svg-button">
-      <div class="svg-wrapper">
+  <div class="button-group">
+    <button type="submit" tabindex="2" title="add account" class="button secondary iconed-button">
+      <div *ngIf="!loading" class="inline-icon icon-add">
         <div role="img"></div>
       </div>
+  
+      <tw-loading *ngIf="loading"></tw-loading>
+  
+      <span>
+        Add account
+      </span>
     </button>
-
-    <tw-loading *ngIf="loading"></tw-loading>
-
-    <span>
-      Account
-    </span>
-  </button>
-
-  <button (click)="changeStep.next('select-account')" type="button" tabindex="4" title="back" class="action-button button secondary iconed-button">
-    <button type="button" class="bordered icon-back svg-button">
-      <div class="svg-wrapper">
+  
+    <button (click)="changeStep.next('select-account')" type="button" tabindex="3" title="back" class="button secondary iconed-button">
+      <div class="inline-icon icon-back">
         <div role="img"></div>
       </div>
+  
+      <span>
+        Back
+      </span>
     </button>
-
-    <span>
-      Back
-    </span>
-  </button>
+  </div>
 </form>

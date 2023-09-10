@@ -1,0 +1,49 @@
+///
+/// shows unauthenticated account for authentication
+///
+/// @group Components
+/// @class .unauthenticated-account
+/// 
+/// @example
+/// ```
+/// <section class="unauthenticated-account">
+///   <img title="profile picture" alt="profile picture" class="profile" src="/assets/profile/default-profile.png" />
+///   <div class="user-info">
+///     <span class="user-name">
+///       António Vicente Mendes Maciel
+///       <span class="user-verified"></span>
+///     </span>
+///     <span class="user-nip5">@anarcanudos</span>
+///   </div>
+/// </section>
+/// ```
+
+.unauthenticated-account {
+  padding: 0.5rem;
+}
+
+.add-account,
+.unauthenticated-account {
+  display: flex;
+  border: 1px solid var(--separator);
+  border-radius: 15px;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .space-between {
+    flex: 1 1 0;
+  }
+
+  .svg-button {
+    margin-right: 1rem;
+  }
+}
