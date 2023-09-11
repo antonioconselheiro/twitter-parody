@@ -19,9 +19,16 @@ aside {
     li {
       display: flex;
       align-items: center;
+      cursor: pointer;
+      padding: 1rem 0;
+
+      &:hover {
+        background-color: var(--lowBase);
+      }
 
       tw-profile-picture {
-        width: 45px;
+        width: 50px;
+        margin: 7px;
       }
 
       article {

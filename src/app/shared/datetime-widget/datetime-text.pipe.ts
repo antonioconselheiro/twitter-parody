@@ -50,7 +50,7 @@ export class DatetimeTextPipe implements PipeTransform {
   }
 
   private daysAgo(timestamp: number): string {
-    return moment(timestamp).format('MMMM DD');
+    return moment(timestamp).format('MMM D');
   }
 
   private yearsAgo(timestamp: number): string {
