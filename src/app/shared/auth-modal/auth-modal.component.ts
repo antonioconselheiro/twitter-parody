@@ -2,11 +2,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalableDirective } from '@shared/modal/modalable.directive';
 import { IProfile } from '@shared/profile-service/profile.interface';
+import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
 import { NostrSecretStatefull } from '@shared/security-service/nostr-secret.statefull';
 import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-user';
 import { Subject, Subscription } from 'rxjs';
 import { AuthModalSteps } from './auth-modal-steps.type';
-import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
 
 @Component({
   selector: 'tw-auth-modal',
@@ -35,19 +35,12 @@ export class AuthModalComponent
 
   ngOnInit(): void {
     this.bindAccountsSubscription();
-    this.bindProfilesSubscription();
     this.setInitialScreen();
   }
 
   private bindAccountsSubscription(): void {
     this.subscriptions.add(this.nostrSecretStatefull.accounts$.subscribe({
       next: accounts => this.accounts = accounts
-    }));
-  }
-
-  private bindProfilesSubscription(): void {
-    this.subscriptions.add(this.profiles$.subscribe({
-      next: auth => auth && this.close()
     }));
   }
 

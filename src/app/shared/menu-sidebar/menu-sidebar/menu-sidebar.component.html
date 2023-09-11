@@ -49,14 +49,16 @@
   </button>
 </nav>
 
-<div class="popover bottom">
-  <ul>
-    <li role="button">Add existing account</li>
-    <li role="button">Logout</li>
-  </ul>
-</div>
-
 <div (click)="onProfileMenuClick(profile)" role="button" class="profile-menu">
+  <!-- start popover --->
+  <div [class.active]="showAuthPopover" class="auth-popover popover bottom">
+    <ul>
+      <li (click)="addExistingAccount($event)" role="button">Add existing account</li>
+      <li (click)="logout($event)" role="button">Logout</li>
+    </ul>
+  </div>
+  <!-- end popover --->
+
   <ng-container *ngIf="profile">
     <img title="profile picture" alt="profile picture" class="profile" [src]="profile.picture || '/assets/profile/default-profile.png'" />
     <div class="user-info">

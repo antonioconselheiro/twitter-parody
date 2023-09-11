@@ -29,13 +29,16 @@
             "style": "camelCase"
           }
         ],
-        "@angular-eslint/component-selector": [
+        "component-selector": [
           "error",
           {
             "type": "element",
             "prefix": "tw",
             "style": "kebab-case"
           }
+        ],
+        "@angular-eslint/no-output-native": [
+          "off"
         ],
         "@typescript-eslint/naming-convention": [
           "warn",

@@ -20,6 +20,9 @@ export class AuthenticateFormComponent implements AfterViewInit {
   @Output()
   changeStep = new EventEmitter<AuthModalSteps>();
 
+  @Output()
+  close = new EventEmitter<void>();
+
   @ViewChild('pin')
   pinField?: ElementRef;
   
@@ -66,6 +69,7 @@ export class AuthenticateFormComponent implements AfterViewInit {
     this.loading = true;
     try {
       this.profiles$.authenticateAccount(account, pin)
+        .then(() => this.close.emit())
         //  FIXME: consigo centralizar o tratamento de catch para promises?
         .catch(e => {
           //  FIXME: validar situações onde realmente pode ocorrer

@@ -30,12 +30,14 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
   profile: IProfile | null = null;
   menuActive: MenuType | null = null;
 
+  showAuthPopover = false;
+
   constructor(
     private modalService: ModalService,
     private profile$: ProfilesObservable,
     private menuActive$: MenuActiveObservable,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.bindProfileSubscription();
@@ -59,13 +61,34 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
   }
 
   onProfileMenuClick(profile: IProfile | null): void {
-    if (!profile) {
+    if (profile) {
+      this.showAuthPopover = true;
+    } else {
       this.modalService
         .createModal(AuthModalComponent)
         .setTitle('Accounts')
-        .setData(profile)
+        .setData(null)
         .build();
     }
+  }
+
+  addExistingAccount(e: Event): void {
+    e.stopPropagation();
+
+    this.modalService
+        .createModal(AuthModalComponent)
+        .setTitle('Accounts')
+        .setData(this.profile)
+        .build();
+
+    this.showAuthPopover = false;
+  }
+
+  logout(e: Event): void {
+    e.stopPropagation();
+
+    this.profile$.logout();
+    this.showAuthPopover = false;
   }
 
   openTweetCompose(): void {
