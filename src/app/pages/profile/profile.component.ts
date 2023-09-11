@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ITweet } from '@domain/tweet.interface';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
+import { MainErrorObservable } from '@shared/main-error/main-error.observable';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
 import { IProfile } from '@shared/profile-service/profile.interface';
 import { TweetApi } from '@shared/tweet-service/tweet.api';
@@ -20,8 +21,10 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private error$: MainErrorObservable,
     private networkError$: NetworkErrorObservable,
-    private tweetApi: TweetApi
+    private tweetApi: TweetApi,
+    private router: Router
   ) {
     super();
   }
@@ -38,6 +41,10 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
     } else {
       return `url("/assets/profile/default-banner.jpg")`;
     }
+  }
+
+  goHome(): void {
+    this.router.navigate(['home']).catch(e => this.error$.next(e));
   }
   
   private bindTweetSubscription(): void {

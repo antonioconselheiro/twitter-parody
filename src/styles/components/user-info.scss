@@ -8,26 +8,30 @@
 /// ```
 ///  <div class="user-info">
 ///    <span class="user-name">
-///      {{profile.display_name || profile.name}}
-///      <span *ngIf="profile.nip05valid" class="user-verified"></span>
+///      António Vicente Mendes Maciel
+///      <span class="user-verified"></span>
 ///    </span>
-///    <span *ngIf="profile.nip05" class="user-nip5">{{profile.nip05}}</span>
+///    <span class="user-nip5">@anarcanudos</span>
 ///  </div>
 /// ```
 ///
-.user-info {
-  .user-name {
-    color: var(--contrast);
-    font-weight: bold;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.user-name {
+  color: var(--contrast);
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
-  .user-nip5 {
-    color: var(--lowContrast);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .user-verified {
+    display: inline-block;
+    position: relative;
+    top: 3px;
   }
+}
+
+.user-nip5 {
+  color: var(--lowContrast);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

@@ -55,12 +55,6 @@ button.tweet {
     flex: 1 1 0;
   }
 
-  .user-verified {
-    display: var(--menusidebarDisplayLabels);
-    position: relative;
-    top: -.5rem;
-  }
-
   .ellipsis {
     display: var(--menusidebarDisplayLabels);
     background: var(--highContrast);

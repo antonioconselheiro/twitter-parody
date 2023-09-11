@@ -1,10 +1,8 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { NostrUser } from '@domain/nostr-user';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
 import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
 import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-user';
-import * as CryptoJS from 'crypto-js';
 import { AuthModalSteps } from '../auth-modal-steps.type';
 
 @Component({

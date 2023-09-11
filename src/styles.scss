@@ -21,11 +21,14 @@
 @import 'styles/responsivity/timeline';
 @import 'styles/responsivity/tweet';
 
+//  reset
+@import 'styles/reset';
+
 // elements
 @import 'styles/elements/body';
 @import 'styles/elements/button';
 @import 'styles/elements/heading';
-@import 'styles/elements/focused';
+@import 'styles/elements/time';
 
 //  forms
 @import 'styles/components/forms/button';
@@ -39,7 +42,6 @@
 @import 'styles/components/colors';
 @import 'styles/components/separator';
 @import 'styles/components/bordered';
-@import 'styles/components/profile';
 @import 'styles/components/svg-button';
 @import 'styles/components/verified';
 @import 'styles/components/header-backable';
@@ -56,3 +58,4 @@
 
 // tools
 @import 'styles/tools/hidden';
+

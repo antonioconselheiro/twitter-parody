@@ -131,6 +131,7 @@ nav.menu-bottombar {
 nav.menu-sidebar {
   ul {
     flex-direction: column;
+    max-width: 95%;
 
     li {
       padding: .84rem;

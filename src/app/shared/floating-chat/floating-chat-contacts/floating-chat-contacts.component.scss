@@ -1,0 +1,45 @@
+:host > header {
+  display: flex;
+  padding: 1rem;
+
+  > div {
+    flex: 1 1 0;
+  }
+}
+
+aside {
+  height: 465px;
+  overflow-y: auto;
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 1rem 0;
+
+      &:hover {
+        background-color: var(--lowBase);
+      }
+
+      tw-profile-picture {
+        width: 50px;
+        margin: 7px;
+      }
+
+      article {
+        header {
+          display: flex;
+        }
+
+        .message {
+          color: var(--lowContrast);
+        }
+      }
+    }
+  }
+}

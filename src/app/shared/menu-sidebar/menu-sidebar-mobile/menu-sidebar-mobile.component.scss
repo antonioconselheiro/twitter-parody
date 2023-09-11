@@ -43,13 +43,8 @@
   header {
     position: relative;
 
-    .user-verified {
-      display: block;
-      float: left;
-      position: absolute;
-      right: 10px;
-      top: 60px;
-      z-index: 60;
+    tw-profile-picture {
+      margin: 0;
     }
   }
 
@@ -66,6 +61,12 @@
 .profile-menu {
   flex-direction: column;
   flex: 1 1 35px;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: var(--base);
+  }
 
   .profile {
     margin: var(--menusidebarProfileMargin) !important;

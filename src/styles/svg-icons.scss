@@ -93,3 +93,39 @@
     mask-image: url('/assets/unlock.svg');
   }
 }
+
+.icon-view {
+  div[role=img] {
+    mask-image: url('/assets/read-tweet/view.svg');
+  }
+}
+
+.icon-share {
+  div[role=img] {
+    mask-image: url('/assets/read-tweet/share.svg');
+  }
+}
+
+.icon-down {
+  div[role=img] {
+    mask-image: url('/assets/chat/down.svg');
+  }
+}
+
+.icon-up {
+  div[role=img] {
+    mask-image: url('/assets/chat/up.svg');
+  }
+}
+
+.icon-new-message {
+  div[role=img] {
+    mask-image: url('/assets/chat/new-message.svg');
+  }
+}
+
+.icon-send {
+  div[role=img] {
+    mask-image: url('/assets/chat/send.svg');
+  }
+}

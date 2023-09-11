@@ -1,17 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FloatingChatComponent } from './floating-chat.component';
-import { FloatingChatListComponent } from './floating-chat-list/floating-chat-list.component';
 import { FloatingChatMessagesComponent } from './floating-chat-messages/floating-chat-messages.component';
+import { FloatingChatContactsComponent } from './floating-chat-contacts/floating-chat-contacts.component';
+import { ProfileWidgetModule } from '@shared/profile-widget/profile-widget.module';
+import { DatetimeWidgetModule } from '@shared/datetime-widget/datetime-widget.module';
 
 @NgModule({
   declarations: [
     FloatingChatComponent,
-    FloatingChatListComponent,
+    FloatingChatContactsComponent,
     FloatingChatMessagesComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    DatetimeWidgetModule,
+    ProfileWidgetModule
   ],
   exports: [
     FloatingChatComponent

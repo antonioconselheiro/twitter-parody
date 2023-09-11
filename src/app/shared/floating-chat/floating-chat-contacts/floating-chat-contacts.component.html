@@ -1,0 +1,33 @@
+<header>
+  <div>Messages</div>
+  <button title="new message" type="button" class="icon-new-message svg-button">
+    <div class="svg-wrapper">
+      <div alt="new message" role="img"></div>
+    </div>
+  </button>
+  <button type="button" title="collapse" (click)="collapse.next(!collapsed)" [class.icon-down]="!collapsed" [class.icon-up]="collapsed" class="svg-button">
+    <div class="svg-wrapper">
+      <div alt="collapse" role="img"></div>
+    </div>
+  </button>
+</header>
+
+<aside *ngIf="!collapsed">
+  <ul>
+    <li (click)="choose.emit(message.author)" role="link" *ngFor="let message of contacteds">
+      <tw-profile-picture [picture]="message.author.picture"></tw-profile-picture>
+      <article>
+        <header>
+          <span class="user-name">
+            {{message.author.display_name || message.author.name}}
+            <span *ngIf="message.author.nip05valid" class="user-verified"></span>
+          </span>
+          <span *ngIf="message.author.nip05" class="user-nip5">{{message.author.nip05}}</span>
+          <time [attr.datetime]="message.time | datetimeIso">· {{message.time | datetimeText}}</time>
+        </header>
+
+        <span class="message">message one two three</span>
+      </article>
+    </li>
+  </ul>
+</aside>

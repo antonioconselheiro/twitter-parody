@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, ValidationErrors, Validators } from '@angular/forms';
+import { DataLoadType } from '@domain/data-load-type';
 import { NostrUser } from '@domain/nostr-user';
 import { CustomValidator } from '@shared/custom-validator/custom-validator';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
+import { IProfile } from '@shared/profile-service/profile.interface';
 import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
 import { NostrSecretStatefull } from '@shared/security-service/nostr-secret.statefull';
-import { AuthModalSteps } from '../auth-modal-steps.type';
-import { IProfile } from '@shared/profile-service/profile.interface';
-import { DataLoadType } from '@domain/data-load-type';
 import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-user';
+import { AuthModalSteps } from '../auth-modal-steps.type';
 
 @Component({
   selector: 'tw-add-account-form',

@@ -78,7 +78,10 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
     this.modalService
         .createModal(AuthModalComponent)
         .setTitle('Accounts')
-        .setData(this.profile)
+        .setData({
+          currentAuthProfile: this.profile,
+          currentStep: 'add-account'
+        })
         .build();
 
     this.showAuthPopover = false;
