@@ -1,0 +1,87 @@
+///
+/// Create a floating popover.
+/// Arrow styles: .bottom, .left, .right and .top
+///
+/// @group Components
+/// @class .popover
+/// 
+/// @example
+/// ```
+/// <div class="popover bottom">
+///   <ul>
+///     <li role="button">Add existing account</li>
+///     <li role="button">Logout</li>
+///   </ul>
+/// </div>
+/// ```
+/// 
+.popover {
+  --arrowSize: 6px;
+  
+  //  hidding properties
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+
+  transition: .3s opacity;
+  background-color: var(--base);
+  border-radius: 15px;
+  position: fixed;
+  z-index: 40;
+  padding: 13px 0;
+  box-shadow: var(--baseActive) 0px 0px 15px, var(--baseActive) 0px 0px 3px 1px;
+
+  &.active {
+    width: auto;
+    height: auto;
+    overflow: inherit;
+    opacity: 1;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+
+    box-sizing: border-box;
+    border: var(--arrowSize) solid;
+    border-color: transparent transparent var(--base) var(--base);
+
+    transform-origin: 0 0;
+    box-shadow: -3px 3px 3px 0 var(--baseActive);
+  }
+
+  &.bottom {
+    &::after {
+      bottom: calc(var(--arrowSize) * -2);
+      left: calc(50% - (var(--arrowSize) / 2));
+      transform: rotate(-45deg);
+    }
+  }
+
+  &.top {
+    &::after {
+      top: calc(var(--arrowSize) - (var(--arrowSize) / 2));
+      left: calc(50% - (var(--arrowSize) / 2));
+      transform: rotate(135deg);
+    }
+  }
+
+  &.right {
+    &::after {
+      right: calc(var(--arrowSize) * -2);
+      top: calc(50% + var(--arrowSize));
+      transform: rotate(-135deg);
+    }
+  }
+
+  &.left {
+    &::after {
+      left: calc(var(--arrowSize) - (var(--arrowSize) / 2));
+      top: calc(50% - (var(--arrowSize) / 2));
+      transform: rotate(45deg);
+    }
+  }
+}

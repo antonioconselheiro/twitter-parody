@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IProfile } from '@shared/profile-service/profile.interface';
-import * as CryptoJS from 'crypto-js';
+import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
 import { BehaviorSubject } from 'rxjs';
 import { IUnauthenticatedUser } from './unauthenticated-user';
 
@@ -13,7 +13,9 @@ export class NostrSecretStatefull {
 
   static instance: NostrSecretStatefull | null = null;
 
-  constructor() {
+  constructor(
+    private profiles$: ProfilesObservable
+  ) {
     if (!NostrSecretStatefull.instance) {
       NostrSecretStatefull.instance = this;
     }
@@ -26,28 +28,10 @@ export class NostrSecretStatefull {
 
   // eslint-disable-next-line complexity
   addAccount(profile: IProfile, pin: string): IUnauthenticatedUser | null {
-    const nostrSecret = profile.user.nostrSecret;
-    const displayName = profile.display_name || profile.name;
-    const picture = profile.picture || '/assets/profile/default-profile.jpg';
-
-    if (!nostrSecret || !displayName) {
+    const unauthenticated = this.profiles$.encryptAccount(profile, pin);
+    if (!unauthenticated) {
       return null;
     }
-
-    const nsecEncrypted = CryptoJS.AES.encrypt(nostrSecret, String(pin), {
-      iv: CryptoJS.enc.Hex.parse('be410fea41df7162a679875ec131cf2c'),
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.Pkcs7
-    });
-
-    const unauthenticated: IUnauthenticatedUser = {
-      picture,
-      displayName,
-      npub: profile.user.nostrPublic,
-      nip05: profile.nip05,
-      nip05valid: profile.nip05valid,
-      nsecEncrypted: String(nsecEncrypted)
-    };
 
     this.accounts[unauthenticated.npub] = unauthenticated;
     this.update();

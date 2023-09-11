@@ -22,7 +22,7 @@ angular (scss + rxjs) + nostr-tools
 _Ebenézer_
 
 I got this far:
-![last test](./docs/testing-twitter-parody-responsivity.gif)
+![last test](./docs/ebenezer.gif)
 
 ## Donate
 Do you want more protests in favor of free speech, freedom of software and freedom of work similar to this one?

@@ -15,4 +15,5 @@
   *ngIf="currentStep === 'authenticate' && authenticatingAccount"
   (changeStep)="onChangeStep($event)"
   [account]="authenticatingAccount"
+  (close)="close()"
 ></tw-authenticate-form>
