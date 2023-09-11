@@ -92,6 +92,7 @@ and interesting technologies to master to enhance your ability to contribute:
 - https://www.typescriptlang.org/docs/handbook/intro.html
 - https://angular.io/guide/developer-guide-overview
 - https://rxjs.dev/guide/observable
+- https://sass-lang.com/guide/
 - https://docs.docker.com/get-started/
 - https://code.visualstudio.com/docs/remote/devcontainer-cli
 - https://github.com/nostr-protocol/nips

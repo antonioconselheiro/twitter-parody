@@ -8,12 +8,14 @@ import { MobileBottomNavigationComponent } from './mobile-bottom-navigation/mobi
 import { MenuActiveObservable } from './menu-active.observable';
 import { AuthModalModule } from '@shared/auth-modal/auth-modal.module';
 import { ProfileWidgetModule } from '@shared/profile-widget/profile-widget.module';
+import { AccountsListMobileComponent } from './menu-sidebar-mobile/accounts-list-mobile/accounts-list-mobile.component';
 
 @NgModule({
   declarations: [
     MenuSidebarComponent,
     MenuSidebarMobileComponent,
-    MobileBottomNavigationComponent
+    MobileBottomNavigationComponent,
+    AccountsListMobileComponent
   ],
   imports: [
     CommonModule,

@@ -5,8 +5,8 @@ import { IProfile } from '@shared/profile-service/profile.interface';
 import { NostrSecretStatefull } from '@shared/security-service/nostr-secret.statefull';
 import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-user';
 import { Subject, Subscription } from 'rxjs';
-import { AuthModalSteps } from './auth-modal-steps.type';
 import { IAuthModalArguments } from './auth-modal-arguments.interface';
+import { AuthModalSteps } from './auth-modal-steps.type';
 
 @Component({
   selector: 'tw-auth-modal',

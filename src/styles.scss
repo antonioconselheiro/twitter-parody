@@ -21,6 +21,9 @@
 @import 'styles/responsivity/timeline';
 @import 'styles/responsivity/tweet';
 
+//  reset
+@import 'styles/reset';
+
 // elements
 @import 'styles/elements/body';
 @import 'styles/elements/button';
@@ -55,3 +58,4 @@
 
 // tools
 @import 'styles/tools/hidden';
+
