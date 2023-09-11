@@ -123,3 +123,9 @@
     mask-image: url('/assets/chat/new-message.svg');
   }
 }
+
+.icon-send {
+  div[role=img] {
+    mask-image: url('/assets/chat/send.svg');
+  }
+}

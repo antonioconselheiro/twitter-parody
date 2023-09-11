@@ -2,6 +2,10 @@ header {
   display: flex;
   padding: 1rem;
 
+  .back-button {
+    margin-right: 1rem;
+  }
+
   .user-info {
     display: flex;
     flex-direction: column;
@@ -17,14 +21,16 @@ header {
 
 aside {
   height: 465px;
+  display: flex;
+  flex-direction: column;
 
   .svg-wrapper [role=img] {
     background-color: var(--primary);
   }
   
   section {
-    height: 300px;
-    overflow-y: scroll;
+    flex: 1 1 0;
+    overflow-y: auto;
   }
   
   footer {

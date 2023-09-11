@@ -14,7 +14,7 @@
 
 <aside *ngIf="!collapsed">
   <ul>
-    <li role="link" *ngFor="let message of contacteds">
+    <li (click)="choose.emit(message.author)" role="link" *ngFor="let message of contacteds">
       <tw-profile-picture [picture]="message.author.picture"></tw-profile-picture>
       <article>
         <header>
