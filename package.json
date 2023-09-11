@@ -34,6 +34,7 @@
     "ecma-error-normalizer": "^1.0.5",
     "geohash": "^0.0.1",
     "latlon-geohash": "^2.0.0",
+    "moment": "^2.29.4",
     "nostr-tools": "^1.14.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

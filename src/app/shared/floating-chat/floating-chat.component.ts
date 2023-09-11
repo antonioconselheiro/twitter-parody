@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { IProfile } from '@shared/profile-service/profile.interface';
 
 @Component({
   selector: 'tw-floating-chat',
@@ -7,5 +8,7 @@ import { Component } from '@angular/core';
 })
 export class FloatingChatComponent {
   //  TODO: persistir essa informação no localstorage ou no armazemanto do app
-  collapsed = false;
+  collapsed = true;
+
+  talkingContact: IProfile | null = null;
 }

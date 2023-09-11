@@ -1,1 +1,58 @@
-<p>floating-chat-messages works!</p>
+<header>
+  <button title="back" type="button" class="icon-back svg-button">
+    <div class="svg-wrapper">
+      <div role="img"></div>
+    </div>
+  </button>
+  <div class="user-info">
+    <span class="user-name">{{contact?.display_name || contact?.name}}</span>
+    <span class="user-nip5">{{contact?.nip05}}</span>
+  </div>
+  <button type="button" title="collapse" (click)="collapse.next(!collapsed)" [class.icon-down]="!collapsed" [class.icon-up]="collapsed" class="svg-button">
+    <div class="svg-wrapper">
+      <div role="img"></div>
+    </div>
+  </button>
+</header>
+<aside *ngIf="!collapsed">
+  <section>
+    <article class="send message">
+      <!-- Conteúdo da mensagem -->
+    </article>
+    <time datetime="2023-09-01T14:30:00">Hoje, 14:30</time>
+  
+    <article class="received message">
+      <!-- Conteúdo da mensagem -->
+    </article>
+    <time datetime="2023-09-01T14:30:00">Hoje, 14:30</time>
+  </section>
+  <footer>
+    <button title="upload image" type="button" class="icon-upload-image svg-button">
+      <div class="svg-wrapper">
+        <div role="img"></div>
+      </div>
+    </button>
+    
+    <button title="gif" type="button" class="icon-gif svg-button">
+      <div class="svg-wrapper">
+        <div role="img"></div>
+      </div>
+    </button>
+
+    <button title="choose emoticon" type="button" class="icon-emoticon svg-button">
+      <div class="svg-wrapper">
+        <div role="img"></div>
+      </div>
+    </button>
+  
+    <div class="chat-input">
+      <input #message type="text" title="Start a new message" placeholder="Start a new message" />
+    
+      <button [attr.disabled]="message.value.length ? null : 'disabled'" title="send message" type="button" class="icon-send svg-button">
+        <div class="svg-wrapper">
+          <div alt="send message" role="img"></div>
+        </div>
+      </button>
+    </div>
+  </footer>
+</aside>

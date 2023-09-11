@@ -15,25 +15,23 @@
 ///  </div>
 /// ```
 ///
-.user-info {
-  .user-name {
-    color: var(--contrast);
-    font-weight: bold;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.user-name {
+  color: var(--contrast);
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
-    .user-verified {
-      display: inline-block;
-      position: relative;
-      top: 3px;
-    }
+  .user-verified {
+    display: inline-block;
+    position: relative;
+    top: 3px;
   }
+}
 
-  .user-nip5 {
-    color: var(--lowContrast);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.user-nip5 {
+  color: var(--lowContrast);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

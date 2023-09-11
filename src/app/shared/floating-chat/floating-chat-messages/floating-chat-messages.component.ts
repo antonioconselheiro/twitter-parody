@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { IProfile } from '@shared/profile-service/profile.interface';
 
 @Component({
   selector: 'tw-floating-chat-messages',
@@ -7,4 +8,15 @@ import { Component } from '@angular/core';
 })
 export class FloatingChatMessagesComponent {
 
+  @Output()
+  back = new EventEmitter<void>();
+
+  @Output()
+  collapse = new EventEmitter<boolean>();
+
+  @Input()
+  collapsed = true;
+
+  @Input()
+  contact: IProfile | null = null;
 }

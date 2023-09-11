@@ -1,0 +1,38 @@
+:host > header {
+  display: flex;
+  padding: 1rem;
+
+  > div {
+    flex: 1 1 0;
+  }
+}
+
+aside {
+  height: 465px;
+  overflow-y: auto;
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: flex;
+      align-items: center;
+
+      tw-profile-picture {
+        width: 45px;
+      }
+
+      article {
+        header {
+          display: flex;
+        }
+
+        .message {
+          color: var(--lowContrast);
+        }
+      }
+    }
+  }
+}

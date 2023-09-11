@@ -87,17 +87,5 @@
         }
       }
     }
-
-    &.icon-view {
-      div[role=img] {
-        mask-image: url('/assets/read-tweet/view.svg');
-      }
-    }
-
-    &.icon-share {
-      div[role=img] {
-        mask-image: url('/assets/read-tweet/share.svg');
-      }
-    }
   }
 }

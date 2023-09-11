@@ -1,0 +1,58 @@
+header {
+  display: flex;
+  padding: 1rem;
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+
+    .user-name {
+      font-size: 20px;
+      width: 230px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+aside {
+  height: 465px;
+
+  .svg-wrapper [role=img] {
+    background-color: var(--primary);
+  }
+  
+  section {
+    height: 300px;
+    overflow-y: scroll;
+  }
+  
+  footer {
+    display: flex;
+  
+    .chat-input {
+      background-color: var(--lowBase);
+      display: flex;
+      border-radius: 25px;
+      overflow: hidden;
+      padding-left: 1rem;
+      margin: 5px 0;
+      box-sizing: border-box;
+  
+      input {
+        background-color: var(--lowBase);
+        border: 0;
+  
+        &::placeholder {
+          color: var(--lowContrast);
+          font-size: 15px;
+        }
+  
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
+}
+

@@ -5,6 +5,7 @@ import { FloatingChatModule } from '@shared/floating-chat/floating-chat.module';
 import { MainErrorModule } from '@shared/main-error/main-error.module';
 import { ModalModule } from '@shared/modal/modal.module';
 import { ProfileServiceModule } from '@shared/profile-service/profile-service.module';
+import { SecurityServiceModule } from '@shared/security-service/security-service.module';
 import { ThemeModule } from '@shared/theme/theme.module';
 import { TweetServiceModule } from '@shared/tweet-service/tweet-service.module';
 import { UtilModule } from '@shared/util/util.module';
@@ -21,7 +22,6 @@ import { ProfileModule } from './pages/profile/profile.module';
 import { TimelineModule } from './pages/timeline/timeline.module';
 import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.module';
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
-import { SecurityServiceModule } from '@shared/security-service/security-service.module';
 
 @NgModule({
   declarations: [
