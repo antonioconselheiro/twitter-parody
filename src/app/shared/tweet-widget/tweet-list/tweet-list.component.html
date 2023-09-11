@@ -5,7 +5,7 @@
 
   <div class="tweet-structure">
     <div>
-      <img title="profile picture" alt="profile picture" class="profile" [src]="tweet.author?.picture || '/assets/profile/default-profile.png'" />
+      <tw-profile-picture [picture]="tweet.author?.picture"></tw-profile-picture>
     </div>
     <div class="tweet-metadata">
       <header>

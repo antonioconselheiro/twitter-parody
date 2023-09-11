@@ -2,7 +2,7 @@
 <p>Insert the PIN to open the Nostr Secret and authenticate</p>
 
 <section *ngIf="account" class="unauthenticated-account">
-  <img title="profile picture" alt="profile picture" class="profile" [src]="account.picture || '/assets/profile/default-profile.png'" />
+  <tw-profile-picture [picture]="account.picture"></tw-profile-picture>
   <div class="user-info">
     <span class="user-name">
       {{account.displayName}}

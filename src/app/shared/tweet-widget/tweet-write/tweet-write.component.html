@@ -1,6 +1,6 @@
 <div class="write-tweet separator">
   <div class="hbar">
-    <img title="profile picture" alt="profile picture" class="profile" [src]="profile?.picture || '/assets/profile/default-profile.png'" />
+    <tw-profile-picture [picture]="profile?.picture"></tw-profile-picture>
   </div>
   <div>
     <textarea #textArea [(ngModel)]="tweet" placeholder="What's on your mind?" autocomplete="off" autocorrect="off"></textarea>

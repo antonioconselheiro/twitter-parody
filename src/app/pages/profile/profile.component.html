@@ -1,7 +1,7 @@
 <ng-container *ngIf="profile">
   <header class="header-backable">
     <div>
-      <button title="back" type="button" class="icon-back svg-button">
+      <button (click)="goHome()" title="back" type="button" class="icon-back svg-button">
         <div class="svg-wrapper">
           <div alt="back" role="img"></div>
         </div>
@@ -19,7 +19,7 @@
     <div class="banner" [style.backgroundImage]="getProfileBanner()">
     </div>
     <div class="edit-profile-container">
-      <img alt="profile picture" title="profile picture" class="profile" [src]="profile.picture || '/assets/profile/default-profile.png'" />
+      <tw-profile-picture [picture]="profile.picture"></tw-profile-picture>
   
       <button class="button secondary">Edit profile</button>
     </div>

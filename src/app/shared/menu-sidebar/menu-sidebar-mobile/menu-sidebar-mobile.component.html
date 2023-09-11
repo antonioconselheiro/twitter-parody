@@ -2,7 +2,7 @@
   <header>
     <span *ngIf="profile.nip05valid" class="user-verified"></span>
     <div class="profile-menu">
-      <img alt="profile picture" title="profile picture" class="profile" [src]="profile.picture || '/assets/profile/default-profile.png'" />
+      <tw-profile-picture [picture]="profile.picture"></tw-profile-picture>
       <div class="user-info">
         <span class="user-name">{{profile.display_name || profile.name}}</span>
         <span *ngIf="profile.nip05" class="user-nip5">{{profile.nip05}}</span>

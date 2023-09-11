@@ -14,6 +14,7 @@ import { TweetWriteButtonGroupComponent } from './tweet-write-button-group/tweet
 import { TweetWriteComponent } from './tweet-write/tweet-write.component';
 import { TweetComponent } from './tweet/tweet.component';
 import { TweetApi } from '../tweet-service/tweet.api';
+import { ProfileWidgetModule } from '@shared/profile-widget/profile-widget.module';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { TweetApi } from '../tweet-service/tweet.api';
     AmountModule,
     SecurityWidgetModule,
     PickerComponent,
+    ProfileWidgetModule,
     FormsModule
   ],
   exports: [

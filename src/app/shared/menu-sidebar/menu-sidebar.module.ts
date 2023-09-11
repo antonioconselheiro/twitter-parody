@@ -7,6 +7,7 @@ import { MenuSidebarMobileObservable } from './menu-sidebar-mobile/menu-sidebar-
 import { MobileBottomNavigationComponent } from './mobile-bottom-navigation/mobile-bottom-navigation.component';
 import { MenuActiveObservable } from './menu-active.observable';
 import { AuthModalModule } from '@shared/auth-modal/auth-modal.module';
+import { ProfileWidgetModule } from '@shared/profile-widget/profile-widget.module';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { AuthModalModule } from '@shared/auth-modal/auth-modal.module';
   imports: [
     CommonModule,
     RouterModule,
+    ProfileWidgetModule,
     AuthModalModule
   ],
   exports: [

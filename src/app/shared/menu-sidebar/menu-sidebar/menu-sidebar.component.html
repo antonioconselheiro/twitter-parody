@@ -60,7 +60,7 @@
   <!-- end popover --->
 
   <ng-container *ngIf="profile">
-    <img title="profile picture" alt="profile picture" class="profile" [src]="profile.picture || '/assets/profile/default-profile.png'" />
+    <tw-profile-picture [picture]="profile.picture"></tw-profile-picture>
     <div class="user-info">
       <span class="user-name">{{profile.display_name || profile.name}}</span>
       <span *ngIf="profile.nip05" class="user-nip5">{{profile.nip05}}</span>
