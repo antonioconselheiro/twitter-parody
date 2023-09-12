@@ -12,7 +12,7 @@
   </button>
 </header>
 
-<aside *ngIf="!collapsed">
+<aside *ngIf="!collapsed && contacteds.length">
   <ul>
     <li (click)="choose.emit(message.author)" role="link" *ngFor="let message of contacteds">
       <tw-profile-picture [picture]="message.author.picture"></tw-profile-picture>
@@ -30,4 +30,12 @@
       </article>
     </li>
   </ul>
+</aside>
+
+<aside class="no-message" *ngIf="!collapsed && !contacteds.length">
+  <h2>Welcome to your inbox!</h2>
+  <p>
+    Drop a line, share tweets and more with private conversations between you and others on Twitter (Parody). 
+  </p>
+  <button class="primary button">Write a message</button>
 </aside>

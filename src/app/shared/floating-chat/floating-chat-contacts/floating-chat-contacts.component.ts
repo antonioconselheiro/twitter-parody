@@ -2,8 +2,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IProfile } from '@shared/profile-service/profile.interface';
 import { IMessage } from '../message.interface';
-import { NostrUser } from '@domain/nostr-user';
-import { DataLoadType } from '@domain/data-load-type';
 
 @Component({
   selector: 'tw-floating-chat-contacts',

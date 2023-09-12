@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
 })
 export class ExploreSidebarComponent {
   terms(): void {
-    alert('Ancestral Property of King Jesus Christ - may the Lord receive the fruit of our work');
+    alert('Ancestral Property of King Jesus Christ');
   }
 }
