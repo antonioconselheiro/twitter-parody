@@ -26,7 +26,7 @@ button.button {
   border-radius: 50px;
   padding: 1rem;
   background-color: var(--primary);
-  color: var(--primary-text);
+  color: var(--primaryText);
   display: block;
   cursor: pointer;
   font-weight: bold;
@@ -40,6 +40,7 @@ button.button {
   &.secondary {
     background-color: var(--base);
     border: 1px solid var(--lowestContrast);
+    color: var(--contrast);
 
     &:hover,
     &:active {
