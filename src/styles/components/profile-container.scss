@@ -61,11 +61,20 @@
   .additional-information {
     display: flex;
 
-    >* {
+    > * {
+      flex: 1 1 0;
       display: flex;
       align-items: center;
       margin-right: 1rem;
       color: var(--lowContrast);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      a {
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
     }
 
     .inline-icon {
@@ -84,7 +93,7 @@
       }
     }
 
-    a~a {
+    a ~ a {
       margin-left: 1rem;
     }
   }

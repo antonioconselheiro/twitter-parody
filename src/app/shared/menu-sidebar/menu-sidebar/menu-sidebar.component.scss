@@ -44,6 +44,7 @@ button.tweet {
 
 .profile-menu {
   align-items: center;
+  min-width: 235px;
 
   .login-button,
   .profile {
@@ -64,6 +65,7 @@ button.tweet {
     max-width: 19px;
     max-height: 19px;
     margin: .5rem;
+    margin-right: 1rem;
   }
 
   .auth-popover {
