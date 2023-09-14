@@ -15,7 +15,14 @@ footer.terms {
   margin: 1rem;
   font-size: 13px;
   cursor: pointer;
+  text-decoration: none;
 
+  a,
+  span {
+    color: var(--lowestContrast);
+  }
+
+  a:hover,
   span:hover {
     text-decoration: underline;
   }

@@ -40,6 +40,9 @@
         "@angular-eslint/no-output-native": [
           "off"
         ],
+        "@angular-eslint/no-host-metadata-property": [
+          "off"
+        ],
         "@typescript-eslint/naming-convention": [
           "warn",
           {

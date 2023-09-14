@@ -11,6 +11,15 @@ aside {
   height: 465px;
   overflow-y: auto;
 
+  &.no-message {
+    padding: 2rem;
+    box-sizing: border-box;
+  
+    > button {
+      margin: 2rem auto;
+    }
+  }
+
   ul {
     list-style-type: none;
     padding: 0;

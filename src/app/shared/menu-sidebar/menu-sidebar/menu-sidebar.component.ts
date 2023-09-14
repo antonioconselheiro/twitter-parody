@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, HostBinding, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthModalComponent } from '@shared/auth-modal/auth-modal.component';
 import { ModalService } from '@shared/modal/modal.service';
 import { IProfile } from '@shared/profile-service/profile.interface';
 import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
@@ -7,7 +8,7 @@ import { CompositeTweetPopoverComponent } from '@shared/tweet-widget/composite-t
 import { Subscription } from 'rxjs';
 import { MenuActiveObservable } from '../menu-active.observable';
 import { MenuType } from '../menu-type.enum';
-import { AuthModalComponent } from '@shared/auth-modal/auth-modal.component';
+import { PopoverComponent } from '@shared/popover-widget/popover.component';
 
 @Component({
   selector: 'tw-menu-sidebar',
@@ -29,8 +30,9 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
 
   profile: IProfile | null = null;
   menuActive: MenuType | null = null;
-
-  showAuthPopover = false;
+  
+  @ViewChild('authPopover', { read: PopoverComponent })
+  popover!: PopoverComponent;
 
   constructor(
     private modalService: ModalService,
@@ -62,7 +64,7 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
 
   onProfileMenuClick(profile: IProfile | null): void {
     if (profile) {
-      this.showAuthPopover = true;
+      this.popover.show();
     } else {
       this.modalService
         .createModal(AuthModalComponent)
@@ -76,22 +78,22 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
     e.stopPropagation();
 
     this.modalService
-        .createModal(AuthModalComponent)
-        .setTitle('Accounts')
-        .setData({
-          currentAuthProfile: this.profile,
-          currentStep: 'add-account'
-        })
-        .build();
+      .createModal(AuthModalComponent)
+      .setTitle('Accounts')
+      .setData({
+        currentAuthProfile: this.profile,
+        currentStep: 'add-account'
+      })
+      .build();
 
-    this.showAuthPopover = false;
+    this.popover.hide();
   }
 
   logout(e: Event): void {
     e.stopPropagation();
 
     this.profile$.logout();
-    this.showAuthPopover = false;
+    this.popover.hide();
   }
 
   openTweetCompose(): void {

@@ -50,14 +50,12 @@
 </nav>
 
 <div (click)="onProfileMenuClick(profile)" role="button" class="profile-menu">
-  <!-- start popover --->
-  <div [class.active]="showAuthPopover" class="auth-popover popover bottom">
+  <tw-popover class="auth-popover" #authPopover>
     <ul>
       <li (click)="addExistingAccount($event)" role="button">Add existing account</li>
       <li (click)="logout($event)" role="button">Logout</li>
     </ul>
-  </div>
-  <!-- end popover --->
+  </tw-popover>
 
   <ng-container *ngIf="profile">
     <tw-profile-picture [picture]="profile.picture"></tw-profile-picture>

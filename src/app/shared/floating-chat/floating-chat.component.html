@@ -3,6 +3,7 @@
   (choose)="talkingContact = $event"
   (collapse)="collapsed = $event"
   [collapsed]="collapsed"
+  [contacteds]="lastMessageFromEachContactedProfile"
 ></tw-floating-chat-contacts>
 <tw-floating-chat-messages
   *ngIf="talkingContact"

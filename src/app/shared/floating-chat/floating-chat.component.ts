@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IProfile } from '@shared/profile-service/profile.interface';
+import { IMessage } from './message.interface';
 
 @Component({
   selector: 'tw-floating-chat',
@@ -11,4 +12,7 @@ export class FloatingChatComponent {
   collapsed = true;
 
   talkingContact: IProfile | null = null;
+
+  @Input()
+  lastMessageFromEachContactedProfile: IMessage[] = [];
 }
