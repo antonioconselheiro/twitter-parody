@@ -16,6 +16,7 @@ import { TweetComponent } from './tweet/tweet.component';
 import { TweetApi } from '../tweet-service/tweet.api';
 import { ProfileWidgetModule } from '@shared/profile-widget/profile-widget.module';
 import { DatetimeWidgetModule } from '@shared/datetime-widget/datetime-widget.module';
+import { LoadingModule } from '@shared/loading/loading.module';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { DatetimeWidgetModule } from '@shared/datetime-widget/datetime-widget.mo
     PickerComponent,
     ProfileWidgetModule,
     DatetimeWidgetModule,
-    FormsModule
+    FormsModule,
+    LoadingModule
   ],
   exports: [
     TweetListComponent,

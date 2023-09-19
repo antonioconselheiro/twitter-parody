@@ -1,4 +1,4 @@
- import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { ITweet } from '@domain/tweet.interface';
 import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 
@@ -6,12 +6,15 @@ import { ITweetImgViewing } from '../tweet-img-viewing.interface';
   selector: 'tw-tweet-list',
   templateUrl: './tweet-list.component.html',
   styleUrls: ['./tweet-list.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
 export class TweetListComponent {
 
   @Input()
   tweets: ITweet[] = [];
+
+  @Input()
+  loading = true;
 
   viewing: ITweetImgViewing | null = null;
 

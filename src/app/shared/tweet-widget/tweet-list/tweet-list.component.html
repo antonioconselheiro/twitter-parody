@@ -1,3 +1,7 @@
+<div *ngIf="loading" class="separator tl-loading">
+  <tw-loading></tw-loading>
+</div>
+
 <article class="read-tweet separator" *ngFor="let tweet of tweets; trackBy: trackByTweetId">
   <a href="javascript:void(0)" class="retweet-origin">
     Example has retweeted

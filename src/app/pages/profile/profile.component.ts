@@ -16,6 +16,8 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
 
   override title = 'Profile';
 
+  loading = true;
+
   profile: IProfile | null = null;
   tweets: ITweet[] = [];
 
@@ -51,7 +53,8 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
     const npub = this.activatedRoute.snapshot.params['npub'];
     this.tweetApi.listTweetsFrom(npub)
       .then(tweets => this.tweets = tweets)
-      .catch(e => this.networkError$.next(e));
+      .catch(e => this.networkError$.next(e))
+      .finally(() => this.loading = false);
   }
   
   private getProfileFromActivatedRoute(): void {
