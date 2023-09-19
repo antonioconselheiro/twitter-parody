@@ -21,6 +21,7 @@
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    margin-top: 2rem;
   }
 
   .edit-profile-container {
@@ -29,10 +30,10 @@
     justify-content: space-between;
 
     img.profile {
-      width: 100px;
-      height: 100px;
+      width: 135px;
+      height: 135px;
       position: relative;
-      top: -5rem;
+      top: -6rem;
     }
 
     button.button {
