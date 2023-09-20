@@ -16,9 +16,24 @@ figure {
   }
 
   > .img-wrapper {
+    display: flex;
+    flex-direction: column;
     flex: 1 1 0;
-    background-position: center;
-    background-size: auto 100%;
-    background-repeat: no-repeat;
+
+    > .img {
+      flex: 1 1 0;
+      background-position: center;
+      background-size: auto 100%;
+      background-repeat: no-repeat;
+      border: 1px solid var(--base);
+
+      &:not(:last-child) {
+        background-size: 100% auto;
+      }
+
+      + .img {
+        background-size: 100% auto;
+      }
+    }
   }
 }

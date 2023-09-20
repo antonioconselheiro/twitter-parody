@@ -101,6 +101,7 @@
           "error",
           200
         ],
+        "for-direction": [ "off" ],
         "eqeqeq": "warn",
         "@typescript-eslint/ban-ts-comment": [
           "warn",

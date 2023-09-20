@@ -31,7 +31,8 @@ export class TweetComponent {
   imgOpen = new EventEmitter<ITweetImgViewing | null>();
 
   private interceptedTweet: ITweet | null = null;
-  imgs: string[] = [];
+
+  imgs: [string, string?][] = [];
   smallView = '';
   fullView = '';
 
@@ -56,7 +57,7 @@ export class TweetComponent {
     this.fullView = this.getFullView(tweet.content, this.imgs);
   }
 
-  private getSmallView(tweet: string, imgs: string[]): string {
+  private getSmallView(tweet: string, imgs: [string, string?][]): string {
     const maxLength = 280;
     let content = this.getFullView(tweet, imgs);
     if (content.length > maxLength) {
@@ -69,8 +70,12 @@ export class TweetComponent {
     return content;
   }
 
-  private getFullView(tweet: string, imgs: string[]): string {
-    imgs.forEach(img => tweet = tweet.replace(this.urlUtil.regexFromLink(img), ''))
+  private getFullView(tweet: string, imgs: [string, string?][]): string {
+    const imgList = new Array<string | undefined>()
+      .concat(...imgs)
+      .filter((i): i is string => !!i);
+
+    imgList.forEach(img => tweet = tweet.replace(this.urlUtil.regexFromLink(img), ''))
     return tweet;
   }
 

@@ -24,10 +24,10 @@ export class TweetHtmlfyService {
     return Array.from(matches);
   }
 
-  separateImageAndLinks(content: string): { urls: string[], imgs: string[] } {
+  separateImageAndLinks(content: string): { urls: string[], imgs: [string, string?][] } {
     const links = this.extractUrls(content);
     const isImgRegex = /\.(png|jpg|jpeg|gif|svg|webp)$/;
-    const imgs = new Array<string>();
+    let imgs = new Array<string>();
     const urls = new Array<string>();
     links.forEach(link => {
       const is = isImgRegex.test(link);
@@ -38,7 +38,33 @@ export class TweetHtmlfyService {
       }
     });
 
-    return { urls, imgs };
+    imgs = imgs.concat([
+      'https://i.imgur.com/OjAomOO.jpeg',
+      'https://i.imgur.com/OjAomOO.jpeg'
+    ]);
+
+    return { urls, imgs: this.imageListToMatriz(imgs) };
+  }
+
+  private imageListToMatriz(imgList: string[]): [string, string?][] {
+    const pair = 2;
+
+    if (imgList.length === pair) {
+      return [[imgList[0]],[imgList[1]]];
+    }
+
+    let matriz: [string, string?][] = [];
+    let currentTouple: [string, string?] | null = null;
+    for (let i = imgList.length - 1; i >= 0; i--) {
+      if (!currentTouple || currentTouple.length === pair) {
+        currentTouple = [imgList[i]];
+        matriz = [currentTouple].concat(matriz);
+      } else {
+        currentTouple.push(imgList[i]);
+      }
+    }
+
+    return matriz;
   }
 
   private htmlfyLink(content: string, links: string[]): string {

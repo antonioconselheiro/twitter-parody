@@ -6,11 +6,20 @@
   <a role="button" *ngIf="showMoreTextButton()">Show more</a>
 </ng-container>
 
-<figure *ngIf="tweet && imgs.length && showImages">
+<figure
+  *ngIf="tweet && imgs.length && showImages"
+>
   <div
-    *ngFor="let img of imgs"
+    *ngFor="let imgTouple of imgs"
     class="img-wrapper"
-    (click)="imgOpen.next({ tweet, img })"
-    [style.background-image]="'url(' + (img | proxifyImage) + ')'"
-  ></div>
+  >
+  <ng-container *ngFor="let img of imgTouple">
+    <div
+      *ngIf="img"
+      class="img"
+      (click)="imgOpen.next({ tweet, img })"
+      [style.background-image]="'url(' + (img | proxifyImage) + ')'"
+    ></div>
+  </ng-container>
+  </div>
 </figure>
