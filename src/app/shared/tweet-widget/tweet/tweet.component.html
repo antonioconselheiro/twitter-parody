@@ -8,7 +8,7 @@
     <a role="button" *ngIf="showMoreTextButton()">Show more</a>
   </ng-container>
 
-  <figure *ngIf="tweet.imgMatriz && showImages">
+  <figure *ngIf="tweet.imgMatriz && tweet.imgMatriz.length && showImages">
     <div
       *ngFor="let touple of tweet.imgMatriz"
       class="img-wrapper"
