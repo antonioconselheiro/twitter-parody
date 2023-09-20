@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 import { IProfile } from './profile.interface';
 import * as CryptoJS from 'crypto-js';
 import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-user';
+import { TweetHtmlfyService } from '@shared/tweet-service/tweet-htmlfy.service';
 
 /**
  * Them main observable of this class emit the authenticated profile metadata
@@ -28,7 +29,8 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
   } = {};
 
   constructor(
-    private apiService: ApiService
+    private apiService: ApiService,
+    private tweetHtmlfyService: TweetHtmlfyService
   ) {
     const authProfileSerialized = sessionStorage.getItem('ProfilesObservable_auth');
     const authProfile = authProfileSerialized ? JSON.parse(authProfileSerialized) as IProfile : null;
@@ -90,12 +92,20 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
     if ('sig' in profile) {
       const metadata = JSON.parse(profile.content);
       const npub = nip19.npubEncode(profile.pubkey);
-      return this.profiles[npub] = {
+      const htmlAbout = metadata.about && this.tweetHtmlfyService.safify(metadata.about)
+
+      const newProfile = this.profiles[npub] = {
         npub: npub,
         user: new NostrUser(npub),
         load: DataLoadType.EAGER_LOADED,
         ...metadata
       }
+
+      if (htmlAbout) {
+        newProfile.htmlAbout = htmlAbout;
+      }
+
+      return newProfile;
     } else {
       return this.profiles[profile.npub] = profile;
     }

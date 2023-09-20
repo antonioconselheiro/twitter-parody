@@ -1,25 +1,26 @@
-<ng-container *ngIf="isFull">
-  <span [innerHTML]="fullView | tweetHtmlfy"></span>
-</ng-container>
-<ng-container *ngIf="!isFull">
-  <span [innerHTML]="smallView | tweetHtmlfy"></span>
-  <a role="button" *ngIf="showMoreTextButton()">Show more</a>
-</ng-container>
+<ng-container *ngIf="tweet">
 
-<figure
-  *ngIf="tweet && imgs.length && showImages"
->
-  <div
-    *ngFor="let imgTouple of imgs"
-    class="img-wrapper"
-  >
-  <ng-container *ngFor="let img of imgTouple">
-    <div
-      *ngIf="img"
-      class="img"
-      (click)="imgOpen.next({ tweet, img })"
-      [style.background-image]="'url(' + (img | proxifyImage) + ')'"
-    ></div>
+  <ng-container *ngIf="isFull">
+    <span [innerHTML]="tweet.htmlFullView"></span>
   </ng-container>
-  </div>
-</figure>
+  <ng-container *ngIf="!isFull">
+    <span [innerHTML]="tweet.htmlSmallView"></span>
+    <a role="button" *ngIf="showMoreTextButton()">Show more</a>
+  </ng-container>
+
+  <figure *ngIf="tweet.imgMatriz && showImages">
+    <div
+      *ngFor="let touple of tweet.imgMatriz"
+      class="img-wrapper"
+    >
+    <ng-container *ngFor="let img of touple">
+      <div
+        *ngIf="img"
+        class="img"
+        (click)="imgOpen.next({ tweet, img })"
+        [style.background-image]="'url(' + (img | proxifyImage) + ')'"
+      ></div>
+    </ng-container>
+    </div>
+  </figure>
+</ng-container>

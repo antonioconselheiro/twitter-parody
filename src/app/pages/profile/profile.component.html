@@ -30,7 +30,7 @@
       </span>
       <span *ngIf="profile.nip05" class="user-nip5">{{profile.nip05}}</span>
     </div>
-    <div class="bio" [innerHTML]="profile.about | tweetHtmlfy"></div>
+    <div class="bio" [innerHTML]="profile.htmlAbout"></div>
     <div class="additional-information">
       <span *ngIf="profile.location">
         <div class="inline-icon icon-location">

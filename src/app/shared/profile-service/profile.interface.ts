@@ -1,3 +1,4 @@
+import { SafeHtml } from "@angular/platform-browser";
 import { DataLoadType } from "@domain/data-load-type";
 import { NostrUser } from "@domain/nostr-user";
 
@@ -8,6 +9,7 @@ export interface IProfile {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   display_name?: string;
   picture?: string;
+  htmlAbout?: SafeHtml;
   about?: string;
   banner?: string;
   lud16?: string;

@@ -8,6 +8,8 @@ import { ApiService } from "@shared/api-service/api.service";
 import { Event } from 'nostr-tools';
 import { ProfilesObservable } from "../profile-service/profiles.observable";
 import Geohash from "latlon-geohash";
+import { TweetHtmlfyService } from "./tweet-htmlfy.service";
+import { UrlUtil } from "@shared/util/url.service";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +17,9 @@ import Geohash from "latlon-geohash";
 export class TweetApi {
 
   constructor(
+    private urlUtil: UrlUtil,
     private apiService: ApiService,
+    private tweetHtmlfyService: TweetHtmlfyService,
     private profiles$: ProfilesObservable
   ) { }
 
@@ -71,16 +75,41 @@ export class TweetApi {
     return Object.values(tweetsMap);
   }
 
+  private getSmallView(tweet: string, imgList: string[]): string {
+    const maxLength = 280;
+    let content = this.getFullView(tweet, imgList);
+    if (content.length > maxLength) {
+      content = content.substring(0, maxLength - 1);
+      //  substituí eventual link cortado pela metade
+      content = content.replace(/http[^ ]+$/, '');
+      content += '…';
+    }
+
+    return content;
+  }
+
+  private getFullView(tweet: string, imgList: string[]): string {
+    imgList?.forEach(img => tweet = tweet.replace(this.urlUtil.regexFromLink(img), ''))
+    return tweet;
+  }
+
   // eslint-disable-next-line complexity
   private castAndCacheEventToTweet(tweetsMap: { [id: string]: ITweet }, event: Event<NostrEventKind.Text>): ITweet;
   private castAndCacheEventToTweet(tweetsMap: { [id: string]: ITweet }, event: Event<NostrEventKind.Repost>): ITweet;
   private castAndCacheEventToTweet(tweetsMap: { [id: string]: ITweet }, event: Event<NostrEventKind.Text | NostrEventKind.Repost>): ITweet;
   private castAndCacheEventToTweet(tweetsMap: { [id: string]: ITweet }, event: Event<NostrEventKind.Text> | Event<NostrEventKind.Repost>): ITweet {
     const lazyLoaded = tweetsMap[event.id];
+    const content = this.getTweetContent(event, lazyLoaded);
+
+    const { urls, imgList, imgMatriz } = this.tweetHtmlfyService.separateImageAndLinks(content);
+    const htmlSmallView = this.tweetHtmlfyService.safify(this.getSmallView(content, imgList));
+    const htmlFullView = this.tweetHtmlfyService.safify(this.getFullView(content, imgList));
+
     const tweet = tweetsMap[event.id] = {
       id: event.id,
       author: this.profiles$.getFromPubKey(event.pubkey),
-      content: this.getTweetContent(event, lazyLoaded),
+      content, htmlSmallView, htmlFullView,
+      urls, imgList, imgMatriz,
       reactions: lazyLoaded?.reactions || [],
       reply: lazyLoaded?.reply || [],
       created: this.getTweetCreated(event, lazyLoaded),

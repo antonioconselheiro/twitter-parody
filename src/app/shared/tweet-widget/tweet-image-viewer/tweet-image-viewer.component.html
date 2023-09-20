@@ -5,6 +5,18 @@
     </div>
   </button>
 
+  <button *ngIf="hasPreviousImage()" (click)="showPreviousImage()" title="show previous image" type="button" class="icon-left svg-button">
+    <div class="svg-wrapper">
+      <div alt="close" role="img"></div>
+    </div>
+  </button>
+
+  <button *ngIf="hasNextImage()" (click)="showNextImage()" title="show next image" type="button" class="icon-right svg-button">
+    <div class="svg-wrapper">
+      <div alt="close" role="img"></div>
+    </div>
+  </button>
+
   <img [src]="activeImage" />
 </div>
 <div class="tweet-sidebar">

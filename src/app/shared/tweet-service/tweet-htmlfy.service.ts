@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import { SafeHtml } from '@angular/platform-browser';
 
 @Injectable()
 export class TweetHtmlfyService {
 
-  safify(content: string): string {
+  safify(content: string): SafeHtml {
     content = this.stripTags(content);
     const { urls } = this.separateImageAndLinks(content);
     content = this.htmlfyLink(content, urls);
@@ -24,7 +25,11 @@ export class TweetHtmlfyService {
     return Array.from(matches);
   }
 
-  separateImageAndLinks(content: string): { urls: string[], imgs: [string, string?][] } {
+  separateImageAndLinks(content: string): {
+    urls: string[],
+    imgMatriz: [string, string?][],
+    imgList: string[]
+  } {
     const links = this.extractUrls(content);
     const isImgRegex = /\.(png|jpg|jpeg|gif|svg|webp)$/;
     let imgs = new Array<string>();
@@ -43,7 +48,7 @@ export class TweetHtmlfyService {
       'https://i.imgur.com/OjAomOO.jpeg'
     ]);
 
-    return { urls, imgs: this.imageListToMatriz(imgs) };
+    return { urls, imgMatriz: this.imageListToMatriz(imgs), imgList: imgs };
   }
 
   private imageListToMatriz(imgList: string[]): [string, string?][] {

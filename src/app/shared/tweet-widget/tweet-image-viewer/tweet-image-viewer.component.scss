@@ -20,6 +20,8 @@
 
 .main-image {
   background-color: var(--headerColor);
+  display: flex;
+  align-items: center;
   position: fixed;
   right: 350px;
   bottom: 0;
@@ -29,6 +31,19 @@
   button {
     margin: 1rem;
     position: absolute;
+
+    &.icon-close {
+      top: 0;
+      left: 0;
+    }
+  
+    &.icon-left {
+      left: 0;
+    }
+  
+    &.icon-right {
+      right: 0;
+    }
   }
 
   img {
