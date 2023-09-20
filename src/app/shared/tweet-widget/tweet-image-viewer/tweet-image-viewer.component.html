@@ -1,4 +1,4 @@
-<div class="main-image">
+<div [class.full]="!showTweets" class="main-image">
   <button (click)="close.emit()" title="close" type="button" class="icon-close svg-button">
     <div class="svg-wrapper">
       <div alt="close" role="img"></div>
@@ -17,8 +17,22 @@
     </div>
   </button>
 
+  <button
+    type="button"
+    [attr.title]="showTweets ? 'hide tweets' : 'show tweets'"
+    [class.icon-double-left]="!showTweets"
+    [class.icon-double-right]="showTweets"
+    (click)="showTweets = !showTweets"
+    class="tweets-controller svg-button"
+  >
+
+    <div class="svg-wrapper">
+      <div role="img"></div>
+    </div>
+  </button>
+
   <img [src]="activeImage" />
 </div>
-<div class="tweet-sidebar">
+<div [class.hide]="!showTweets" class="tweet-sidebar">
   <tw-tweet-list [tweet]="tweet"></tw-tweet-list>
 </div>

@@ -1,14 +1,44 @@
+.icon-double-down {
+  div[role=img] {
+    mask-image: url('/assets/arrow/double-down.svg');
+  }
+}
+
+.icon-double-up {
+  div[role=img] {
+    mask-image: url('/assets/arrow/double-up.svg');
+  }
+}
+
+.icon-double-left {
+  div[role=img] {
+    mask-image: url('/assets/arrow/double-left.svg');
+  }
+}
+
+.icon-double-right {
+  div[role=img] {
+    mask-image: url('/assets/arrow/double-right.svg');
+  }
+}
+
 .icon-left,
 .icon-back {
   div[role=img] {
-    mask-image: url('/assets/left.svg');
+    mask-image: url('/assets/arrow/left.svg');
   }
 }
 
 .icon-right,
 .icon-enter {
   div[role=img] {
-    mask-image: url('/assets/right.svg');
+    mask-image: url('/assets/arrow/right.svg');
+  }
+}
+
+.icon-up {
+  div[role=img] {
+    mask-image: url('/assets/arrow/up.svg');
   }
 }
 
@@ -105,18 +135,6 @@
 .icon-share {
   div[role=img] {
     mask-image: url('/assets/read-tweet/share.svg');
-  }
-}
-
-.icon-down {
-  div[role=img] {
-    mask-image: url('/assets/chat/down.svg');
-  }
-}
-
-.icon-up {
-  div[role=img] {
-    mask-image: url('/assets/chat/up.svg');
   }
 }
 

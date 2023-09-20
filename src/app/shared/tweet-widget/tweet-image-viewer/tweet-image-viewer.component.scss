@@ -16,6 +16,10 @@
   background-color: var(--base);
   border-left: 1px solid var(--separator);
   height: 100%;
+
+  &.hide {
+    display: none;
+  }
 }
 
 .main-image {
@@ -28,9 +32,21 @@
   left: 0;
   top: 0;
 
+  &.full {
+    right: 0;
+  }
+
   button {
     margin: 1rem;
     position: absolute;
+
+    .svg-wrapper {
+      background-color: var(--headerColor);
+
+      [role=img] {
+        background-color: var(--highContrast);
+      }
+    }
 
     &.icon-close {
       top: 0;
@@ -42,6 +58,11 @@
     }
   
     &.icon-right {
+      right: 0;
+    }
+
+    &.tweets-controller {
+      top: 0;
       right: 0;
     }
   }

@@ -17,6 +17,8 @@ export class TweetImageViewerComponent {
   @Output()
   close = new EventEmitter<void>();
 
+  showTweets = true;
+
   private getImageList(): string[] {
     return this.tweet?.imgList || [];
   }
