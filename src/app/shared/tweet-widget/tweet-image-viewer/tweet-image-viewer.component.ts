@@ -39,12 +39,12 @@ export class TweetImageViewerComponent {
   showPreviousImage(): void {
     const currentIndexOf = this.getIndexFromImageList(this.activeImage);
     const imgList = this.getImageList();
-    this.activeImage = imgList[currentIndexOf + 1] || this.activeImage || '';
+    this.activeImage = imgList[currentIndexOf - 1] || this.activeImage || '';
   }
 
   showNextImage(): void {
     const currentIndexOf = this.getIndexFromImageList(this.activeImage);
     const imgList = this.getImageList();
-    this.activeImage = imgList[currentIndexOf - 1] || this.activeImage || '';
+    this.activeImage = imgList[currentIndexOf + 1] || this.activeImage || '';
   }
 }

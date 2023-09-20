@@ -1,10 +1,12 @@
-.icon-left, icon-back {
+.icon-left,
+.icon-back {
   div[role=img] {
     mask-image: url('/assets/left.svg');
   }
 }
 
-.icon-right, .icon-enter {
+.icon-right,
+.icon-enter {
   div[role=img] {
     mask-image: url('/assets/right.svg');
   }
