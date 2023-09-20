@@ -49,7 +49,7 @@
   </button>
 </nav>
 
-<div (click)="onProfileMenuClick(profile)" role="button" class="profile-menu">
+<div (click)="onProfileMenuClick(profile)" role="button" class="profile-menu" [class.bordered]="!profile">
   <tw-popover class="auth-popover" #authPopover>
     <ul>
       <li (click)="addExistingAccount($event)" role="button">Add existing account</li>
