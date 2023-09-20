@@ -2,7 +2,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 import { DataLoadType } from '@domain/data-load-type';
 import { NostrUser } from '@domain/nostr-user';
+import { CameraObservable } from '@shared/camera/camera.observable';
 import { CustomValidator } from '@shared/custom-validator/custom-validator';
+import { MainErrorObservable } from '@shared/main-error/main-error.observable';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
 import { IProfile } from '@shared/profile-service/profile.interface';
 import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
@@ -47,6 +49,8 @@ export class AddAccountFormComponent {
 
   constructor(
     private fb: FormBuilder,
+    private camera$: CameraObservable,
+    private error$: MainErrorObservable,
     private profiles$: ProfilesObservable,
     private networkError$: NetworkErrorObservable,
     private nostrSecretStatefull: NostrSecretStatefull
@@ -87,6 +91,16 @@ export class AddAccountFormComponent {
         this.networkError$.next(e);
       })
       .finally(() => this.loading = false);
+  }
+
+  readQrcodeUsingCamera(): void {
+    this.asyncReadQrcodeUsingCamera().catch(e => this.error$.next(e))
+  }
+
+  async asyncReadQrcodeUsingCamera(): Promise<void> {
+    const nsec = await this.camera$.readQrCode();
+    this.accountForm.patchValue({ nsec });
+    return Promise.resolve();
   }
 
   private addAccount(profile: IProfile, user: NostrUser, pin: string): void {

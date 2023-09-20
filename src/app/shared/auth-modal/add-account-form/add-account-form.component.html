@@ -18,6 +18,19 @@
     <button
       type="button"
       tabindex="4"
+      title="read nsec from qrcode"
+      (click)="readQrcodeUsingCamera()"
+      class="bordered icon-qrcode-read svg-button"
+    >
+
+      <div class="svg-wrapper">
+        <div role="img"></div>
+      </div>
+    </button>
+
+    <button
+      type="button"
+      tabindex="4"
       [attr.title]="showNostrSecret ? 'hide nostr secret' : 'show nostr secret'"
       [class.icon-show]="!showNostrSecret"
       [class.icon-hide]="showNostrSecret"

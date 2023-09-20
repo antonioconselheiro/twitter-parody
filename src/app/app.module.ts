@@ -22,6 +22,7 @@ import { ProfileModule } from './pages/profile/profile.module';
 import { TimelineModule } from './pages/timeline/timeline.module';
 import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.module';
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
+import { CameraModule } from '@shared/camera/camera.module';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
     CommunitiesModule,
 
     //  shared
+    CameraModule,
     MenuSidebarModule,
     ExploreSidebarModule,
     ProfileServiceModule,
