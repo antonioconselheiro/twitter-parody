@@ -43,11 +43,6 @@ export class TweetHtmlfyService {
       }
     });
 
-    imgs = imgs.concat([
-      'https://i.imgur.com/OjAomOO.jpeg',
-      'https://i.imgur.com/OjAomOO.jpeg'
-    ]);
-
     return { urls, imgMatriz: this.imageListToMatriz(imgs), imgList: imgs };
   }
 
