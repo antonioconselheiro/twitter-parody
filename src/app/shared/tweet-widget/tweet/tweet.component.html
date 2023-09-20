@@ -6,7 +6,7 @@
   <a role="button" *ngIf="showMoreTextButton()">Show more</a>
 </ng-container>
 
-<figure *ngIf="tweet && imgs.length">
+<figure *ngIf="tweet && imgs.length && showImages">
   <div
     *ngFor="let img of imgs"
     class="img-wrapper"

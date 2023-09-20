@@ -12,6 +12,9 @@ import { ITweet } from '@domain/tweet.interface';
 export class TweetComponent {
 
   @Input()
+  showImages = true;
+
+  @Input()
   isFull = false;
   
   @Input()

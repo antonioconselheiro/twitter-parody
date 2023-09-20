@@ -1,6 +1,12 @@
 <div class="main-image">
-  <div></div>
+  <button (click)="close.emit()" title="close" type="button" class="icon-close svg-button">
+    <div class="svg-wrapper">
+      <div alt="close" role="img"></div>
+    </div>
+  </button>
+
+  <img [src]="activeImage" />
 </div>
 <div class="tweet-sidebar">
-  <tw-tweet-list></tw-tweet-list>
+  <tw-tweet-list [tweet]="tweet"></tw-tweet-list>
 </div>

@@ -1,25 +1,25 @@
-<div *ngIf="loading" class="separator tl-loading">
+<div *ngIf="loading && !tweet" class="separator tl-loading">
   <tw-loading></tw-loading>
 </div>
 
-<article class="read-tweet separator" *ngFor="let tweet of tweets; trackBy: trackByTweetId">
+<article class="read-tweet separator" *ngFor="let twet of tweets; trackBy: trackByTweetId">
   <a href="javascript:void(0)" class="retweet-origin">
     Example has retweeted
   </a>
 
   <div class="tweet-structure">
     <div>
-      <tw-profile-picture [picture]="tweet.author?.picture"></tw-profile-picture>
+      <tw-profile-picture [picture]="twet.author?.picture"></tw-profile-picture>
     </div>
     <div class="tweet-metadata">
       <header>
         <address class="author user-info">
           <span class="user-name">
-            {{tweet.author?.display_name || tweet.author?.name}}
-            <span *ngIf="tweet.author?.nip05valid" class="user-verified"></span>
+            {{twet.author?.display_name || twet.author?.name}}
+            <span *ngIf="twet.author?.nip05valid" class="user-verified"></span>
           </span>
-          <span *ngIf="tweet.author?.nip05" class="user-nip5">{{tweet.author?.nip05}}</span>
-          <time *ngIf="tweet.created" [attr.datetime]="tweet.created | datetimeIso">{{tweet.created | datetimeText}}</time> <!-- TODO: remover mock -->
+          <span *ngIf="twet.author?.nip05" class="user-nip5">{{twet.author?.nip05}}</span>
+          <time *ngIf="twet.created" [attr.datetime]="twet.created | datetimeIso">{{twet.created | datetimeText}}</time> <!-- TODO: remover mock -->
         </address>
 
         <button class="svg-button ellipsis">
@@ -29,9 +29,23 @@
         </button>
       </header>
 
-      <tw-tweet (imgOpen)="onImgOpen($event)" class="tweet-content" [tweet]="tweet"></tw-tweet>
-      <tw-tweet-button-group [tweet]="tweet"></tw-tweet-button-group>
+      <tw-tweet
+        class="tweet-content"
+        (imgOpen)="onImgOpen($event)"
+        [tweet]="twet"
+        [showImages]="twet !== tweet"
+        [isFull]="twet === tweet"
+      ></tw-tweet>
+      <tw-tweet-button-group [tweet]="twet"></tw-tweet-button-group>
     </div>
   </div>
 </article>
-<tw-tweet-image-viewer *ngIf="viewing" [tweet]="viewing.tweet" [activeImage]="viewing.img"></tw-tweet-image-viewer>
+<div *ngIf="loading && tweet" class="separator tl-loading">
+  <tw-loading></tw-loading>
+</div>
+<tw-tweet-image-viewer
+  *ngIf="viewing"
+  [tweet]="viewing.tweet"
+  [activeImage]="viewing.img"
+  (close)="viewing = null"
+></tw-tweet-image-viewer>

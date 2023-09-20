@@ -1,11 +1,38 @@
+:host {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+}
+
 .tweet-sidebar {
+  position: fixed;
   width: 350px;
+  top: 0;
+  right: 0;
+
+  background-color: var(--base);
+  border-left: 1px solid var(--separator);
+  height: 100%;
 }
 
 .main-image {
+  background-color: var(--headerColor);
   position: fixed;
-  top: 0;
-  right: (0px - 350px);
-  left: 0;
+  right: 350px;
   bottom: 0;
+  left: 0;
+  top: 0;
+
+  button {
+    margin: 1rem;
+    position: absolute;
+  }
+
+  img {
+    margin: 0 auto;
+    display: block;
+  }
 }

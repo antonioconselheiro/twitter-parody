@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ITweet } from '@domain/tweet.interface';
 
 @Component({
@@ -13,4 +13,9 @@ export class TweetImageViewerComponent {
 
   @Input()
   activeImage = '';
+
+  @Output()
+  close = new EventEmitter<void>();
+
+  // TODO: incluir um mecanismo para carregar todos os comentários da imagem
 }
