@@ -1,7 +1,7 @@
 :host {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: var(--modalAlign);
   background-color: var(--backgroundOverlap);
   position: fixed;
   top: 0;
@@ -12,11 +12,11 @@
 }
 
 .modal {
-  margin: 3rem auto;
+  margin: 0 auto;
   display: block;
   width: 600px;
   background-color: var(--base);
-  border-radius: 20px;
+  border-radius: var(--modalBorderRadius);
 
   header {
     padding: .75rem;

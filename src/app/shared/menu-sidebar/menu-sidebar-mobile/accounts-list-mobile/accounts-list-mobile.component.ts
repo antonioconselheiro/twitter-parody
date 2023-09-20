@@ -1,4 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AuthModalComponent } from '@shared/auth-modal/auth-modal.component';
+import { ModalService } from '@shared/modal/modal.service';
+import { IProfile } from '@shared/profile-service/profile.interface';
 import { NostrSecretStatefull } from '@shared/security-service/nostr-secret.statefull';
 import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-user';
 import { Subscription } from 'rxjs';
@@ -12,9 +15,13 @@ export class AccountsListMobileComponent implements OnInit, OnDestroy {
 
   private subscriptions = new Subscription();
 
+  @Input()
+  profile: IProfile | null = null;
+
   accounts: IUnauthenticatedUser[] = [];
 
   constructor(
+    private modalService: ModalService,
     private nostrSecretStatefull: NostrSecretStatefull
   ) { }
 
@@ -26,5 +33,16 @@ export class AccountsListMobileComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  addAccountModal(): void {
+    this.modalService
+    .createModal(AuthModalComponent)
+    .setTitle('Accounts')
+    .setData({
+      currentAuthProfile: this.profile,
+      currentStep: 'add-account'
+    })
+    .build();
   }
 }

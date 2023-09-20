@@ -1,0 +1,11 @@
+body {
+  //  default, mobile
+  --modalBorderRadius: 20px 20px 0 0;
+  --modalAlign: end;
+
+  //  not mobile
+  @media screen and (min-width: 800px) {
+    --modalBorderRadius: 20px;
+    --modalAlign: center;
+  }
+}
