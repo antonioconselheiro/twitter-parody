@@ -74,11 +74,30 @@ export class CameraComponent implements OnInit, OnDestroy, ICloseable {
     return Promise.resolve();
   }
 
+  // eslint-disable-next-line complexity
   close(): void {
+    this.stopStreaming();
+    this.stopScanning();
+    this.completeSubscriptions();
+  }
+
+  private stopStreaming(): void {
+    if (this.videoEl && this.videoEl.nativeElement) {
+      const stream = this.videoEl.nativeElement.srcObject as MediaStream | null;
+      if (stream instanceof MediaStream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+    }
+  }
+
+  private stopScanning(): void {
     if (this.scanning) {
       this.scanning.stop();
+      this.scanning.destroy();
     }
+  }
 
+  private completeSubscriptions(): void {
     if (!this.camera$.qrCodeResponse.closed) {
       this.camera$.qrCodeResponse.complete();
     }
