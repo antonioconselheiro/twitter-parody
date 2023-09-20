@@ -27,13 +27,14 @@ export class TweetApi {
     const events = await this.apiService.get([
       {
         kinds: [
+          NostrEventKind.Metadata,
           NostrEventKind.Text,
-          NostrEventKind.Repost,
-          NostrEventKind.Reaction
+          NostrEventKind.Repost
         ],
         authors: [
           String(new NostrUser(npub))
-        ]
+        ],
+        limit: 20
       }
     ]);
 
@@ -43,12 +44,53 @@ export class TweetApi {
     return Promise.resolve(tweets);
   }
 
+  async listReactionsFrom(npub: string): Promise<ITweet[]> {
+    const events = await this.apiService.get([
+      {
+        kinds: [
+          NostrEventKind.Metadata,
+          NostrEventKind.Reaction
+        ],
+        authors: [
+          String(new NostrUser(npub))
+        ],
+        limit: 20
+      }
+    ]);
+
+    this.profiles$.cache(events);
+
+    const tweets = this.castResultsetToTweets(events);
+    return Promise.resolve(tweets);
+  }
+
+  async listTweetsInteractions(tweets: ITweet[]): Promise<ITweet[]> {
+    const events = await this.apiService.get([
+      {
+        kinds: [
+          NostrEventKind.Metadata,
+          NostrEventKind.Text,
+          NostrEventKind.Repost,
+          NostrEventKind.Reaction
+        ],
+        ids: tweets.map(tweet => tweet.id)
+      }
+    ]);
+
+    this.profiles$.cache(events);
+
+    tweets = this.castResultsetToTweets(events, tweets);
+    return Promise.resolve(tweets);
+  }
+
   private isKind<T extends NostrEventKind>(event: Event<NostrEventKind>, kind: T): event is Event<T>  {
     return event.kind === kind;
   }
 
-  private castResultsetToTweets(events: Event<NostrEventKind>[]): ITweet[] {
+  private castResultsetToTweets(events: Event<NostrEventKind>[], tweets: ITweet[] = []): ITweet[] {
     const tweetsMap: { [id: string]: ITweet } = {};
+    tweets.forEach(tweet => tweetsMap[tweet.id] = tweet);
+
     //  FIXME: débito técnico, resolver complexidade ciclomática
     // eslint-disable-next-line complexity
     events.forEach(event => {

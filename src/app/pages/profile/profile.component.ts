@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DataLoadType } from '@domain/data-load-type';
 import { ITweet } from '@domain/tweet.interface';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
 import { MainErrorObservable } from '@shared/main-error/main-error.observable';
@@ -32,7 +33,10 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
   }
 
   override ngOnInit(): void {
-    this.bindTweetSubscription();
+    this.bindTweetSubscription()
+      .catch(e => this.networkError$.next(e))
+      .finally(() => this.loading = false);
+
     this.getProfileFromActivatedRoute();
     super.ngOnInit();
   }
@@ -49,12 +53,12 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
     this.router.navigate(['home']).catch(e => this.error$.next(e));
   }
   
-  private bindTweetSubscription(): void {
+  private async bindTweetSubscription(): Promise<void> {
     const npub = this.activatedRoute.snapshot.params['npub'];
-    this.tweetApi.listTweetsFrom(npub)
-      .then(tweets => this.tweets = tweets)
-      .catch(e => this.networkError$.next(e))
-      .finally(() => this.loading = false);
+    let tweets = await this.tweetApi.listTweetsFrom(npub);
+    tweets = await this.tweetApi.listTweetsInteractions(tweets);
+
+    this.tweets = tweets.filter(tweet => tweet.load === DataLoadType.EAGER_LOADED);
   }
   
   private getProfileFromActivatedRoute(): void {
