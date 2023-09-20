@@ -28,8 +28,13 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private setCurrentTheme(theme: ITheme): void {
-    document.body.setAttribute('data-theme', theme.base);
-    document.body.setAttribute('data-color', theme.color);
+    if (['darker', 'light', 'dark'].includes(theme.base)) {
+      document.body.setAttribute('data-theme', theme.base);
+    }
+
+    if (['blue',  'yellow',  'magenta',  'purple',  'orange',  'green'].includes(theme.color)) {
+      document.body.setAttribute('data-color', theme.color);
+    }
   }
 
   ngOnDestroy(): void {

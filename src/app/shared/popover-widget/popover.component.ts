@@ -39,8 +39,9 @@ export class PopoverComponent {
     }
   }
 
-  @HostListener('document:click', ['$event'])
+  //@HostListener('document:click', ['$event'])
   onClickOutsidePopover(event: MouseEvent): void {
+
     const el = this.el?.nativeElement
     if (!el) {
       this.showPopoverAnimating = false;

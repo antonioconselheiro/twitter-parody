@@ -1,12 +1,13 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { ITweet } from '@domain/tweet.interface';
+import { ICloseable } from '@shared/util/closeable.interface';
 
 @Component({
   selector: 'tw-tweet-image-viewer',
   templateUrl: './tweet-image-viewer.component.html',
   styleUrls: ['./tweet-image-viewer.component.scss']
 })
-export class TweetImageViewerComponent {
+export class TweetImageViewerComponent implements ICloseable {
 
   @Input()
   tweet: ITweet | null = null;
@@ -15,7 +16,7 @@ export class TweetImageViewerComponent {
   activeImage = '';
 
   @Output()
-  close = new EventEmitter<void>();
+  closeEvent = new EventEmitter<void>();
 
   showTweets = true;
 
@@ -48,5 +49,10 @@ export class TweetImageViewerComponent {
     const currentIndexOf = this.getIndexFromImageList(this.activeImage);
     const imgList = this.getImageList();
     this.activeImage = imgList[currentIndexOf + 1] || this.activeImage || '';
+  }
+
+  @HostListener('document:keydown.escape')
+  close(): void {
+    this.closeEvent.next();
   }
 }
