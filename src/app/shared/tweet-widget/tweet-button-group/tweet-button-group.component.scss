@@ -1,5 +1,6 @@
 :host {
   display: flex;
+  position: relative;
   justify-content: space-between;
 
   button.svg-button {
@@ -87,5 +88,11 @@
         }
       }
     }
+  }
+
+  tw-popover {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
   }
 }

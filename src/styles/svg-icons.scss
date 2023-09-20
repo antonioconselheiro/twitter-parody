@@ -138,6 +138,60 @@
   }
 }
 
+.icon-add-bookmark {
+  div[role=img] {
+    mask-image: url('/assets/read-tweet/options/add-bookmark.svg');
+  }
+}
+
+.icon-add-list {
+  div[role=img] {
+    mask-image: url('/assets/read-tweet/options/add-list.svg');
+  }
+}
+
+.icon-block {
+  div[role=img] {
+    mask-image: url('/assets/read-tweet/options/block.svg');
+  }
+}
+
+.icon-report {
+  div[role=img] {
+    mask-image: url('/assets/read-tweet/options/report.svg');
+  }
+}
+
+.icon-silence {
+  div[role=img] {
+    mask-image: url('/assets/read-tweet/options/silence.svg');
+  }
+}
+
+.icon-unfollow {
+  div[role=img] {
+    mask-image: url('/assets/read-tweet/options/unfollow.svg');
+  }
+}
+
+.icon-pin-tweet {
+  div[role=img] {
+    mask-image: url('/assets/read-tweet/options/pin-tweet.svg');
+  }
+}
+
+.icon-pinned-tweet {
+  div[role=img] {
+    mask-image: url('/assets/read-tweet/options/pinned-tweet.svg');
+  }
+}
+
+.icon-trash {
+  div[role=img] {
+    mask-image: url('/assets/read-tweet/options/trash.svg');
+  }
+}
+
 .icon-new-message {
   div[role=img] {
     mask-image: url('/assets/chat/new-message.svg');

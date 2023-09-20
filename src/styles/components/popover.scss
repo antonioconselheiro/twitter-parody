@@ -42,49 +42,75 @@
     display: none;
   }
 
-  &::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 0;
-
-    box-sizing: border-box;
-    border: var(--arrowSize) solid;
-    border-color: transparent transparent var(--base) var(--base);
-
-    transform-origin: 0 0;
-    box-shadow: -3px 3px 3px 0 var(--baseActive);
-  }
-
-  &.bottom {
+  &.has-arrow {
     &::after {
-      bottom: calc(var(--arrowSize) * -2);
-      left: calc(50% - (var(--arrowSize) / 2));
-      transform: rotate(-45deg);
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+  
+      box-sizing: border-box;
+      border: var(--arrowSize) solid;
+      border-color: transparent transparent var(--base) var(--base);
+  
+      transform-origin: 0 0;
+      box-shadow: -3px 3px 3px 0 var(--baseActive);
+    }
+  
+    &.bottom {
+      &::after {
+        bottom: calc(var(--arrowSize) * -2);
+        left: calc(50% - (var(--arrowSize) / 2));
+        transform: rotate(-45deg);
+      }
+    }
+  
+    &.top {
+      &::after {
+        top: calc(var(--arrowSize) - (var(--arrowSize) / 2));
+        left: calc(50% - (var(--arrowSize) / 2));
+        transform: rotate(135deg);
+      }
+    }
+  
+    &.right {
+      &::after {
+        right: calc(var(--arrowSize) * -2);
+        top: calc(50% + var(--arrowSize));
+        transform: rotate(-135deg);
+      }
+    }
+  
+    &.left {
+      &::after {
+        left: calc(var(--arrowSize) - (var(--arrowSize) / 2));
+        top: calc(50% - (var(--arrowSize) / 2));
+        transform: rotate(45deg);
+      }
     }
   }
+}
 
-  &.top {
-    &::after {
-      top: calc(var(--arrowSize) - (var(--arrowSize) / 2));
-      left: calc(50% - (var(--arrowSize) / 2));
-      transform: rotate(135deg);
+ul.popover-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  overflow: hidden;
+  
+  li {
+    padding: 1rem;
+    font-size: 15px;
+    font-weight: bold;
+    align-items: center;
+    display: flex;
+
+    .inline-icon {
+      margin-right: .5rem;
     }
-  }
 
-  &.right {
-    &::after {
-      right: calc(var(--arrowSize) * -2);
-      top: calc(50% + var(--arrowSize));
-      transform: rotate(-135deg);
-    }
-  }
-
-  &.left {
-    &::after {
-      left: calc(var(--arrowSize) - (var(--arrowSize) / 2));
-      top: calc(50% - (var(--arrowSize) / 2));
-      transform: rotate(45deg);
+    &:hover {
+      background-color: var(--lowBase);
+      cursor: pointer;
     }
   }
 }

@@ -1,14 +1,14 @@
-import { Component, ElementRef, HostBinding, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthModalComponent } from '@shared/auth-modal/auth-modal.component';
 import { ModalService } from '@shared/modal/modal.service';
+import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { IProfile } from '@shared/profile-service/profile.interface';
 import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
 import { CompositeTweetPopoverComponent } from '@shared/tweet-widget/composite-tweet-popover/composite-tweet-popover.component';
 import { Subscription } from 'rxjs';
 import { MenuActiveObservable } from '../menu-active.observable';
 import { MenuType } from '../menu-type.enum';
-import { PopoverComponent } from '@shared/popover-widget/popover.component';
 
 @Component({
   selector: 'tw-menu-sidebar',

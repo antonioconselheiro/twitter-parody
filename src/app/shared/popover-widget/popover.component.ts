@@ -3,9 +3,8 @@ import { Component, ElementRef, HostBinding, HostListener } from '@angular/core'
 @Component({
   selector: 'tw-popover',
   templateUrl: './popover.component.html',
-  styleUrls: ['./popover.component.scss'],
   host: {
-    class: 'popover bottom'
+    class: 'popover'
   }
 })
 export class PopoverComponent {

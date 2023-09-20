@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { ITweet } from '@domain/tweet.interface';
+import { PopoverComponent } from '@shared/popover-widget/popover.component';
 
 @Component({
   selector: 'tw-tweet-button-group',
@@ -9,4 +10,7 @@ import { ITweet } from '@domain/tweet.interface';
 export class TweetButtonGroupComponent {
   @Input()
   tweet: ITweet | null = null;
+
+  @ViewChild('tweetShare', { read: PopoverComponent })
+  share!: PopoverComponent;
 }

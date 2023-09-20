@@ -50,8 +50,8 @@
 </nav>
 
 <div (click)="onProfileMenuClick(profile)" role="button" class="profile-menu" [class.bordered]="!profile">
-  <tw-popover class="auth-popover" #authPopover>
-    <ul>
+  <tw-popover class="auth-popover has-arrow bottom" #authPopover>
+    <ul class="popover-list">
       <li (click)="addExistingAccount($event)" role="button">Add existing account</li>
       <li (click)="logout($event)" role="button">Logout</li>
     </ul>

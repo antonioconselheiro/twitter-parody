@@ -22,11 +22,64 @@
           <time *ngIf="twet.created" [attr.datetime]="twet.created | datetimeIso">{{twet.created | datetimeText}}</time> <!-- TODO: remover mock -->
         </address>
 
-        <button class="svg-button ellipsis">
+        <button (click)="tweetActions.show()" class="svg-button ellipsis">
           <div class="svg-wrapper">
             <div role="img"></div>
           </div>
         </button>
+
+        <tw-popover #tweetActions>
+          <ul class="popover-list">
+            <li role="button">
+              <div class="inline-icon icon-unfollow">
+                <div role="img"></div>
+              </div>
+              Delete
+            </li>
+            <li role="button">
+              <div class="inline-icon icon-pin-tweet">
+                <div role="img"></div>
+              </div>
+              Pin to your Profile
+            </li>
+            <li role="button">
+              <div class="inline-icon icon-unfollow">
+                <div role="img"></div>
+              </div>
+              Unfollow @name
+            </li>
+            <li role="button">
+              <div class="inline-icon icon-add-list">
+                <div role="img"></div>
+              </div>
+              Add/Remove @name from Lists
+            </li>
+            <li role="button">
+              <div class="inline-icon icon-silence">
+                <div role="img"></div>
+              </div>
+              Silence @name
+            </li>
+            <li role="button">
+              <div class="inline-icon icon-block">
+                <div role="img"></div>
+              </div>
+              Block @name
+            </li>
+            <li role="button">
+              <div class="inline-icon icon-report">
+                <div role="img"></div>
+              </div>
+              Report @name
+            </li>
+            <li role="button">
+              <div class="inline-icon icon-view">
+                <div role="img"></div>
+              </div>
+              Event detail
+            </li>
+          </ul>
+        </tw-popover>
       </header>
 
       <tw-tweet

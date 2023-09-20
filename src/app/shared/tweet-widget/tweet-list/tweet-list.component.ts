@@ -1,6 +1,7 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ITweet } from '@domain/tweet.interface';
 import { ITweetImgViewing } from '../tweet-img-viewing.interface';
+import { PopoverComponent } from '@shared/popover-widget/popover.component';
 
 @Component({
   selector: 'tw-tweet-list',
@@ -9,6 +10,9 @@ import { ITweetImgViewing } from '../tweet-img-viewing.interface';
   encapsulation: ViewEncapsulation.None
 })
 export class TweetListComponent {
+
+  @Input()
+  loading = true;
 
   @Input()
   tweets: ITweet[] = [];
@@ -25,8 +29,8 @@ export class TweetListComponent {
 
   private interceptedTweet: ITweet | null = null;
 
-  @Input()
-  loading = true;
+  @ViewChild('tweetActions', { read: PopoverComponent })
+  share!: PopoverComponent;
 
   viewing: ITweetImgViewing | null = null;
 

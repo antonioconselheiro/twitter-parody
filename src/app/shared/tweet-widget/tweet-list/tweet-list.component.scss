@@ -44,6 +44,7 @@
 
       header {
         display: flex;
+        position: relative;
         justify-content: space-between;
         align-items: center;
 
@@ -77,7 +78,15 @@
             mask-image: url('/assets/ellipsis.svg');
           }
         }
+
+        tw-popover {
+          position: absolute;
+          top: 5px;
+          right: 5px;
+        }
       }
+
+      
     }
   }
 }

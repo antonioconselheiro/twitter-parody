@@ -71,24 +71,5 @@ button.tweet {
   .auth-popover {
     bottom: 85px;
     width: 300px;
-    border-radius: 15px;
-
-    ul {
-      margin: 0;
-      padding: 0;
-      list-style-type: none;
-      overflow: hidden;
-      
-      li {
-        padding: 1rem;
-        font-size: 15px;
-        font-weight: bold;
-
-        &:hover {
-          background-color: var(--lowBase);
-          cursor: pointer;
-        }
-      }
-    }
   }
 }

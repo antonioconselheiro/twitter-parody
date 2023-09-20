@@ -22,10 +22,33 @@
   </div>
   <span class="amount">{{tweet.view | amount}}</span>
 </button>
-<button type="button" class="icon-share svg-button">
+<button (click)="share.show()" type="button" class="icon-share svg-button">
   <div class="svg-wrapper">
     <div role="img"></div>
   </div>
 </button>
+
+<tw-popover #tweetShare>
+  <ul class="popover-list">
+    <li role="button">
+      <div class="inline-icon icon-link">
+        <div role="img"></div>
+      </div>
+      Copy link
+    </li>
+    <li role="button">
+      <div class="inline-icon icon-new-message">
+        <div role="img"></div>
+      </div>
+      Send by Private Message
+    </li>
+    <li role="button">
+      <div class="inline-icon icon-add-bookmark">
+        <div role="img"></div>
+      </div>
+      Bookmark Tweet
+    </li>
+  </ul>
+</tw-popover>
 
   

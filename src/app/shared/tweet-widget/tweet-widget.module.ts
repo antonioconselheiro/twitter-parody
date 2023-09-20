@@ -15,6 +15,7 @@ import { TweetListComponent } from './tweet-list/tweet-list.component';
 import { TweetWriteButtonGroupComponent } from './tweet-write-button-group/tweet-write-button-group.component';
 import { TweetWriteComponent } from './tweet-write/tweet-write.component';
 import { TweetComponent } from './tweet/tweet.component';
+import { PopoverWidgetModule } from '@shared/popover-widget/popover-widget.module';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { TweetComponent } from './tweet/tweet.component';
     AmountModule,
     SecurityWidgetModule,
     PickerComponent,
+    PopoverWidgetModule,
     ProfileWidgetModule,
     DatetimeWidgetModule,
     FormsModule,
