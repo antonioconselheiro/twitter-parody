@@ -93,8 +93,10 @@ export class AddAccountFormComponent {
       .finally(() => this.loading = false);
   }
 
-  readQrcodeUsingCamera(): void {
-    this.asyncReadQrcodeUsingCamera().catch(e => this.error$.next(e))
+  readQrcodeUsingCamera(pin?: HTMLInputElement): void {
+    this.asyncReadQrcodeUsingCamera()
+      .then(() => pin?.focus())
+      .catch(e => this.error$.next(e))
   }
 
   async asyncReadQrcodeUsingCamera(): Promise<void> {
