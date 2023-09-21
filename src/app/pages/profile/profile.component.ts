@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DataLoadType } from '@domain/data-load-type';
+import { DataLoadType } from '@domain/data-load.type';
 import { ITweet } from '@domain/tweet.interface';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
 import { MainErrorObservable } from '@shared/main-error/main-error.observable';
@@ -21,7 +21,7 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
   loading = true;
 
   profile: IProfile | null = null;
-  tweets: ITweet[] = [];
+  tweets: ITweet<DataLoadType.EAGER_LOADED>[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -58,10 +58,12 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
   private async bindTweetSubscription(): Promise<void> {
     const npub = this.activatedRoute.snapshot.params['npub'];
     let tweets = await this.tweetApi.listTweetsFrom(npub);
-    tweets = await this.tweetApi.listTweetsInteractions(tweets);
+    tweets = await this.tweetApi.eagerLoadTweetsData(tweets);
     await this.profile$.loadLazyToEager();
 
-    this.tweets = tweets.filter(tweet => tweet.load === DataLoadType.EAGER_LOADED);
+    this.tweets = tweets.filter(
+      (tweet): tweet is ITweet<DataLoadType.EAGER_LOADED> => tweet.load === DataLoadType.EAGER_LOADED
+    );
   }
   
   private getProfileFromActivatedRoute(): void {

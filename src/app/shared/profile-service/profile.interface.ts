@@ -1,5 +1,5 @@
 import { SafeHtml } from "@angular/platform-browser";
-import { DataLoadType } from "@domain/data-load-type";
+import { DataLoadType } from "@domain/data-load.type";
 import { NostrUser } from "@domain/nostr-user";
 
 export interface IProfile {

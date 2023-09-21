@@ -1,42 +1,31 @@
-import { IProfile } from '@shared/profile-service/profile.interface';
-import { IReaction } from './reaction.interface';
-import { DataLoadType } from './data-load-type';
 import { SafeHtml } from '@angular/platform-browser';
+import { DataLoadType } from './data-load.type';
+import { IReaction } from './reaction.interface';
+import { EventId } from './event-id.type';
+import { NostrPublicType } from './nostr-public.type';
+import Geohash from 'latlon-geohash';
 
-export type ITweet = {
-  id: string;
-  author: IProfile;
+export type ITweet<T extends DataLoadType | unknown = unknown> = {
+  id: EventId;
+  load: T;
+  reactions: IReaction[];
+  repling?: EventId;
+  retweeted?: EventId[];
+  retweeting?: EventId;
+  replies?: EventId[];
+} & ({
+  load: DataLoadType.EAGER_LOADED;
+  author: NostrPublicType;
   content: string;
   htmlFullView: SafeHtml;
   htmlSmallView: SafeHtml;
   urls: string[];
   imgList: string[];
   imgMatriz: [string, string?][];
-  reactions: IReaction[];
-  reply: ITweet[];
-  location?: { lat: number, lon: number };
-  retweeted?: ITweet[];
-  retweeting?: ITweet;
-  replies?: ITweet[];
+  location?: Geohash.Point;
   created: number;
   view?: number;
-  load: DataLoadType.EAGER_LOADED;
 } | {
-  id: string;
-  author?: IProfile;
-  content?: string;
-  htmlFullView?: SafeHtml;
-  htmlSmallView?: SafeHtml;
-  urls?: string[];
-  imgList?: string[];
-  imgMatriz?: [string, string?][];
-  reactions: IReaction[];
-  reply?: ITweet[];
-  location?: { lat: number, lon: number };
-  retweeted?: ITweet[];
-  retweeting?: ITweet;
-  replies?: ITweet[];
-  created?: number;
-  view?: number;
   load: DataLoadType.LAZY_LOADED;
-}
+  author?: string;
+})

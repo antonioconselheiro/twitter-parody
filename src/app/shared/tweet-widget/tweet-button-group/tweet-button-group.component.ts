@@ -1,4 +1,5 @@
 import { Component, Input, ViewChild } from '@angular/core';
+import { DataLoadType } from '@domain/data-load.type';
 import { ITweet } from '@domain/tweet.interface';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 
@@ -9,7 +10,7 @@ import { PopoverComponent } from '@shared/popover-widget/popover.component';
 })
 export class TweetButtonGroupComponent {
   @Input()
-  tweet: ITweet | null = null;
+  tweet: ITweet<DataLoadType.EAGER_LOADED> | null = null;
 
   @ViewChild('tweetShare', { read: PopoverComponent })
   share!: PopoverComponent;

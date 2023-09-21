@@ -1,6 +1,9 @@
-import { IProfile } from "@shared/profile-service/profile.interface";
+import { NostrPublicType } from "./nostr-public.type";
+import { EventId } from "./event-id.type";
 
 export interface IReaction {
+  id: EventId;
   content: string;
-  author: IProfile;
+  tweet: EventId;
+  author: NostrPublicType;
 }

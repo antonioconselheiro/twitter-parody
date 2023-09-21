@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
+import { DataLoadType } from '@domain/data-load.type';
 import { NostrEventKind } from '@domain/nostr-event-kind';
+import { IReaction } from '@domain/reaction.interface';
 import { ITweet } from '@domain/tweet.interface';
+import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
 import { UrlUtil } from '@shared/util/url.service';
 import Geohash from 'latlon-geohash';
 import { Event } from 'nostr-tools';
 import { TweetHtmlfyService } from './tweet-htmlfy.service';
-import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
-import { DataLoadType } from '@domain/data-load-type';
-import { IReaction } from '@domain/reaction.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -77,8 +77,9 @@ export class TweetConverter {
 
     const retweetAsTweet: Event<NostrEventKind.Text> = { ...event, content: '', kind: NostrEventKind.Text };
     const tweet = this.castAndCacheEventToTweet(tweetsMap, retweetAsTweet);
-    retweeted.retweeted = [tweet];
-    tweet.retweeting = retweeted;
+    
+    retweeted.retweeted = [event.id];
+    tweet.retweeting = retweeted.id;
     return tweet;
 
   }
@@ -87,8 +88,10 @@ export class TweetConverter {
     const [ [, idEvent], [, pubkey] ] = event.tags;
 
     const reaction: IReaction = {
-      author: this.profiles$.getFromPubKey(pubkey),
-      content: event.content
+      id: event.id,
+      author: this.profiles$.castPubkeyToNostrPublic(pubkey),
+      content: event.content,
+      tweet: idEvent
     };
 
     if (!tweetsMap[idEvent]) {
@@ -110,11 +113,11 @@ export class TweetConverter {
 
     const tweet = tweetsMap[event.id] = {
       id: event.id,
-      author: this.profiles$.getFromPubKey(event.pubkey),
+      author: this.profiles$.castPubkeyToNostrPublic(event.pubkey),
       content, htmlSmallView, htmlFullView,
       urls, imgList, imgMatriz,
       reactions: lazyLoaded?.reactions || [],
-      reply: lazyLoaded?.reply || [],
+      repling: lazyLoaded?.repling,
       created: this.getTweetCreated(event, lazyLoaded),
       load: DataLoadType.EAGER_LOADED,
     }
@@ -130,14 +133,17 @@ export class TweetConverter {
       const [[,idEvent], [, pubkey]] = event.tags;
 
       if (!tweetsMap[idEvent]) {
-        tweet = tweetsMap[idEvent] = this.createLazyLoadableTweetFromEventId(idEvent, pubkey);
+        tweetsMap[idEvent] = this.createLazyLoadableTweetFromEventId(idEvent, pubkey);
       }
 
-      tweetsMap[event.id].retweeting = tweetsMap[idEvent];
+      tweet.retweeting = idEvent;
     }
   }
   
-  private getCoordinatesFromEvent(tweet: ITweet, event: Event<NostrEventKind>): ITweet {
+  private getCoordinatesFromEvent(
+    tweet: ITweet<DataLoadType.EAGER_LOADED>,
+    event: Event<NostrEventKind>
+  ): ITweet<DataLoadType.EAGER_LOADED> {
     const [,geohash] = event.tags.find(tag => tag[0] === 'g') || [];
     if (geohash) {
       tweet.location = Geohash.decode(geohash);
@@ -147,24 +153,24 @@ export class TweetConverter {
   }
 
   private createLazyLoadableTweetFromEventId(idEvent: string, pubkey?: string): ITweet {
-    const tweet: ITweet = {
+    const tweet: ITweet<DataLoadType.LAZY_LOADED> = {
       id: idEvent,
       reactions: new Array<IReaction>(),
       load: DataLoadType.LAZY_LOADED
     };
 
     if (pubkey) {
-      tweet.author = this.profiles$.getFromPubKey(pubkey);
+      tweet.author = this.profiles$.castPubkeyToNostrPublic(pubkey);
     }
 
     return tweet;
   }
 
   private getTweetContent(event: Event<NostrEventKind.Text | NostrEventKind.Repost>, tweet?: ITweet): string {
-    return event.content || tweet?.content || '';
+    return event.content || tweet && 'content' in tweet && tweet?.content || '';
   }
 
   private getTweetCreated(event: Event<NostrEventKind.Text | NostrEventKind.Repost>, tweet?: ITweet): number {
-    return event.created_at || tweet?.created || 0;
+    return event.created_at || tweet && 'created' in tweet && tweet?.created || 0;
   }
 }

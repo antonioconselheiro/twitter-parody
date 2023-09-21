@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, ValidationErrors, Validators } from '@angular/forms';
-import { DataLoadType } from '@domain/data-load-type';
+import { DataLoadType } from '@domain/data-load.type';
 import { NostrUser } from '@domain/nostr-user';
 import { CameraObservable } from '@shared/camera/camera.observable';
 import { CustomValidator } from '@shared/custom-validator/custom-validator';

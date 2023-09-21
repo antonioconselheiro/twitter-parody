@@ -58,7 +58,7 @@ export class TweetApi {
     return Promise.resolve(tweets);
   }
 
-  async listTweetsInteractions(tweets: ITweet[]): Promise<ITweet[]> {
+  async eagerLoadTweetsData(tweets: ITweet[]): Promise<ITweet[]> {
     const events = await this.apiService.get([
       {
         kinds: [
@@ -67,11 +67,9 @@ export class TweetApi {
           NostrEventKind.Repost,
           NostrEventKind.Reaction
         ],
-        ids: tweets.map(tweet => tweet.id)
+        '#e': tweets.map(tweet => tweet.id)
       }
     ]);
-
-    this.profiles$.cache(events);
 
     tweets = this.tweetConverter.castResultsetToTweets(events, tweets);
     return Promise.resolve(tweets);

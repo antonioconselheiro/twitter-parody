@@ -8,18 +8,18 @@
   </a>
 
   <div class="tweet-structure">
-    <div>
-      <tw-profile-picture [picture]="twet.author?.picture"></tw-profile-picture>
+    <div *ngIf="twet.author">
+      <tw-profile-picture [picture]="getAuthorProfile(twet.author).picture"></tw-profile-picture>
     </div>
     <div class="tweet-metadata">
       <header>
-        <address class="author user-info">
+        <address *ngIf="twet.author" class="author user-info">
           <span class="user-name">
-            {{twet.author?.display_name || twet.author?.name}}
-            <span *ngIf="twet.author?.nip05valid" class="user-verified"></span>
+            {{this.getAuthorName(twet.author)}}
+            <span *ngIf="getAuthorProfile(twet.author).nip05valid" class="user-verified"></span>
           </span>
-          <span *ngIf="twet.author?.nip05" class="user-nip5">{{twet.author?.nip05}}</span>
-          <time *ngIf="twet.created" [attr.datetime]="twet.created | datetimeIso">{{twet.created | datetimeText}}</time> <!-- TODO: remover mock -->
+          <span *ngIf="getAuthorProfile(twet.author).nip05" class="user-nip5">{{getAuthorProfile(twet.author).nip05}}</span>
+          <time *ngIf="twet.created" [attr.datetime]="twet.created | datetimeIso">{{twet.created | datetimeText}}</time>
         </address>
 
         <button (click)="tweetActions.show()" class="svg-button ellipsis">

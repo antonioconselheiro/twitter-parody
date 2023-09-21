@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DataLoadType } from '@domain/data-load-type';
+import { DataLoadType } from '@domain/data-load.type';
 import { NostrEventKind } from '@domain/nostr-event-kind';
 import { NostrUser } from '@domain/nostr-user';
 import { ApiService } from '@shared/api-service/api.service';
@@ -11,7 +11,11 @@ import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-u
 import { TweetHtmlfyService } from '@shared/tweet-service/tweet-htmlfy.service';
 
 /**
- * Them main observable of this class emit the authenticated profile metadata
+ * This class responsible for caching event information
+ * involving profiles, including events: Metadata (0)
+ * 
+ * Them main observable of this class emit the authenticated
+ * profile metadata
  */
 @Injectable({
   providedIn: 'root'
@@ -76,20 +80,7 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
   }
 
   private async loadProfiles(npubs: string[]): Promise<IProfile[]> {
-    const events = await this.apiService.get([
-      {
-        kinds: [
-          NostrEventKind.Metadata
-        ],
-        authors: npubs.map(npub => {
-          const { data } = nip19.decode(npub);
-          return String(data);
-        })
-      }
-    ]);
-
-    this.cache(events);
-    return Promise.resolve(npubs.map(npub => this.get(npub)));
+    return Promise.all(npubs.map(npub => this.loadProfile(npub)));
   }
 
   private async loadProfile(npub: string): Promise<IProfile> {
@@ -145,11 +136,15 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
   }
 
   loadFromPubKey(pubkey: string): Promise<IProfile> {
-    return this.loadProfile(nip19.npubEncode(pubkey));
+    return this.loadProfile(this.castPubkeyToNostrPublic(pubkey));
+  }
+
+  castPubkeyToNostrPublic(pubkey: string): string {
+    return nip19.npubEncode(pubkey);
   }
 
   getFromPubKey(pubkey: string): IProfile {
-    return this.get(nip19.npubEncode(pubkey));
+    return this.get(this.castPubkeyToNostrPublic(pubkey));
   }
   
   get(npubs: string): IProfile;
