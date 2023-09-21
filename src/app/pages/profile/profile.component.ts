@@ -6,6 +6,7 @@ import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-en
 import { MainErrorObservable } from '@shared/main-error/main-error.observable';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
 import { IProfile } from '@shared/profile-service/profile.interface';
+import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
 import { TweetApi } from '@shared/tweet-service/tweet.api';
 
 @Component({
@@ -26,6 +27,7 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
     private activatedRoute: ActivatedRoute,
     private error$: MainErrorObservable,
     private networkError$: NetworkErrorObservable,
+    private profile$: ProfilesObservable,
     private tweetApi: TweetApi,
     private router: Router
   ) {
@@ -57,6 +59,7 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
     const npub = this.activatedRoute.snapshot.params['npub'];
     let tweets = await this.tweetApi.listTweetsFrom(npub);
     tweets = await this.tweetApi.listTweetsInteractions(tweets);
+    await this.profile$.loadLazyToEager();
 
     this.tweets = tweets.filter(tweet => tweet.load === DataLoadType.EAGER_LOADED);
   }

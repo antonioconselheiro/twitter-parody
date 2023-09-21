@@ -63,8 +63,33 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
     }
   }
 
+  /**
+   * call this functions after collect new
+   * events to update lazy loaded profiles
+   */
+  async loadLazyToEager(): Promise<void> {
+    const npubLazyProfiles = Object.values(this.profiles)
+      .filter(profile => profile.load === DataLoadType.LAZY_LOADED)
+      .map(profile => profile.user.nostrPublic);
+
+    await this.loadProfiles(npubLazyProfiles);
+  }
+
   private async loadProfiles(npubs: string[]): Promise<IProfile[]> {
-    return Promise.all(npubs.map(npub => this.loadProfile(npub)));
+    const events = await this.apiService.get([
+      {
+        kinds: [
+          NostrEventKind.Metadata
+        ],
+        authors: npubs.map(npub => {
+          const { data } = nip19.decode(npub);
+          return String(data);
+        })
+      }
+    ]);
+
+    this.cache(events);
+    return Promise.resolve(npubs.map(npub => this.get(npub)));
   }
 
   private async loadProfile(npub: string): Promise<IProfile> {
@@ -93,12 +118,20 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
       const metadata = JSON.parse(profile.content);
       const npub = nip19.npubEncode(profile.pubkey);
       const htmlAbout = metadata.about && this.tweetHtmlfyService.safify(metadata.about)
-
-      const newProfile = this.profiles[npub] = {
-        npub: npub,
-        user: new NostrUser(npub),
-        load: DataLoadType.EAGER_LOADED,
-        ...metadata
+      let newProfile: IProfile;
+      if (this.profiles[npub]) {
+        newProfile = this.profiles[npub];
+        newProfile.npub = npub;
+        newProfile.user = new NostrUser(npub);
+        newProfile.load = DataLoadType.EAGER_LOADED;
+        Object.assign(newProfile, metadata);
+      } else {
+        newProfile = this.profiles[npub] = {
+          npub: npub,
+          user: new NostrUser(npub),
+          load: DataLoadType.EAGER_LOADED,
+          ...metadata
+        }
       }
 
       if (htmlAbout) {
@@ -109,6 +142,10 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
     } else {
       return this.profiles[profile.npub] = profile;
     }
+  }
+
+  loadFromPubKey(pubkey: string): Promise<IProfile> {
+    return this.loadProfile(nip19.npubEncode(pubkey));
   }
 
   getFromPubKey(pubkey: string): IProfile {

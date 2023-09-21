@@ -36,18 +36,7 @@ export class TweetConverter {
       } else if (this.isKind(event, NostrEventKind.Repost)) {
         this.castAndCacheEventToRetweet(tweetsMap, event);
       } else if (this.isKind(event, NostrEventKind.Reaction)) {
-        const [ [, idEvent], [, pubkey] ] = event.tags;
-
-        const reaction: IReaction = {
-          author: this.profiles$.getFromPubKey(pubkey),
-          content: event.content
-        };
-
-        if (!tweetsMap[idEvent]) {
-          tweetsMap[idEvent] = this.createLazyLoadableTweetFromEventId(idEvent);
-        }
-
-        tweetsMap[idEvent].reactions.push(reaction);
+        this.castAndCacheEventToReaction(tweetsMap, event);
       }
     });
 
@@ -73,8 +62,40 @@ export class TweetConverter {
   }
 
   private castAndCacheEventToRetweet(tweetsMap: { [id: string]: ITweet }, event: Event<NostrEventKind.Repost>): ITweet {
-    //  TODO: trabalhando aqui :)
-    return {} as ITweet;
+    const lazyLoaded = tweetsMap[event.id];
+    const content = this.getTweetContent(event, lazyLoaded);
+    let retweeted: ITweet;
+
+    if (content) {
+      const retweetedEvent: Event<NostrEventKind.Text> = JSON.parse(content);
+      retweeted = this.castAndCacheEventToTweet(tweetsMap, retweetedEvent);
+      
+    } else {
+      const [[, idEvent],[,pubkey]] = event.tags;
+      retweeted = this.createLazyLoadableTweetFromEventId(idEvent, pubkey);
+    }
+
+    const retweetAsTweet: Event<NostrEventKind.Text> = { ...event, content: '', kind: NostrEventKind.Text };
+    const tweet = this.castAndCacheEventToTweet(tweetsMap, retweetAsTweet);
+    retweeted.retweeted = [tweet];
+    tweet.retweeting = retweeted;
+    return tweet;
+
+  }
+
+  private castAndCacheEventToReaction(tweetsMap: { [id: string]: ITweet }, event: Event<NostrEventKind.Reaction>): void {
+    const [ [, idEvent], [, pubkey] ] = event.tags;
+
+    const reaction: IReaction = {
+      author: this.profiles$.getFromPubKey(pubkey),
+      content: event.content
+    };
+
+    if (!tweetsMap[idEvent]) {
+      tweetsMap[idEvent] = this.createLazyLoadableTweetFromEventId(idEvent);
+    }
+
+    tweetsMap[idEvent].reactions.push(reaction);
   }
 
   //  FIXME: debt
