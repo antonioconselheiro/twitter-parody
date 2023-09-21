@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoadingWidgetModule } from '@shared/loading/loading-widget.module';
 import { ProfileWidgetModule } from '@shared/profile-widget/profile-widget.module';
 import { AddAccountFormComponent } from './add-account-form/add-account-form.component';
 import { AuthModalComponent } from './auth-modal.component';
 import { AuthenticateFormComponent } from './authenticate-form/authenticate-form.component';
 import { SelectAccountListComponent } from './select-account-list/select-account-list.component';
-import { LoadingModule } from '@shared/loading/loading.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,7 @@ import { LoadingModule } from '@shared/loading/loading.module';
     CommonModule,
     ReactiveFormsModule,
     ProfileWidgetModule,
-    LoadingModule
+    LoadingWidgetModule
   ],
   exports: [
     AuthModalComponent

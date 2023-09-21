@@ -13,4 +13,4 @@ import { LoadingComponent } from './loading.component';
     LoadingComponent
   ]
 })
-export class LoadingModule { }
+export class LoadingWidgetModule { }

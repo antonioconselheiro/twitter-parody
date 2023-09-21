@@ -51,6 +51,7 @@
         .author {
           font-style: normal;
           display: flex;
+          align-items: center;
           width: 90%;
 
           .user-name {
@@ -59,6 +60,7 @@
 
           .user-nip5 {
             max-width: 20%;
+            margin-left: 4px;
           }
 
           time {
@@ -85,8 +87,6 @@
           right: 5px;
         }
       }
-
-      
     }
   }
 }

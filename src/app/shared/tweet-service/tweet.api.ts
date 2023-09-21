@@ -28,8 +28,7 @@ export class TweetApi {
         ],
         authors: [
           String(new NostrUser(npub))
-        ],
-        limit: 20
+        ]
       }
     ]);
 
@@ -48,8 +47,7 @@ export class TweetApi {
         ],
         authors: [
           String(new NostrUser(npub))
-        ],
-        limit: 20
+        ]
       }
     ]);
 

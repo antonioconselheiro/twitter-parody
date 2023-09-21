@@ -11,4 +11,17 @@ main {
     width: var(--mainWidth);
     min-height: 100vw;
   }
+
+  router-outlet {
+    &:last-child {
+      padding: 1rem;
+      display: block;
+    }
+
+    &:not(:last-child) {
+      tw-loading {
+        display: none;
+      }
+    }
+  }
 }

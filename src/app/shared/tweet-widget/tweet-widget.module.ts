@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { DatetimeWidgetModule } from '@shared/datetime-widget/datetime-widget.module';
-import { LoadingModule } from '@shared/loading/loading.module';
+import { LoadingWidgetModule } from '@shared/loading/loading-widget.module';
+import { PopoverWidgetModule } from '@shared/popover-widget/popover-widget.module';
 import { ProfileWidgetModule } from '@shared/profile-widget/profile-widget.module';
 import { SecurityWidgetModule } from '@shared/security-widget/security-widget.module';
 import { AmountModule } from '../amount/amount.module';
@@ -15,7 +16,6 @@ import { TweetListComponent } from './tweet-list/tweet-list.component';
 import { TweetWriteButtonGroupComponent } from './tweet-write-button-group/tweet-write-button-group.component';
 import { TweetWriteComponent } from './tweet-write/tweet-write.component';
 import { TweetComponent } from './tweet/tweet.component';
-import { PopoverWidgetModule } from '@shared/popover-widget/popover-widget.module';
 
 @NgModule({
   declarations: [
@@ -36,7 +36,7 @@ import { PopoverWidgetModule } from '@shared/popover-widget/popover-widget.modul
     ProfileWidgetModule,
     DatetimeWidgetModule,
     FormsModule,
-    LoadingModule
+    LoadingWidgetModule
   ],
   exports: [
     TweetListComponent,

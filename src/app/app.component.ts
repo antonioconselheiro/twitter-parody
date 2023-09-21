@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { ITheme } from '@shared/theme/theme.interface';
 import { ThemeObservable } from '@shared/theme/theme.observable';
 import { Subscription } from 'rxjs';

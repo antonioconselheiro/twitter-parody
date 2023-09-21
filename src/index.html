@@ -7,6 +7,19 @@
   <title>Twitter (Parody)</title>
   <base href="/">
   <link rel="icon" type="image/x-icon" href="assets/twitter.ico">
+  <link rel="preload" as="image" href="/assets/logo/light-logo.png">
+
+  <style>
+    tw-root:empty {
+      width: 200px;
+      height: 200px;
+      display: block;
+      margin: calc(25% - 100px) auto;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-image: url('/assets/logo/light-logo.png');
+    }
+  </style>
 </head>
 <body data-theme="light" data-color="blue">
   <tw-root></tw-root>
