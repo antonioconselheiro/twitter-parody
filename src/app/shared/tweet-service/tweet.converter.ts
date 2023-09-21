@@ -24,12 +24,9 @@ export class TweetConverter {
     return event.kind === kind;
   }
 
-  castResultsetToTweets(events: Event<NostrEventKind>[], tweets: ITweet[] = []): ITweet[] {
-    const tweetsMap: { [id: string]: ITweet } = {};
-    tweets.forEach(tweet => tweetsMap[tweet.id] = tweet);
+  castResultsetToTweets(events: Event<NostrEventKind>[]): ITweet<DataLoadType.EAGER_LOADED>[] {
+    const tweetsMap: { [id: string]: ITweet<DataLoadType.EAGER_LOADED> } = {};
 
-    //  FIXME: débito técnico, resolver complexidade ciclomática
-    // eslint-disable-next-line complexity
     events.forEach(event => {
       if (this.isKind(event, NostrEventKind.Text)) {
         this.castAndCacheEventToTweet(tweetsMap, event);
@@ -78,7 +75,7 @@ export class TweetConverter {
     const retweetAsTweet: Event<NostrEventKind.Text> = { ...event, content: '', kind: NostrEventKind.Text };
     const tweet = this.castAndCacheEventToTweet(tweetsMap, retweetAsTweet);
     
-    retweeted.retweeted = [event.id];
+    retweeted.retweetedBy = [event.id];
     tweet.retweeting = retweeted.id;
     return tweet;
 
@@ -118,6 +115,8 @@ export class TweetConverter {
       urls, imgList, imgMatriz,
       reactions: lazyLoaded?.reactions || [],
       repling: lazyLoaded?.repling,
+      retweetedBy: lazyLoaded?.retweetedBy,
+      retweeting: lazyLoaded?.retweeting,
       created: this.getTweetCreated(event, lazyLoaded),
       load: DataLoadType.EAGER_LOADED,
     }

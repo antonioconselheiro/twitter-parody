@@ -5,6 +5,7 @@ import { ITweet } from "@domain/tweet.interface";
 import { ApiService } from "@shared/api-service/api.service";
 import { ProfilesObservable } from "../profile-service/profiles.observable";
 import { TweetConverter } from "./tweet.converter";
+import { DataLoadType } from "@domain/data-load.type";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class TweetApi {
     private apiService: ApiService
   ) { }
 
-  async listTweetsFrom(npub: string): Promise<ITweet[]> {
+  async listTweetsFrom(npub: string): Promise<ITweet<DataLoadType.EAGER_LOADED>[]> {
     const events = await this.apiService.get([
       {
         kinds: [
@@ -57,22 +58,4 @@ export class TweetApi {
     const tweets = this.tweetConverter.castResultsetToTweets(events);
     return Promise.resolve(tweets);
   }
-
-  async eagerLoadTweetsData(tweets: ITweet[]): Promise<ITweet[]> {
-    const events = await this.apiService.get([
-      {
-        kinds: [
-          NostrEventKind.Metadata,
-          NostrEventKind.Text,
-          NostrEventKind.Repost,
-          NostrEventKind.Reaction
-        ],
-        '#e': tweets.map(tweet => tweet.id)
-      }
-    ]);
-
-    tweets = this.tweetConverter.castResultsetToTweets(events, tweets);
-    return Promise.resolve(tweets);
-  }
-
 }

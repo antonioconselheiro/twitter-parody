@@ -4,7 +4,7 @@ import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
 import { IProfile } from '@shared/profile-service/profile.interface';
-import { TweetStatefull } from '@shared/tweet-service/tweet.observable';
+import { TweetStatefull } from '@shared/tweet-service/tweet.statefull';
 import { DataLoadType } from '@domain/data-load.type';
 
 @Component({

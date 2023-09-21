@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TweetApi } from './tweet.api';
 import { TweetHtmlfyService } from './tweet-htmlfy.service';
 import { TweetConverter } from './tweet.converter';
+import { TweetStatefull } from './tweet.statefull';
 
 @NgModule({
   imports: [
@@ -11,6 +12,7 @@ import { TweetConverter } from './tweet.converter';
   providers: [
     TweetApi,
     TweetConverter,
+    TweetStatefull,
     TweetHtmlfyService
   ]
 })

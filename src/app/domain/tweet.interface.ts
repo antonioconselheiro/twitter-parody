@@ -10,7 +10,7 @@ export type ITweet<T extends DataLoadType | unknown = unknown> = {
   load: T;
   reactions: IReaction[];
   repling?: EventId;
-  retweeted?: EventId[];
+  retweetedBy?: EventId[];
   retweeting?: EventId;
   replies?: EventId[];
 } & ({

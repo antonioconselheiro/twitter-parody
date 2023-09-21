@@ -98,3 +98,4 @@ and interesting technologies to master to enhance your ability to contribute:
 - https://github.com/nostr-protocol/nips
 - https://github.com/nbd-wtf/nostr-tools
 - https://nostr.how/en/the-protocol
+- https://nostrdebug.com/
