@@ -61,7 +61,7 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
   async load(npubs: string[]): Promise<IProfile[]>;
   async load(npubs: string[] | string): Promise<IProfile | IProfile[]> {
     if (typeof npubs === 'string') {
-      return this.profiles[npubs] || this.loadProfile(npubs);
+      return this.profiles[npubs] && Promise.resolve(this.profiles[npubs]) || this.loadProfile(npubs);
     } else {
       return this.loadProfiles(npubs);
     }

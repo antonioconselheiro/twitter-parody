@@ -3,6 +3,7 @@ import { DataLoadType } from "@domain/data-load.type";
 import { EventId } from "@domain/event-id.type";
 import { NostrEventKind } from "@domain/nostr-event-kind";
 import { IReaction } from "@domain/reaction.interface";
+import { IRetweet } from "@domain/retweet.interface";
 import { ITweet } from "@domain/tweet.interface";
 import { ApiService } from "@shared/api-service/api.service";
 import { ProfilesObservable } from "@shared/profile-service/profiles.observable";
@@ -50,8 +51,44 @@ export class TweetStatefull {
     return TweetStatefull.instance;
   }
 
-  get(idEvent: EventId): ITweet<DataLoadType.EAGER_LOADED> {
+  async load(idEvent: EventId): Promise<ITweet>;
+  async load(idEvent: EventId[]): Promise<ITweet[]>;
+  async load(idEvent: EventId[] | EventId): Promise<ITweet | ITweet[]> {
+    if (typeof idEvent === 'string') {
+      return this.eagerTweets[idEvent] && Promise.resolve(this.eagerTweets[idEvent]) || this.loadProfile(idEvent);
+    } else {
+      return this.loadProfiles(idEvent);
+    }
+  }
+
+  get(idEvent: EventId): ITweet<DataLoadType.EAGER_LOADED> | IRetweet {
     return this.eagerTweets[idEvent];
+  }
+
+  async loadProfile(events: EventId): Promise<ITweet> {
+    return this.loadProfiles([events]).then(tweets => Promise.resolve(tweets[0]))
+  }
+  
+  async loadProfiles(idEvents: EventId[]): Promise<ITweet[]> {
+    const notLoadedList = idEvents.filter(id => {
+      if (this.eagerTweets[id]) {
+        return false;
+      }
+
+      return true;
+    });
+
+    const events = await this.apiService.get([
+      {
+        ids: notLoadedList,
+        kinds: [
+          NostrEventKind.Text
+        ]
+      }
+    ]);
+
+    const tweets = this.tweetConverter.castResultsetToTweets(events);
+    return Promise.resolve(idEvents.map(id => this.get(id)));
   }
 
   private extractEventsAndNPubsFromTweets(tweets: ITweet[]): EventId[] {
