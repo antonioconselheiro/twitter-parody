@@ -1,1 +1,1 @@
-export type NostrPublicType = string;
+export type TNostrPublic = string;

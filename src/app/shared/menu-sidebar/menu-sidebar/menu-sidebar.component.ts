@@ -4,7 +4,7 @@ import { AuthModalComponent } from '@shared/auth-modal/auth-modal.component';
 import { ModalService } from '@shared/modal/modal.service';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { IProfile } from '@shared/profile-service/profile.interface';
-import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
+import { AuthProfileObservable } from '@shared/profile-service/profiles.observable';
 import { CompositeTweetPopoverComponent } from '@shared/tweet-widget/composite-tweet-popover/composite-tweet-popover.component';
 import { Subscription } from 'rxjs';
 import { MenuActiveObservable } from '../menu-active.observable';
@@ -36,7 +36,7 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
 
   constructor(
     private modalService: ModalService,
-    private profile$: ProfilesObservable,
+    private profile$: AuthProfileObservable,
     private menuActive$: MenuActiveObservable,
     private router: Router
   ) { }

@@ -2,7 +2,7 @@ import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ITweet } from '@domain/tweet.interface';
 import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
-import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
+import { AuthProfileObservable } from '@shared/profile-service/profiles.observable';
 import { IProfile } from '@shared/profile-service/profile.interface';
 import { TweetStatefull } from '@shared/tweet-service/tweet.statefull';
 import { DataLoadType } from '@domain/data-load.type';
@@ -40,7 +40,7 @@ export class TweetListComponent {
 
   constructor(
     private tweetStatefull: TweetStatefull,
-    private profile$: ProfilesObservable
+    private profile$: AuthProfileObservable
   ) { }
 
   getAuthorProfile(npub: string): IProfile {

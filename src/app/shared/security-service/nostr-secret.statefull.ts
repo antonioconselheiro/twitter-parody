@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IProfile } from '@shared/profile-service/profile.interface';
-import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
+import { AuthProfileObservable } from '@shared/profile-service/profiles.observable';
 import { BehaviorSubject } from 'rxjs';
 import { IUnauthenticatedUser } from './unauthenticated-user';
 
@@ -14,7 +14,7 @@ export class NostrSecretStatefull {
   static instance: NostrSecretStatefull | null = null;
 
   constructor(
-    private profiles$: ProfilesObservable
+    private profiles$: AuthProfileObservable
   ) {
     if (!NostrSecretStatefull.instance) {
       NostrSecretStatefull.instance = this;

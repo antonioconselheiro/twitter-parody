@@ -1,10 +1,9 @@
 import { Injectable } from "@angular/core";
 import { DataLoadType } from "@domain/data-load.type";
-import { EventId } from "@domain/event-id.type";
-import { IReaction } from "@domain/reaction.interface";
+import { TEventId } from "@domain/event-id.type";
 import { IRetweet } from "@domain/retweet.interface";
 import { ITweet } from "@domain/tweet.interface";
-import { ProfilesObservable } from "@shared/profile-service/profiles.observable";
+import { AuthProfileObservable } from "@shared/profile-service/profiles.observable";
 import { TweetApi } from "./tweet.api";
 import { TweetConverter } from "./tweet.converter";
 
@@ -22,51 +21,51 @@ import { TweetConverter } from "./tweet.converter";
  * preventing it from being serialized and cached
  */
 @Injectable()
-export class TweetStatefull {
+export class TweetCache {
 
-  static instance: TweetStatefull | null = null;
+  static instance: TweetCache | null = null;
 
-  lazyTweets: {
-    [idEvent: EventId]: ITweet<DataLoadType.LAZY_LOADED>
+  static lazyTweets: {
+    [idEvent: TEventId]: ITweet<DataLoadType.LAZY_LOADED>
   } = { };
 
-  eagerTweets: {
-    [idEvent: EventId]: ITweet<DataLoadType.EAGER_LOADED>
+  static eagerTweets: {
+    [idEvent: TEventId]: ITweet<DataLoadType.EAGER_LOADED>
   } = { };
 
   constructor(
     private tweetApi: TweetApi,
-    private profile$: ProfilesObservable,
+    private profile$: AuthProfileObservable,
     private tweetConverter: TweetConverter
   ) {
-    if (!TweetStatefull.instance) {
-      TweetStatefull.instance = this;
+    if (!TweetCache.instance) {
+      TweetCache.instance = this;
     }
 
-    return TweetStatefull.instance;
+    return TweetCache.instance;
   }
 
-  async load(idEvent: EventId): Promise<ITweet>;
-  async load(idEvent: EventId[]): Promise<ITweet[]>;
-  async load(idEvent: EventId[] | EventId): Promise<ITweet | ITweet[]> {
+  async load(idEvent: TEventId): Promise<ITweet>;
+  async load(idEvent: TEventId[]): Promise<ITweet[]>;
+  async load(idEvent: TEventId[] | TEventId): Promise<ITweet | ITweet[]> {
     if (typeof idEvent === 'string') {
-      return this.eagerTweets[idEvent] && Promise.resolve(this.eagerTweets[idEvent]) || this.loadTweet(idEvent);
+      return TweetCache.eagerTweets[idEvent] && Promise.resolve(TweetCache.eagerTweets[idEvent]) || this.loadTweet(idEvent);
     } else {
       return this.loadTweets(idEvent);
     }
   }
 
-  get(idEvent: EventId): ITweet<DataLoadType.EAGER_LOADED> | IRetweet {
-    return this.eagerTweets[idEvent];
+  get(idEvent: TEventId): ITweet<DataLoadType.EAGER_LOADED> | IRetweet {
+    return TweetCache.eagerTweets[idEvent];
   }
 
-  async loadTweet(events: EventId): Promise<ITweet> {
+  async loadTweet(events: TEventId): Promise<ITweet> {
     return this.loadTweets([events]).then(tweets => Promise.resolve(tweets[0]))
   }
   
-  async loadTweets(idEvents: EventId[]): Promise<ITweet[]> {
+  async loadTweets(idEvents: TEventId[]): Promise<ITweet[]> {
     const notLoadedList = idEvents.filter(id => {
-      if (this.eagerTweets[id]) {
+      if (TweetCache.eagerTweets[id]) {
         return false;
       }
 
@@ -77,12 +76,12 @@ export class TweetStatefull {
 
     this.tweetConverter
       .castResultsetToTweets(events)
-      .forEach(tweet => this.eagerTweets[tweet.id] = tweet);
+      .forEach(tweet => TweetCache.eagerTweets[tweet.id] = tweet);
 
     return Promise.resolve(idEvents.map(id => this.get(id)));
   }
 
-  private extractEventsAndNPubsFromTweets(tweets: ITweet[]): EventId[] {
+  private extractEventsAndNPubsFromTweets(tweets: ITweet[]): TEventId[] {
     return tweets.map(tweet => {
       const replies = tweet.replies || [];
       const repling = tweet.repling ? [tweet.repling] : [];

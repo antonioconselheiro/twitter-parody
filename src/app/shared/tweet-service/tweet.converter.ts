@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { DataLoadType } from '@domain/data-load.type';
-import { EventId } from '@domain/event-id.type';
+import { TEventId } from '@domain/event-id.type';
 import { NostrEventKind } from '@domain/nostr-event-kind';
 import { IReaction } from '@domain/reaction.interface';
 import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';
 import { IZap } from '@domain/zap.interface';
+import { HtmlfyService } from '@shared/htmlfy/htmlfy.service';
 import { ProfileConverter } from '@shared/profile-service/profile.converter';
 import { UrlUtil } from '@shared/util/url.service';
 import Geohash from 'latlon-geohash';
 import { Event } from 'nostr-tools';
-import { TweetHtmlfyService } from './tweet-htmlfy.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class TweetConverter {
 
   constructor(
     private urlUtil: UrlUtil,
-    private tweetHtmlfyService: TweetHtmlfyService,
+    private htmlfyService: HtmlfyService,
     private profilesConverter: ProfileConverter
   ) { }
 
@@ -143,15 +143,14 @@ export class TweetConverter {
     return tweet;
   }
 
-  private castEventToTweet(event: Event<NostrEventKind.Text>, retweeting: EventId): IRetweet;
+  private castEventToTweet(event: Event<NostrEventKind.Text>, retweeting: TEventId): IRetweet;
   private castEventToTweet(event: Event<NostrEventKind.Text>): ITweet<DataLoadType.EAGER_LOADED>;
-  private castEventToTweet(event: Event<NostrEventKind.Text>, retweeting?: EventId): ITweet<DataLoadType.EAGER_LOADED> | IRetweet;
-  private castEventToTweet(event: Event<NostrEventKind.Text>, retweeting?: EventId): ITweet<DataLoadType.EAGER_LOADED> {
+  private castEventToTweet(event: Event<NostrEventKind.Text>, retweeting?: TEventId): ITweet<DataLoadType.EAGER_LOADED> | IRetweet {
     const content = this.getTweetContent(event);
 
-    const { urls, imgList, imgMatriz } = this.tweetHtmlfyService.separateImageAndLinks(content);
-    const htmlSmallView = this.tweetHtmlfyService.safify(this.getSmallView(content, imgList));
-    const htmlFullView = this.tweetHtmlfyService.safify(this.getFullView(content, imgList));
+    const { urls, imgList, imgMatriz } = this.htmlfyService.separateImageAndLinks(content);
+    const htmlSmallView = this.htmlfyService.safify(this.getSmallView(content, imgList));
+    const htmlFullView = this.htmlfyService.safify(this.getFullView(content, imgList));
 
     const tweet: ITweet<DataLoadType.EAGER_LOADED> = {
       id: event.id,

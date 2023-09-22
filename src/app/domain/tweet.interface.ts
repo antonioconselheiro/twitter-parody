@@ -1,21 +1,21 @@
 import { SafeHtml } from '@angular/platform-browser';
 import { DataLoadType } from './data-load.type';
 import { IReaction } from './reaction.interface';
-import { EventId } from './event-id.type';
-import { NostrPublicType } from './nostr-public.type';
+import { TEventId } from './event-id.type';
+import { TNostrPublic } from './nostr-public.type';
 import Geohash from 'latlon-geohash';
 
 export type ITweet<T extends DataLoadType | unknown = unknown> = {
-  id: EventId;
+  id: TEventId;
   load: T;
   reactions: IReaction[];
-  repling?: EventId;
-  retweetedBy?: EventId[];
-  retweeting?: EventId;
-  replies?: EventId[];
+  repling?: TEventId;
+  retweetedBy?: TEventId[];
+  retweeting?: TEventId;
+  replies?: TEventId[];
 } & ({
   load: DataLoadType.EAGER_LOADED;
-  author: NostrPublicType;
+  author: TNostrPublic;
   content: string;
   htmlFullView: SafeHtml;
   htmlSmallView: SafeHtml;

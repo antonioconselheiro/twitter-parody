@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProfilesObservable } from './profiles.observable';
+import { AuthenticatedProfileObservable } from './authenticated-profile.observable';
 import { ProfileApi } from './profile.api';
 import { ProfileConverter } from './profile.converter';
 import { ProfileCache } from './profile.cache';
-import { ProfileFacade } from './profile.facade';
+import { ProfileProxy } from './profile.proxy';
+import { ProfileEncrypt } from './profile.encrypt';
 
 @NgModule({
   imports: [
@@ -13,9 +14,10 @@ import { ProfileFacade } from './profile.facade';
   providers: [
     ProfileApi,
     ProfileCache,
-    ProfileFacade,
+    ProfileProxy,
+    ProfileEncrypt,
     ProfileConverter,
-    ProfilesObservable
+    AuthenticatedProfileObservable
   ]
 })
 export class ProfileServiceModule { }

@@ -3,7 +3,7 @@ import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-en
 import { MainErrorObservable } from '@shared/main-error/main-error.observable';
 import { MenuSidebarMobileObservable } from '@shared/menu-sidebar/menu-sidebar-mobile/menu-sidebar-mobile.observable';
 import { IProfile } from '@shared/profile-service/profile.interface';
-import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
+import { AuthProfileObservable } from '@shared/profile-service/profiles.observable';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -20,7 +20,7 @@ export class TimelineComponent extends AbstractEntitledComponent implements OnIn
 
   constructor(
     private menuSidebarMobile$: MenuSidebarMobileObservable,
-    private profiles$: ProfilesObservable,
+    private profiles$: AuthProfileObservable,
     private error$: MainErrorObservable
   ) {
     super();

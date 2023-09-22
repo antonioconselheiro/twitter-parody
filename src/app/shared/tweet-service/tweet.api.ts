@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { EventId } from "@domain/event-id.type";
+import { TEventId } from "@domain/event-id.type";
 import { NostrEventKind } from "@domain/nostr-event-kind";
 import { NostrUser } from "@domain/nostr-user";
 import { ApiService } from "@shared/api-service/api.service";
@@ -41,7 +41,7 @@ export class TweetApi {
     ]);
   }
 
-  loadEvents(events: EventId[]): Promise<Event<
+  loadEvents(events: TEventId[]): Promise<Event<
     NostrEventKind.Text | NostrEventKind.Repost | NostrEventKind.Reaction | NostrEventKind.Zap
   >[]> {
     return this.apiService.get([
@@ -54,7 +54,7 @@ export class TweetApi {
     ]);
   }
 
-  loadRelatedEvents(events: EventId[]): Promise<Event<
+  loadRelatedEvents(events: TEventId[]): Promise<Event<
     NostrEventKind.Text | NostrEventKind.Repost | NostrEventKind.Reaction | NostrEventKind.Zap
   >[]> {
     return this.apiService.get([

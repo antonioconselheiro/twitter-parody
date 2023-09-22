@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ITheme } from './theme.interface';
-import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
+import { AuthProfileObservable } from '@shared/profile-service/profiles.observable';
 import { IProfile } from '@shared/profile-service/profile.interface';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class ThemeObservable extends BehaviorSubject<ITheme> {
   private static instance: ThemeObservable | null = null;
 
   constructor(
-    private profile$: ProfilesObservable
+    private profile$: AuthProfileObservable
   ) {
     const profile = profile$.getValue();
     const base = profile?.theme || 'darker';

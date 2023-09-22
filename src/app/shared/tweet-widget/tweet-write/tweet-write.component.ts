@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IProfile } from '@shared/profile-service/profile.interface';
-import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
+import { AuthProfileObservable } from '@shared/profile-service/profiles.observable';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -16,7 +16,7 @@ export class TweetWriteComponent implements OnInit, OnDestroy {
   profile: IProfile | null = null;
   
   constructor(
-    private profiles$: ProfilesObservable
+    private profiles$: AuthProfileObservable
   ) { }
 
   ngOnInit(): void {

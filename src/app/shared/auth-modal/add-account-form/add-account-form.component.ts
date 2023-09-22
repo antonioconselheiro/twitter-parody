@@ -7,7 +7,7 @@ import { CustomValidator } from '@shared/custom-validator/custom-validator';
 import { MainErrorObservable } from '@shared/main-error/main-error.observable';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
 import { IProfile } from '@shared/profile-service/profile.interface';
-import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
+import { AuthProfileObservable } from '@shared/profile-service/profiles.observable';
 import { NostrSecretStatefull } from '@shared/security-service/nostr-secret.statefull';
 import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-user';
 import { AuthModalSteps } from '../auth-modal-steps.type';
@@ -51,7 +51,7 @@ export class AddAccountFormComponent {
     private fb: FormBuilder,
     private camera$: CameraObservable,
     private error$: MainErrorObservable,
-    private profiles$: ProfilesObservable,
+    private profiles$: AuthProfileObservable,
     private networkError$: NetworkErrorObservable,
     private nostrSecretStatefull: NostrSecretStatefull
   ) { }

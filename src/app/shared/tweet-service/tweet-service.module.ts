@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { TweetApi } from './tweet.api';
 import { TweetHtmlfyService } from './tweet-htmlfy.service';
 import { TweetConverter } from './tweet.converter';
-import { TweetStatefull } from './tweet.statefull';
-import { TweetFacade } from './tweet.facade';
+import { TweetCache } from './tweet.cache';
+import { TweetFacade } from './tweet.proxy';
 
 @NgModule({
   imports: [
@@ -14,7 +14,7 @@ import { TweetFacade } from './tweet.facade';
     TweetApi,
     TweetFacade,
     TweetConverter,
-    TweetStatefull,
+    TweetCache,
     TweetHtmlfyService
   ]
 })

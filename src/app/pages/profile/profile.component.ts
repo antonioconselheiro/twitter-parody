@@ -6,7 +6,7 @@ import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-en
 import { MainErrorObservable } from '@shared/main-error/main-error.observable';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
 import { IProfile } from '@shared/profile-service/profile.interface';
-import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
+import { AuthProfileObservable } from '@shared/profile-service/profiles.observable';
 import { TweetApi } from '@shared/tweet-service/tweet.api';
 import { TweetStatefull } from '@shared/tweet-service/tweet.statefull';
 
@@ -29,7 +29,7 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
     private error$: MainErrorObservable,
     private networkError$: NetworkErrorObservable,
     private tweetStatefull: TweetStatefull,
-    private profile$: ProfilesObservable,
+    private profile$: AuthProfileObservable,
     private tweetApi: TweetApi,
     private router: Router
   ) {
