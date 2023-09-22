@@ -1,11 +1,9 @@
 import { Injectable } from "@angular/core";
+import { EventId } from "@domain/event-id.type";
 import { NostrEventKind } from "@domain/nostr-event-kind";
 import { NostrUser } from "@domain/nostr-user";
-import { ITweet } from "@domain/tweet.interface";
 import { ApiService } from "@shared/api-service/api.service";
-import { ProfilesObservable } from "../profile-service/profiles.observable";
-import { TweetConverter } from "./tweet.converter";
-import { DataLoadType } from "@domain/data-load.type";
+import { Event } from 'nostr-tools';
 
 @Injectable({
   providedIn: 'root'
@@ -13,16 +11,13 @@ import { DataLoadType } from "@domain/data-load.type";
 export class TweetApi {
 
   constructor(
-    private tweetConverter: TweetConverter,
-    private profiles$: ProfilesObservable,
     private apiService: ApiService
   ) { }
 
-  async listTweetsFrom(npub: string): Promise<ITweet<DataLoadType.EAGER_LOADED>[]> {
-    const events = await this.apiService.get([
+  listTweetsFrom(npub: string): Promise<Event<NostrEventKind.Text | NostrEventKind.Repost>[]> {
+    return this.apiService.get([
       {
         kinds: [
-          NostrEventKind.Metadata,
           NostrEventKind.Text,
           NostrEventKind.Repost
         ],
@@ -31,18 +26,12 @@ export class TweetApi {
         ]
       }
     ]);
-
-    this.profiles$.cache(events);
-
-    const tweets = this.tweetConverter.castResultsetToTweets(events);
-    return Promise.resolve(tweets);
   }
 
-  async listReactionsFrom(npub: string): Promise<ITweet[]> {
-    const events = await this.apiService.get([
+  listReactionsFrom(npub: string): Promise<Event<NostrEventKind.Reaction>[]> {
+    return this.apiService.get([
       {
         kinds: [
-          NostrEventKind.Metadata,
           NostrEventKind.Reaction
         ],
         authors: [
@@ -50,10 +39,34 @@ export class TweetApi {
         ]
       }
     ]);
+  }
 
-    this.profiles$.cache(events);
+  loadEvents(events: EventId[]): Promise<Event<
+    NostrEventKind.Text | NostrEventKind.Repost | NostrEventKind.Reaction | NostrEventKind.Zap
+  >[]> {
+    return this.apiService.get([
+      {
+        ids: events,
+        kinds: [
+          NostrEventKind.Text
+        ]
+      }
+    ]);
+  }
 
-    const tweets = this.tweetConverter.castResultsetToTweets(events);
-    return Promise.resolve(tweets);
+  loadRelatedEvents(events: EventId[]): Promise<Event<
+    NostrEventKind.Text | NostrEventKind.Repost | NostrEventKind.Reaction | NostrEventKind.Zap
+  >[]> {
+    return this.apiService.get([
+      {
+        kinds: [
+          NostrEventKind.Text,
+          NostrEventKind.Repost,
+          NostrEventKind.Reaction,
+          NostrEventKind.Zap
+        ],
+        '#e': events
+      }
+    ]);
   }
 }

@@ -1,12 +1,11 @@
 import { Injectable } from "@angular/core";
 import { DataLoadType } from "@domain/data-load.type";
 import { EventId } from "@domain/event-id.type";
-import { NostrEventKind } from "@domain/nostr-event-kind";
 import { IReaction } from "@domain/reaction.interface";
 import { IRetweet } from "@domain/retweet.interface";
 import { ITweet } from "@domain/tweet.interface";
-import { ApiService } from "@shared/api-service/api.service";
 import { ProfilesObservable } from "@shared/profile-service/profiles.observable";
+import { TweetApi } from "./tweet.api";
 import { TweetConverter } from "./tweet.converter";
 
 /**
@@ -27,10 +26,6 @@ export class TweetStatefull {
 
   static instance: TweetStatefull | null = null;
 
-  reactions: {
-    [idEvent: EventId]: IReaction
-  } = { };
-
   lazyTweets: {
     [idEvent: EventId]: ITweet<DataLoadType.LAZY_LOADED>
   } = { };
@@ -40,7 +35,7 @@ export class TweetStatefull {
   } = { };
 
   constructor(
-    private apiService: ApiService,
+    private tweetApi: TweetApi,
     private profile$: ProfilesObservable,
     private tweetConverter: TweetConverter
   ) {
@@ -55,9 +50,9 @@ export class TweetStatefull {
   async load(idEvent: EventId[]): Promise<ITweet[]>;
   async load(idEvent: EventId[] | EventId): Promise<ITweet | ITweet[]> {
     if (typeof idEvent === 'string') {
-      return this.eagerTweets[idEvent] && Promise.resolve(this.eagerTweets[idEvent]) || this.loadProfile(idEvent);
+      return this.eagerTweets[idEvent] && Promise.resolve(this.eagerTweets[idEvent]) || this.loadTweet(idEvent);
     } else {
-      return this.loadProfiles(idEvent);
+      return this.loadTweets(idEvent);
     }
   }
 
@@ -65,11 +60,11 @@ export class TweetStatefull {
     return this.eagerTweets[idEvent];
   }
 
-  async loadProfile(events: EventId): Promise<ITweet> {
-    return this.loadProfiles([events]).then(tweets => Promise.resolve(tweets[0]))
+  async loadTweet(events: EventId): Promise<ITweet> {
+    return this.loadTweets([events]).then(tweets => Promise.resolve(tweets[0]))
   }
   
-  async loadProfiles(idEvents: EventId[]): Promise<ITweet[]> {
+  async loadTweets(idEvents: EventId[]): Promise<ITweet[]> {
     const notLoadedList = idEvents.filter(id => {
       if (this.eagerTweets[id]) {
         return false;
@@ -78,16 +73,12 @@ export class TweetStatefull {
       return true;
     });
 
-    const events = await this.apiService.get([
-      {
-        ids: notLoadedList,
-        kinds: [
-          NostrEventKind.Text
-        ]
-      }
-    ]);
+    const events = await this.tweetApi.loadEvents(notLoadedList);
 
-    const tweets = this.tweetConverter.castResultsetToTweets(events);
+    this.tweetConverter
+      .castResultsetToTweets(events)
+      .forEach(tweet => this.eagerTweets[tweet.id] = tweet);
+
     return Promise.resolve(idEvents.map(id => this.get(id)));
   }
 
@@ -104,32 +95,25 @@ export class TweetStatefull {
 
   async eagerLoadRelatedEvents(tweets: ITweet<DataLoadType.EAGER_LOADED>[]): Promise<ITweet<DataLoadType.EAGER_LOADED>[]> {
     const idEvents = this.extractEventsAndNPubsFromTweets(tweets);
-    const events = await this.apiService.get([
-      {
-        kinds: [
-          NostrEventKind.Text,
-          NostrEventKind.Repost,
-          NostrEventKind.Reaction
-        ],
-        '#e': idEvents
-      }
-    ]);
+    const events = await this.tweetApi.loadRelatedEvents(idEvents);
 
     tweets = this.tweetConverter.castResultsetToTweets(events);
     return Promise.resolve(tweets);
   }
 
-  createLazyLoadableTweetFromEventId(idEvent: string, pubkey?: string): ITweet {
-    const tweet: ITweet<DataLoadType.LAZY_LOADED> = {
-      id: idEvent,
-      reactions: new Array<IReaction>(),
-      load: DataLoadType.LAZY_LOADED
-    };
+  async listTweetsFrom(npub: string): Promise<ITweet<DataLoadType.EAGER_LOADED>[]> {
+    const events = await this.tweetApi.listTweetsFrom(npub);
+    this.profile$.cache(events);
 
-    if (pubkey) {
-      tweet.author = this.profile$.castPubkeyToNostrPublic(pubkey);
-    }
+    const tweets = this.tweetConverter.castResultsetToTweets(events);
+    return Promise.resolve(tweets);
+  }
 
-    return tweet;
+  async listReactionsFrom(npub: string): Promise<ITweet[]> {
+    const events = await this.tweetApi.listReactionsFrom(npub);
+    this.profile$.cache(events);
+
+    const tweets = this.tweetConverter.castResultsetToTweets(events);
+    return Promise.resolve(tweets);
   }
 }

@@ -9,6 +9,8 @@ import { IProfile } from './profile.interface';
 import * as CryptoJS from 'crypto-js';
 import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-user';
 import { TweetHtmlfyService } from '@shared/tweet-service/tweet-htmlfy.service';
+import { ProfileConverter } from './profile.converter';
+import { ProfileApi } from './profile.api';
 
 /**
  * This class responsible for caching event information
@@ -33,7 +35,8 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
   } = {};
 
   constructor(
-    private apiService: ApiService,
+    private profileApi: ProfileApi,
+    private profileConverter: ProfileConverter,
     private tweetHtmlfyService: TweetHtmlfyService
   ) {
     const authProfileSerialized = sessionStorage.getItem('ProfilesObservable_auth');
@@ -77,16 +80,7 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
       return Promise.resolve(profile);
     }
 
-    const events = await this.apiService.get([
-      {
-        kinds: [
-          NostrEventKind.Metadata
-        ],
-        authors: [
-          String(new NostrUser(npub))
-        ]
-      }
-    ]);
+    const events = await this.profileApi.loadProfile(npub);
 
     this.cache(events);
     return Promise.resolve(this.get(npub));
@@ -124,15 +118,11 @@ export class ProfilesObservable extends BehaviorSubject<IProfile | null> {
   }
 
   loadFromPubKey(pubkey: string): Promise<IProfile> {
-    return this.loadProfile(this.castPubkeyToNostrPublic(pubkey));
-  }
-
-  castPubkeyToNostrPublic(pubkey: string): string {
-    return nip19.npubEncode(pubkey);
+    return this.loadProfile(this.profileConverter.castPubkeyToNostrPublic(pubkey));
   }
 
   getFromPubKey(pubkey: string): IProfile {
-    return this.get(this.castPubkeyToNostrPublic(pubkey));
+    return this.get(this.profileConverter.castPubkeyToNostrPublic(pubkey));
   }
   
   get(npubs: string): IProfile;

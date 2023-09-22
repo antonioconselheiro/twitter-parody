@@ -4,6 +4,7 @@ import { TweetApi } from './tweet.api';
 import { TweetHtmlfyService } from './tweet-htmlfy.service';
 import { TweetConverter } from './tweet.converter';
 import { TweetStatefull } from './tweet.statefull';
+import { TweetFacade } from './tweet.facade';
 
 @NgModule({
   imports: [
@@ -11,6 +12,7 @@ import { TweetStatefull } from './tweet.statefull';
   ],
   providers: [
     TweetApi,
+    TweetFacade,
     TweetConverter,
     TweetStatefull,
     TweetHtmlfyService
