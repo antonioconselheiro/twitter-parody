@@ -6,9 +6,6 @@ import { ITweet } from '@domain/tweet.interface';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
 import { MainErrorObservable } from '@shared/main-error/main-error.observable';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
-import { AuthenticatedProfileObservable } from '@shared/profile-service/authenticated-profile.observable';
-import { ProfileProxy } from '@shared/profile-service/profile.proxy';
-import { TweetApi } from '@shared/tweet-service/tweet.api';
 import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
 
 @Component({
@@ -30,8 +27,6 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
     private error$: MainErrorObservable,
     private networkError$: NetworkErrorObservable,
     private tweetProxy: TweetProxy,
-    private profileProxy: ProfileProxy,
-    private profile$: AuthenticatedProfileObservable,
     private router: Router
   ) {
     super();
@@ -61,8 +56,6 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
   private async bindTweetSubscription(): Promise<void> {
     const npub = this.activatedRoute.snapshot.params['npub'];
     const tweets = await this.tweetProxy.listTweetsFromNostrPublic(npub);
-    //  TODO: check if eager load the related profile is necessary here
-    //  if it is, then, implements...
 
     this.tweets = tweets.filter(
       (tweet): tweet is ITweet<DataLoadType.EAGER_LOADED> => tweet.load === DataLoadType.EAGER_LOADED

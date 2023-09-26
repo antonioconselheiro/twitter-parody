@@ -43,7 +43,6 @@ export class ProfileProxy {
   async load(npubs: string): Promise<IProfile>;
   async load(npubs: string[]): Promise<IProfile[]>;
   async load(npubs: string[] | string): Promise<IProfile | IProfile[]> {
-    debugger;
     if (typeof npubs === 'string') {
       return ProfileCache.profiles[npubs] && Promise.resolve(ProfileCache.profiles[npubs]) || this.loadProfile(npubs);
     } else {
@@ -60,14 +59,12 @@ export class ProfileProxy {
   }
 
   async loadProfile(npub: string): Promise<IProfile> {
-    debugger;
     const profile = this.profileCache.get(npub);
     if (profile && profile.name) {
       return Promise.resolve(profile);
     }
 
     const events = await this.profileApi.loadProfile(npub);
-    debugger;
     this.profileCache.cache(events);
     return Promise.resolve(this.profileCache.get(npub));
   }
