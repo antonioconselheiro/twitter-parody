@@ -40,8 +40,6 @@ export class TweetConverter {
       if (this.isKind(event, NostrEventKind.Text)) {
         timeline.eager.push(this.castEventToTweet(event));
       } else if (this.isKind(event, NostrEventKind.Repost)) {
-        timeline.eager.push();
-          
         const { retweet, tweet } = this.castEventToRetweet(event);
         timeline.eager.push(retweet);
         if (tweet.load === DataLoadType.LAZY_LOADED) {
