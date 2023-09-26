@@ -7,6 +7,7 @@ import { ITweet } from "@domain/tweet.interface";
 import { Event } from 'nostr-tools';
 import { TweetApi } from "./tweet.api";
 import { TweetConverter } from "./tweet.converter";
+import { TweetMerge } from "./tweet.merge";
 
 /**
  * This class responsible for caching event information
@@ -40,6 +41,7 @@ export class TweetCache {
 
   constructor(
     private tweetApi: TweetApi,
+    private tweetMerge: TweetMerge,
     private tweetConverter: TweetConverter
   ) {
     if (!TweetCache.instance) {
@@ -103,62 +105,24 @@ export class TweetCache {
         this.cacheTweet(TweetCache.lazyTweets[tweet.id]);
       }
     } else if (tweet.load === DataLoadType.LAZY_LOADED) {
-      const lazyLoaded = TweetCache.lazyTweets[tweet.id] = this.mergeLazyLoadedTweets(
+      const lazyLoaded = TweetCache.lazyTweets[tweet.id] = this.tweetMerge.mergeLazyLoadedTweets(
         TweetCache.lazyTweets[tweet.id], tweet as ITweet<DataLoadType.LAZY_LOADED>
       );
 
       const eagerLoaded = TweetCache.eagerTweets[tweet.id];
       if (eagerLoaded) {
-        TweetCache.eagerTweets[tweet.id] = this.mergeLazyLoadedTweets(
+        TweetCache.eagerTweets[tweet.id] = this.tweetMerge.mergeLazyLoadedTweets(
           eagerLoaded, lazyLoaded
         )
       }
     }
   }
 
-  //  FIXME: passar pro serviço de conversão
-  // eslint-disable-next-line complexity
-  private mergeLazyLoadedTweets<T>(
-    receiveMerge: ITweet<T>, lazyTweet: ITweet<DataLoadType.LAZY_LOADED>
-  ): ITweet<T> {
-    receiveMerge.reactions = Object.assign(receiveMerge.reactions, lazyTweet.reactions);
-    receiveMerge.zaps = Object.assign(receiveMerge.zaps, lazyTweet.zaps);
-    
-    receiveMerge.author = receiveMerge.author || lazyTweet.author;
-    if (!receiveMerge.author) {
-      delete receiveMerge.author;
-    }
-
-    receiveMerge.repling = receiveMerge.repling || lazyTweet.repling;
-    if (!receiveMerge.repling) {
-      delete receiveMerge.repling;
-    }
-
-    receiveMerge.retweeting = receiveMerge.retweeting || lazyTweet.retweeting;
-    if (!receiveMerge.retweeting) {
-      delete receiveMerge.retweeting;
-    }
-
-    receiveMerge.replies = [
-      ...new Set(new Array<TEventId>()
-      .concat(receiveMerge.replies || [])
-      .concat(lazyTweet.replies || []))
-    ];
-
-    receiveMerge.retweetedBy = [
-      ...new Set(new Array<TEventId>()
-      .concat(receiveMerge.retweetedBy || [])
-      .concat(lazyTweet.retweetedBy || []))
-    ];
-
-    return receiveMerge;
-  }
-
-  async eagerLoadRelatedEvents(tweets: ITweet<DataLoadType.EAGER_LOADED>[]): Promise<ITweet<DataLoadType.EAGER_LOADED>[]> {
+  async eagerLoadRelatedEvents(tweets: ITweet<DataLoadType.EAGER_LOADED>[]): Promise<void> {
     const idEvents = this.tweetConverter.extractEventsAndNPubsFromTweets(tweets);
     const events = await this.tweetApi.loadRelatedEvents(idEvents);
+    this.cache(events);
 
-    tweets = this.tweetConverter.castResultsetToTweets(events);
-    return Promise.resolve(tweets);
+    return Promise.resolve();
   }
 }

@@ -6,11 +6,12 @@ import { CameraObservable } from '@shared/camera/camera.observable';
 import { CustomValidator } from '@shared/custom-validator/custom-validator';
 import { MainErrorObservable } from '@shared/main-error/main-error.observable';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
-import { IProfile } from '@shared/profile-service/profile.interface';
-import { AuthProfileObservable } from '@shared/profile-service/profiles.observable';
+import { AuthenticatedProfileObservable } from '@shared/profile-service/authenticated-profile.observable';
 import { NostrSecretStatefull } from '@shared/security-service/nostr-secret.statefull';
 import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-user';
 import { AuthModalSteps } from '../auth-modal-steps.type';
+import { ProfileProxy } from '@shared/profile-service/profile.proxy';
+import { IProfile } from '@domain/profile.interface';
 
 @Component({
   selector: 'tw-add-account-form',
@@ -51,7 +52,7 @@ export class AddAccountFormComponent {
     private fb: FormBuilder,
     private camera$: CameraObservable,
     private error$: MainErrorObservable,
-    private profiles$: AuthProfileObservable,
+    private profileProxy: ProfileProxy,
     private networkError$: NetworkErrorObservable,
     private nostrSecretStatefull: NostrSecretStatefull
   ) { }
@@ -81,7 +82,7 @@ export class AddAccountFormComponent {
 
     const user = new NostrUser(nsec);
     this.loading = true;
-    this.profiles$
+    this.profileProxy
       .load(user.nostrPublic)
       .then(profile => this.addAccount(profile, user, pin))
       //  FIXME: consigo centralizar o tratamento de catch para promises?

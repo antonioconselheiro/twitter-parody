@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 import { TweetApi } from './tweet.api';
 import { TweetCache } from './tweet.cache';
 import { TweetConverter } from './tweet.converter';
-import { TweetFacade } from './tweet.proxy';
+import { TweetProxy } from './tweet.proxy';
+import { TweetMerge } from './tweet.merge';
 
 @NgModule({
   imports: [
@@ -11,7 +12,8 @@ import { TweetFacade } from './tweet.proxy';
   ],
   providers: [
     TweetApi,
-    TweetFacade,
+    TweetProxy,
+    TweetMerge,
     TweetConverter,
     TweetCache
   ]

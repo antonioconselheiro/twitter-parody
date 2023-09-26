@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { IProfile } from '@shared/profile-service/profile.interface';
 import { IMessage } from './message.interface';
+import { IProfile } from '@domain/profile.interface';
 
 @Component({
   selector: 'tw-floating-chat',

@@ -1,4 +1,4 @@
-import { IProfile } from "@shared/profile-service/profile.interface";
+import { IProfile } from "@domain/profile.interface";
 
 export interface IMessage {
   text: string;

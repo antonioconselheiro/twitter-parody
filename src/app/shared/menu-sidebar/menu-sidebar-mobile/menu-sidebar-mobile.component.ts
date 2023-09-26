@@ -1,10 +1,10 @@
 import { Component, HostBinding, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MenuSidebarMobileObservable } from './menu-sidebar-mobile.observable';
-import { AuthProfileObservable } from '@shared/profile-service/profiles.observable';
-import { IProfile } from '@shared/profile-service/profile.interface';
 import { MenuType } from '../menu-type.enum';
 import { MenuActiveObservable } from '../menu-active.observable';
+import { IProfile } from '@domain/profile.interface';
+import { AuthenticatedProfileObservable } from '@shared/profile-service/authenticated-profile.observable';
 
 @Component({
   selector: 'tw-menu-sidebar-mobile',
@@ -29,7 +29,7 @@ export class MenuSidebarMobileComponent implements OnInit, OnDestroy {
   touchStart = 0;
 
   constructor(
-    private profile$: AuthProfileObservable,
+    private profile$: AuthenticatedProfileObservable,
     private menuActive$: MenuActiveObservable,
     private menuSidebarMobile$: MenuSidebarMobileObservable
   ) { }

@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
-import { AuthProfileObservable } from '@shared/profile-service/profiles.observable';
 import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-user';
 import { AuthModalSteps } from '../auth-modal-steps.type';
+import { AuthenticatedProfileObservable } from '@shared/profile-service/authenticated-profile.observable';
 
 @Component({
   selector: 'tw-authenticate-form',
@@ -36,7 +36,7 @@ export class AuthenticateFormComponent implements AfterViewInit {
 
   constructor(
     private fb: FormBuilder,
-    private profiles$: AuthProfileObservable,
+    private profiles$: AuthenticatedProfileObservable,
     private networkError$: NetworkErrorObservable
   ) { }
 
