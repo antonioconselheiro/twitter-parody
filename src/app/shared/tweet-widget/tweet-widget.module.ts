@@ -12,10 +12,10 @@ import { TweetApi } from '../tweet-service/tweet.api';
 import { CompositeTweetPopoverComponent } from './composite-tweet-popover/composite-tweet-popover.component';
 import { TweetButtonGroupComponent } from './tweet-button-group/tweet-button-group.component';
 import { TweetImageViewerComponent } from './tweet-image-viewer/tweet-image-viewer.component';
-import { TweetListComponent } from './tweet-list/tweet-list.component';
 import { TweetWriteButtonGroupComponent } from './tweet-write-button-group/tweet-write-button-group.component';
 import { TweetWriteComponent } from './tweet-write/tweet-write.component';
 import { TweetComponent } from './tweet/tweet.component';
+import { TweetListComponent } from './tweet-list/tweet-list.component';
 
 @NgModule({
   declarations: [

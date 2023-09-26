@@ -1,14 +1,16 @@
 import { SafeHtml } from '@angular/platform-browser';
+import Geohash from 'latlon-geohash';
 import { DataLoadType } from './data-load.type';
-import { IReaction } from './reaction.interface';
 import { TEventId } from './event-id.type';
 import { TNostrPublic } from './nostr-public.type';
-import Geohash from 'latlon-geohash';
+import { ITweetReactionMap } from './tweet-reaction-map.interface';
+import { ITweetZapMap } from './tweet-zap-map.interface';
 
 export type ITweet<T extends DataLoadType | unknown = unknown> = {
   id: TEventId;
   load: T;
-  reactions: IReaction[];
+  reactions: ITweetReactionMap;
+  zaps: ITweetZapMap;
   repling?: TEventId;
   retweetedBy?: TEventId[];
   retweeting?: TEventId;

@@ -14,7 +14,7 @@
   <div class="svg-wrapper">
     <div role="img"></div>
   </div>
-  <span class="amount">{{tweet?.reactions?.length || 0 | amount}}</span>
+  <span class="amount">{{getTweetReactions(tweet) | amount}}</span>
 </button>
 <button *ngIf="tweet && tweet.view" type="button" class="icon-view svg-button">
   <div class="svg-wrapper">

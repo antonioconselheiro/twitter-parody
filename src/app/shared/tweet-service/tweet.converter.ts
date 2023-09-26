@@ -11,6 +11,7 @@ import { ProfileConverter } from '@shared/profile-service/profile.converter';
 import { UrlUtil } from '@shared/util/url.service';
 import Geohash from 'latlon-geohash';
 import { Event } from 'nostr-tools';
+import { ITweetRelatedInfoWrapper } from './tweet-related-info-wrapper.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -27,18 +28,11 @@ export class TweetConverter {
     return event.kind === kind;
   }
 
-  castResultsetToTweets(events: Event<NostrEventKind>[]): {
-    tweets: ITweet<DataLoadType.EAGER_LOADED>,
-    lazy: ITweet<DataLoadType.LAZY_LOADED>,
-    reactions: Array<IReaction>,
-    zap: Array<IZap>
-  }[] {
+  castResultsetToTweets(events: Event<NostrEventKind>[]): ITweetRelatedInfoWrapper {
 
-    const timeline = {
+    const timeline: ITweetRelatedInfoWrapper = {
       eager: [],
-      lazy: [],
-      reactions: [],
-      zap: [],
+      lazy: []
     };
 
     // eslint-disable-next-line complexity
@@ -46,25 +40,29 @@ export class TweetConverter {
       if (this.isKind(event, NostrEventKind.Text)) {
         timeline.eager.push(this.castEventToTweet(event));
       } else if (this.isKind(event, NostrEventKind.Repost)) {
-        const { retweet, tweet } = timeline.eager.push(this.castEventToRetweet(event));
+        timeline.eager.push();
+          
+        const { retweet, tweet } = this.castEventToRetweet(event);
         timeline.eager.push(retweet);
         if (tweet.load === DataLoadType.LAZY_LOADED) {
-          timeline.lazy.push(retweet);
+          timeline.lazy.push(tweet);
         } else {
-          timeline.eager.push(retweet);
+          timeline.eager.push(tweet);
         }
       } else if (this.isKind(event, NostrEventKind.Reaction)) {
-        const { reaction, lazy } = this.castEventToReaction(event)
-        timeline.reactions.push(reaction);
+        const lazy = this.castEventReactionToLazyLoadTweet(event);
         timeline.lazy.push(lazy);
       } else if (this.isKind(event, NostrEventKind.Zap)) {
-        const { zap, lazy } = this.castEventToZap(event)
-        timeline.zap.push(zap);
+        const lazy = this.castEventZapToLazyLoadTweet(event);
         timeline.lazy.push(lazy);
       }
     });
 
     return timeline;
+  }
+
+  getTweetReactions(tweet?: ITweet | null): number {
+    return tweet && Object.keys(tweet.reactions).length || 0;
   }
 
   private getSmallView(tweet: string, imgList: string[]): string {
@@ -108,13 +106,23 @@ export class TweetConverter {
     };
   }
 
-  private castEventToZap(event: Event<NostrEventKind.Zap>): IZap {
-    
-    // TODO: 
-    return {} as IZap;
+  private castEventZapToLazyLoadTweet(event: Event<NostrEventKind.Zap>): ITweet<DataLoadType.LAZY_LOADED> {
+    const [ [, idEvent], [, pubkey] ] = event.tags;
+
+    const reaction: IZap = {
+      id: event.id,
+      author: this.profilesConverter.castPubkeyToNostrPublic(pubkey),
+      content: event.content,
+      tweet: idEvent
+    };
+
+    const lazy = this.createLazyLoadableTweetFromEventId(idEvent);
+    lazy.zaps[event.id] = reaction;
+
+    return lazy;
   }
 
-  private castEventToReaction(event: Event<NostrEventKind.Reaction>): IReaction {
+  private castEventReactionToLazyLoadTweet(event: Event<NostrEventKind.Reaction>): ITweet<DataLoadType.LAZY_LOADED> {
     const [ [, idEvent], [, pubkey] ] = event.tags;
 
     const reaction: IReaction = {
@@ -124,7 +132,10 @@ export class TweetConverter {
       tweet: idEvent
     };
 
-    return reaction;
+    const lazy = this.createLazyLoadableTweetFromEventId(idEvent);
+    lazy.reactions[event.id] = reaction;
+
+    return lazy;
   }
 
   createLazyLoadableTweetFromEventId(
@@ -132,7 +143,8 @@ export class TweetConverter {
   ): ITweet<DataLoadType.LAZY_LOADED> {
     const tweet: ITweet<DataLoadType.LAZY_LOADED> = {
       id: idEvent,
-      reactions: new Array<IReaction>(),
+      reactions: {},
+      zaps: {},
       load: DataLoadType.LAZY_LOADED
     };
 
@@ -157,7 +169,8 @@ export class TweetConverter {
       author: this.profilesConverter.castPubkeyToNostrPublic(event.pubkey),
       content, htmlSmallView, htmlFullView,
       urls, imgList, imgMatriz,
-      reactions: [],
+      reactions: {},
+      zaps: {},
       created: this.getTweetCreated(event),
       load: DataLoadType.EAGER_LOADED,
     };
@@ -172,10 +185,10 @@ export class TweetConverter {
     return tweet;
   }
 
-  private getRetweetingFromEvent(tweet: ITweet, event: Event<NostrEventKind>): IRetweet {
+  private getRetweetingFromEvent(tweet: ITweet, event: Event<NostrEventKind>): void {
     if (this.isKind(event, NostrEventKind.Repost)) {
       const [[,idEvent], [, pubkey]] = event.tags;
-
+      tweet.author = this.profilesConverter.castPubkeyToNostrPublic(pubkey);
       tweet.retweeting = idEvent;
     }
   }
@@ -198,5 +211,16 @@ export class TweetConverter {
 
   private getTweetCreated(event: Event<NostrEventKind.Text | NostrEventKind.Repost>): number {
     return event.created_at || 0;
+  }
+
+  extractEventsAndNPubsFromTweets(tweets: ITweet[]): TEventId[] {
+    return tweets.map(tweet => {
+      const replies = tweet.replies || [];
+      const repling = tweet.repling ? [tweet.repling] : [];
+      const retweetedBy = tweet.retweetedBy || [];
+      const retweeting = tweet.retweeting ? [tweet.retweeting] : [];
+      
+      return [ ...replies, ...repling, ...retweetedBy, ...retweeting ];
+    }).flat(1);
   }
 }

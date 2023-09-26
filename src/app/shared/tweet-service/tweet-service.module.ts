@@ -1,9 +1,8 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { TweetApi } from './tweet.api';
-import { TweetHtmlfyService } from './tweet-htmlfy.service';
-import { TweetConverter } from './tweet.converter';
 import { TweetCache } from './tweet.cache';
+import { TweetConverter } from './tweet.converter';
 import { TweetFacade } from './tweet.proxy';
 
 @NgModule({
@@ -14,8 +13,7 @@ import { TweetFacade } from './tweet.proxy';
     TweetApi,
     TweetFacade,
     TweetConverter,
-    TweetCache,
-    TweetHtmlfyService
+    TweetCache
   ]
 })
 export class TweetServiceModule { }

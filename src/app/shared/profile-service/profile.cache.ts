@@ -3,6 +3,7 @@ import { NostrEventKind } from "@domain/nostr-event-kind";
 import { Event } from 'nostr-tools';
 import { ProfileConverter } from "./profile.converter";
 import { IProfile } from "@domain/profile.interface";
+import { TNostrPublic } from "@domain/nostr-public.type";
 
 @Injectable()
 export class ProfileCache {
@@ -10,7 +11,7 @@ export class ProfileCache {
   static instance: ProfileCache | null = null;
 
   static profiles: {
-    [npub: string]: IProfile
+    [npub: TNostrPublic]: IProfile
   } = {};
 
   constructor(
@@ -25,6 +26,7 @@ export class ProfileCache {
 
   get(npubs: string): IProfile;
   get(npubs: string[]): IProfile[];
+  get(npubs: string[] | string): IProfile | IProfile[];
   get(npubs: string[] | string): IProfile | IProfile[] {
     if (typeof npubs === 'string') {
       return this.getLazily(npubs);
@@ -47,6 +49,7 @@ export class ProfileCache {
 
   cache(profiles: Event<NostrEventKind>[]): void;
   cache(profiles: IProfile[]): void;
+  cache(profiles: IProfile[] | Event<NostrEventKind>[]): void;
   cache(profiles: IProfile[] | Event<NostrEventKind>[]): void {
     const profileList = (profiles as (IProfile | Event<NostrEventKind>)[]);
     profileList
