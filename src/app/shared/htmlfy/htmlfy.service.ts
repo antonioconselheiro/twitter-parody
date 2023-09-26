@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 
-@Injectable()
-export class TweetHtmlfyService {
+@Injectable({
+  providedIn: 'root'
+})
+export class HtmlfyService {
 
   safify(content: string): SafeHtml {
     content = this.stripTags(content);
@@ -32,7 +34,7 @@ export class TweetHtmlfyService {
   } {
     const links = this.extractUrls(content);
     const isImgRegex = /\.(png|jpg|jpeg|gif|svg|webp)$/;
-    let imgs = new Array<string>();
+    const imgs = new Array<string>();
     const urls = new Array<string>();
     links.forEach(link => {
       const is = isImgRegex.test(link);

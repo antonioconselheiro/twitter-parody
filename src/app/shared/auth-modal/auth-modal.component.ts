@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalableDirective } from '@shared/modal/modalable.directive';
-import { IProfile } from '@shared/profile-service/profile.interface';
 import { NostrSecretStatefull } from '@shared/security-service/nostr-secret.statefull';
 import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-user';
 import { Subject, Subscription } from 'rxjs';
 import { IAuthModalArguments } from './auth-modal-arguments.interface';
 import { AuthModalSteps } from './auth-modal-steps.type';
+import { IProfile } from '@domain/profile.interface';
 
 @Component({
   selector: 'tw-auth-modal',

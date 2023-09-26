@@ -1,16 +1,18 @@
 import { getPublicKey, nip19 } from 'nostr-tools';
+import { TNostrPublic } from './nostr-public.type';
+import { TNostrSecret } from './nostr-secret.type';
 
 export class NostrUser {
 
   /**
    * nsec
    */
-  readonly nostrSecret: string | null;
+  readonly nostrSecret: TNostrSecret | null;
 
   /**
    * npub
    */
-  readonly nostrPublic: string;
+  readonly nostrPublic: TNostrPublic;
 
   /**
    * nsec decoded

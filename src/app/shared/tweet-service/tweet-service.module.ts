@@ -1,9 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { TweetApi } from './tweet.api';
-import { TweetHtmlfyService } from './tweet-htmlfy.service';
+import { TweetCache } from './tweet.cache';
 import { TweetConverter } from './tweet.converter';
-import { TweetStatefull } from './tweet.statefull';
+import { TweetProxy } from './tweet.proxy';
+import { TweetMerge } from './tweet.merge';
 
 @NgModule({
   imports: [
@@ -11,9 +12,10 @@ import { TweetStatefull } from './tweet.statefull';
   ],
   providers: [
     TweetApi,
+    TweetProxy,
+    TweetMerge,
     TweetConverter,
-    TweetStatefull,
-    TweetHtmlfyService
+    TweetCache
   ]
 })
 export class TweetServiceModule { }

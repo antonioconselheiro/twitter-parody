@@ -1,11 +1,11 @@
 import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ITweet } from '@domain/tweet.interface';
-import { ITweetImgViewing } from '../tweet-img-viewing.interface';
-import { PopoverComponent } from '@shared/popover-widget/popover.component';
-import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
-import { IProfile } from '@shared/profile-service/profile.interface';
-import { TweetStatefull } from '@shared/tweet-service/tweet.statefull';
 import { DataLoadType } from '@domain/data-load.type';
+import { IProfile } from '@domain/profile.interface';
+import { ITweet } from '@domain/tweet.interface';
+import { PopoverComponent } from '@shared/popover-widget/popover.component';
+import { ProfileProxy } from '@shared/profile-service/profile.proxy';
+import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
+import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 
 @Component({
   selector: 'tw-tweet-list',
@@ -39,12 +39,12 @@ export class TweetListComponent {
   viewing: ITweetImgViewing | null = null;
 
   constructor(
-    private tweetStatefull: TweetStatefull,
-    private profile$: ProfilesObservable
+    private profileProxy: ProfileProxy,
+    private tweetProxy: TweetProxy
   ) { }
 
   getAuthorProfile(npub: string): IProfile {
-    return this.profile$.get(npub);
+    return this.profileProxy.get(npub);
   }
 
   getAuthorName(npub?: string): string {
@@ -52,14 +52,14 @@ export class TweetListComponent {
       return '';
     }
 
-    const author = this.profile$.get(npub);
+    const author = this.profileProxy.get(npub);
     return author.display_name || author.name || '';
   }
 
   private interceptTweet(tweet: ITweet<DataLoadType.EAGER_LOADED> | null): void {
     if (tweet && tweet.load === DataLoadType.EAGER_LOADED) {
       const repliesId = (tweet.replies || []);
-      const replies = repliesId.map(reply => this.tweetStatefull.get(reply))
+      const replies = repliesId.map(reply => this.tweetProxy.get(reply))
       this.tweets = [tweet].concat(replies)
     }
   }

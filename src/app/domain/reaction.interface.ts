@@ -1,9 +1,9 @@
-import { NostrPublicType } from "./nostr-public.type";
-import { EventId } from "./event-id.type";
+import { TNostrPublic } from "./nostr-public.type";
+import { TEventId } from "./event-id.type";
 
 export interface IReaction {
-  id: EventId;
+  id: TEventId;
   content: string;
-  tweet: EventId;
-  author: NostrPublicType;
+  tweet: TEventId;
+  author: TNostrPublic;
 }

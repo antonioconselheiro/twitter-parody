@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataLoadType } from '@domain/data-load.type';
+import { IProfile } from '@domain/profile.interface';
 import { ITweet } from '@domain/tweet.interface';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
 import { MainErrorObservable } from '@shared/main-error/main-error.observable';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
-import { IProfile } from '@shared/profile-service/profile.interface';
-import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
-import { TweetApi } from '@shared/tweet-service/tweet.api';
-import { TweetStatefull } from '@shared/tweet-service/tweet.statefull';
+import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
 
 @Component({
   selector: 'tw-profile',
@@ -28,9 +26,7 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
     private activatedRoute: ActivatedRoute,
     private error$: MainErrorObservable,
     private networkError$: NetworkErrorObservable,
-    private tweetStatefull: TweetStatefull,
-    private profile$: ProfilesObservable,
-    private tweetApi: TweetApi,
+    private tweetProxy: TweetProxy,
     private router: Router
   ) {
     super();
@@ -59,9 +55,7 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
   
   private async bindTweetSubscription(): Promise<void> {
     const npub = this.activatedRoute.snapshot.params['npub'];
-    const tweets = await this.tweetApi.listTweetsFrom(npub);
-    await this.tweetStatefull.eagerLoadRelatedEvents(tweets);
-    // await this.profile$.loadProfiles(npubs);
+    const tweets = await this.tweetProxy.listTweetsFromNostrPublic(npub);
 
     this.tweets = tweets.filter(
       (tweet): tweet is ITweet<DataLoadType.EAGER_LOADED> => tweet.load === DataLoadType.EAGER_LOADED

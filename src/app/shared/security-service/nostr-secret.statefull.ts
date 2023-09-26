@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { IProfile } from '@shared/profile-service/profile.interface';
-import { ProfilesObservable } from '@shared/profile-service/profiles.observable';
+import { IProfile } from '@domain/profile.interface';
+import { ProfileEncrypt } from '@shared/profile-service/profile.encrypt';
 import { BehaviorSubject } from 'rxjs';
 import { IUnauthenticatedUser } from './unauthenticated-user';
 
@@ -14,7 +14,7 @@ export class NostrSecretStatefull {
   static instance: NostrSecretStatefull | null = null;
 
   constructor(
-    private profiles$: ProfilesObservable
+    private profileEncrypt: ProfileEncrypt
   ) {
     if (!NostrSecretStatefull.instance) {
       NostrSecretStatefull.instance = this;
@@ -28,7 +28,7 @@ export class NostrSecretStatefull {
 
   // eslint-disable-next-line complexity
   addAccount(profile: IProfile, pin: string): IUnauthenticatedUser | null {
-    const unauthenticated = this.profiles$.encryptAccount(profile, pin);
+    const unauthenticated = this.profileEncrypt.encryptAccount(profile, pin);
     if (!unauthenticated) {
       return null;
     }
