@@ -10,8 +10,9 @@ export class AmountPipe implements PipeTransform {
     const minimalToFormat = 1_000;
     const secondFormatStyle = 10_000;
     const thirdFormatStyle = 1_000_000
-
-    if (value < minimalToFormat) {
+    if (!value) {
+      return '';
+    } else if (value < minimalToFormat) {
       return String(value);
     } else if (value < secondFormatStyle) {
       const valueStr = String(value)

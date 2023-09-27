@@ -14,9 +14,6 @@ export class ApiService {
     const sub = pool.sub(
       this.relays, filters
     );
-
-    sub.on('event', event => { events.push(event); });
-    sub.on('count', count => console.info('count event >> ', count))
     
     return new Promise(resolve => {
       sub.on('eose', () => {

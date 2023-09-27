@@ -68,7 +68,6 @@ export class ProfileCache {
       this.chooseNewer(profile, ProfileCache.profiles[profile.npub])
     );
 
-    console.info('ProfileCache.profiles[profile.npub]', ProfileCache.profiles[profile.npub]);
     return ProfileCache.profiles[profile.npub];
   }
 

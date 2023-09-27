@@ -251,7 +251,7 @@ export class TweetConverter {
     return event.created_at || 0;
   }
 
-  extractEventsAndNPubsFromTweets(tweets: ITweet[]): TEventId[] {
+  extractEventsFromTweets(tweets: ITweet[]): TEventId[] {
     return tweets.map(tweet => {
       const replies = tweet.replies || [];
       const repling = tweet.repling ? [tweet.repling] : [];
