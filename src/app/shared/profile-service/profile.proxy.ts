@@ -5,6 +5,8 @@ import { ProfileCache } from "./profile.cache";
 import { ProfileApi } from "./profile.api";
 import { Event } from 'nostr-tools';
 import { NostrEventKind } from "@domain/nostr-event-kind";
+import { DataLoadType } from "@domain/data-load.type";
+import { TNostrPublic } from "@domain/nostr-public.type";
 
 /**
  * Orchestrate the interaction with the profile data,
@@ -44,7 +46,12 @@ export class ProfileProxy {
   async load(npubs: string[]): Promise<IProfile[]>;
   async load(npubs: string[] | string): Promise<IProfile | IProfile[]> {
     if (typeof npubs === 'string') {
-      return ProfileCache.profiles[npubs] && Promise.resolve(ProfileCache.profiles[npubs]) || this.loadProfile(npubs);
+      const indexedProfile = ProfileCache.profiles[npubs];
+      if (!indexedProfile || indexedProfile.load === DataLoadType.LAZY_LOADED) {
+        return this.loadProfile(npubs);
+      }
+
+      return Promise.resolve(indexedProfile);
     } else {
       return this.loadProfiles(npubs);
     }
@@ -60,10 +67,14 @@ export class ProfileProxy {
 
   async loadProfile(npub: string): Promise<IProfile> {
     const profile = this.profileCache.get(npub);
-    if (profile && profile.name) {
+    if (profile && profile.load === DataLoadType.EAGER_LOADED) {
       return Promise.resolve(profile);
     }
 
+    return this.forceProfileReload(npub);
+  }
+  
+  private async forceProfileReload(npub: TNostrPublic): Promise<IProfile> {
     const events = await this.profileApi.loadProfile(npub);
     this.profileCache.cache(events);
     return Promise.resolve(this.profileCache.get(npub));

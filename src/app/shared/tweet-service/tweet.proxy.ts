@@ -3,6 +3,7 @@ import { DataLoadType } from "@domain/data-load.type";
 import { TEventId } from "@domain/event-id.type";
 import { IRetweet } from "@domain/retweet.interface";
 import { ITweet } from "@domain/tweet.interface";
+import { ProfileProxy } from "@shared/profile-service/profile.proxy";
 import { TweetApi } from "./tweet.api";
 import { TweetCache } from "./tweet.cache";
 
@@ -11,6 +12,7 @@ export class TweetProxy {
 
   constructor(
     private tweetApi: TweetApi,
+    private profileProxy: ProfileProxy,
     private tweetCache: TweetCache
   ) { }
 
@@ -24,7 +26,8 @@ export class TweetProxy {
     const rawEvents = await this.tweetApi.listTweetsFrom(npub);
     this.tweetCache.cache(rawEvents);
     const relatedEvents = await this.tweetApi.loadRelatedEvents(rawEvents.map(e => e.id));
-    this.tweetCache.cache(relatedEvents);
+    const npubs = this.tweetCache.cache(relatedEvents);
+    await this.profileProxy.loadProfiles(npubs);
 
     return rawEvents.map(event => this.tweetCache.get(event.id));
   }

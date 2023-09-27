@@ -49,7 +49,8 @@ export class TweetApi {
         ids: events,
         kinds: [
           NostrEventKind.Text
-        ]
+        ],
+        limit: 150
       }
     ]);
   }

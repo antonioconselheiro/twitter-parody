@@ -4,6 +4,7 @@ import { Event } from 'nostr-tools';
 import { ProfileConverter } from "./profile.converter";
 import { IProfile } from "@domain/profile.interface";
 import { TNostrPublic } from "@domain/nostr-public.type";
+import { DataLoadType } from "@domain/data-load.type";
 
 @Injectable()
 export class ProfileCache {
@@ -44,7 +45,7 @@ export class ProfileCache {
       return ProfileCache.profiles[npub];
     }
 
-    return this.profileConverter.getMetadataFromNostrPublic(npub);
+    return ProfileCache.profiles[npub] = this.profileConverter.getMetadataFromNostrPublic(npub);
   }
 
   cache(profiles: Event<NostrEventKind>[]): void;
@@ -66,7 +67,7 @@ export class ProfileCache {
   }
 
   private chooseNewer(updatedProfile: IProfile, indexedProfile: IProfile | undefined): IProfile {
-    if (!indexedProfile) {
+    if (!indexedProfile || indexedProfile.load === DataLoadType.LAZY_LOADED) {
       return updatedProfile;
     }
 

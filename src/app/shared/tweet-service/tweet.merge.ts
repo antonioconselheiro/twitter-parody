@@ -8,9 +8,19 @@ import { ITweet } from '@domain/tweet.interface';
 })
 export class TweetMerge {
 
+  mergeLazyLoadedTweets(
+    receiveMerge: ITweet<DataLoadType.EAGER_LOADED>, lazyTweet: ITweet<DataLoadType.LAZY_LOADED>
+  ): ITweet<DataLoadType.EAGER_LOADED>;
+  mergeLazyLoadedTweets(
+    receiveMerge: ITweet<DataLoadType.LAZY_LOADED> | undefined, lazyTweet: ITweet<DataLoadType.LAZY_LOADED>
+  ): ITweet<DataLoadType.LAZY_LOADED>;
   mergeLazyLoadedTweets<T>(
-    receiveMerge: ITweet<T>, lazyTweet: ITweet<DataLoadType.LAZY_LOADED>
+    receiveMerge: ITweet<T> | undefined, lazyTweet: ITweet<DataLoadType.LAZY_LOADED>
   ): ITweet<T> {
+    if (!receiveMerge) {
+      return lazyTweet as ITweet<T>;
+    }
+
     this.mergeReactions(receiveMerge, lazyTweet);
     this.mergeZaps(receiveMerge, lazyTweet);
     this.mergeAuthor(receiveMerge, lazyTweet);
