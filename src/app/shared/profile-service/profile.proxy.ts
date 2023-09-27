@@ -45,6 +45,7 @@ export class ProfileProxy {
   async load(npubs: string): Promise<IProfile>;
   async load(npubs: string[]): Promise<IProfile[]>;
   async load(npubs: string[] | string): Promise<IProfile | IProfile[]> {
+    debugger;
     if (typeof npubs === 'string') {
       const indexedProfile = ProfileCache.profiles[npubs];
       if (!indexedProfile || indexedProfile.load === DataLoadType.LAZY_LOADED) {
