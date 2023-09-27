@@ -3,22 +3,22 @@
 </div>
 
 <article class="read-tweet separator" *ngFor="let twet of tweets; trackBy: trackByTweetId">
-  <a href="javascript:void(0)" class="retweet-origin">
-    Example has retweeted
+  <a *ngIf="isSimpleRetweet(twet)" href="javascript:void(0)" class="retweet-origin">
+    {{getRetweetAuthorName(twet)}} has retweeted
   </a>
 
   <div class="tweet-structure">
     <div *ngIf="twet.author">
-      <tw-profile-picture [picture]="getAuthorProfile(twet.author).picture"></tw-profile-picture>
+      <tw-profile-picture [picture]="getAuthorProfile(twet).picture"></tw-profile-picture>
     </div>
     <div class="tweet-metadata">
       <header>
-        <address *ngIf="twet.author" class="author user-info">
+        <address *ngIf="getAuthorProfile(twet)" class="author user-info">
           <span class="user-name">
-            {{this.getAuthorName(twet.author)}}
-            <span *ngIf="getAuthorProfile(twet.author).nip05valid" class="user-verified"></span>
+            {{this.getAuthorName(twet)}}
+            <span *ngIf="getAuthorProfile(twet).nip05valid" class="user-verified"></span>
           </span>
-          <span *ngIf="getAuthorProfile(twet.author).nip05" class="user-nip5">{{getAuthorProfile(twet.author).nip05}}</span>
+          <span *ngIf="getAuthorProfile(twet).nip05" class="user-nip5">{{getAuthorProfile(twet).nip05}}</span>
           <time *ngIf="twet.created" [attr.datetime]="twet.created | datetimeIso">{{twet.created | datetimeText}}</time>
         </address>
 

@@ -62,7 +62,9 @@ export class ProfileProxy {
   }
 
   async loadProfiles(npubs: string[]): Promise<IProfile[]> {
-    return Promise.all(npubs.map(npub => this.loadProfile(npub)));
+    return Promise.all(npubs.map(npub => {
+      return this.loadProfile(npub);
+    }));
   }
 
   async loadProfile(npub: string): Promise<IProfile> {

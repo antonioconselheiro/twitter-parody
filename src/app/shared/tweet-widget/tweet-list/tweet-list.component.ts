@@ -6,6 +6,9 @@ import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { ProfileProxy } from '@shared/profile-service/profile.proxy';
 import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
 import { ITweetImgViewing } from '../tweet-img-viewing.interface';
+import { ProfileCache } from '@shared/profile-service/profile.cache';
+import { TweetCache } from '@shared/tweet-service/tweet.cache';
+import { IRetweet } from '@domain/retweet.interface';
 
 @Component({
   selector: 'tw-tweet-list',
@@ -43,16 +46,27 @@ export class TweetListComponent {
     private tweetProxy: TweetProxy
   ) { }
 
-  getAuthorProfile(npub: string): IProfile {
-    return this.profileProxy.get(npub);
+  isSimpleRetweet(tweet: ITweet<DataLoadType.EAGER_LOADED>): tweet is IRetweet {
+    return tweet.retweeting && !String(tweet.htmlFullView).trim().length || false;
   }
 
-  getAuthorName(npub?: string): string {
-    if (!npub) {
-      return '';
+  getRetweetAuthorName(tweet: ITweet<DataLoadType.EAGER_LOADED>): string {
+    const author = ProfileCache.profiles[tweet.author];
+    return author.display_name || author.name || '';
+  }
+
+  getAuthorProfile(tweet: ITweet<DataLoadType.EAGER_LOADED>): IProfile {
+    //  FIXME: dar um jeito do template não precisar chamar
+    //  diversas vezes um método com essa complexidade
+    if (this.isSimpleRetweet(tweet)) {
+      return ProfileCache.profiles[TweetCache.eagerTweets[tweet.retweeting].author];
     }
 
-    const author = this.profileProxy.get(npub);
+    return ProfileCache.profiles[tweet.author];
+  }
+
+  getAuthorName(tweet: ITweet<DataLoadType.EAGER_LOADED>): string {
+    const author = this.getAuthorProfile(tweet);
     return author.display_name || author.name || '';
   }
 
