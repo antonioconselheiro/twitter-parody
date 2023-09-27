@@ -18,7 +18,7 @@
     </div>
     <span class="amount">{{getTweetReactions(tweet) | amount}}</span>
   </button>
-  <button *ngIf="tweet && tweet.view" type="button" class="icon-view svg-button">
+  <button *ngIf="tweet && tweet.load === EAGER_LOADED && tweet.view" type="button" class="icon-view svg-button">
     <div class="svg-wrapper">
       <div role="img"></div>
     </div>

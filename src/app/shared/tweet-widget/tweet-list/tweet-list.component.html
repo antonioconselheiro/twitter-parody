@@ -3,95 +3,132 @@
 </div>
 
 <article class="read-tweet separator" *ngFor="let twet of tweets; trackBy: trackByTweetId">
-  <a *ngIf="isSimpleRetweet(twet)" href="javascript:void(0)" class="retweet-origin">
-    {{getRetweetAuthorName(twet)}} has retweeted
-  </a>
-
-  <div class="tweet-structure">
-    <div *ngIf="twet.author">
-      <tw-profile-picture [profile]="getAuthorProfile(twet)"></tw-profile-picture>
+  <ng-container *ngIf="twet.load === EAGER_LOADED">
+    <a *ngIf="isSimpleRetweet(twet)" href="javascript:void(0)" class="retweet-origin">
+      {{getRetweetAuthorName(twet)}} has retweeted
+    </a>
+  
+    <div class="tweet-structure">
+      <div *ngIf="twet.author">
+        <tw-profile-picture [profile]="getAuthorProfile(twet)"></tw-profile-picture>
+      </div>
+      <div class="tweet-metadata">
+        <header>
+          <address *ngIf="getAuthorProfile(twet)" class="author user-info">
+            <span class="user-name">
+              {{this.getAuthorName(twet)}}
+              <span *ngIf="getAuthorProfile(twet)?.nip05valid" class="user-verified"></span>
+            </span>
+            <span *ngIf="getAuthorProfile(twet)?.nip05" class="user-nip5">
+              {{getAuthorProfile(twet)?.nip05}}
+            </span>
+            <time *ngIf="twet.created" [attr.datetime]="twet.created | datetimeIso">{{twet.created | datetimeText}}</time>
+          </address>
+  
+          <button (click)="tweetActions.show()" class="svg-button ellipsis">
+            <div class="svg-wrapper">
+              <div role="img"></div>
+            </div>
+          </button>
+  
+          <tw-popover #tweetActions>
+            <ul class="popover-list">
+              <li role="button">
+                <div class="inline-icon icon-unfollow">
+                  <div role="img"></div>
+                </div>
+                Delete
+              </li>
+              <li role="button">
+                <div class="inline-icon icon-pin-tweet">
+                  <div role="img"></div>
+                </div>
+                Pin to your Profile
+              </li>
+              <li role="button">
+                <div class="inline-icon icon-unfollow">
+                  <div role="img"></div>
+                </div>
+                Unfollow @name
+              </li>
+              <li role="button">
+                <div class="inline-icon icon-add-list">
+                  <div role="img"></div>
+                </div>
+                Add/Remove @name from Lists
+              </li>
+              <li role="button">
+                <div class="inline-icon icon-silence">
+                  <div role="img"></div>
+                </div>
+                Silence @name
+              </li>
+              <li role="button">
+                <div class="inline-icon icon-block">
+                  <div role="img"></div>
+                </div>
+                Block @name
+              </li>
+              <li role="button">
+                <div class="inline-icon icon-report">
+                  <div role="img"></div>
+                </div>
+                Report @name
+              </li>
+              <li role="button">
+                <div class="inline-icon icon-view">
+                  <div role="img"></div>
+                </div>
+                Event detail
+              </li>
+            </ul>
+          </tw-popover>
+        </header>
+  
+        <tw-tweet
+          class="tweet-content"
+          (imgOpen)="onImgOpen($event)"
+          [tweet]="twet"
+          [showImages]="twet !== tweet"
+          [isFull]="twet === tweet"
+        ></tw-tweet>
+        <tw-tweet-button-group [tweet]="twet"></tw-tweet-button-group>
+      </div>
     </div>
-    <div class="tweet-metadata">
-      <header>
-        <address *ngIf="getAuthorProfile(twet)" class="author user-info">
-          <span class="user-name">
-            {{this.getAuthorName(twet)}}
-            <span *ngIf="getAuthorProfile(twet).nip05valid" class="user-verified"></span>
-          </span>
-          <span *ngIf="getAuthorProfile(twet).nip05" class="user-nip5">{{getAuthorProfile(twet).nip05}}</span>
-          <time *ngIf="twet.created" [attr.datetime]="twet.created | datetimeIso">{{twet.created | datetimeText}}</time>
-        </address>
-
-        <button (click)="tweetActions.show()" class="svg-button ellipsis">
-          <div class="svg-wrapper">
-            <div role="img"></div>
-          </div>
-        </button>
-
-        <tw-popover #tweetActions>
-          <ul class="popover-list">
-            <li role="button">
-              <div class="inline-icon icon-unfollow">
-                <div role="img"></div>
-              </div>
-              Delete
-            </li>
-            <li role="button">
-              <div class="inline-icon icon-pin-tweet">
-                <div role="img"></div>
-              </div>
-              Pin to your Profile
-            </li>
-            <li role="button">
-              <div class="inline-icon icon-unfollow">
-                <div role="img"></div>
-              </div>
-              Unfollow @name
-            </li>
-            <li role="button">
-              <div class="inline-icon icon-add-list">
-                <div role="img"></div>
-              </div>
-              Add/Remove @name from Lists
-            </li>
-            <li role="button">
-              <div class="inline-icon icon-silence">
-                <div role="img"></div>
-              </div>
-              Silence @name
-            </li>
-            <li role="button">
-              <div class="inline-icon icon-block">
-                <div role="img"></div>
-              </div>
-              Block @name
-            </li>
-            <li role="button">
-              <div class="inline-icon icon-report">
-                <div role="img"></div>
-              </div>
-              Report @name
-            </li>
-            <li role="button">
-              <div class="inline-icon icon-view">
-                <div role="img"></div>
-              </div>
-              Event detail
-            </li>
-          </ul>
-        </tw-popover>
-      </header>
-
-      <tw-tweet
-        class="tweet-content"
-        (imgOpen)="onImgOpen($event)"
-        [tweet]="twet"
-        [showImages]="twet !== tweet"
-        [isFull]="twet === tweet"
-      ></tw-tweet>
-      <tw-tweet-button-group [tweet]="twet"></tw-tweet-button-group>
+  </ng-container>
+  <ng-container *ngIf="twet.load === LAZY_LOADED">
+    <div class="tweet-structure">
+      <div *ngIf="twet.author">
+        <tw-profile-picture [profile]="getAuthorProfile(twet)"></tw-profile-picture>
+      </div>
+      <div class="tweet-metadata">
+        <header>
+          <address *ngIf="getAuthorProfile(twet)" class="author user-info">
+            <span class="user-name">
+              {{this.getAuthorName(twet)}}
+              <span *ngIf="getAuthorProfile(twet)?.nip05valid" class="user-verified"></span>
+            </span>
+            <span *ngIf="getAuthorProfile(twet)?.nip05" class="user-nip5">{{getAuthorProfile(twet)?.nip05}}</span>
+          </address>
+  
+          <button class="svg-button ellipsis">
+            <div class="svg-wrapper">
+              <div role="img"></div>
+            </div>
+          </button>
+        </header>
+  
+        <tw-tweet
+          class="tweet-content"
+          (imgOpen)="onImgOpen($event)"
+          [tweet]="twet"
+          [showImages]="twet !== tweet"
+          [isFull]="twet === tweet"
+        ></tw-tweet>
+        <tw-tweet-button-group [tweet]="twet"></tw-tweet-button-group>
+      </div>
     </div>
-  </div>
+  </ng-container>
 </article>
 <div *ngIf="loading && tweet" class="separator tl-loading">
   <tw-loading></tw-loading>

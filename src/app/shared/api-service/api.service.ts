@@ -14,12 +14,19 @@ export class ApiService {
     const sub = pool.sub(
       this.relays, filters
     );
-    
+
+    sub.on('event', event => {
+      events.push(event);
+    });
+
     return new Promise(resolve => {
       sub.on('eose', () => {
         resolve(events);
-        //  sub.unsub(); FIXME: should unsubscribe each interaction?
+        //sub.unsub();
+        //pool.close(this.relays);
       });
     });
   }
 }
+
+

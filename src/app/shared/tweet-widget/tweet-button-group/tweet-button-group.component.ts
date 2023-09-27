@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DataLoadType } from '@domain/data-load.type';
 import { IProfile } from '@domain/profile.interface';
+import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { AuthenticatedProfileObservable } from '@shared/profile-service/authenticated-profile.observable';
@@ -14,10 +15,13 @@ import { Subscription } from 'rxjs';
 })
 export class TweetButtonGroupComponent implements OnInit, OnDestroy {
 
+  readonly EAGER_LOADED = DataLoadType.EAGER_LOADED;
+  readonly LAZY_LOADED = DataLoadType.LAZY_LOADED;
+
   subscriptions = new Subscription();
 
   @Input()
-  tweet: ITweet<DataLoadType.EAGER_LOADED> | null = null;
+  tweet: ITweet | IRetweet | null = null;
 
   @ViewChild('tweetShare', { read: PopoverComponent })
   share!: PopoverComponent;
@@ -43,7 +47,7 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
     }));
   }
 
-  isRetweetedByYou(tweet: ITweet<DataLoadType.EAGER_LOADED>): boolean {
+  isRetweetedByYou(tweet: ITweet | IRetweet): boolean {
     if (!this.profile || !tweet.retweetedBy) {
       return false;
     }
@@ -51,7 +55,7 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
     return tweet.retweetedBy.includes(this.profile.npub);
   }
 
-  isLikedByYou(tweet: ITweet<DataLoadType.EAGER_LOADED>): boolean {
+  isLikedByYou(tweet: ITweet | IRetweet): boolean {
     const reactions = Object.values(tweet.reactions);
     const profile = this.profile;
     if (!profile || !reactions.length) {

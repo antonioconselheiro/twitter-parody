@@ -1,4 +1,4 @@
-<ng-container *ngIf="showingTweet">
+<ng-container *ngIf="showingTweet && showingTweet.load === EAGER_LOADED">
 
   <ng-container *ngIf="isFull">
     <span [innerHTML]="showingTweet.htmlFullView"></span>

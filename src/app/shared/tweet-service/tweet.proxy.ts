@@ -1,14 +1,13 @@
 import { Injectable } from "@angular/core";
-import { DataLoadType } from "@domain/data-load.type";
 import { TEventId } from "@domain/event-id.type";
+import { IProfile } from "@domain/profile.interface";
 import { IRetweet } from "@domain/retweet.interface";
 import { ITweet } from "@domain/tweet.interface";
+import { ProfileCache } from "@shared/profile-service/profile.cache";
 import { ProfileProxy } from "@shared/profile-service/profile.proxy";
 import { TweetApi } from "./tweet.api";
 import { TweetCache } from "./tweet.cache";
 import { TweetConverter } from "./tweet.converter";
-import { ProfileCache } from "@shared/profile-service/profile.cache";
-import { IProfile } from "@domain/profile.interface";
 
 @Injectable()
 export class TweetProxy {
@@ -20,12 +19,12 @@ export class TweetProxy {
     private tweetConverter: TweetConverter
   ) { }
 
-  get(idEvent: TEventId): ITweet<DataLoadType.EAGER_LOADED> | IRetweet {
+  get(idEvent: TEventId): ITweet | IRetweet {
     return TweetCache.get(idEvent);
   }
 
   async listTweetsFromNostrPublic(npub: string): Promise<
-    Array<ITweet<DataLoadType.EAGER_LOADED> | IRetweet>
+    Array<ITweet | IRetweet>
   > {
     const rawEvents = await this.tweetApi.listTweetsFrom(npub);
     const npubs1 = this.tweetCache.cache(rawEvents);
@@ -38,7 +37,7 @@ export class TweetProxy {
   }
 
   async listReactionsFromNostrPublic(npub: string): Promise<
-    Array<ITweet<DataLoadType.EAGER_LOADED> | IRetweet>
+    Array<ITweet | IRetweet>
   > {
     const rawEvents = await this.tweetApi.listReactionsFrom(npub);
     const npubs1 = this.tweetCache.cache(rawEvents);
@@ -54,9 +53,10 @@ export class TweetProxy {
    * if the current tweet is just a retweet with no comment
    * the profile from the retweeted will be returned
    */
-  getTweetOrRetweetedAuthorProfile(tweet: ITweet<DataLoadType.EAGER_LOADED>): IProfile {
-    //  FIXME: dar um jeito do template não precisar chamar
-    //  diversas vezes um método com essa complexidade
+  //  FIXME: dar um jeito do template não precisar chamar
+  //  diversas vezes um método com essa complexidade
+  // eslint-disable-next-line complexity
+  getTweetOrRetweetedAuthorProfile(tweet: ITweet): IProfile | null {
     if (this.tweetConverter.isSimpleRetweet(tweet)) {
       const retweeted = TweetCache.eagerTweets[tweet.retweeting] || TweetCache.lazyTweets[tweet.retweeting];
       if (retweeted.author) {
@@ -64,6 +64,10 @@ export class TweetProxy {
       }
     }
 
-    return ProfileCache.profiles[tweet.author];
+    if (!tweet.author) {
+      return null;
+    }
+
+    return ProfileCache.profiles[tweet.author] || null;
   }
 }

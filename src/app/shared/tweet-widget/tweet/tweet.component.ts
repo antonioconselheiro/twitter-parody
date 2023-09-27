@@ -3,6 +3,7 @@ import { ITweet } from '@domain/tweet.interface';
 import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 import { DataLoadType } from '@domain/data-load.type';
 import { TweetCache } from '@shared/tweet-service/tweet.cache';
+import { IRetweet } from '@domain/retweet.interface';
 
 @Component({
   selector: 'tw-tweet',
@@ -10,6 +11,9 @@ import { TweetCache } from '@shared/tweet-service/tweet.cache';
   styleUrls: ['./tweet.component.scss']
 })
 export class TweetComponent {
+
+  readonly EAGER_LOADED = DataLoadType.EAGER_LOADED;
+  readonly LAZY_LOADED = DataLoadType.LAZY_LOADED;
 
   @Input()
   showImages = true;
@@ -26,25 +30,25 @@ export class TweetComponent {
   smallView = '';
   fullView = '';
 
-  interceptedTweet: ITweet<DataLoadType.EAGER_LOADED> | null = null;
+  interceptedTweet: ITweet | IRetweet | null = null;
   
   @Input()
-  set tweet(tweet: ITweet<DataLoadType.EAGER_LOADED> | null) {
+  set tweet(tweet: ITweet | IRetweet | null) {
     this.interceptedTweet = tweet;
     this.showingTweet = this.getShowingTweet();
   }
   
-  get tweet(): ITweet<DataLoadType.EAGER_LOADED> | null {
+  get tweet(): ITweet | IRetweet | null {
     return this.interceptedTweet;
   }
 
-  showingTweet: ITweet<DataLoadType.EAGER_LOADED> | null = null;
+  showingTweet: ITweet | null = null;
 
   showMoreTextButton(): boolean {
     return this.smallView.length !== this.fullView.length;
   }
 
-  getShowingTweet(): ITweet<DataLoadType.EAGER_LOADED> | null {
+  getShowingTweet(): ITweet | null {
     if (!this.tweet) {
       return null;
     } else if (this.tweet.retweeting) {

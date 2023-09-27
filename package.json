@@ -33,7 +33,7 @@
     "crypto-js": "^4.1.1",
     "latlon-geohash": "^2.0.0",
     "moment": "^2.29.4",
-    "nostr-tools": "^1.14.2",
+    "nostr-tools": "^1.16.0",
     "qr-scanner": "^1.4.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

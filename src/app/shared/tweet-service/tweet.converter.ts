@@ -262,7 +262,10 @@ export class TweetConverter {
     }).flat(1);
   }
 
-  isSimpleRetweet(tweet: ITweet<DataLoadType.EAGER_LOADED>): tweet is IRetweet {
-    return tweet.retweeting && !String(tweet.htmlFullView).trim().length || false;
+  isSimpleRetweet(tweet: ITweet): tweet is IRetweet {
+    return tweet.retweeting
+      && tweet.load === DataLoadType.EAGER_LOADED
+      && !String(tweet.htmlFullView).trim().length
+      || false;
   }
 }
