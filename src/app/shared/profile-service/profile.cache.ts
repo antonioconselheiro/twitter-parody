@@ -63,7 +63,13 @@ export class ProfileCache {
       profile = this.profileConverter.convertEventToProfile(profile);
     }
 
-    return ProfileCache.profiles[profile.npub] = this.chooseNewer(profile, ProfileCache.profiles[profile.npub]);
+    ProfileCache.profiles[profile.npub] = Object.assign(
+      ProfileCache.profiles[profile.npub] || {},
+      this.chooseNewer(profile, ProfileCache.profiles[profile.npub])
+    );
+
+    console.info('ProfileCache.profiles[profile.npub]', ProfileCache.profiles[profile.npub]);
+    return ProfileCache.profiles[profile.npub];
   }
 
   private chooseNewer(updatedProfile: IProfile, indexedProfile: IProfile | undefined): IProfile {

@@ -261,4 +261,8 @@ export class TweetConverter {
       return [ ...replies, ...repling, ...retweetedBy, ...retweeting ];
     }).flat(1);
   }
+
+  isSimpleRetweet(tweet: ITweet<DataLoadType.EAGER_LOADED>): tweet is IRetweet {
+    return tweet.retweeting && !String(tweet.htmlFullView).trim().length || false;
+  }
 }

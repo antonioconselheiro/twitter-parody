@@ -120,12 +120,4 @@ export class TweetCache {
       }
     }
   }
-
-  async eagerLoadRelatedEvents(tweets: ITweet<DataLoadType.EAGER_LOADED>[]): Promise<void> {
-    const idEvents = this.tweetConverter.extractEventsAndNPubsFromTweets(tweets);
-    const events = await this.tweetApi.loadRelatedEvents(idEvents);
-    this.cache(events);
-
-    return Promise.resolve();
-  }
 }
