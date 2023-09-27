@@ -220,7 +220,7 @@ export class TweetConverter {
   private getNostrPublicFromTags(event: Event): TNostrPublic[] {
     return event.tags
       .filter(([type]) => type === 'p')
-      .map(([,npub]) => npub);
+      .map(([,npub]) => this.profilesConverter.castPubkeyToNostrPublic(npub));
   }
 
   private getRetweetingFromEvent(tweet: ITweet, event: Event<NostrEventKind>): void {

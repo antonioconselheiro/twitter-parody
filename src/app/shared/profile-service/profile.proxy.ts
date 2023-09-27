@@ -61,8 +61,10 @@ export class ProfileProxy {
     return this.loadProfile(this.profileConverter.castPubkeyToNostrPublic(pubkey));
   }
 
-  async loadProfiles(npubs: string[]): Promise<IProfile[]> {
-    return Promise.all(npubs.map(npub => {
+  async loadProfiles(...npubs: TNostrPublic[][]): Promise<IProfile[]> {
+    const npubss = [...new Set(npubs.flat(1))];
+
+    return Promise.all(npubss.map(npub => {
       return this.loadProfile(npub);
     }));
   }

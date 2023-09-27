@@ -24,10 +24,10 @@ export class TweetProxy {
     Array<ITweet<DataLoadType.EAGER_LOADED> | IRetweet>
   > {
     const rawEvents = await this.tweetApi.listTweetsFrom(npub);
-    this.tweetCache.cache(rawEvents);
+    const npubs1 = this.tweetCache.cache(rawEvents);
     const relatedEvents = await this.tweetApi.loadRelatedEvents(rawEvents.map(e => e.id));
-    const npubs = this.tweetCache.cache(relatedEvents);
-    await this.profileProxy.loadProfiles(npubs);
+    const npubs2 = this.tweetCache.cache(relatedEvents);
+    await this.profileProxy.loadProfiles(npubs1, npubs2);
 
     return rawEvents.map(event => this.tweetCache.get(event.id));
   }
@@ -36,9 +36,11 @@ export class TweetProxy {
     Array<ITweet<DataLoadType.EAGER_LOADED> | IRetweet>
   > {
     const rawEvents = await this.tweetApi.listReactionsFrom(npub);
-    this.tweetCache.cache(rawEvents);
+    console.info('listReactionsFrom', JSON.stringify(rawEvents));
+    const npubs1 = this.tweetCache.cache(rawEvents);
     const relatedEvents = await this.tweetApi.loadRelatedEvents(rawEvents.map(e => e.id));
-    this.tweetCache.cache(relatedEvents);
+    const npubs2 = this.tweetCache.cache(relatedEvents);
+    await this.profileProxy.loadProfiles(npubs1, npubs2);
 
     return rawEvents.map(event => this.tweetCache.get(event.id));
   }
