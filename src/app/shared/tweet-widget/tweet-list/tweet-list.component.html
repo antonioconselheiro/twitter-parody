@@ -9,7 +9,7 @@
 
   <div class="tweet-structure">
     <div *ngIf="twet.author">
-      <tw-profile-picture [picture]="getAuthorProfile(twet).picture"></tw-profile-picture>
+      <tw-profile-picture [profile]="getAuthorProfile(twet)"></tw-profile-picture>
     </div>
     <div class="tweet-metadata">
       <header>

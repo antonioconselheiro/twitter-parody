@@ -1,4 +1,8 @@
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
+import { IProfile } from '@domain/profile.interface';
+import { MainErrorObservable } from '@shared/main-error/main-error.observable';
+import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-user';
 
 @Component({
   selector: 'tw-profile-picture',
@@ -7,19 +11,35 @@ import { Component, Input } from '@angular/core';
 })
 export class ProfilePictureComponent {
 
-  private readonly defaultPicture = '/assets/profile/default-profile.png'; 
+  readonly defaultPicture = '/assets/profile/default-profile.png'; 
 
   @Input()
   tabindex?: number;
 
   @Input()
-  set picture(pic: string | undefined) {
-    this.interceptedPicture = pic || this.defaultPicture;
+  profile: IProfile | null = null;
+
+  @Input()
+  account: IUnauthenticatedUser | null = null;
+
+  constructor(
+    private error$: MainErrorObservable,
+    private router: Router
+  ) { }
+
+  openProfile(): void {
+    if (this.profile && this.profile.npub) {
+      this.router.navigate(['/p', this.profile.npub]).catch(e => this.error$.next(e));
+    }
   }
 
-  get picture(): string | undefined {
-    return this.interceptedPicture || this.defaultPicture;
+  getPicture(): string {
+    if (this.profile && this.profile.picture) {
+      return this.profile.picture;
+    } else if (this.account && this.account.picture) {
+      return this.account.picture;
+    } else {
+      return this.defaultPicture;
+    }
   }
-
-  interceptedPicture = this.defaultPicture;
 }
