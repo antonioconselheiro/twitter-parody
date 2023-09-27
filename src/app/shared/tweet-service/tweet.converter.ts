@@ -13,6 +13,7 @@ import { UrlUtil } from '@shared/util/url.service';
 import Geohash from 'latlon-geohash';
 import { Event } from 'nostr-tools';
 import { ITweetRelatedInfoWrapper } from './tweet-related-info-wrapper.interface';
+import { TweetCache } from './tweet.cache';
 
 @Injectable({
   providedIn: 'root'
@@ -97,8 +98,9 @@ export class TweetConverter {
     const author = this.getAuthorNostrPublicFromEvent(event);
     let npubs: string[] = [ author ];
     let retweeted: ITweet;
+    const simpleRetweetContent = '#[0]';
 
-    if (content) {
+    if (content && content !== simpleRetweetContent) {
       const retweetedEvent: Event<NostrEventKind.Text> = JSON.parse(content);
       const { tweet, npubs: npubs2 } = this.castEventToTweet(retweetedEvent);
       retweeted = tweet;
@@ -142,13 +144,14 @@ export class TweetConverter {
   private castEventReactionToLazyLoadTweet(event: Event<NostrEventKind.Reaction>): {
     lazy: ITweet<DataLoadType.LAZY_LOADED>, npubs: TNostrPublic[]
   } {
-    const [ [, idEvent], [, pubkey] ] = event.tags;
-    const npub = this.profilesConverter.castPubkeyToNostrPublic(pubkey);
-    const npubs = [ npub ];
+    const [ [, idEvent] ] = event.tags;
+    const pubkey = event.tags
+      .filter(tag => tag[0] === 'p')
+      .map(tag => tag[1])
+      .at(0);
 
     const reaction: IReaction = {
       id: event.id,
-      author: this.profilesConverter.castPubkeyToNostrPublic(pubkey),
       content: event.content,
       tweet: idEvent
     };
@@ -156,7 +159,15 @@ export class TweetConverter {
     const lazy = this.createLazyLoadableTweetFromEventId(idEvent);
     lazy.reactions[event.id] = reaction;
 
-    return { lazy, npubs };
+    if (pubkey) {
+      const npub = this.profilesConverter.castPubkeyToNostrPublic(pubkey);
+      const npubs = [ npub ];
+      reaction.author = npub;
+
+      return { lazy, npubs };
+    }
+
+    return { lazy, npubs: [] };
   }
 
   createLazyLoadableTweetFromEventId(
@@ -267,5 +278,17 @@ export class TweetConverter {
       && tweet.load === DataLoadType.EAGER_LOADED
       && !String(tweet.htmlFullView).trim().length
       || false;
+  }
+
+  getShowingTweet(tweet: ITweet | IRetweet): ITweet;
+  getShowingTweet(tweet: ITweet | IRetweet | null): ITweet | null;
+  getShowingTweet(tweet: ITweet | IRetweet | null): ITweet | null {
+    if (!tweet) {
+      return null;
+    } else if (tweet.retweeting) {
+      return TweetCache.get(tweet.retweeting);
+    } else {
+      return tweet;
+    }
   }
 }

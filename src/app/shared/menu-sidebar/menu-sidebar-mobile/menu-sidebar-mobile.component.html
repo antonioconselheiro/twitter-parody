@@ -18,7 +18,7 @@
     </div>
   </header>
   <ul>
-    <li tabindex="101" *ngIf="profile && profile.npub" [class.active]="menuActive === MENU_TYPE_PROFILE" role="link" routerLink="/p/{{profile.npub}}">
+    <li tabindex="101" *ngIf="profile && profile.npub" [class.active]="menuActive === MENU_TYPE_PROFILE" role="link" routerLink="/#/p/{{profile.npub}}">
       <div title="Profile" class="menu-icon icon-profile"></div>
       <span>Profile</span>
     </li>

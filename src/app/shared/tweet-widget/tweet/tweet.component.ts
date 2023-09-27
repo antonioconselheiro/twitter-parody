@@ -4,6 +4,7 @@ import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 import { DataLoadType } from '@domain/data-load.type';
 import { TweetCache } from '@shared/tweet-service/tweet.cache';
 import { IRetweet } from '@domain/retweet.interface';
+import { TweetConverter } from '@shared/tweet-service/tweet.converter';
 
 @Component({
   selector: 'tw-tweet',
@@ -31,11 +32,15 @@ export class TweetComponent {
   fullView = '';
 
   interceptedTweet: ITweet | IRetweet | null = null;
+
+  constructor(
+    private tweetConverter: TweetConverter
+  ) {}
   
   @Input()
   set tweet(tweet: ITweet | IRetweet | null) {
     this.interceptedTweet = tweet;
-    this.showingTweet = this.getShowingTweet();
+    this.showingTweet = this.tweetConverter.getShowingTweet(this.tweet);
   }
   
   get tweet(): ITweet | IRetweet | null {
@@ -48,13 +53,5 @@ export class TweetComponent {
     return this.smallView.length !== this.fullView.length;
   }
 
-  getShowingTweet(): ITweet | null {
-    if (!this.tweet) {
-      return null;
-    } else if (this.tweet.retweeting) {
-      return TweetCache.get(this.tweet.retweeting);
-    } else {
-      return this.tweet;
-    }
-  }
+
 }

@@ -85,11 +85,11 @@ export class HtmlfyService {
   }
 
   private htmlfyMention(content: string): string {
-    return content.replace(/nostr:npub(\w+)/g, "<a class='mention' href='/p/npub$1'>npub$1</a>");
+    return content.replace(/nostr:npub(\w+)/g, "<a class='mention' href='/#/p/npub$1'>npub$1</a>");
   }
 
   private htmlfyHashtag(content: string): string {
-    return content.replace(/#(\w+)/g, "<a class='hashtag' href='#/explore?q=$1'>#$1</a>");
+    return content.replace(/#(\w+)/g, "<a class='hashtag' href='/#/explore?q=$1'>#$1</a>");
   }
 
   private htmlfyParagraph(content: string): string {

@@ -30,8 +30,8 @@
     justify-content: space-between;
 
     img.profile {
-      width: 135px;
-      height: 135px;
+      min-width: 135px;
+      min-height: 135px;
       position: relative;
       top: -6rem;
     }

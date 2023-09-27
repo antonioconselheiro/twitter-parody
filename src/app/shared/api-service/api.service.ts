@@ -22,8 +22,8 @@ export class ApiService {
     return new Promise(resolve => {
       sub.on('eose', () => {
         resolve(events);
-        //sub.unsub();
-        //pool.close(this.relays);
+        sub.unsub();
+        pool.close(this.relays);
       });
     });
   }

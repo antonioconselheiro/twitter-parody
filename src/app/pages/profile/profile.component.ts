@@ -67,12 +67,17 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
   }
   
   private async bindTweetSubscription(): Promise<void> {
-    const npub = this.activatedRoute.snapshot.params['npub'];
-    const tweets = await this.tweetProxy.listTweetsFromNostrPublic(npub);
+    const profile: IProfile = this.activatedRoute.snapshot.data['profile'];
+    this.profile = profile;
+    const tweets = await this.tweetProxy.listTweetsFromNostrPublic(profile.npub);
 
     this.tweets = tweets.filter(
       (tweet): tweet is ITweet<DataLoadType.EAGER_LOADED> => tweet.load === DataLoadType.EAGER_LOADED
     );
+
+    this.subscriptions.add(this.activatedRoute.data.subscribe({
+      next: data => this.profile = data['profile']
+    }));
   }
   
   private getProfileFromActivatedRoute(): void {

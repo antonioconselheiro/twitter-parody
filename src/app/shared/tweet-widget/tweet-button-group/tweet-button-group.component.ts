@@ -48,11 +48,16 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   }
 
   isRetweetedByYou(tweet: ITweet | IRetweet): boolean {
-    if (!this.profile || !tweet.retweetedBy) {
+    if (!this.profile) {
       return false;
     }
 
-    return tweet.retweetedBy.includes(this.profile.npub);
+    const showingTweet = this.tweetConverter.getShowingTweet(tweet);
+    if (!showingTweet.retweetedBy) {
+      return false;
+    }
+
+    return showingTweet.retweetedBy.includes(this.profile.npub);
   }
 
   isLikedByYou(tweet: ITweet | IRetweet): boolean {

@@ -60,6 +60,7 @@ const routes: Routes = [
   {
     path: 'p/:npub',
     component: ProfileComponent,
+    runGuardsAndResolvers: 'pathParamsChange',
     resolve: {
       profile: profileResolverFn,
       menu: menuActiveResolverFn
