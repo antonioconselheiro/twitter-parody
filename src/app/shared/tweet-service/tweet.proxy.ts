@@ -6,8 +6,10 @@ import { ITweet } from "@domain/tweet.interface";
 import { ProfileCache } from "@shared/profile-service/profile.cache";
 import { ProfileProxy } from "@shared/profile-service/profile.proxy";
 import { TweetApi } from "./tweet.api";
+import { Event } from 'nostr-tools';
 import { TweetCache } from "./tweet.cache";
 import { TweetConverter } from "./tweet.converter";
+import { NostrEventKind } from "@domain/nostr-event-kind";
 
 @Injectable()
 export class TweetProxy {
@@ -27,19 +29,39 @@ export class TweetProxy {
     Array<ITweet | IRetweet>
   > {
     const rawEvents = await this.tweetApi.listTweetsFrom([npub]);
+    return this.loadRelatedEvents(rawEvents);
+  }
+
+  async listReactionsFromNostrPublic(npub: string): Promise<
+    Array<ITweet | IRetweet>
+  > {
+    const rawEvents = await this.tweetApi.listReactionsFrom(npub);
+    return this.loadRelatedEvents(rawEvents);
+  }
+
+  private async loadRelatedEvents(rawEvents: Event<NostrEventKind>[]): Promise<
+    Array<ITweet | IRetweet>
+  > {
     if (!rawEvents.length) {
       return Promise.resolve([]);
     }
 
-    const npubs1 = this.tweetCache.cache(rawEvents);
+    const wrapper1 = this.tweetCache.cache(rawEvents);
     const eventList = rawEvents.map(e => e.id);
     const relatedEvents = await this.tweetApi.loadRelatedEvents(eventList);
-    const npubs2 = this.tweetCache.cache(relatedEvents);
+    const wrapper2 = this.tweetCache.cache(relatedEvents);
+
+    const lazyEvents = wrapper1.lazy.map(lazy => lazy.id);
+    const lazyEagerLoaded = await this.tweetApi.loadRelatedEvents(lazyEvents);
+    const wrapper3 = this.tweetCache.cache(lazyEagerLoaded);
+
     const relatedEventList = [...new Set(eventList.concat(relatedEvents.map(e => e.id)))];
     const reactions = await this.tweetApi.loadRelatedReactions(relatedEventList);
-    const npubs3 = this.tweetCache.cache(reactions);
+    const wrapper4 = this.tweetCache.cache(reactions);
 
-    await this.profileProxy.loadProfiles(npubs1, npubs2, npubs3);
+    await this.profileProxy.loadProfiles(
+      wrapper1.npubs, wrapper2.npubs, wrapper3.npubs, wrapper4.npubs
+    );
 
     return rawEvents
       .map(event => this.tweetCache.get(event.id))
@@ -50,27 +72,6 @@ export class TweetProxy {
 
         return 0;
       }).filter(t => t);
-  }
-
-  async listReactionsFromNostrPublic(npub: string): Promise<
-    Array<ITweet | IRetweet>
-  > {
-    const rawEvents = await this.tweetApi.listReactionsFrom(npub);
-    const npubs1 = this.tweetCache.cache(rawEvents);
-    const eventList = rawEvents.map(e => e.id);
-    const relatedEvents = await this.tweetApi.loadRelatedEvents(eventList);
-    const npubs2 = this.tweetCache.cache(relatedEvents);
-    await this.profileProxy.loadProfiles(npubs1, npubs2);
-
-    return rawEvents
-      .map(event => this.tweetCache.get(event.id))
-      .sort((tweetA, tweetB) => {
-        if ('created' in tweetA && 'created' in tweetB) {
-          return tweetA.created - tweetB.created;
-        }
-
-        return 0;
-      });
   }
 
   /**

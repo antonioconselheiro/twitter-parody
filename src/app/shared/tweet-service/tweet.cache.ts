@@ -9,6 +9,7 @@ import { Event } from 'nostr-tools';
 import { TweetApi } from "./tweet.api";
 import { TweetConverter } from "./tweet.converter";
 import { TweetMerge } from "./tweet.merge";
+import { ITweetRelatedInfoWrapper } from "./tweet-related-info-wrapper.interface";
 
 /**
  * This class responsible for caching event information
@@ -85,14 +86,14 @@ export class TweetCache {
     return Promise.resolve(idEvents.map(id => this.get(id)));
   }
   
-  cache(events: Event<NostrEventKind>[]): Array<TNostrPublic> {
+  cache(events: Event<NostrEventKind>[]): ITweetRelatedInfoWrapper {
     const wrapper = this.tweetConverter
       .castResultsetToTweets(events);
 
     wrapper.eager.forEach(tweet => this.cacheTweet(tweet));
     wrapper.lazy.forEach(tweet => this.cacheTweet(tweet));
 
-    return wrapper.npubs;
+    return wrapper;
   }
 
   /**

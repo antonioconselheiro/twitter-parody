@@ -8,7 +8,7 @@
     <a role="button" *ngIf="showMoreTextButton()">Show more</a>
   </ng-container>
 
-  <video *ngIf="showingTweet.videoUrl" autoplay="true" controls>
+  <video *ngIf="showingTweet.videoUrl" controls>
     <source [src]="showingTweet.videoUrl" type="video/mp4" />
   </video>
 
