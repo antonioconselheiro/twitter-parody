@@ -99,7 +99,7 @@
         ],
         "max-lines": [
           "error",
-          300
+          400
         ],
         "for-direction": [ "off" ],
         "eqeqeq": "warn",
