@@ -36,6 +36,10 @@ export class ProfileCache {
     }
   }
 
+  isEagerLoaded(npub: string): boolean {
+    return this.get(npub).load === DataLoadType.EAGER_LOADED;
+  }
+
   getFromPubKey(pubkey: string): IProfile {
     return this.get(this.profileConverter.castPubkeyToNostrPublic(pubkey));
   }
