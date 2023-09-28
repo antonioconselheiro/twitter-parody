@@ -201,16 +201,16 @@ export class TweetConverter {
     tweet: ITweet<DataLoadType.EAGER_LOADED> | IRetweet, npubs: Array<string>
   } {
     const content = this.getTweetContent(event);
-    const { urls, imgList, imgMatriz } = this.htmlfyService.separateImageAndLinks(content);
-    const htmlSmallView = this.htmlfyService.safify(this.getSmallView(content, imgList));
-    const htmlFullView = this.htmlfyService.safify(this.getFullView(content, imgList));
+    const { urls, imageList, videoUrl, imgMatriz } = this.htmlfyService.separateImageAndLinks(content);
+    const htmlSmallView = this.htmlfyService.safify(this.getSmallView(content, imageList));
+    const htmlFullView = this.htmlfyService.safify(this.getFullView(content, imageList));
     const author = this.getAuthorNostrPublicFromEvent(event);
     let npubs: string[] = [ author ];
 
     const tweet: ITweet<DataLoadType.EAGER_LOADED> = {
-      id: event.id,
-      author, content, htmlSmallView,
-      htmlFullView, urls, imgList, imgMatriz,
+      id: event.id, author, content,
+      htmlSmallView, htmlFullView,
+      urls, imageList, videoUrl, imgMatriz,
       reactions: {},
       zaps: {},
       created: this.getTweetCreated(event),

@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ITweet } from '@domain/tweet.interface';
-import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 import { DataLoadType } from '@domain/data-load.type';
-import { TweetCache } from '@shared/tweet-service/tweet.cache';
 import { IRetweet } from '@domain/retweet.interface';
+import { ITweet } from '@domain/tweet.interface';
 import { TweetConverter } from '@shared/tweet-service/tweet.converter';
+import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 
 @Component({
   selector: 'tw-tweet',
@@ -52,6 +51,4 @@ export class TweetComponent {
   showMoreTextButton(): boolean {
     return this.smallView.length !== this.fullView.length;
   }
-
-
 }

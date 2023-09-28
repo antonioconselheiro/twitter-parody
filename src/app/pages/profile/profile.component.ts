@@ -40,11 +40,12 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
 
   override ngOnInit(): void {
     this.bindAuthenticatedProfileSubscription();
-    this.bindTweetSubscription()
+    this.loadProfileTweets(this.activatedRoute.snapshot.data['profile'])
       .catch(e => this.networkError$.next(e))
       .finally(() => this.loading = false);
 
     this.getProfileFromActivatedRoute();
+    this.bindViewingProfile();
     super.ngOnInit();
   }
 
@@ -65,9 +66,19 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
       next: profile => this.authProfile = profile
     }));
   }
+
+  private bindViewingProfile(): void {
+    this.subscriptions.add(this.activatedRoute.data.subscribe({
+      next: wrapper => {
+        this.profile = wrapper['profile'];
+        this.tweets = [];
+        document.body.scrollTo(0,0);
+        this.loadProfileTweets(wrapper['profile']).catch(e => this.error$.next(e));
+      }
+    }));
+  }
   
-  private async bindTweetSubscription(): Promise<void> {
-    const profile: IProfile = this.activatedRoute.snapshot.data['profile'];
+  private async loadProfileTweets(profile: IProfile): Promise<void> {
     this.profile = profile;
     const tweets = await this.tweetProxy.listTweetsFromNostrPublic(profile.npub);
 
@@ -84,6 +95,7 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
     this.profile = this.activatedRoute.snapshot.data['profile'];
     if (this.profile) {
       this.title = this.profile.display_name || this.profile.name || 'Profile';
+      this.loadProfileTweets(this.profile).catch(e => this.error$.next(e));
     }
   }
 

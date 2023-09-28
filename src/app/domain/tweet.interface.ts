@@ -22,7 +22,8 @@ export type ITweet<T extends DataLoadType | unknown = unknown> = {
   htmlFullView: SafeHtml;
   htmlSmallView: SafeHtml;
   urls: string[];
-  imgList: string[];
+  imageList: string[];
+  videoUrl?: string;
   imgMatriz: [string, string?][];
   location?: Geohash.Point;
   created: number;

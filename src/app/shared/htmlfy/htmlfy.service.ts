@@ -30,22 +30,35 @@ export class HtmlfyService {
   separateImageAndLinks(content: string): {
     urls: string[],
     imgMatriz: [string, string?][],
-    imgList: string[]
+    imageList: string[],
+    videoUrl?: string
   } {
     const links = this.extractUrls(content);
-    const isImgRegex = /\.(png|jpg|jpeg|gif|svg|webp)$/;
-    const imgs = new Array<string>();
+    const isImageRegex = /\.(png|jpg|jpeg|gif|svg|webp)$/;
+    const isVideoRegex = /\.(mp4)$/;
+
+    const imageList = new Array<string>();
+    let videoUrl: string | undefined = undefined;
     const urls = new Array<string>();
+
     links.forEach(link => {
-      const is = isImgRegex.test(link);
-      if (is) {
-        imgs.push(link);
+      const isImage = isImageRegex.test(link);
+      const isVideo = isVideoRegex.test(link);
+      if (isImage) {
+        imageList.push(link);
+      } else if (isVideo) {
+        videoUrl = link;
       } else {
         urls.push(link);
       }
     });
 
-    return { urls, imgMatriz: this.imageListToMatriz(imgs), imgList: imgs };
+    return {
+      urls,
+      imgMatriz: this.imageListToMatriz(imageList),
+      imageList,
+      videoUrl
+    };
   }
 
   private imageListToMatriz(imgList: string[]): [string, string?][] {
@@ -85,11 +98,11 @@ export class HtmlfyService {
   }
 
   private htmlfyMention(content: string): string {
-    return content.replace(/nostr:npub(\w+)/g, "<a class='mention' href='/#/p/npub$1'>npub$1</a>");
+    return content.replace(/nostr:npub(\w+)/g, "<a class='mention' href='/p/npub$1'>npub$1</a>");
   }
 
   private htmlfyHashtag(content: string): string {
-    return content.replace(/#(\w+)/g, "<a class='hashtag' href='/#/explore?q=$1'>#$1</a>");
+    return content.replace(/#(\w+)/g, "<a class='hashtag' href='/explore?q=$1'>#$1</a>");
   }
 
   private htmlfyParagraph(content: string): string {

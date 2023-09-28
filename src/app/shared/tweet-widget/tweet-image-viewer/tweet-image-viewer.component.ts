@@ -22,7 +22,7 @@ export class TweetImageViewerComponent implements ICloseable {
   showTweets = true;
 
   private getImageList(): string[] {
-    return this.tweet?.imgList || [];
+    return this.tweet?.imageList || [];
   }
 
   private getIndexFromImageList(activeImage: string): number {

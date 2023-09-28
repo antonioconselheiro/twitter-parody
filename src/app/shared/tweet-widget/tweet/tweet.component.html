@@ -8,6 +8,10 @@
     <a role="button" *ngIf="showMoreTextButton()">Show more</a>
   </ng-container>
 
+  <video *ngIf="showingTweet.videoUrl" autoplay="true" controls>
+    <source [src]="showingTweet.videoUrl" type="video/mp4" />
+  </video>
+
   <figure *ngIf="showingTweet.imgMatriz && showingTweet.imgMatriz.length && showImages">
     <div
       *ngFor="let touple of showingTweet.imgMatriz"
