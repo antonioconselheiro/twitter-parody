@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
+import { DataLoadType } from "@domain/data-load.type";
+import { NostrEventKind } from "@domain/nostr-event-kind";
 import { NostrUser } from "@domain/nostr-user";
 import { IProfile } from "@domain/profile.interface";
-import { DataLoadType } from "@domain/data-load.type";
-import { Event, nip19 } from 'nostr-tools';
-import { NostrEventKind } from "@domain/nostr-event-kind";
 import { HtmlfyService } from "@shared/htmlfy/htmlfy.service";
+import { Event, nip19 } from 'nostr-tools';
 
 @Injectable()
 export class ProfileConverter {
