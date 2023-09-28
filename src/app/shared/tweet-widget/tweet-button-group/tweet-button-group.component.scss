@@ -96,3 +96,25 @@
     right: 5px;
   }
 }
+
+.heart-animation {
+  background-image: url('/assets/sprites/heart_animation.png') !important;
+	background-repeat: no-repeat;
+	background-size: 2900%;
+  background: left;
+  mask-image: none;
+  background-color: transparent !important;
+}
+
+.animate {
+  animation: heart-burst .8s steps(28) forwards;
+}
+
+@keyframes heart-burst {
+	0% {
+		mask-position: left
+	}
+	100% {
+		mask-position: right
+	}
+}

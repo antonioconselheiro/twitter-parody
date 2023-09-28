@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ITweet } from '@domain/tweet.interface';
-import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 import { DataLoadType } from '@domain/data-load.type';
+import { IRetweet } from '@domain/retweet.interface';
+import { ITweet } from '@domain/tweet.interface';
+import { TweetConverter } from '@shared/tweet-service/tweet.converter';
+import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 
 @Component({
   selector: 'tw-tweet',
@@ -9,6 +11,9 @@ import { DataLoadType } from '@domain/data-load.type';
   styleUrls: ['./tweet.component.scss']
 })
 export class TweetComponent {
+
+  readonly EAGER_LOADED = DataLoadType.EAGER_LOADED;
+  readonly LAZY_LOADED = DataLoadType.LAZY_LOADED;
 
   @Input()
   showImages = true;
@@ -25,8 +30,23 @@ export class TweetComponent {
   smallView = '';
   fullView = '';
 
+  interceptedTweet: ITweet | IRetweet | null = null;
+
+  constructor(
+    private tweetConverter: TweetConverter
+  ) {}
+  
   @Input()
-  tweet: ITweet<DataLoadType.EAGER_LOADED> | null = null;
+  set tweet(tweet: ITweet | IRetweet | null) {
+    this.interceptedTweet = tweet;
+    this.showingTweet = this.tweetConverter.getShowingTweet(this.tweet);
+  }
+  
+  get tweet(): ITweet | IRetweet | null {
+    return this.interceptedTweet;
+  }
+
+  showingTweet: ITweet | null = null;
 
   showMoreTextButton(): boolean {
     return this.smallView.length !== this.fullView.length;

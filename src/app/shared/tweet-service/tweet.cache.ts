@@ -36,8 +36,8 @@ export class TweetCache {
     [idEvent: TEventId]: ITweet<DataLoadType.EAGER_LOADED>
   } = { };
 
-  static get(idEvent: TEventId): ITweet<DataLoadType.EAGER_LOADED> | IRetweet {
-    return TweetCache.eagerTweets[idEvent];
+  static get(idEvent: TEventId): ITweet | IRetweet {
+    return TweetCache.eagerTweets[idEvent] || TweetCache.lazyTweets[idEvent];
   }
 
   constructor(
@@ -62,7 +62,7 @@ export class TweetCache {
     }
   }
 
-  get(idEvent: TEventId): ITweet<DataLoadType.EAGER_LOADED> | IRetweet {
+  get(idEvent: TEventId): ITweet | IRetweet {
     return TweetCache.get(idEvent);
   }
 
@@ -119,13 +119,5 @@ export class TweetCache {
         )
       }
     }
-  }
-
-  async eagerLoadRelatedEvents(tweets: ITweet<DataLoadType.EAGER_LOADED>[]): Promise<void> {
-    const idEvents = this.tweetConverter.extractEventsAndNPubsFromTweets(tweets);
-    const events = await this.tweetApi.loadRelatedEvents(idEvents);
-    this.cache(events);
-
-    return Promise.resolve();
   }
 }

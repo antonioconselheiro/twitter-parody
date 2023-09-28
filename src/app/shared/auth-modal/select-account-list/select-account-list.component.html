@@ -1,6 +1,6 @@
 <h2>Select account</h2>
 <section *ngFor="let account of accounts" class="unauthenticated-account">
-  <tw-profile-picture [picture]="account.picture"></tw-profile-picture>
+  <tw-profile-picture [account]="account"></tw-profile-picture>
   <div class="user-info">
     <span class="user-name">
       {{account.displayName}}

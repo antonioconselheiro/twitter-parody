@@ -57,7 +57,7 @@
     </ul>
   </tw-popover>
   <ng-container *ngIf="profile">
-    <tw-profile-picture [picture]="profile.picture"></tw-profile-picture>
+    <tw-profile-picture [profile]="profile"></tw-profile-picture>
     <div class="user-info">
       <span class="user-name">
         {{profile.display_name || profile.name}}

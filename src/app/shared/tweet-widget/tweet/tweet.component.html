@@ -1,23 +1,27 @@
-<ng-container *ngIf="tweet">
+<ng-container *ngIf="showingTweet && showingTweet.load === EAGER_LOADED">
 
   <ng-container *ngIf="isFull">
-    <span [innerHTML]="tweet.htmlFullView"></span>
+    <span [innerHTML]="showingTweet.htmlFullView"></span>
   </ng-container>
   <ng-container *ngIf="!isFull">
-    <span [innerHTML]="tweet.htmlSmallView"></span>
+    <span [innerHTML]="showingTweet.htmlSmallView"></span>
     <a role="button" *ngIf="showMoreTextButton()">Show more</a>
   </ng-container>
 
-  <figure *ngIf="tweet.imgMatriz && tweet.imgMatriz.length && showImages">
+  <video *ngIf="showingTweet.videoUrl" autoplay="true" controls>
+    <source [src]="showingTweet.videoUrl" type="video/mp4" />
+  </video>
+
+  <figure *ngIf="showingTweet.imgMatriz && showingTweet.imgMatriz.length && showImages">
     <div
-      *ngFor="let touple of tweet.imgMatriz"
+      *ngFor="let touple of showingTweet.imgMatriz"
       class="img-wrapper"
     >
     <ng-container *ngFor="let img of touple">
       <div
         *ngIf="img"
         class="img"
-        (click)="imgOpen.next({ tweet, img })"
+        (click)="imgOpen.next({ tweet: showingTweet, img })"
         [style.background-image]="'url(' + (img | proxifyImage) + ')'"
       ></div>
     </ng-container>

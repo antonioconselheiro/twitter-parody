@@ -15,14 +15,18 @@ export class ApiService {
       this.relays, filters
     );
 
-    sub.on('event', event => { events.push(event); });
-    sub.on('count', count => console.info('count event >> ', count))
-    
+    sub.on('event', event => {
+      events.push(event);
+    });
+
     return new Promise(resolve => {
       sub.on('eose', () => {
         resolve(events);
-        //  sub.unsub(); FIXME: should unsubscribe each interaction?
+        sub.unsub();
+        pool.close(this.relays);
       });
     });
   }
 }
+
+

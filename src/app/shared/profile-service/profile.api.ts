@@ -19,7 +19,7 @@ export class ProfileApi {
           NostrEventKind.Metadata
         ],
         authors: [
-          String(new NostrUser(npub))
+          (new NostrUser(npub)).publicKeyHex
         ]
       }
     ])

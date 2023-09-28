@@ -13,6 +13,7 @@ import { UrlUtil } from '@shared/util/url.service';
 import Geohash from 'latlon-geohash';
 import { Event } from 'nostr-tools';
 import { ITweetRelatedInfoWrapper } from './tweet-related-info-wrapper.interface';
+import { TweetCache } from './tweet.cache';
 
 @Injectable({
   providedIn: 'root'
@@ -97,8 +98,9 @@ export class TweetConverter {
     const author = this.getAuthorNostrPublicFromEvent(event);
     let npubs: string[] = [ author ];
     let retweeted: ITweet;
+    const simpleRetweetContent = '#[0]';
 
-    if (content) {
+    if (content && content !== simpleRetweetContent) {
       const retweetedEvent: Event<NostrEventKind.Text> = JSON.parse(content);
       const { tweet, npubs: npubs2 } = this.castEventToTweet(retweetedEvent);
       retweeted = tweet;
@@ -142,13 +144,14 @@ export class TweetConverter {
   private castEventReactionToLazyLoadTweet(event: Event<NostrEventKind.Reaction>): {
     lazy: ITweet<DataLoadType.LAZY_LOADED>, npubs: TNostrPublic[]
   } {
-    const [ [, idEvent], [, pubkey] ] = event.tags;
-    const npub = this.profilesConverter.castPubkeyToNostrPublic(pubkey);
-    const npubs = [ npub ];
+    const [ [, idEvent] ] = event.tags;
+    const pubkey = event.tags
+      .filter(tag => tag[0] === 'p')
+      .map(tag => tag[1])
+      .at(0);
 
     const reaction: IReaction = {
       id: event.id,
-      author: this.profilesConverter.castPubkeyToNostrPublic(pubkey),
       content: event.content,
       tweet: idEvent
     };
@@ -156,7 +159,15 @@ export class TweetConverter {
     const lazy = this.createLazyLoadableTweetFromEventId(idEvent);
     lazy.reactions[event.id] = reaction;
 
-    return { lazy, npubs };
+    if (pubkey) {
+      const npub = this.profilesConverter.castPubkeyToNostrPublic(pubkey);
+      const npubs = [ npub ];
+      reaction.author = npub;
+
+      return { lazy, npubs };
+    }
+
+    return { lazy, npubs: [] };
   }
 
   createLazyLoadableTweetFromEventId(
@@ -190,16 +201,16 @@ export class TweetConverter {
     tweet: ITweet<DataLoadType.EAGER_LOADED> | IRetweet, npubs: Array<string>
   } {
     const content = this.getTweetContent(event);
-    const { urls, imgList, imgMatriz } = this.htmlfyService.separateImageAndLinks(content);
-    const htmlSmallView = this.htmlfyService.safify(this.getSmallView(content, imgList));
-    const htmlFullView = this.htmlfyService.safify(this.getFullView(content, imgList));
+    const { urls, imageList, videoUrl, imgMatriz } = this.htmlfyService.separateImageAndLinks(content);
+    const htmlSmallView = this.htmlfyService.safify(this.getSmallView(content, imageList));
+    const htmlFullView = this.htmlfyService.safify(this.getFullView(content, imageList));
     const author = this.getAuthorNostrPublicFromEvent(event);
     let npubs: string[] = [ author ];
 
     const tweet: ITweet<DataLoadType.EAGER_LOADED> = {
-      id: event.id,
-      author, content, htmlSmallView,
-      htmlFullView, urls, imgList, imgMatriz,
+      id: event.id, author, content,
+      htmlSmallView, htmlFullView,
+      urls, imageList, videoUrl, imgMatriz,
       reactions: {},
       zaps: {},
       created: this.getTweetCreated(event),
@@ -220,7 +231,7 @@ export class TweetConverter {
   private getNostrPublicFromTags(event: Event): TNostrPublic[] {
     return event.tags
       .filter(([type]) => type === 'p')
-      .map(([,npub]) => npub);
+      .map(([,npub]) => this.profilesConverter.castPubkeyToNostrPublic(npub));
   }
 
   private getRetweetingFromEvent(tweet: ITweet, event: Event<NostrEventKind>): void {
@@ -251,7 +262,7 @@ export class TweetConverter {
     return event.created_at || 0;
   }
 
-  extractEventsAndNPubsFromTweets(tweets: ITweet[]): TEventId[] {
+  extractEventsFromTweets(tweets: ITweet[]): TEventId[] {
     return tweets.map(tweet => {
       const replies = tweet.replies || [];
       const repling = tweet.repling ? [tweet.repling] : [];
@@ -260,5 +271,24 @@ export class TweetConverter {
       
       return [ ...replies, ...repling, ...retweetedBy, ...retweeting ];
     }).flat(1);
+  }
+
+  isSimpleRetweet(tweet: ITweet): tweet is IRetweet {
+    return tweet.retweeting
+      && tweet.load === DataLoadType.EAGER_LOADED
+      && !String(tweet.htmlFullView).trim().length
+      || false;
+  }
+
+  getShowingTweet(tweet: ITweet | IRetweet): ITweet;
+  getShowingTweet(tweet: ITweet | IRetweet | null): ITweet | null;
+  getShowingTweet(tweet: ITweet | IRetweet | null): ITweet | null {
+    if (!tweet) {
+      return null;
+    } else if (tweet.retweeting) {
+      return TweetCache.get(tweet.retweeting);
+    } else {
+      return tweet;
+    }
   }
 }
