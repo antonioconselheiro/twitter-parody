@@ -69,7 +69,7 @@ export class TweetConverter {
     return timeline;
   }
 
-  getTweetReactions(tweet?: ITweet | null): number {
+  getTweetReactionsLength(tweet?: ITweet | null): number {
     return tweet && Object.keys(tweet.reactions).length || 0;
   }
 
@@ -145,29 +145,20 @@ export class TweetConverter {
     lazy: ITweet<DataLoadType.LAZY_LOADED>, npubs: TNostrPublic[]
   } {
     const [ [, idEvent] ] = event.tags;
-    const pubkey = event.tags
-      .filter(tag => tag[0] === 'p')
-      .map(tag => tag[1])
-      .at(0);
+    const npub = this.profilesConverter.castPubkeyToNostrPublic(event.pubkey);
+    const npubs = [ npub ];
 
     const reaction: IReaction = {
       id: event.id,
       content: event.content,
-      tweet: idEvent
+      tweet: idEvent,
+      author: npub
     };
 
     const lazy = this.createLazyLoadableTweetFromEventId(idEvent);
     lazy.reactions[event.id] = reaction;
 
-    if (pubkey) {
-      const npub = this.profilesConverter.castPubkeyToNostrPublic(pubkey);
-      const npubs = [ npub ];
-      reaction.author = npub;
-
-      return { lazy, npubs };
-    }
-
-    return { lazy, npubs: [] };
+    return { lazy, npubs };
   }
 
   createLazyLoadableTweetFromEventId(
