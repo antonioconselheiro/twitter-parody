@@ -12,15 +12,13 @@ export class ProfileApi {
     private apiService: ApiService
   ) { }
 
-  loadProfile(npub: TNostrPublic): Promise<Event<NostrEventKind.Metadata>[]> {
+  loadProfiles(npubs: Array<TNostrPublic>): Promise<Event<NostrEventKind.Metadata>[]> {
     return this.apiService.get([
       {
         kinds: [
           NostrEventKind.Metadata
         ],
-        authors: [
-          (new NostrUser(npub)).publicKeyHex
-        ]
+        authors: npubs.map(npub => (new NostrUser(npub)).publicKeyHex)
       }
     ])
   }

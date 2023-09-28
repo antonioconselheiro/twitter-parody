@@ -26,12 +26,20 @@ export class TweetProxy {
   async listTweetsFromNostrPublic(npub: string): Promise<
     Array<ITweet | IRetweet>
   > {
-    const rawEvents = await this.tweetApi.listTweetsFrom(npub);
+    const rawEvents = await this.tweetApi.listTweetsFrom([npub]);
+    if (!rawEvents.length) {
+      return Promise.resolve([]);
+    }
+
     const npubs1 = this.tweetCache.cache(rawEvents);
     const eventList = rawEvents.map(e => e.id);
     const relatedEvents = await this.tweetApi.loadRelatedEvents(eventList);
     const npubs2 = this.tweetCache.cache(relatedEvents);
-    await this.profileProxy.loadProfiles(npubs1, npubs2);
+    const relatedEventList = [...new Set(eventList.concat(relatedEvents.map(e => e.id)))];
+    const reactions = await this.tweetApi.loadRelatedReactions(relatedEventList);
+    const npubs3 = this.tweetCache.cache(reactions);
+
+    await this.profileProxy.loadProfiles(npubs1, npubs2, npubs3);
 
     return rawEvents
       .map(event => this.tweetCache.get(event.id))
@@ -41,7 +49,7 @@ export class TweetProxy {
         }
 
         return 0;
-      });
+      }).filter(t => t);
   }
 
   async listReactionsFromNostrPublic(npub: string): Promise<

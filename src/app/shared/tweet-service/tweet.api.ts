@@ -14,16 +14,14 @@ export class TweetApi {
     private apiService: ApiService
   ) { }
 
-  listTweetsFrom(npub: string): Promise<Event<NostrEventKind.Text | NostrEventKind.Repost>[]> {
+  listTweetsFrom(npubs: string[]): Promise<Event<NostrEventKind.Text | NostrEventKind.Repost>[]> {
     return this.apiService.get([
       {
         kinds: [
           NostrEventKind.Text,
           NostrEventKind.Repost
         ],
-        authors: [
-          String(new NostrUser(npub))
-        ]
+        authors: npubs.map(npub => (new NostrUser(npub)).publicKeyHex)
       }
     ]);
   }
@@ -56,13 +54,25 @@ export class TweetApi {
   }
 
   loadRelatedEvents(events: TEventId[]): Promise<Event<
-    NostrEventKind.Text | NostrEventKind.Repost | NostrEventKind.Reaction | NostrEventKind.Zap
+    NostrEventKind.Text | NostrEventKind.Repost
   >[]> {
     return this.apiService.get([
       {
         kinds: [
           NostrEventKind.Text,
-          NostrEventKind.Repost,
+          NostrEventKind.Repost
+        ],
+        '#e': events
+      }
+    ]);
+  }
+
+  loadRelatedReactions(events: TEventId[]): Promise<Event<
+    NostrEventKind.Reaction | NostrEventKind.Zap
+  >[]> {
+    return this.apiService.get([
+      {
+        kinds: [
           NostrEventKind.Reaction,
           NostrEventKind.Zap
         ],

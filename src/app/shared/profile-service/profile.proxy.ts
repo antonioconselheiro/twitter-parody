@@ -61,26 +61,22 @@ export class ProfileProxy {
     return this.loadProfile(this.profileConverter.castPubkeyToNostrPublic(pubkey));
   }
 
-  async loadProfiles(...npubs: TNostrPublic[][]): Promise<IProfile[]> {
-    const npubss = [...new Set(npubs.flat(1))];
+  async loadProfiles(...npubss: TNostrPublic[][]): Promise<IProfile[]> {
+    const npubs = [...new Set(npubss.flat(1))];
 
-    return Promise.all(npubss.map(npub => {
-      return this.loadProfile(npub);
-    }));
+    const notLoaded = npubs.filter(npub => !this.profileCache.isEagerLoaded(npub))
+
+    return this.forceProfileReload(notLoaded);
   }
 
   async loadProfile(npub: string): Promise<IProfile> {
-    const profile = this.profileCache.get(npub);
-    if (profile && profile.load === DataLoadType.EAGER_LOADED) {
-      return Promise.resolve(profile);
-    }
-
-    return this.forceProfileReload(npub);
+    return this.loadProfiles([npub])
+      .then(npubs => Promise.resolve(npubs[0]));
   }
   
-  private async forceProfileReload(npub: TNostrPublic): Promise<IProfile> {
-    const events = await this.profileApi.loadProfile(npub);
+  private async forceProfileReload(npubs: Array<TNostrPublic>): Promise<Array<IProfile>> {
+    const events = await this.profileApi.loadProfiles(npubs);
     this.profileCache.cache(events);
-    return Promise.resolve(this.profileCache.get(npub));
+    return Promise.resolve(npubs.map(npub => this.profileCache.get(npub)));
   }
 }
