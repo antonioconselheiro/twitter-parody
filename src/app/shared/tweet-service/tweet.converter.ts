@@ -101,6 +101,9 @@ export class TweetConverter {
     const simpleRetweetContent = '#[0]';
 
     if (content && content !== simpleRetweetContent) {
+      //  FIXME: o elemento que passou pelo parse precisa ser indexado
+      //  no cache, pois está ficando sem as informações complementarem
+      //  lazy carregadas, como likes, retweets e zaps
       const retweetedEvent: Event<NostrEventKind.Text> = JSON.parse(content);
       const { tweet, npubs: npubs2 } = this.castEventToTweet(retweetedEvent);
       retweeted = tweet;
@@ -120,8 +123,11 @@ export class TweetConverter {
     }
 
     const retweetAsTweet: Event<NostrEventKind.Text> = { ...event, content: '', kind: NostrEventKind.Text };
-    const { tweet: retweet, npubs: npubs3 } = this.castEventToTweet(retweetAsTweet, retweeted.id);
-    npubs = npubs.concat(npubs3);
+    const { tweet: retweet, npubs: npubs2 } = this.castEventToTweet(retweetAsTweet, retweeted.id);
+    npubs = npubs.concat(npubs2);
+    if (retweeted.author) {
+      npubs.push(retweeted.author);
+    }
 
     retweeted.retweetedBy = [event.id];
 
