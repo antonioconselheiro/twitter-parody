@@ -33,7 +33,15 @@ export class TweetProxy {
     const npubs2 = this.tweetCache.cache(relatedEvents);
     await this.profileProxy.loadProfiles(npubs1, npubs2);
 
-    return rawEvents.map(event => this.tweetCache.get(event.id));
+    return rawEvents
+      .map(event => this.tweetCache.get(event.id))
+      .sort((tweetA, tweetB) => {
+        if ('created' in tweetA && 'created' in tweetB) {
+          return tweetB.created - tweetA.created;
+        }
+
+        return 0;
+      });
   }
 
   async listReactionsFromNostrPublic(npub: string): Promise<
@@ -46,7 +54,15 @@ export class TweetProxy {
     const npubs2 = this.tweetCache.cache(relatedEvents);
     await this.profileProxy.loadProfiles(npubs1, npubs2);
 
-    return rawEvents.map(event => this.tweetCache.get(event.id));
+    return rawEvents
+      .map(event => this.tweetCache.get(event.id))
+      .sort((tweetA, tweetB) => {
+        if ('created' in tweetA && 'created' in tweetB) {
+          return tweetA.created - tweetB.created;
+        }
+
+        return 0;
+      });
   }
 
   /**
