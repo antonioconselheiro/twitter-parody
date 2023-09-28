@@ -5,7 +5,6 @@ import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { AuthenticatedProfileObservable } from '@shared/profile-service/authenticated-profile.observable';
-import { ProfileProxy } from '@shared/profile-service/profile.proxy';
 import { TweetConverter } from '@shared/tweet-service/tweet.converter';
 import { Subscription } from 'rxjs';
 
@@ -31,7 +30,6 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
 
   constructor(
     private tweetConverter: TweetConverter,
-    private profileProxy: ProfileProxy,
     private profile$: AuthenticatedProfileObservable
   ) { }
 
@@ -69,9 +67,6 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    console.info('tweet', tweet);
-    console.info('author', profile);
-    console.info('reactions', reactions, reactions.map(reaction => reaction.author && this.profileProxy.get(reaction.author) || null));
     return !!reactions.find(reaction => reaction.author === profile.npub)
   }
 
