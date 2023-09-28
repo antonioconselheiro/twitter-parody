@@ -5,5 +5,5 @@ export interface IReaction {
   id: TEventId;
   content: string;
   tweet: TEventId;
-  author?: TNostrPublic;
+  author: TNostrPublic;
 }

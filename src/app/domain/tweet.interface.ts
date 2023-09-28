@@ -19,8 +19,19 @@ export type ITweet<T extends DataLoadType | unknown = unknown> = {
   load: DataLoadType.EAGER_LOADED;
   author: TNostrPublic;
   content: string;
-  htmlFullView: SafeHtml;
+
+  /**
+   * use htmlSmallView instead
+   */
+  htmlSmallViewLoaded?: SafeHtml;
+
+  /**
+   * use htmlFullView instead
+   */
+  htmlFullViewLoaded?: SafeHtml;
+
   htmlSmallView: SafeHtml;
+  htmlFullView: SafeHtml;
   urls: string[];
   imageList: string[];
   videoUrl?: string;

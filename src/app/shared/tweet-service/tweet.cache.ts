@@ -87,7 +87,7 @@ export class TweetCache {
   
   cache(events: Event<NostrEventKind>[]): Array<TNostrPublic> {
     const wrapper = this.tweetConverter
-    .castResultsetToTweets(events);
+      .castResultsetToTweets(events);
 
     wrapper.eager.forEach(tweet => this.cacheTweet(tweet));
     wrapper.lazy.forEach(tweet => this.cacheTweet(tweet));

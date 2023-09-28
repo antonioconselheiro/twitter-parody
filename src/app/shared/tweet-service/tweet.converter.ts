@@ -69,7 +69,7 @@ export class TweetConverter {
     return timeline;
   }
 
-  getTweetReactions(tweet?: ITweet | null): number {
+  getTweetReactionsLength(tweet?: ITweet | null): number {
     return tweet && Object.keys(tweet.reactions).length || 0;
   }
 
@@ -145,29 +145,20 @@ export class TweetConverter {
     lazy: ITweet<DataLoadType.LAZY_LOADED>, npubs: TNostrPublic[]
   } {
     const [ [, idEvent] ] = event.tags;
-    const pubkey = event.tags
-      .filter(tag => tag[0] === 'p')
-      .map(tag => tag[1])
-      .at(0);
+    const npub = this.profilesConverter.castPubkeyToNostrPublic(event.pubkey);
+    const npubs = [ npub ];
 
     const reaction: IReaction = {
       id: event.id,
       content: event.content,
-      tweet: idEvent
+      tweet: idEvent,
+      author: npub
     };
 
     const lazy = this.createLazyLoadableTweetFromEventId(idEvent);
     lazy.reactions[event.id] = reaction;
 
-    if (pubkey) {
-      const npub = this.profilesConverter.castPubkeyToNostrPublic(pubkey);
-      const npubs = [ npub ];
-      reaction.author = npub;
-
-      return { lazy, npubs };
-    }
-
-    return { lazy, npubs: [] };
+    return { lazy, npubs };
   }
 
   createLazyLoadableTweetFromEventId(
@@ -191,6 +182,50 @@ export class TweetConverter {
     return this.profilesConverter.castPubkeyToNostrPublic(event.pubkey);
   }
 
+  private instanceTweet(event: Event<NostrEventKind.Text>, author: TNostrPublic): ITweet<DataLoadType.EAGER_LOADED> {
+    const content = this.getTweetContent(event);
+    const { urls, imageList, videoUrl, imgMatriz } = this.htmlfyService.separateImageAndLinks(content);
+
+    const tweet: ITweet<DataLoadType.EAGER_LOADED> = {
+      id: event.id, author, reactions: {},
+      zaps: {}, created: this.getTweetCreated(event),
+      load: DataLoadType.EAGER_LOADED,
+      content, htmlSmallView: '', htmlFullView: '',
+      urls, imageList, videoUrl, imgMatriz
+    };
+
+    /**
+     * I do this because mentions depend on profiles
+     * 
+     * When the event loads, we do not have any information about the related profiles,
+     * because it is the event that gives us this information. Generally, immediately
+     * after loading the events, the related profiles are loaded and only after that the
+     * data is available to be used on screen and then execute this get enabling the name
+     * of the loaded profile to be associated with the mention correctly
+     */
+    Object.defineProperty(tweet, "htmlSmallView", {
+      get: () => {
+        if (!tweet.htmlSmallViewLoaded) {
+          tweet.htmlSmallViewLoaded = this.htmlfyService.safify(this.getSmallView(content, imageList));
+        }
+
+        return tweet.htmlSmallViewLoaded;
+      },
+    });
+
+    Object.defineProperty(tweet, "htmlFullView", {
+      get: () => {
+        if (!tweet.htmlFullViewLoaded) {
+          tweet.htmlFullViewLoaded = this.htmlfyService.safify(this.getFullView(content, imageList));
+        }
+
+        return tweet.htmlFullViewLoaded;
+      },
+    });
+    
+    return tweet;
+  }
+
   private castEventToTweet(event: Event<NostrEventKind.Text>, retweeting: TEventId): {
     tweet: IRetweet, npubs: Array<string>
   };
@@ -200,22 +235,9 @@ export class TweetConverter {
   private castEventToTweet(event: Event<NostrEventKind.Text>, retweeting?: TEventId): {
     tweet: ITweet<DataLoadType.EAGER_LOADED> | IRetweet, npubs: Array<string>
   } {
-    const content = this.getTweetContent(event);
-    const { urls, imageList, videoUrl, imgMatriz } = this.htmlfyService.separateImageAndLinks(content);
-    const htmlSmallView = this.htmlfyService.safify(this.getSmallView(content, imageList));
-    const htmlFullView = this.htmlfyService.safify(this.getFullView(content, imageList));
     const author = this.getAuthorNostrPublicFromEvent(event);
     let npubs: string[] = [ author ];
-
-    const tweet: ITweet<DataLoadType.EAGER_LOADED> = {
-      id: event.id, author, content,
-      htmlSmallView, htmlFullView,
-      urls, imageList, videoUrl, imgMatriz,
-      reactions: {},
-      zaps: {},
-      created: this.getTweetCreated(event),
-      load: DataLoadType.EAGER_LOADED,
-    };
+    const tweet = this.instanceTweet(event, author);
 
     if (retweeting) {
       tweet.retweeting = retweeting;

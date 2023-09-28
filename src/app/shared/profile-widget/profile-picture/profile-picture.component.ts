@@ -42,4 +42,12 @@ export class ProfilePictureComponent {
       return this.defaultPicture;
     }
   }
+
+  getTitle(): string {
+    if (this.profile) {
+      return this.profile.display_name || this.profile.name || '';
+    }
+
+    return 'profile picture';
+  }
 }

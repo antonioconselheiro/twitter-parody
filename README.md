@@ -1,7 +1,8 @@
 ![twitter](./docs/twitter.svg)
 
-E a pomba voltou a ele à tarde; e eis, arrancada, uma folha de oliveira no seu bico; e conheceu Noé que as águas tinham minguado de sobre a terra. 
-Gênesis 8:11
+And the dove came in to him in the evening; and, lo, in her mouth was an olive leaf pluckt off: so Noah knew that the waters were abated from off the earth.  
+
+Gn 8:11
 
 # Twitter (Parody)
  _don't thread on Twitter_

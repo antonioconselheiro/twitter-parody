@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
+import { ProfileCache } from '@shared/profile-service/profile.cache';
 
 @Injectable({
   providedIn: 'root'
@@ -98,7 +99,24 @@ export class HtmlfyService {
   }
 
   private htmlfyMention(content: string): string {
-    return content.replace(/nostr:npub(\w+)/g, "<a class='mention' href='/p/npub$1'>npub$1</a>");
+    content = content
+      .replace(/nostr:npub(\w+)/g, "<a class='mention' href='/p/npub$1'>{{npub$1}}</a>");
+    const matches = content.match(/(\{\{npub[^ ]*\}\})/g);
+
+    if (matches) {
+      [...matches].forEach(match => {
+        const npub = match.replace(/^\{\{|\}\}/g, '');
+        const profile = ProfileCache.profiles[npub];
+        let replace = npub;
+        if (profile) {
+          replace = profile.display_name || profile.name || npub;
+        }
+
+        content = content.replace(new RegExp(match, 'g'), replace)
+      });
+    }
+
+    return content;
   }
 
   private htmlfyHashtag(content: string): string {
