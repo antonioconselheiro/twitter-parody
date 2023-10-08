@@ -11,6 +11,7 @@ export type ITweet<T extends DataLoadType | unknown = unknown> = {
   load: T;
   reactions: ITweetReactionMap;
   zaps: ITweetZapMap;
+  rootRepling?: TEventId;
   repling?: TEventId;
   retweetedBy?: TEventId[];
   retweeting?: TEventId;

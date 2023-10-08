@@ -143,7 +143,7 @@
         "complexity": [
           "error",
           {
-            "max": 5
+            "max": 7
           }
         ],
         "import/order": "off",

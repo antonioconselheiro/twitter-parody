@@ -10,9 +10,9 @@ import { IZap } from '@domain/zap.interface';
 import { HtmlfyService } from '@shared/htmlfy/htmlfy.service';
 import { ProfileConverter } from '@shared/profile-service/profile.converter';
 import { UrlUtil } from '@shared/util/url.service';
-import Geohash from 'latlon-geohash';
 import { Event } from 'nostr-tools';
 import { ITweetRelatedInfoWrapper } from './tweet-related-info-wrapper.interface';
+import { TweetTagsConverter } from './tweet-tags.converter';
 import { TweetCache } from './tweet.cache';
 
 @Injectable({
@@ -22,6 +22,7 @@ export class TweetConverter {
 
   constructor(
     private urlUtil: UrlUtil,
+    private tweetTagsConverter: TweetTagsConverter,
     private htmlfyService: HtmlfyService,
     private profilesConverter: ProfileConverter
   ) { }
@@ -31,13 +32,13 @@ export class TweetConverter {
   }
 
   castResultsetToTweets(events: Event<NostrEventKind>[]): ITweetRelatedInfoWrapper {
-
     const timeline: ITweetRelatedInfoWrapper = {
       eager: [],
       lazy: [],
       npubs: []
     };
 
+    // TODO: check in tags if tweets have mentions and then, create the threadfy method
     // eslint-disable-next-line complexity
     events.forEach(event => {
       if (this.isKind(event, NostrEventKind.Text)) {
@@ -54,13 +55,19 @@ export class TweetConverter {
         }
         timeline.npubs = timeline.npubs.concat(npubs);
       } else if (this.isKind(event, NostrEventKind.Reaction)) {
-        const { lazy, npubs } = this.castEventReactionToLazyLoadTweet(event);
-        timeline.lazy.push(lazy);
-        timeline.npubs = timeline.npubs.concat(npubs);
+        const result = this.castEventReactionToLazyLoadTweet(event);
+        if (result) {
+          const { lazy, npubs } = result;
+          timeline.lazy.push(lazy);
+          timeline.npubs = timeline.npubs.concat(npubs);
+        }
       } else if (this.isKind(event, NostrEventKind.Zap)) {
-        const { lazy, npubs } = this.castEventZapToLazyLoadTweet(event);
-        timeline.lazy.push(lazy);
-        timeline.npubs = timeline.npubs.concat(npubs);
+        const result = this.castEventZapToLazyLoadTweet(event);
+        if (result) {
+          const { lazy, npubs } = result;
+          timeline.lazy.push(lazy);
+          timeline.npubs = timeline.npubs.concat(npubs);
+        }
       }
     });
 
@@ -109,17 +116,13 @@ export class TweetConverter {
       retweeted = tweet;
       npubs = npubs.concat(npubs2);
     } else {
-      const idEvent = event.tags
-        .filter(([type]) => type === 'e')
-        .map(([, idEvent]) => idEvent)
-        .at(0);
-
-      const pubkey = event.tags
-        .filter(([type]) => type === 'p')
-        .map(([, pubkey]) => pubkey)
-        .at(0);
-
-      retweeted = this.createLazyLoadableTweetFromEventId(idEvent || '', pubkey);
+      const idEvent = this.tweetTagsConverter.getMentionedEvent(event);
+      if (!idEvent) {
+        console.warn('mentioned tweet not found in retweet', event);
+      }
+        const pubkey = this.tweetTagsConverter.getRelatedProfiles(event);
+        //  TODO: validate it use pubkey.at(0) here is secure in retweeted events
+        retweeted = this.createLazyLoadableTweetFromEventId(idEvent || '', pubkey.at(0));
     }
 
     const retweetAsTweet: Event<NostrEventKind.Text> = { ...event, content: '', kind: NostrEventKind.Text };
@@ -138,8 +141,14 @@ export class TweetConverter {
 
   private castEventZapToLazyLoadTweet(event: Event<NostrEventKind.Zap>): {
     lazy: ITweet<DataLoadType.LAZY_LOADED>, npubs: TNostrPublic[]
-  } {
-    const [[, idEvent], [, pubkey]] = event.tags;
+  } | null {
+    const idEvent = this.tweetTagsConverter.getFirstRelatedEvent(event);
+    const pubkey = this.tweetTagsConverter.getFirstRelatedProfile(event);
+    if (!idEvent || !pubkey) {
+      console.warn('[WARNING] event not tagged with event and/or pubkey: ', event);
+      return null;
+    }
+
     const npub = this.profilesConverter.castPubkeyToNostrPublic(pubkey);
     const npubs = [npub];
 
@@ -158,8 +167,13 @@ export class TweetConverter {
 
   private castEventReactionToLazyLoadTweet(event: Event<NostrEventKind.Reaction>): {
     lazy: ITweet<DataLoadType.LAZY_LOADED>, npubs: TNostrPublic[]
-  } {
-    const [[, idEvent]] = event.tags;
+  } | null {
+    const idEvent = this.tweetTagsConverter.getFirstRelatedEvent(event);
+    if (!idEvent) {
+      console.warn('[WARNING] reaction not tagged with event: ', event);
+      return null;
+    }
+
     const npub = this.profilesConverter.castPubkeyToNostrPublic(event.pubkey);
     const npubs = [npub];
 
@@ -258,37 +272,11 @@ export class TweetConverter {
       tweet.retweeting = retweeting;
     }
 
-    npubs = npubs.concat(this.getNostrPublicFromTags(event));
-    this.getCoordinatesFromEvent(tweet, event);
-    this.getRetweetingFromEvent(tweet, event);
+    npubs = npubs.concat(this.tweetTagsConverter.getNostrPublicFromTags(event));
+    this.tweetTagsConverter.mergeCoordinatesFromEvent(tweet, event);
+    this.tweetTagsConverter.mergeRetweetingFromEvent(tweet, event);
 
     return { tweet, npubs };
-  }
-
-  private getNostrPublicFromTags(event: Event): TNostrPublic[] {
-    return event.tags
-      .filter(([type]) => type === 'p')
-      .map(([, npub]) => this.profilesConverter.castPubkeyToNostrPublic(npub));
-  }
-
-  private getRetweetingFromEvent(tweet: ITweet, event: Event<NostrEventKind>): void {
-    if (this.isKind(event, NostrEventKind.Repost)) {
-      const [[, idEvent], [, pubkey]] = event.tags;
-      tweet.author = this.profilesConverter.castPubkeyToNostrPublic(pubkey);
-      tweet.retweeting = idEvent;
-    }
-  }
-
-  private getCoordinatesFromEvent(
-    tweet: ITweet<DataLoadType.EAGER_LOADED>,
-    event: Event<NostrEventKind>
-  ): ITweet<DataLoadType.EAGER_LOADED> {
-    const [, geohash] = event.tags.find(tag => tag[0] === 'g') || [];
-    if (geohash) {
-      tweet.location = Geohash.decode(geohash);
-    }
-
-    return tweet;
   }
 
   private getTweetContent(event: Event<NostrEventKind.Text | NostrEventKind.Repost>): string {
@@ -317,6 +305,10 @@ export class TweetConverter {
       || false;
   }
 
+  /**
+   * Show note if is a simple text, but if it's a retweet
+   * it shows the retweeted note
+   */
   getShowingTweet(tweet: ITweet | IRetweet): ITweet;
   getShowingTweet(tweet: ITweet | IRetweet | null): ITweet | null;
   getShowingTweet(tweet: ITweet | IRetweet | null): ITweet | null {
