@@ -11,7 +11,7 @@ import { HtmlfyService } from '@shared/htmlfy/htmlfy.service';
 import { ProfileConverter } from '@shared/profile-service/profile.converter';
 import { UrlUtil } from '@shared/util/url.service';
 import { Event } from 'nostr-tools';
-import { ITweetRelatedInfoWrapper } from './tweet-related-info-wrapper.interface';
+import { ITweetRelationedInfoWrapper } from './tweet-relationed-info-wrapper.interface';
 import { TweetTagsConverter } from './tweet-tags.converter';
 import { TweetCache } from './tweet.cache';
 import { TweetTypeGuard } from './tweet.type-guard';
@@ -29,8 +29,8 @@ export class TweetConverter {
     private profilesConverter: ProfileConverter
   ) { }
 
-  castResultsetToTweets(events: Event<NostrEventKind>[]): ITweetRelatedInfoWrapper {
-    const timeline: ITweetRelatedInfoWrapper = {
+  castResultsetToTweets(events: Event<NostrEventKind>[]): ITweetRelationedInfoWrapper {
+    const relationed: ITweetRelationedInfoWrapper = {
       eager: [],
       lazy: [],
       npubs: []
@@ -41,44 +41,50 @@ export class TweetConverter {
     events.forEach(event => {
       if (this.tweetTypeGuard.isKind(event, NostrEventKind.Text)) {
         const { tweet, npubs } = this.castEventToTweet(event);
-        timeline.eager.push(tweet);
-        timeline.npubs = timeline.npubs.concat(npubs);
+        relationed.eager.push(tweet);
+        relationed.npubs = relationed.npubs.concat(npubs);
       } else if (this.tweetTypeGuard.isKind(event, NostrEventKind.Repost)) {
         const { retweet, tweet, npubs } = this.castEventToRetweet(event);
-        timeline.eager.push(retweet);
+        relationed.eager.push(retweet);
         if (tweet.load === DataLoadType.LAZY_LOADED) {
-          timeline.lazy.push(tweet);
+          relationed.lazy.push(tweet);
         } else {
-          timeline.eager.push(tweet);
+          relationed.eager.push(tweet);
         }
-        timeline.npubs = timeline.npubs.concat(npubs);
+        relationed.npubs = relationed.npubs.concat(npubs);
       } else if (this.tweetTypeGuard.isKind(event, NostrEventKind.Reaction)) {
         const result = this.castEventReactionToLazyLoadTweet(event);
         if (result) {
           const { lazy, npubs } = result;
-          timeline.lazy.push(lazy);
-          timeline.npubs = timeline.npubs.concat(npubs);
+          relationed.lazy.push(lazy);
+          relationed.npubs = relationed.npubs.concat(npubs);
         }
       } else if (this.tweetTypeGuard.isKind(event, NostrEventKind.Zap)) {
         const result = this.castEventZapToLazyLoadTweet(event);
         if (result) {
           const { lazy, npubs } = result;
-          timeline.lazy.push(lazy);
-          timeline.npubs = timeline.npubs.concat(npubs);
+          relationed.lazy.push(lazy);
+          relationed.npubs = relationed.npubs.concat(npubs);
         }
       }
     });
 
-    timeline.npubs = [...new Set(timeline.npubs)];
+    relationed.npubs = [...new Set(relationed.npubs)];
 
-    return timeline;
+    return relationed;
   }
 
   getTweetReactionsLength(tweet?: ITweet | null): number {
-    return tweet && Object.keys(tweet.reactions).length || 0;
+    if (!tweet) {
+      return 0;
+    }
+
+    tweet = this.tweetTypeGuard.getShowingTweet(tweet);
+    return Object.keys(tweet.reactions).length;
   }
 
-  getRetweetedByYou(tweet: ITweet | IRetweet): number {
+  getRetweetedLength(tweet: ITweet | IRetweet): number {
+    tweet = this.tweetTypeGuard.getShowingTweet(tweet);
     return Object.keys(tweet.retweetedBy || {}).length || 0;
   }
 
@@ -118,9 +124,12 @@ export class TweetConverter {
       retweeted = tweet;
       npubs = npubs.concat(npubs2);
     } else {
-      const idEvent = this.tweetTagsConverter.getMentionedEvent(event);
+      let idEvent = this.tweetTagsConverter.getMentionedEvent(event);
       if (!idEvent) {
-        console.warn('[RELAY DATA WARNING] mentioned tweet not found in retweet', event);
+        idEvent = this.tweetTagsConverter.getFirstRelatedEvent(event)
+        if (!idEvent) {
+          console.warn('[RELAY DATA WARNING] mentioned tweet not found in retweet', event);
+        }
       }
 
       const pubkey = this.tweetTagsConverter.getRelatedProfiles(event);

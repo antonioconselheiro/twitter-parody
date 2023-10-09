@@ -2,14 +2,13 @@ import { Injectable } from "@angular/core";
 import { DataLoadType } from "@domain/data-load.type";
 import { TEventId } from "@domain/event-id.type";
 import { NostrEventKind } from "@domain/nostr-event-kind";
-import { TNostrPublic } from "@domain/nostr-public.type";
 import { IRetweet } from "@domain/retweet.interface";
 import { ITweet } from "@domain/tweet.interface";
 import { Event } from 'nostr-tools';
+import { ITweetRelationedInfoWrapper } from "./tweet-relationed-info-wrapper.interface";
 import { TweetApi } from "./tweet.api";
 import { TweetConverter } from "./tweet.converter";
 import { TweetMerge } from "./tweet.merge";
-import { ITweetRelatedInfoWrapper } from "./tweet-related-info-wrapper.interface";
 
 /**
  * This class responsible for caching event information
@@ -86,7 +85,7 @@ export class TweetCache {
     return Promise.resolve(idEvents.map(id => this.get(id)));
   }
   
-  cache(events: Event<NostrEventKind>[]): ITweetRelatedInfoWrapper {
+  cache(events: Event<NostrEventKind>[]): ITweetRelationedInfoWrapper {
     const wrapper = this.tweetConverter
       .castResultsetToTweets(events);
 

@@ -58,7 +58,7 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   }
 
   getRetweetedLength(tweet: ITweet | IRetweet): number {
-    return this.tweetConverter.getRetweetedByYou(tweet);
+    return this.tweetConverter.getRetweetedLength(tweet);
   }
 
   getTweetReactionsLength(tweet?: ITweet | null): number {

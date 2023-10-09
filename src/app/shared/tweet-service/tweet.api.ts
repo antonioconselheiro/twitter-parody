@@ -21,7 +21,8 @@ export class TweetApi {
           NostrEventKind.Text,
           NostrEventKind.Repost
         ],
-        authors: npubs.map(npub => (new NostrUser(npub)).publicKeyHex)
+        authors: npubs.map(npub => (new NostrUser(npub)).publicKeyHex),
+        limit: 25
       }
     ]);
   }
@@ -34,7 +35,8 @@ export class TweetApi {
         ],
         authors: [
           String(new NostrUser(npub))
-        ]
+        ],
+        limit: 25
       }
     ]);
   }

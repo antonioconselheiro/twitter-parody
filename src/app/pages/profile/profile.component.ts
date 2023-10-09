@@ -72,7 +72,7 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
       next: wrapper => {
         this.profile = wrapper['profile'];
         this.tweets = [];
-        document.body.scrollTo(0,0);
+        document.body.scrollTo(0, 0);
         this.loadProfileTweets(wrapper['profile']).catch(e => this.error$.next(e));
       }
     }));

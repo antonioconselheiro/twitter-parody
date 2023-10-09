@@ -48,21 +48,26 @@ export class TweetProxy {
       return Promise.resolve([]);
     }
 
-    const wrapper1 = this.tweetCache.cache(rawEvents);
+    const wrapperRoot = this.tweetCache.cache(rawEvents);
     const eventList = rawEvents.map(e => e.id);
     const relatedEvents = await this.tweetApi.loadRelatedEvents(eventList);
-    const wrapper2 = this.tweetCache.cache(relatedEvents);
+    const wrapperRelated = this.tweetCache.cache(relatedEvents);
 
-    const lazyEvents = wrapper1.lazy.map(lazy => lazy.id);
+    const lazyEvents = wrapperRoot.lazy.map(lazy => lazy.id);
     const lazyEagerLoaded = await this.tweetApi.loadRelatedEvents(lazyEvents);
-    const wrapper3 = this.tweetCache.cache(lazyEagerLoaded);
+    const wrapperLazyEagerLoaded = this.tweetCache.cache(lazyEagerLoaded);
 
-    const relatedEventList = [...new Set(eventList.concat(relatedEvents.map(e => e.id)))];
+    const relatedEventList = [...new Set(
+      eventList
+        .concat(wrapperRelated.eager.map(e => e.id))
+        .concat(wrapperLazyEagerLoaded.eager.map(e => e.id))
+    )];
+
     const reactions = await this.tweetApi.loadRelatedReactions(relatedEventList);
-    const wrapper4 = this.tweetCache.cache(reactions);
+    const wrapperReactions = this.tweetCache.cache(reactions);
 
     await this.profileProxy.loadProfiles(
-      wrapper1.npubs, wrapper2.npubs, wrapper3.npubs, wrapper4.npubs
+      wrapperRoot.npubs, wrapperRelated.npubs, wrapperLazyEagerLoaded.npubs, wrapperReactions.npubs
     );
 
     return rawEvents

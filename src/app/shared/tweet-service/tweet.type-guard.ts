@@ -30,16 +30,17 @@ export class TweetTypeGuard {
     if (!profile) {
       return false;
     }
-
-    const showingTweet = this.getShowingTweet(tweet);
-    if (!showingTweet.retweetedBy) {
+    
+    tweet = this.getShowingTweet(tweet);
+    if (!tweet.retweetedBy) {
       return false;
     }
 
-    return Object.values(showingTweet.retweetedBy).includes(profile.npub);
+    return Object.values(tweet.retweetedBy).includes(profile.npub);
   }
 
   isLikedByProfile(tweet: ITweet | IRetweet, profile: IProfile | null): boolean {
+    tweet = this.getShowingTweet(tweet);
     const reactions = Object.values(tweet.reactions);
     if (!profile || !reactions.length) {
       return false;
@@ -58,6 +59,7 @@ export class TweetTypeGuard {
     if (!tweet) {
       return null;
     } else if (tweet.retweeting) {
+      console.info('tweet: ', tweet, 'retweeting: ', TweetCache.get(tweet.retweeting));
       return TweetCache.get(tweet.retweeting);
     } else {
       return tweet;
