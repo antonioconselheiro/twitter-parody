@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DataLoadType } from '@domain/data-load.type';
 import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';
-import { TweetConverter } from '@shared/tweet-service/tweet.converter';
+import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
 import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 
 @Component({
@@ -33,13 +33,13 @@ export class TweetComponent {
   interceptedTweet: ITweet | IRetweet | null = null;
 
   constructor(
-    private tweetConverter: TweetConverter
+    private tweetTypeGuard: TweetTypeGuard
   ) {}
   
   @Input()
   set tweet(tweet: ITweet | IRetweet | null) {
     this.interceptedTweet = tweet;
-    this.showingTweet = this.tweetConverter.getShowingTweet(this.tweet);
+    this.showingTweet = this.tweetTypeGuard.getShowingTweet(this.tweet);
   }
   
   get tweet(): ITweet | IRetweet | null {

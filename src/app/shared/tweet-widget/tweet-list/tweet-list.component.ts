@@ -8,6 +8,7 @@ import { ProfileCache } from '@shared/profile-service/profile.cache';
 import { TweetConverter } from '@shared/tweet-service/tweet.converter';
 import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
 import { ITweetImgViewing } from '../tweet-img-viewing.interface';
+import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
 
 @Component({
   selector: 'tw-tweet-list',
@@ -44,6 +45,7 @@ export class TweetListComponent {
   viewing: ITweetImgViewing | null = null;
 
   constructor(
+    private tweetTypeGuard: TweetTypeGuard,
     private tweetConverter: TweetConverter,
     private tweetProxy: TweetProxy
   ) { }
@@ -60,7 +62,7 @@ export class TweetListComponent {
   }
 
   isSimpleRetweet(tweet: ITweet<DataLoadType.EAGER_LOADED>): tweet is IRetweet {
-    return this.tweetConverter.isSimpleRetweet(tweet);
+    return this.tweetTypeGuard.isSimpleRetweet(tweet);
   }
 
   getAuthorName(tweet: ITweet): string {

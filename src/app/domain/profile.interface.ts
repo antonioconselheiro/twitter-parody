@@ -1,9 +1,10 @@
 import { SafeHtml } from "@angular/platform-browser";
 import { DataLoadType } from "@domain/data-load.type";
 import { NostrUser } from "@domain/nostr-user";
+import { TNostrPublic } from "./nostr-public.type";
 
 export interface IProfile {
-  npub: string;
+  npub: TNostrPublic;
   user: NostrUser;
   name?: string;
   // eslint-disable-next-line @typescript-eslint/naming-convention

@@ -1,0 +1,10 @@
+[X] identify how manys replies the event has
+[X] identify how manys retweet the event has
+[X] identify if the user has retweeted it
+[ ] create thread data structure
+[ ] write scss for chained tweets
+[ ] compose tweet data with the mentioned tweet event id
+[ ] write scss for retweet with comment
+[ ] set active bookmark as blue
+
+[ ] the number of retweets is not right

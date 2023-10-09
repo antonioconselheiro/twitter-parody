@@ -84,10 +84,8 @@ export class TweetMerge {
   private mergeRetweetedBy<T>(
     receiveMerge: ITweet<T>, lazyTweet: ITweet<DataLoadType.LAZY_LOADED>
   ): void {
-    receiveMerge.retweetedBy = [
-      ...new Set(new Array<TEventId>()
-      .concat(receiveMerge.retweetedBy || [])
-      .concat(lazyTweet.retweetedBy || []))
-    ];
+    receiveMerge.retweetedBy = Object.assign(
+      receiveMerge.retweetedBy || {}, lazyTweet.retweetedBy
+    );
   }
 }

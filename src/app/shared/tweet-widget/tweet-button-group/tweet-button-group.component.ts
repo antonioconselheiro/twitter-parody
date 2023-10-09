@@ -6,6 +6,7 @@ import { ITweet } from '@domain/tweet.interface';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { AuthenticatedProfileObservable } from '@shared/profile-service/authenticated-profile.observable';
 import { TweetConverter } from '@shared/tweet-service/tweet.converter';
+import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -30,6 +31,7 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
 
   constructor(
     private tweetConverter: TweetConverter,
+    private tweetTypeGuard: TweetTypeGuard,
     private profile$: AuthenticatedProfileObservable
   ) { }
 
@@ -48,29 +50,18 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   }
 
   isRetweetedByYou(tweet: ITweet | IRetweet): boolean {
-    if (!this.profile) {
-      return false;
-    }
-
-    const showingTweet = this.tweetConverter.getShowingTweet(tweet);
-    if (!showingTweet.retweetedBy) {
-      return false;
-    }
-
-    return showingTweet.retweetedBy.includes(this.profile.npub);
+    return this.tweetTypeGuard.isRetweetedByProfile(tweet, this.profile);
   }
 
   isLikedByYou(tweet: ITweet | IRetweet): boolean {
-    const reactions = Object.values(tweet.reactions);
-    const profile = this.profile;
-    if (!profile || !reactions.length) {
-      return false;
-    }
-
-    return !!reactions.find(reaction => reaction.author === profile.npub)
+    return this.tweetTypeGuard.isLikedByProfile(tweet, this.profile);
   }
 
-  getTweetReactions(tweet?: ITweet | null): number {
+  getRetweetedLength(tweet: ITweet | IRetweet): number {
+    return this.tweetConverter.getRetweetedLength(tweet);
+  }
+
+  getTweetReactionsLength(tweet?: ITweet | null): number {
     return this.tweetConverter.getTweetReactionsLength(tweet);
   }
 }
