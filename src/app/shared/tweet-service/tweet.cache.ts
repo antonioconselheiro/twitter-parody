@@ -81,7 +81,7 @@ export class TweetCache {
     });
 
     const events = await this.tweetApi.loadEvents(notLoadedList);
-    
+
     this.cache(events);
     return Promise.resolve(idEvents.map(id => this.get(id)));
   }

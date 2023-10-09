@@ -13,7 +13,7 @@ export type ITweet<T extends DataLoadType | unknown = unknown> = {
   zaps: ITweetZapMap;
   rootRepling?: TEventId;
   repling?: TEventId;
-  retweetedBy?: TEventId[];
+  retweetedBy?: { [attr: TEventId]: TNostrPublic };
   retweeting?: TEventId;
   replies?: TEventId[];
 } & ({
@@ -42,5 +42,5 @@ export type ITweet<T extends DataLoadType | unknown = unknown> = {
   view?: number;
 } | {
   load: DataLoadType.LAZY_LOADED;
-  author?: string;
+  author?: TNostrPublic;
 })

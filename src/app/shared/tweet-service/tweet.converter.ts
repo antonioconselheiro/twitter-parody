@@ -78,6 +78,10 @@ export class TweetConverter {
     return tweet && Object.keys(tweet.reactions).length || 0;
   }
 
+  getRetweetedByYou(tweet: ITweet | IRetweet): number {
+    return Object.keys(tweet.retweetedBy || {}).length || 0;
+  }
+
   private getSmallView(tweet: string, imgList: string[]): string {
     const maxLength = 280;
     let content = this.getFullView(tweet, imgList);
@@ -131,7 +135,9 @@ export class TweetConverter {
       npubs.push(retweeted.author);
     }
 
-    retweeted.retweetedBy = [event.id];
+    retweeted.retweetedBy = {
+      [event.id]: author
+    };
 
     return {
       retweet, tweet: retweeted, npubs
@@ -289,23 +295,7 @@ export class TweetConverter {
       const retweetedBy = tweet.retweetedBy || [];
       const retweeting = tweet.retweeting ? [tweet.retweeting] : [];
 
-      return [...replies, ...repling, ...retweetedBy, ...retweeting];
+      return [...replies, ...repling, ...Object.keys(retweetedBy), ...retweeting];
     }).flat(1);
-  }
-
-  /**
-   * Show note if is a simple text, but if it's a retweet
-   * it shows the retweeted note
-   */
-  getShowingTweet(tweet: ITweet | IRetweet): ITweet;
-  getShowingTweet(tweet: ITweet | IRetweet | null): ITweet | null;
-  getShowingTweet(tweet: ITweet | IRetweet | null): ITweet | null {
-    if (!tweet) {
-      return null;
-    } else if (tweet.retweeting) {
-      return TweetCache.get(tweet.retweeting);
-    } else {
-      return tweet;
-    }
-  }
+  }  
 }

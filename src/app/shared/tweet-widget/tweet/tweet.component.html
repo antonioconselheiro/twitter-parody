@@ -5,7 +5,7 @@
   </ng-container>
   <ng-container *ngIf="!isFull">
     <span [innerHTML]="showingTweet.htmlSmallView"></span>
-    <a role="button" *ngIf="showMoreTextButton()">Show more</a>
+    <a role="button" class="raw-link" *ngIf="showMoreTextButton()">Show more</a>
   </ng-container>
 
   <video *ngIf="showingTweet.videoUrl" controls>

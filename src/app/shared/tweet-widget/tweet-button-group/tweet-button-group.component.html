@@ -10,13 +10,13 @@
     <div class="svg-wrapper">
       <div role="img"></div>
     </div>
-    <span class="amount">{{tweet.retweetedBy?.length || 0 | amount}}</span>
+    <span class="amount">{{getRetweetedLength(tweet) | amount}}</span>
   </button>
   <button [class.active]="isLikedByYou(tweet)" type="button" class="icon-like svg-button">
     <div class="svg-wrapper">
       <div role="img"></div>
     </div>
-    <span class="amount">{{getTweetReactions(tweet) | amount}}</span>
+    <span class="amount">{{getTweetReactionsLength(tweet) | amount}}</span>
   </button>
   <button *ngIf="tweet && tweet.load === EAGER_LOADED && tweet.view" type="button" class="icon-view svg-button">
     <div class="svg-wrapper">
