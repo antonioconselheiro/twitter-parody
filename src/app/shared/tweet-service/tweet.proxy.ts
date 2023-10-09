@@ -10,12 +10,14 @@ import { Event } from 'nostr-tools';
 import { TweetCache } from "./tweet.cache";
 import { TweetConverter } from "./tweet.converter";
 import { NostrEventKind } from "@domain/nostr-event-kind";
+import { TweetTypeGuard } from "./tweet.type-guard";
 
 @Injectable()
 export class TweetProxy {
 
   constructor(
     private tweetApi: TweetApi,
+    private tweetTypeGuard: TweetTypeGuard,
     private profileProxy: ProfileProxy,
     private tweetCache: TweetCache,
     private tweetConverter: TweetConverter
@@ -82,7 +84,7 @@ export class TweetProxy {
   //  diversas vezes um método com essa complexidade
   // eslint-disable-next-line complexity
   getTweetOrRetweetedAuthorProfile(tweet: ITweet): IProfile | null {
-    if (this.tweetConverter.isSimpleRetweet(tweet)) {
+    if (this.tweetTypeGuard.isSimpleRetweet(tweet)) {
       const retweeted = TweetCache.eagerTweets[tweet.retweeting] || TweetCache.lazyTweets[tweet.retweeting];
       if (retweeted.author) {
         return ProfileCache.profiles[retweeted.author];

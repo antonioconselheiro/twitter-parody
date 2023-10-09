@@ -5,6 +5,7 @@ import { TweetCache } from './tweet.cache';
 import { TweetConverter } from './tweet.converter';
 import { TweetProxy } from './tweet.proxy';
 import { TweetMerge } from './tweet.merge';
+import { TweetTypeGuard } from './tweet.type-guard';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { TweetMerge } from './tweet.merge';
     TweetProxy,
     TweetMerge,
     TweetConverter,
-    TweetCache
+    TweetCache,
+    TweetTypeGuard
   ]
 })
 export class TweetServiceModule { }

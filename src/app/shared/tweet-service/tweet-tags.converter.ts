@@ -8,19 +8,21 @@ import { ITweet } from '@domain/tweet.interface';
 import { ProfileConverter } from '@shared/profile-service/profile.converter';
 import Geohash from 'latlon-geohash';
 import { Event } from 'nostr-tools';
+import { TweetTypeGuard } from './tweet.type-guard';
 
+/**
+ * NIP12
+ * https://github.com/nostr-protocol/nips/blob/master/12.md
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class TweetTagsConverter {
 
   constructor(
-    private profilesConverter: ProfileConverter
+    private profilesConverter: ProfileConverter,
+    private tweetTypeGuard: TweetTypeGuard
   ) { }
-
-  private isKind<T extends NostrEventKind>(event: Event<NostrEventKind>, kind: T): event is Event<T> {
-    return event.kind === kind;
-  }
 
   mergeCoordinatesFromEvent(
     tweet: ITweet<DataLoadType.EAGER_LOADED>,
@@ -105,10 +107,15 @@ export class TweetTagsConverter {
   }
 
   mergeRetweetingFromEvent(tweet: ITweet, event: Event<NostrEventKind>): void {
-    if (this.isKind(event, NostrEventKind.Repost)) {
-      const [[, idEvent], [, pubkey]] = event.tags;
-      tweet.author = this.profilesConverter.castPubkeyToNostrPublic(pubkey);
-      tweet.retweeting = idEvent;
+    if (this.tweetTypeGuard.isKind(event, NostrEventKind.Repost)) {
+      const idEvent = this.getFirstRelatedEvent(event);
+      const pubkey = this.getFirstRelatedProfile(event);
+      if (idEvent && pubkey) {
+        tweet.author = this.profilesConverter.castPubkeyToNostrPublic(pubkey);
+        tweet.retweeting = idEvent;
+      } else {
+        console.warn('[RELAY DATA WARNING] mentioned tweet and/or author not found in retweet', event);
+      }
     }
   }
 }

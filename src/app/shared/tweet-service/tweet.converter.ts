@@ -14,6 +14,7 @@ import { Event } from 'nostr-tools';
 import { ITweetRelatedInfoWrapper } from './tweet-related-info-wrapper.interface';
 import { TweetTagsConverter } from './tweet-tags.converter';
 import { TweetCache } from './tweet.cache';
+import { TweetTypeGuard } from './tweet.type-guard';
 
 @Injectable({
   providedIn: 'root'
@@ -24,12 +25,9 @@ export class TweetConverter {
     private urlUtil: UrlUtil,
     private tweetTagsConverter: TweetTagsConverter,
     private htmlfyService: HtmlfyService,
+    private tweetTypeGuard: TweetTypeGuard,
     private profilesConverter: ProfileConverter
   ) { }
-
-  private isKind<T extends NostrEventKind>(event: Event<NostrEventKind>, kind: T): event is Event<T> {
-    return event.kind === kind;
-  }
 
   castResultsetToTweets(events: Event<NostrEventKind>[]): ITweetRelatedInfoWrapper {
     const timeline: ITweetRelatedInfoWrapper = {
@@ -41,11 +39,11 @@ export class TweetConverter {
     // TODO: check in tags if tweets have mentions and then, create the threadfy method
     // eslint-disable-next-line complexity
     events.forEach(event => {
-      if (this.isKind(event, NostrEventKind.Text)) {
+      if (this.tweetTypeGuard.isKind(event, NostrEventKind.Text)) {
         const { tweet, npubs } = this.castEventToTweet(event);
         timeline.eager.push(tweet);
         timeline.npubs = timeline.npubs.concat(npubs);
-      } else if (this.isKind(event, NostrEventKind.Repost)) {
+      } else if (this.tweetTypeGuard.isKind(event, NostrEventKind.Repost)) {
         const { retweet, tweet, npubs } = this.castEventToRetweet(event);
         timeline.eager.push(retweet);
         if (tweet.load === DataLoadType.LAZY_LOADED) {
@@ -54,14 +52,14 @@ export class TweetConverter {
           timeline.eager.push(tweet);
         }
         timeline.npubs = timeline.npubs.concat(npubs);
-      } else if (this.isKind(event, NostrEventKind.Reaction)) {
+      } else if (this.tweetTypeGuard.isKind(event, NostrEventKind.Reaction)) {
         const result = this.castEventReactionToLazyLoadTweet(event);
         if (result) {
           const { lazy, npubs } = result;
           timeline.lazy.push(lazy);
           timeline.npubs = timeline.npubs.concat(npubs);
         }
-      } else if (this.isKind(event, NostrEventKind.Zap)) {
+      } else if (this.tweetTypeGuard.isKind(event, NostrEventKind.Zap)) {
         const result = this.castEventZapToLazyLoadTweet(event);
         if (result) {
           const { lazy, npubs } = result;
@@ -118,11 +116,12 @@ export class TweetConverter {
     } else {
       const idEvent = this.tweetTagsConverter.getMentionedEvent(event);
       if (!idEvent) {
-        console.warn('mentioned tweet not found in retweet', event);
+        console.warn('[RELAY DATA WARNING] mentioned tweet not found in retweet', event);
       }
-        const pubkey = this.tweetTagsConverter.getRelatedProfiles(event);
-        //  TODO: validate it use pubkey.at(0) here is secure in retweeted events
-        retweeted = this.createLazyLoadableTweetFromEventId(idEvent || '', pubkey.at(0));
+
+      const pubkey = this.tweetTagsConverter.getRelatedProfiles(event);
+      //  TODO: validate it use pubkey.at(0) here is secure in retweeted events
+      retweeted = this.createLazyLoadableTweetFromEventId(idEvent || '', pubkey.at(0));
     }
 
     const retweetAsTweet: Event<NostrEventKind.Text> = { ...event, content: '', kind: NostrEventKind.Text };
@@ -145,7 +144,7 @@ export class TweetConverter {
     const idEvent = this.tweetTagsConverter.getFirstRelatedEvent(event);
     const pubkey = this.tweetTagsConverter.getFirstRelatedProfile(event);
     if (!idEvent || !pubkey) {
-      console.warn('[WARNING] event not tagged with event and/or pubkey: ', event);
+      console.warn('[RELAY DATA WARNING] event not tagged with event and/or pubkey: ', event);
       return null;
     }
 
@@ -170,7 +169,7 @@ export class TweetConverter {
   } | null {
     const idEvent = this.tweetTagsConverter.getFirstRelatedEvent(event);
     if (!idEvent) {
-      console.warn('[WARNING] reaction not tagged with event: ', event);
+      console.warn('[RELAY DATA WARNING] reaction not tagged with event: ', event);
       return null;
     }
 
@@ -224,13 +223,9 @@ export class TweetConverter {
     };
 
     /**
-     * I do this because mentions depend on profiles
-     * 
-     * When the event loads, we do not have any information about the related profiles,
-     * because it is the event that gives us this information. Generally, immediately
-     * after loading the events, the related profiles are loaded and only after that the
-     * data is available to be used on screen and then execute this get enabling the name
-     * of the loaded profile to be associated with the mention correctly
+     * Getter and setter to access this data because mentions depend on profiles,
+     * but author profile load after his mention, so the htmlfy must run when all
+     * data is loaded
      */
     Object.defineProperty(tweet, "htmlSmallView", {
       get: () => {
@@ -296,13 +291,6 @@ export class TweetConverter {
 
       return [...replies, ...repling, ...retweetedBy, ...retweeting];
     }).flat(1);
-  }
-
-  isSimpleRetweet(tweet: ITweet): tweet is IRetweet {
-    return tweet.retweeting
-      && tweet.load === DataLoadType.EAGER_LOADED
-      && !String(tweet.htmlFullView).trim().length
-      || false;
   }
 
   /**
