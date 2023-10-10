@@ -19,7 +19,6 @@ export const defaultRelays = [...new Set([
   'wss://nostr.fmt.wiz.biz',
   'wss://relay.nostrati.com',
   'wss://relay.nostr.com.au',
-  'wss://nostr.milou.lol',
   'wss://eden.nostr.land',
   'wss://nostr.fmt.wiz.biz',
   'wss://relay.damus.io',

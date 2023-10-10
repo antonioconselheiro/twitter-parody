@@ -9,12 +9,11 @@ import { ITweet } from '@domain/tweet.interface';
 import { IZap } from '@domain/zap.interface';
 import { HtmlfyService } from '@shared/htmlfy/htmlfy.service';
 import { ProfileConverter } from '@shared/profile-service/profile.converter';
-import { UrlUtil } from '@shared/util/url.service';
 import { Event } from 'nostr-tools';
 import { ITweetRelationedInfoWrapper } from './tweet-relationed-info-wrapper.interface';
 import { TweetTagsConverter } from './tweet-tags.converter';
-import { TweetTypeGuard } from './tweet.type-guard';
 import { TweetCache } from './tweet.cache';
+import { TweetTypeGuard } from './tweet.type-guard';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +21,6 @@ import { TweetCache } from './tweet.cache';
 export class TweetConverter {
 
   constructor(
-    private urlUtil: UrlUtil,
     private tweetTagsConverter: TweetTagsConverter,
     private htmlfyService: HtmlfyService,
     private tweetTypeGuard: TweetTypeGuard,
