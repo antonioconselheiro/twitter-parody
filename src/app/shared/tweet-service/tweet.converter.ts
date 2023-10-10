@@ -39,27 +39,36 @@ export class TweetConverter {
     // TODO: check in tags if tweets have mentions and then, create the threadfy method
     // eslint-disable-next-line complexity
     events.forEach(event => {
-      if (this.tweetTypeGuard.isKind(event, NostrEventKind.Text)) {
+      const isSimpleText = this.tweetTypeGuard.isKind(event, NostrEventKind.Text);
+      const isRepost = this.tweetTypeGuard.isKind(event, NostrEventKind.Repost);
+      const isReaction = this.tweetTypeGuard.isKind(event, NostrEventKind.Reaction);
+      const isZap = this.tweetTypeGuard.isKind(event, NostrEventKind.Zap);
+
+      if (isSimpleText) {
+        //  FIXME: https://github.com/users/antonioconselheiro/projects/1/views/1?pane=issue&itemId=41105788
         const { tweet, npubs } = this.castEventToTweet(event);
         relationed.eager.push(tweet);
         relationed.npubs = relationed.npubs.concat(npubs);
-      } else if (this.tweetTypeGuard.isKind(event, NostrEventKind.Repost)) {
+      } else if (isRepost) {
         const { retweet, tweet, npubs } = this.castEventToRetweet(event);
-        relationed.eager.push(retweet);
+        if (retweet) {
+          relationed.eager.push(retweet);
+        }
+
         if (tweet.load === DataLoadType.LAZY_LOADED) {
           relationed.lazy.push(tweet);
         } else {
           relationed.eager.push(tweet);
         }
         relationed.npubs = relationed.npubs.concat(npubs);
-      } else if (this.tweetTypeGuard.isKind(event, NostrEventKind.Reaction)) {
+      } else if (isReaction) {
         const result = this.castEventReactionToLazyLoadTweet(event);
         if (result) {
           const { lazy, npubs } = result;
           relationed.lazy.push(lazy);
           relationed.npubs = relationed.npubs.concat(npubs);
         }
-      } else if (this.tweetTypeGuard.isKind(event, NostrEventKind.Zap)) {
+      } else if (isZap) {
         const result = this.castEventZapToLazyLoadTweet(event);
         if (result) {
           const { lazy, npubs } = result;
