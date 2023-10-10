@@ -42,6 +42,11 @@
       overflow: hidden;
       width: 100%;
 
+      .retweet-content {
+        border-radius: 15px;
+        margin-top: .75rem;
+      }
+
       header {
         display: flex;
         position: relative;

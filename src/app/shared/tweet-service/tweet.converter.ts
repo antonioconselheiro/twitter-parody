@@ -9,12 +9,11 @@ import { ITweet } from '@domain/tweet.interface';
 import { IZap } from '@domain/zap.interface';
 import { HtmlfyService } from '@shared/htmlfy/htmlfy.service';
 import { ProfileConverter } from '@shared/profile-service/profile.converter';
-import { UrlUtil } from '@shared/util/url.service';
 import { Event } from 'nostr-tools';
 import { ITweetRelationedInfoWrapper } from './tweet-relationed-info-wrapper.interface';
 import { TweetTagsConverter } from './tweet-tags.converter';
-import { TweetTypeGuard } from './tweet.type-guard';
 import { TweetCache } from './tweet.cache';
+import { TweetTypeGuard } from './tweet.type-guard';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +21,6 @@ import { TweetCache } from './tweet.cache';
 export class TweetConverter {
 
   constructor(
-    private urlUtil: UrlUtil,
     private tweetTagsConverter: TweetTagsConverter,
     private htmlfyService: HtmlfyService,
     private tweetTypeGuard: TweetTypeGuard,
@@ -39,27 +37,45 @@ export class TweetConverter {
     // TODO: check in tags if tweets have mentions and then, create the threadfy method
     // eslint-disable-next-line complexity
     events.forEach(event => {
-      if (this.tweetTypeGuard.isKind(event, NostrEventKind.Text)) {
-        const { tweet, npubs } = this.castEventToTweet(event);
+      const isSimpleText = this.tweetTypeGuard.isKind(event, NostrEventKind.Text);
+      const isRepost = this.tweetTypeGuard.isKind(event, NostrEventKind.Repost);
+      const isReaction = this.tweetTypeGuard.isKind(event, NostrEventKind.Reaction);
+      const isZap = this.tweetTypeGuard.isKind(event, NostrEventKind.Zap);
+
+      if (isSimpleText) {
+        //  FIXME: https://github.com/users/antonioconselheiro/projects/1/views/1?pane=issue&itemId=41105788
+        const { retweeted, tweet, npubs } = this.castEventToTweet(event);
         relationed.eager.push(tweet);
+
+        if (retweeted) {
+          if (retweeted.load === DataLoadType.LAZY_LOADED) {
+            relationed.lazy.push(retweeted);
+          } else {
+            relationed.eager.push(retweeted);
+          }
+        }
+
         relationed.npubs = relationed.npubs.concat(npubs);
-      } else if (this.tweetTypeGuard.isKind(event, NostrEventKind.Repost)) {
-        const { retweet, tweet, npubs } = this.castEventToRetweet(event);
-        relationed.eager.push(retweet);
-        if (tweet.load === DataLoadType.LAZY_LOADED) {
-          relationed.lazy.push(tweet);
+      } else if (isRepost) {
+        const { retweet, retweeted, npubs } = this.castEventToRetweet(event);
+        if (retweet) {
+          relationed.eager.push(retweet);
+        }
+
+        if (retweeted.load === DataLoadType.LAZY_LOADED) {
+          relationed.lazy.push(retweeted);
         } else {
-          relationed.eager.push(tweet);
+          relationed.eager.push(retweeted);
         }
         relationed.npubs = relationed.npubs.concat(npubs);
-      } else if (this.tweetTypeGuard.isKind(event, NostrEventKind.Reaction)) {
+      } else if (isReaction) {
         const result = this.castEventReactionToLazyLoadTweet(event);
         if (result) {
           const { lazy, npubs } = result;
           relationed.lazy.push(lazy);
           relationed.npubs = relationed.npubs.concat(npubs);
         }
-      } else if (this.tweetTypeGuard.isKind(event, NostrEventKind.Zap)) {
+      } else if (isZap) {
         const result = this.castEventZapToLazyLoadTweet(event);
         if (result) {
           const { lazy, npubs } = result;
@@ -101,7 +117,7 @@ export class TweetConverter {
   }
 
   private castEventToRetweet(event: Event<NostrEventKind.Repost>): {
-    retweet: IRetweet, tweet: ITweet, npubs: TNostrPublic[]
+    retweet: IRetweet, retweeted: ITweet, npubs: TNostrPublic[]
   } {
     const content = this.getTweetContent(event);
     const author = this.getAuthorNostrPublicFromEvent(event);
@@ -143,7 +159,7 @@ export class TweetConverter {
     };
 
     return {
-      retweet, tweet: retweeted, npubs
+      retweet, retweeted: retweeted, npubs
     };
   }
 
@@ -260,27 +276,34 @@ export class TweetConverter {
   }
 
   private castEventToTweet(event: Event<NostrEventKind.Text>, retweeting: TEventId): {
-    tweet: IRetweet, npubs: Array<string>
+    retweeted: ITweet, tweet: IRetweet, npubs: Array<string>
   };
   private castEventToTweet(event: Event<NostrEventKind.Text>): {
-    tweet: ITweet<DataLoadType.EAGER_LOADED>, npubs: Array<string>
+    retweeted?: ITweet, tweet: ITweet<DataLoadType.EAGER_LOADED>, npubs: Array<string>
   };
   private castEventToTweet(event: Event<NostrEventKind.Text>, retweeting?: TEventId): {
-    tweet: ITweet<DataLoadType.EAGER_LOADED> | IRetweet, npubs: Array<string>
+    retweeted?: ITweet, tweet: ITweet<DataLoadType.EAGER_LOADED> | IRetweet, npubs: Array<string>
   } {
     const author = this.getAuthorNostrPublicFromEvent(event);
     let npubs: string[] = [author];
+    let retweeted: ITweet | undefined = undefined;
     const tweet = this.instanceTweet(event, author);
-
+    
     if (retweeting) {
       tweet.retweeting = retweeting;
+      retweeted = TweetCache.get(retweeting);
+    } else {
+      retweeting = this.tweetTagsConverter.getMentionedEvent(event) || undefined;
+      if (retweeting) {
+        tweet.retweeting = retweeting;
+      }
     }
 
     npubs = npubs.concat(this.tweetTagsConverter.getNostrPublicFromTags(event));
     this.tweetTagsConverter.mergeCoordinatesFromEvent(tweet, event);
     this.tweetTagsConverter.mergeRetweetingFromEvent(tweet, event);
 
-    return { tweet, npubs };
+    return { retweeted, tweet, npubs };
   }
 
   private getTweetContent(event: Event<NostrEventKind.Text | NostrEventKind.Repost>): string {

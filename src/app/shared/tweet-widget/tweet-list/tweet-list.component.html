@@ -2,7 +2,7 @@
   <tw-loading></tw-loading>
 </div>
 
-<article class="read-tweet separator" *ngFor="let twet of tweets; trackBy: trackByTweetId">
+<article [class.separator]="!retweeted" class="read-tweet" *ngFor="let twet of tweets; trackBy: trackByTweetId">
   <ng-container *ngIf="twet.load === EAGER_LOADED">
     <a *ngIf="isSimpleRetweet(twet)" href="javascript:void(0)" class="retweet-origin">
       {{getRetweetAuthorName(twet)}} has retweeted
@@ -92,7 +92,15 @@
           [showImages]="twet !== tweet"
           [isFull]="twet === tweet"
         ></tw-tweet>
-        <tw-tweet-button-group [tweet]="twet"></tw-tweet-button-group>
+
+        <tw-tweet-list
+          class="bordered retweet-content"
+          *ngIf="getRetweet(twet) && twet.content"
+          [loading]="false"
+          [retweeted]="getRetweet(twet)"
+        ></tw-tweet-list>
+
+        <tw-tweet-button-group *ngIf="!retweeted" [tweet]="twet"></tw-tweet-button-group>
       </div>
     </div>
   </ng-container>
@@ -117,12 +125,6 @@
             </div>
           </button>
         </header>
-
-        <tw-tweet-list
-          *ngIf="getRetweet(twet)"
-          [loading]="false"
-          [retweeted]="getRetweet(twet)"
-        ></tw-tweet-list>
   
         <tw-tweet
           class="tweet-content"
@@ -131,6 +133,7 @@
           [showImages]="twet !== tweet"
           [isFull]="twet === tweet"
         ></tw-tweet>
+
         <tw-tweet-button-group [tweet]="twet"></tw-tweet-button-group>
       </div>
     </div>
