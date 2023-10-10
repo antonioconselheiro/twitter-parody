@@ -117,6 +117,12 @@
             </div>
           </button>
         </header>
+
+        <tw-tweet-list
+          *ngIf="getRetweet(twet)"
+          [loading]="false"
+          [retweeted]="getRetweet(twet)"
+        ></tw-tweet-list>
   
         <tw-tweet
           class="tweet-content"

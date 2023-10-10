@@ -1,19 +1,27 @@
 import { Injectable } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
+import { TNostrPublic } from '@domain/nostr-public.type';
 import { ProfileCache } from '@shared/profile-service/profile.cache';
+import { UrlUtil } from '@shared/util/url.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HtmlfyService {
 
+  constructor(
+    private urlUtil: UrlUtil
+  ) { }
+
   safify(content: string): SafeHtml {
     content = this.stripTags(content);
-    const { urls } = this.separateImageAndLinks(content);
+    const { urls, imageList, videoUrl } = this.separateImageAndLinks(content);
     content = this.htmlfyLink(content, urls);
     content = this.htmlfyHashtag(content);
     content = this.htmlfyMention(content);
     content = this.htmlfyParagraph(content);
+    const midiaMetadata = [videoUrl].concat(imageList).filter((has): has is string => !!has);
+    content = this.stripMetadata(content, midiaMetadata);
 
     return content;
   }
@@ -109,7 +117,7 @@ export class HtmlfyService {
         const profile = ProfileCache.profiles[npub];
         let replace = npub;
         if (profile) {
-          replace = profile.display_name || profile.name || npub;
+          replace = profile.display_name || profile.name || this.minifyNostrPublic(npub);
         }
 
         content = content.replace(new RegExp(match, 'g'), replace)
@@ -117,6 +125,10 @@ export class HtmlfyService {
     }
 
     return content;
+  }
+
+  private minifyNostrPublic(npub: TNostrPublic): string {
+    return npub.replace(/(^.{7})(.+)(.{3}$)/g, '$1…$3');
   }
 
   private htmlfyHashtag(content: string): string {
@@ -131,6 +143,13 @@ export class HtmlfyService {
       .filter(has => !!has.trim())
       .map(p => `<p>${p}</p>`)
       .join('');
+  }
+
+  private stripMetadata(content: string, midiaMetadata: string[]): string {
+    midiaMetadata.forEach(img => content = content.replace(this.urlUtil.regexFromLink(img), ''));
+    const nostrMetadataMatcher = /nostr:[^ ]+/g; 
+    content = content.replace(nostrMetadataMatcher, '');
+    return content;
   }
 
   private regexFromLink(link: string): RegExp {

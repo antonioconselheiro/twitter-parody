@@ -58,11 +58,18 @@ export class TweetTagsConverter {
   }
 
   getMentionedEvent<T extends NostrEventKind>(event: Event<T>): TEventId | null {
-    return this
+    const mentionedFound = this
       .getRelatedEvents(event)
       .filter(([,type]) => type === 'mention')
       .map(([idEvent]) => idEvent)
       .at(0) || null;
+
+    if (!mentionedFound) {
+      const matches = event.content.match(/nostr:note[^ ]+/);
+      return matches && matches[0] || null;
+    }
+
+    return mentionedFound;
   }
 
   getRepliedEvent<T extends NostrEventKind>(event: Event<T>): {
