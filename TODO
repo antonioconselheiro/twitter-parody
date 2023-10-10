@@ -6,5 +6,5 @@
 [ ] compose tweet data with the mentioned tweet event id
 [ ] write scss for retweet with comment
 [ ] set active bookmark as blue
-
+[ ] treat mention in cases: nostr:note17gh3... and #[0]
 [ ] the number of retweets is not right

@@ -13,7 +13,6 @@ import { UrlUtil } from '@shared/util/url.service';
 import { Event } from 'nostr-tools';
 import { ITweetRelationedInfoWrapper } from './tweet-relationed-info-wrapper.interface';
 import { TweetTagsConverter } from './tweet-tags.converter';
-import { TweetCache } from './tweet.cache';
 import { TweetTypeGuard } from './tweet.type-guard';
 
 @Injectable({
@@ -91,7 +90,7 @@ export class TweetConverter {
   private getSmallView(tweet: string, imgList: string[]): string {
     const maxLength = 280;
     let content = this.getFullView(tweet, imgList);
-    if (content.length > maxLength) {
+    if (content.replace(/nostr:[^\s]+/g, '').length > maxLength) {
       content = content.substring(0, maxLength - 1);
       //  substituí eventual link cortado pela metade
       content = content.replace(/http[^ ]+$/, '');

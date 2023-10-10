@@ -27,9 +27,6 @@ export class TweetComponent {
   imgList: string[] = [];
   imgs: [string, string?][] = [];
 
-  smallView = '';
-  fullView = '';
-
   interceptedTweet: ITweet | IRetweet | null = null;
 
   constructor(
@@ -49,6 +46,13 @@ export class TweetComponent {
   showingTweet: ITweet | null = null;
 
   showMoreTextButton(): boolean {
-    return this.smallView.length !== this.fullView.length;
+    if (this.interceptedTweet && this.interceptedTweet.load === DataLoadType.EAGER_LOADED) {
+      const smallViewLength = String(this.interceptedTweet.htmlSmallView).length
+      const fullViewLength = String(this.interceptedTweet.htmlFullView).length;
+
+      return smallViewLength !== fullViewLength;
+    }
+
+    return false;
   }
 }
