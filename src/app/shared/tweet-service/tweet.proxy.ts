@@ -45,7 +45,7 @@ export class TweetProxy {
     if (!rawEvents.length) {
       return Promise.resolve([]);
     }
-debugger;
+
     const wrapperRoot = this.tweetCache.cache(rawEvents);
     const eventList = rawEvents.map(e => e.id);
     const relatedEvents = await this.tweetApi.loadRelatedEvents(eventList);
