@@ -13,8 +13,8 @@ import { UrlUtil } from '@shared/util/url.service';
 import { Event } from 'nostr-tools';
 import { ITweetRelationedInfoWrapper } from './tweet-relationed-info-wrapper.interface';
 import { TweetTagsConverter } from './tweet-tags.converter';
-import { TweetCache } from './tweet.cache';
 import { TweetTypeGuard } from './tweet.type-guard';
+import { TweetCache } from './tweet.cache';
 
 @Injectable({
   providedIn: 'root'
@@ -88,10 +88,9 @@ export class TweetConverter {
     return Object.keys(tweet.retweetedBy || {}).length || 0;
   }
 
-  private getSmallView(tweet: string, imgList: string[]): string {
+  private getSmallView(content: string): string {
     const maxLength = 280;
-    let content = this.getFullView(tweet, imgList);
-    if (content.length > maxLength) {
+    if (content.replace(/nostr:[^\s]+/g, '').length > maxLength) {
       content = content.substring(0, maxLength - 1);
       //  substituí eventual link cortado pela metade
       content = content.replace(/http[^ ]+$/, '');
@@ -101,11 +100,6 @@ export class TweetConverter {
     return content;
   }
 
-  private getFullView(tweet: string, imgList: string[]): string {
-    imgList?.forEach(img => tweet = tweet.replace(this.urlUtil.regexFromLink(img), ''))
-    return tweet;
-  }
-
   private castEventToRetweet(event: Event<NostrEventKind.Repost>): {
     retweet: IRetweet, tweet: ITweet, npubs: TNostrPublic[]
   } {
@@ -113,9 +107,9 @@ export class TweetConverter {
     const author = this.getAuthorNostrPublicFromEvent(event);
     let npubs: string[] = [author];
     let retweeted: ITweet;
-    const simpleRetweetContent = '#[0]';
+    const simpleRetweetMatcher = /(^#[0]$)|(^nostr:note[^ ]$)/;
 
-    if (content && content !== simpleRetweetContent) {
+    if (content && !simpleRetweetMatcher.test(content)) {
       //  FIXME: o elemento que passou pelo parse precisa ser indexado
       //  no cache, pois está ficando sem as informações complementarem
       //  lazy carregadas, como likes, retweets e zaps
@@ -245,7 +239,7 @@ export class TweetConverter {
     Object.defineProperty(tweet, "htmlSmallView", {
       get: () => {
         if (!tweet.htmlSmallViewLoaded) {
-          tweet.htmlSmallViewLoaded = this.htmlfyService.safify(this.getSmallView(content, imageList));
+          tweet.htmlSmallViewLoaded = this.htmlfyService.safify(this.getSmallView(content));
         }
 
         return tweet.htmlSmallViewLoaded;
@@ -255,7 +249,7 @@ export class TweetConverter {
     Object.defineProperty(tweet, "htmlFullView", {
       get: () => {
         if (!tweet.htmlFullViewLoaded) {
-          tweet.htmlFullViewLoaded = this.htmlfyService.safify(this.getFullView(content, imageList));
+          tweet.htmlFullViewLoaded = this.htmlfyService.safify(content);
         }
 
         return tweet.htmlFullViewLoaded;
@@ -306,5 +300,15 @@ export class TweetConverter {
 
       return [...replies, ...repling, ...Object.keys(retweetedBy), ...retweeting];
     }).flat(1);
-  }  
+  }
+
+  getRetweet(tweet: IRetweet): ITweet;
+  getRetweet(tweet?: ITweet | IRetweet): ITweet | null;
+  getRetweet(tweet?: ITweet | IRetweet): ITweet | null {
+    if (!tweet || !tweet.retweeting) {
+      return null;
+    }
+
+    return TweetCache.get(tweet.retweeting) || null;
+  }
 }

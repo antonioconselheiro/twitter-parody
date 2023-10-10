@@ -5,10 +5,10 @@ import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { ProfileCache } from '@shared/profile-service/profile.cache';
-import { TweetConverter } from '@shared/tweet-service/tweet.converter';
 import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
-import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
+import { ITweetImgViewing } from '../tweet-img-viewing.interface';
+import { TweetConverter } from '@shared/tweet-service/tweet.converter';
 
 @Component({
   selector: 'tw-tweet-list',
@@ -27,6 +27,11 @@ export class TweetListComponent {
   @Input()
   tweets: Array<ITweet | IRetweet> = [];
 
+  /**
+   * This represents the root tweet of a thread of chained
+   * tweets, if this property is set the replies must be
+   * shown in this tweet list
+   */
   @Input()
   set tweet(tweet: ITweet | IRetweet | null) {
     this.interceptedTweet = tweet;
@@ -37,6 +42,23 @@ export class TweetListComponent {
     return this.interceptedTweet;
   }
 
+  /**
+   * In a retweet with comment, the tw-tweet-list do a recursive
+   * instance to show the retweeted content, but reduced, with
+   * no buttons and if it is a retweet with comment, only the
+   * comment is shown
+   */
+  @Input()
+  set retweeted(tweet: ITweet | null) {
+    this.interceptedRetweet = tweet;
+    this.interceptRetweet(tweet);
+  }
+
+  get retweeted(): ITweet | null {
+    return this.interceptedRetweet;
+  }
+
+  private interceptedRetweet: ITweet | null = null;
   private interceptedTweet: ITweet | IRetweet | null = null;
 
   @ViewChild('tweetActions', { read: PopoverComponent })
@@ -65,6 +87,23 @@ export class TweetListComponent {
     return this.tweetTypeGuard.isSimpleRetweet(tweet);
   }
 
+  showMentionedTweetInRetweet(tweet: ITweet | IRetweet): boolean {
+    const has = this.tweetConverter.getRetweet(tweet);
+    if (!has) {
+      return false;
+    }
+
+    if (this.retweeted) {
+      return false;
+    }
+
+    return true;
+  }
+
+  getRetweet(tweet: ITweet | IRetweet): ITweet | null {
+    return this.tweetConverter.getRetweet(tweet);
+  }
+
   getAuthorName(tweet: ITweet): string {
     const author = this.getAuthorProfile(tweet);
     if (!author) {
@@ -79,6 +118,12 @@ export class TweetListComponent {
       const repliesId = (tweet.replies || []);
       const replies = repliesId.map(reply => this.tweetProxy.get(reply))
       this.tweets = [tweet, ...replies];
+    }
+  }
+
+  private interceptRetweet(tweet: ITweet | null): void {
+    if (tweet && tweet.load === DataLoadType.EAGER_LOADED) {
+      this.tweets = [ tweet ];
     }
   }
 

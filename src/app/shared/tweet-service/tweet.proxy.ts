@@ -1,15 +1,14 @@
 import { Injectable } from "@angular/core";
 import { TEventId } from "@domain/event-id.type";
+import { NostrEventKind } from "@domain/nostr-event-kind";
 import { IProfile } from "@domain/profile.interface";
 import { IRetweet } from "@domain/retweet.interface";
 import { ITweet } from "@domain/tweet.interface";
 import { ProfileCache } from "@shared/profile-service/profile.cache";
 import { ProfileProxy } from "@shared/profile-service/profile.proxy";
-import { TweetApi } from "./tweet.api";
 import { Event } from 'nostr-tools';
+import { TweetApi } from "./tweet.api";
 import { TweetCache } from "./tweet.cache";
-import { TweetConverter } from "./tweet.converter";
-import { NostrEventKind } from "@domain/nostr-event-kind";
 import { TweetTypeGuard } from "./tweet.type-guard";
 
 @Injectable()
@@ -19,8 +18,7 @@ export class TweetProxy {
     private tweetApi: TweetApi,
     private tweetTypeGuard: TweetTypeGuard,
     private profileProxy: ProfileProxy,
-    private tweetCache: TweetCache,
-    private tweetConverter: TweetConverter
+    private tweetCache: TweetCache
   ) { }
 
   get(idEvent: TEventId): ITweet | IRetweet {
