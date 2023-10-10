@@ -47,6 +47,15 @@ export class TweetProxy {
     }
 
     const wrapperRoot = this.tweetCache.cache(rawEvents);
+    //  FIXME: trocar esta lógica para que sejam carregados todos os ids de eventos
+    //  encontrados nos dados disponíveis dos eventos carregados, tlvz fazendo isso
+    //  eu possa remover o carregamento do lazyEagerLoaded, que trás todos eventos
+    //  de lazy load para eager load, pois ele faz uma consulta muita grande e pode
+    //  afetar a experiência de uso do aplicativo
+    //  A alteração também ajuda no carregamento de eventos relacionados que não estão
+    //  sendo carregados, pois são citados apenas no content do event como nostr:note
+    //  e não são associados nas tags :s
+    //  https://github.com/users/antonioconselheiro/projects/1?pane=issue&itemId=41105788
     const eventList = rawEvents.map(e => e.id);
     const relatedEvents = await this.tweetApi.loadRelatedEvents(eventList);
     const wrapperRelated = this.tweetCache.cache(relatedEvents);

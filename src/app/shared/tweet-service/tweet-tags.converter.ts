@@ -7,7 +7,7 @@ import { TNostrPublic } from '@domain/nostr-public.type';
 import { ITweet } from '@domain/tweet.interface';
 import { ProfileConverter } from '@shared/profile-service/profile.converter';
 import Geohash from 'latlon-geohash';
-import { Event } from 'nostr-tools';
+import { Event, nip19 } from 'nostr-tools';
 import { TweetTypeGuard } from './tweet.type-guard';
 
 /**
@@ -65,11 +65,21 @@ export class TweetTagsConverter {
       .at(0) || null;
 
     if (!mentionedFound) {
-      const matches = event.content.match(/nostr:note[^ ]+/);
-      return matches && matches[0] || null;
+      return this.getNoteMentionedInContent(event);
+    }
+    
+    return mentionedFound;
+  }
+  
+  getNoteMentionedInContent<T extends NostrEventKind>(event: Event<T>): TEventId | null {
+    const matches = event.content.match(/nostr:note[^ ]+/);
+    const match = matches && matches[0] || null;
+    if (match) {
+      const { data } = nip19.decode(match.replace(/^nostr:/, ''));
+      return data ? String(data) : null;
     }
 
-    return mentionedFound;
+    return null;
   }
 
   getRepliedEvent<T extends NostrEventKind>(event: Event<T>): {

@@ -59,7 +59,11 @@ export class TweetTypeGuard {
     if (!tweet) {
       return null;
     } else if (tweet.retweeting) {
-      console.info('tweet: ', tweet, 'retweeting: ', TweetCache.get(tweet.retweeting));
+      const retweeting = TweetCache.get(tweet.retweeting);
+      if (!retweeting) {
+        console.error(`Event ${tweet.retweeting} not found in cache, please load the event and the relationed data before try to access it`);
+      }
+
       return TweetCache.get(tweet.retweeting);
     } else {
       return tweet;
