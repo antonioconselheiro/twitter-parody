@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { DataLoadType } from '@domain/data-load.type';
 import { TEventId } from '@domain/event-id.type';
 import { TEventRelationType } from '@domain/event-relation-type.type';
-import { NostrEventKind } from '@domain/nostr-event-kind';
+import { NostrEventKind } from '@domain/nostr-event-kind.enum';
 import { TNostrPublic } from '@domain/nostr-public.type';
 import { ITweet } from '@domain/tweet.interface';
 import { ProfileConverter } from '@shared/profile-service/profile.converter';

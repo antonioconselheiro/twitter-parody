@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { NostrEventKind } from "@domain/nostr-event-kind";
+import { NostrEventKind } from "@domain/nostr-event-kind.enum";
 import { Event } from 'nostr-tools';
 import { ProfileConverter } from "./profile.converter";
 import { IProfile } from "@domain/profile.interface";

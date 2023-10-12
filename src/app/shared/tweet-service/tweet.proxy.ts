@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { TEventId } from "@domain/event-id.type";
-import { NostrEventKind } from "@domain/nostr-event-kind";
+import { NostrEventKind } from "@domain/nostr-event-kind.enum";
 import { IProfile } from "@domain/profile.interface";
 import { IRetweet } from "@domain/retweet.interface";
 import { ITweet } from "@domain/tweet.interface";
@@ -28,7 +28,7 @@ export class TweetProxy {
   async listTweetsFromNostrPublic(npub: string): Promise<
     Array<ITweet | IRetweet>
   > {
-    const rawEvents = await this.tweetApi.listTweetsFrom([npub]);
+    const rawEvents = await this.tweetApi.listTweetsFromNostrPublics([npub]);
     return this.loadRelatedEvents(rawEvents);
   }
 

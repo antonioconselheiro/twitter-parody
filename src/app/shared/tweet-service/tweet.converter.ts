@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataLoadType } from '@domain/data-load.type';
 import { TEventId } from '@domain/event-id.type';
-import { NostrEventKind } from '@domain/nostr-event-kind';
+import { NostrEventKind } from '@domain/nostr-event-kind.enum';
 import { TNostrPublic } from '@domain/nostr-public.type';
 import { IReaction } from '@domain/reaction.interface';
 import { IRetweet } from '@domain/retweet.interface';
@@ -34,6 +34,7 @@ export class TweetConverter {
       npubs: []
     };
 
+    //  FIXME: resolver débito de complexidade ciclomática
     // TODO: check in tags if tweets have mentions and then, create the threadfy method
     // eslint-disable-next-line complexity
     events.forEach(event => {

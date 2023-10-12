@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { TEventId } from "@domain/event-id.type";
-import { NostrEventKind } from "@domain/nostr-event-kind";
+import { NostrEventKind } from "@domain/nostr-event-kind.enum";
 import { NostrUser } from "@domain/nostr-user";
 import { ApiService } from "@shared/api-service/api.service";
 import { Event } from 'nostr-tools';
@@ -14,7 +14,7 @@ export class TweetApi {
     private apiService: ApiService
   ) { }
 
-  listTweetsFrom(npubs: string[]): Promise<Event<NostrEventKind.Text | NostrEventKind.Repost>[]> {
+  listTweetsFromNostrPublics(npubs: string[]): Promise<Event<NostrEventKind.Text | NostrEventKind.Repost>[]> {
     return this.apiService.get([
       {
         kinds: [

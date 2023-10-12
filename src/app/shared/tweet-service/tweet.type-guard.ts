@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DataLoadType } from '@domain/data-load.type';
-import { NostrEventKind } from '@domain/nostr-event-kind';
+import { NostrEventKind } from '@domain/nostr-event-kind.enum';
 import { IProfile } from '@domain/profile.interface';
 import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';
