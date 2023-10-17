@@ -8,14 +8,12 @@ export function nostrSecretValidatorFactory(): ValidatorFn {
     if (!control.value) {
       return null;
     }
-    
+
     try {
       const { type } = nip19.decode(control.value);
 
       if (type === 'npub') {
-        return {
-          invalidNostrPublicGivenInstead: true
-        };
+        return null;
       } else if (type === 'nsec') {
         return null;
       }
@@ -24,6 +22,10 @@ export function nostrSecretValidatorFactory(): ValidatorFn {
         invalidNostrSecret: true
       };
     } catch {
+      if ((/^[\w\d]+@[\w\d]+\.[\w\d]+$/g).test(control.value)) {
+        return null;
+      }
+
       return {
         invalidNostrSecret: true
       };

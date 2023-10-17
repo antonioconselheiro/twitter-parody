@@ -12,6 +12,8 @@ import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-u
 import { AuthModalSteps } from '../auth-modal-steps.type';
 import { ProfileProxy } from '@shared/profile-service/profile.proxy';
 import { IProfile } from '@domain/profile.interface';
+import { Nip5Util } from '@shared/util/nip5.service';
+import { nip19 } from 'nostr-tools';
 
 @Component({
   selector: 'tw-add-account-form',
@@ -66,7 +68,7 @@ export class AddAccountFormComponent {
     return errors[error] || false;
   }
 
-  onAddAccountSubmit(event: SubmitEvent): void {
+  async onAddAccountSubmit(event: SubmitEvent): Promise<void> {
     event.stopPropagation();
     event.preventDefault();
 
@@ -74,10 +76,18 @@ export class AddAccountFormComponent {
     if (!this.accountForm.valid) {
       return;
     }
-    
-    const { nsec, pin } = this.accountForm.getRawValue();
+
+    const { pin } = this.accountForm.getRawValue();
+    let { nsec } = this.accountForm.getRawValue()
     if (!nsec || !pin) {
       return;
+    }
+
+    const pubKey = (await Nip5Util.getNpubByNip5Addr(nsec))?.toString()
+
+
+    if (pubKey) {
+      nsec = nip19.npubEncode(pubKey);
     }
 
     const user = new NostrUser(nsec);

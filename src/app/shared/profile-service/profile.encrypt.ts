@@ -15,10 +15,21 @@ export class ProfileEncrypt {
 
   encryptAccount(profile: IProfile, pin: string): IUnauthenticatedUser | null {
     const nostrSecret = profile.user.nostrSecret;
-    const displayName = profile.display_name || profile.name;
+    const displayName = profile.display_name || profile.name || '';
     const picture = profile.picture || '/assets/profile/default-profile.jpg';
 
-    if (!nostrSecret || !displayName) {
+    if (!nostrSecret) {
+      return {
+        picture,
+        displayName,
+        npub: profile.user.nostrPublic,
+        nip05: profile.nip05,
+        nip05valid: profile.nip05valid,
+        nsecEncrypted: ''
+      }
+    }
+
+    if (!displayName) {
       return null;
     }
 
