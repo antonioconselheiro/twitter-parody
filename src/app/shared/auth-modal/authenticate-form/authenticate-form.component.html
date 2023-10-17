@@ -14,29 +14,13 @@
 
 <form [formGroup]="authenticateForm" (submit)="onAuthenticateSubmit($event)" novalidate autocomplete="off">
   <div [class.error]="showErrors()" class="floating-label pin-field">
-    <input
-      #pin
-      required
-      name="pin"
-      tabindex="1"
-      maxlength="6"
-      formControlName="pin"
-      id="authenticatePinField"
-      [class.has-value]="pin.value"
-      [attr.type]="showPin ? 'text' : 'password'"
-    />
-  
+    <input #pin name="pin" tabindex="1" maxlength="6" formControlName="pin" id="authenticatePinField"
+      [class.has-value]="pin.value" [attr.type]="showPin ? 'text' : 'password'" />
+
     <label for="authenticatePinField">Pin</label>
-  
-    <button
-      type="button"
-      tabindex="4"
-      [attr.title]="showPin ? 'hide pin' : 'show pin'"
-      [class.icon-show]="!showPin"
-      [class.icon-hide]="showPin"
-      (click)="showPin = !showPin"
-      class="bordered icon-info svg-button"
-    >
+
+    <button type="button" tabindex="4" [attr.title]="showPin ? 'hide pin' : 'show pin'" [class.icon-show]="!showPin"
+      [class.icon-hide]="showPin" (click)="showPin = !showPin" class="bordered icon-info svg-button">
       <div class="svg-wrapper">
         <div role="img"></div>
       </div>
@@ -53,19 +37,20 @@
       <div *ngIf="!loading" class="inline-icon icon-unlock">
         <div role="img"></div>
       </div>
-  
+
       <tw-loading *ngIf="loading"></tw-loading>
-  
+
       <span>
         Authenticate
       </span>
     </button>
-  
-    <button (click)="changeStep.next('select-account')" type="button" tabindex="3" title="back" class="action-button button secondary iconed-button">
+
+    <button (click)="changeStep.next('select-account')" type="button" tabindex="3" title="back"
+      class="action-button button secondary iconed-button">
       <div class="inline-icon icon-back">
         <div role="img"></div>
       </div>
-  
+
       <span>
         Back
       </span>
