@@ -3,7 +3,7 @@
   <div [class.error]="submitted && getFormControlErrors('nsec')" class="floating-label">
     <input #nsec required name="nsec" tabindex="1" maxlength="64" formControlName="nsec" id="addAccountNsecField"
       [class.has-value]="nsec.value" [attr.readonly]="loading ? 'readonly' : null"
-      [attr.type]="showNostrSecret ? 'text' : 'password'" />
+      [attr.type]="showNostrSecret ? 'text' : 'password'" (input)="onNSecInputchange()" />
     <label for="addAccountNsecField">Nostr Key (nsec, npub, nip-05)</label>
 
     <button type="button" tabindex="4" title="read nsec from qrcode" (click)="readQrcodeUsingCamera(pin)"
@@ -33,9 +33,10 @@
     </ng-container>
   </div>
 
-  <div [class.error]="submitted && getFormControlErrors('pin')" class="floating-label pin-field">
-    <input #pin [attr.required]="pinIsRequired" name="pin" tabindex="2" [maxlength]="pinLength" formControlName="pin"
-      id="addAccountPinField" [class.has-value]="pin.value" [attr.readonly]="loading ? 'readonly' : null"
+  <div [class.error]="submitted && getFormControlErrors('pin')"
+    [attr.class]="'floating-label pin-field' + (showPinInput ? '' : ' hidden')">
+    <input #pin name="pin" tabindex="2" [maxlength]="pinLength" formControlName="pin" id="addAccountPinField"
+      [class.has-value]="pin.value" [attr.readonly]="loading ? 'readonly' : null"
       [attr.type]="showPin ? 'text' : 'password'" />
 
     <label for="addAccountPinField">Pin</label>

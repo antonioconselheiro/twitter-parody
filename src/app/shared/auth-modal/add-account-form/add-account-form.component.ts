@@ -30,7 +30,7 @@ export class AddAccountFormComponent {
 
   showNostrSecret = false;
   showPin = false;
-  pinIsRequired = false;
+  showPinInput = false;
 
   @Output()
   changeStep = new EventEmitter<AuthModalSteps>();
@@ -107,6 +107,15 @@ export class AddAccountFormComponent {
     return nip5
   }
 
+  onNSecInputchange(): void {
+    if (this.isValidNSec(this.accountForm.getRawValue().nsec ?? '')) {
+      this.showPinInput = true;
+    }
+    else {
+      this.showPinInput = false;
+    }
+  }
+
   async onAddAccountSubmit(event: SubmitEvent): Promise<void> {
     event.stopPropagation();
     event.preventDefault();
@@ -119,12 +128,13 @@ export class AddAccountFormComponent {
     const { pin } = this.accountForm.getRawValue();
     let { nsec } = this.accountForm.getRawValue()
     if (this.isValidNSec(nsec ?? '') && !pin) {
+      this.accountForm.controls.pin.setErrors({
+        required: true
+      })
       return;
     }
 
     nsec = await this.getNpubFromNip5(nsec ?? '');
-
-    console.log(nsec);
 
     const user = new NostrUser(nsec);
     this.loading = true;
