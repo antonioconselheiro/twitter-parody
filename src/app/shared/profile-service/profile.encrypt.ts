@@ -18,7 +18,7 @@ export class ProfileEncrypt {
     const displayName = profile.display_name || profile.name || '';
     const picture = profile.picture || '/assets/profile/default-profile.jpg';
 
-    if (!nostrSecret) {
+    if (!nostrSecret || !pin) {
       return {
         picture,
         displayName,
@@ -49,8 +49,8 @@ export class ProfileEncrypt {
     };
   }
 
-  decryptAccount(account: IUnauthenticatedUser, pin: string): NostrUser {
-    if (!account.nsecEncrypted) {
+  decryptAccount(account: IUnauthenticatedUser, pin?: string): NostrUser {
+    if (!account.nsecEncrypted || !pin) {
       return new NostrUser(account.npub)
     }
     const decrypted = CryptoJS.AES.decrypt(account.nsecEncrypted, pin, {
