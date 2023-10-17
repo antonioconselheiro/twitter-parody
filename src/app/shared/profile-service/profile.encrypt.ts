@@ -50,6 +50,9 @@ export class ProfileEncrypt {
   }
 
   decryptAccount(account: IUnauthenticatedUser, pin: string): NostrUser {
+    if (!account.nsecEncrypted) {
+      return new NostrUser(account.npub)
+    }
     const decrypted = CryptoJS.AES.decrypt(account.nsecEncrypted, pin, {
       iv: this.initializationVector,
       mode: this.mode,
