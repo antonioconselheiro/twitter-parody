@@ -30,6 +30,7 @@ export class AddAccountFormComponent {
 
   showNostrSecret = false;
   showPin = false;
+  pinIsRequired = false;
 
   @Output()
   changeStep = new EventEmitter<AuthModalSteps>();
@@ -37,16 +38,15 @@ export class AddAccountFormComponent {
   @Output()
   selected = new EventEmitter<IUnauthenticatedUser>();
 
-  readonly pinLength = 6;
+  readonly pinLength = 8;
 
   accountForm = this.fb.group({
     nsec: ['', [
       Validators.required.bind(this),
-      CustomValidator.nostrSecret
+      CustomValidator.nostrKeys
     ]],
 
     pin: ['', [
-      Validators.required.bind(this)
     ]]
   });
 
@@ -68,6 +68,45 @@ export class AddAccountFormComponent {
     return errors[error] || false;
   }
 
+  isValidNSec(nsec: string): boolean {
+    try {
+      const { type } = nip19.decode(nsec);
+
+      return type === 'nsec';
+    }
+    catch (err) {
+      return false
+    }
+  }
+
+  isValidNPub(npub: string): boolean {
+    try {
+      const { type } = nip19.decode(npub)
+
+      return type === 'npub';
+    }
+    catch (err) {
+      return false
+    }
+  }
+
+  isValidNip5(nip5: string): boolean {
+    return /^[\w\d]+@[\w\d]+.[\w\d]+$/g.test(nip5);
+  }
+
+  async getNpubFromNip5(nip5: string): Promise<string> {
+    if (this.isValidNip5(nip5 ?? '')) {
+      const pubKey = (await Nip5Util.getNpubByNip5Addr(nip5))?.toString()
+
+
+      if (pubKey) {
+        nip5 = nip19.npubEncode(pubKey);
+      }
+    }
+
+    return nip5
+  }
+
   async onAddAccountSubmit(event: SubmitEvent): Promise<void> {
     event.stopPropagation();
     event.preventDefault();
@@ -79,22 +118,19 @@ export class AddAccountFormComponent {
 
     const { pin } = this.accountForm.getRawValue();
     let { nsec } = this.accountForm.getRawValue()
-    if (!nsec || !pin) {
+    if (this.isValidNSec(nsec ?? '') && !pin) {
       return;
     }
 
-    const pubKey = (await Nip5Util.getNpubByNip5Addr(nsec))?.toString()
+    nsec = await this.getNpubFromNip5(nsec ?? '');
 
-
-    if (pubKey) {
-      nsec = nip19.npubEncode(pubKey);
-    }
+    console.log(nsec);
 
     const user = new NostrUser(nsec);
     this.loading = true;
     this.profileProxy
       .load(user.nostrPublic)
-      .then(profile => this.addAccount(profile, user, pin))
+      .then(profile => this.addAccount(profile, user, pin ?? ''))
       //  FIXME: consigo centralizar o tratamento de catch para promises?
       .catch(e => {
         //  FIXME: validar situações onde realmente pode ocorrer

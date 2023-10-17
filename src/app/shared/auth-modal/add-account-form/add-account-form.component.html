@@ -1,42 +1,22 @@
 <h2>Add account</h2>
 <form [formGroup]="accountForm" (submit)="onAddAccountSubmit($event)" novalidate autocomplete="off">
   <div [class.error]="submitted && getFormControlErrors('nsec')" class="floating-label">
-    <input
-      #nsec
-      required
-      name="nsec"
-      tabindex="1"
-      maxlength="64"
-      formControlName="nsec"
-      id="addAccountNsecField"
-      [class.has-value]="nsec.value"
-      [attr.readonly]="loading ? 'readonly' : null"
-      [attr.type]="showNostrSecret ? 'text' : 'password'"
-    />
-    <label for="addAccountNsecField">Nostr Secret (nsec)</label>
+    <input #nsec required name="nsec" tabindex="1" maxlength="64" formControlName="nsec" id="addAccountNsecField"
+      [class.has-value]="nsec.value" [attr.readonly]="loading ? 'readonly' : null"
+      [attr.type]="showNostrSecret ? 'text' : 'password'" />
+    <label for="addAccountNsecField">Nostr Key (nsec, npub, nip-05)</label>
 
-    <button
-      type="button"
-      tabindex="4"
-      title="read nsec from qrcode"
-      (click)="readQrcodeUsingCamera(pin)"
-      class="bordered icon-qrcode-read svg-button"
-    >
+    <button type="button" tabindex="4" title="read nsec from qrcode" (click)="readQrcodeUsingCamera(pin)"
+      class="bordered icon-qrcode-read svg-button">
 
       <div class="svg-wrapper">
         <div role="img"></div>
       </div>
     </button>
 
-    <button
-      type="button"
-      tabindex="4"
-      [attr.title]="showNostrSecret ? 'hide nostr secret' : 'show nostr secret'"
-      [class.icon-show]="!showNostrSecret"
-      [class.icon-hide]="showNostrSecret"
-      (click)="showNostrSecret = !showNostrSecret"
-      class="bordered svg-button"
-    >
+    <button type="button" tabindex="4" [attr.title]="showNostrSecret ? 'hide nostr secret' : 'show nostr secret'"
+      [class.icon-show]="!showNostrSecret" [class.icon-hide]="showNostrSecret"
+      (click)="showNostrSecret = !showNostrSecret" class="bordered svg-button">
 
       <div class="svg-wrapper">
         <div role="img"></div>
@@ -45,25 +25,18 @@
 
     <ng-container *ngIf="submitted">
       <span *ngIf="getFormControlErrorStatus('nsec', 'required')" class="error">Nostr Secret cannot be blank</span>
-      <span *ngIf="getFormControlErrorStatus('nsec', 'invalidNostrPublicGivenInstead')" class="error">Nostr Public given instead Nostr Secret</span>
+      <span *ngIf="getFormControlErrorStatus('nsec', 'invalidNostrPublicGivenInstead')" class="error">Nostr Public given
+        instead Nostr Secret</span>
       <span *ngIf="getFormControlErrorStatus('nsec', 'invalidNostrSecret')" class="error">Invalid Nostr Secret</span>
-      <span *ngIf="getFormControlErrorStatus('nsec', 'nostrSecretNotFound')" class="error">Could not found this account in current relay pool</span>
+      <span *ngIf="getFormControlErrorStatus('nsec', 'nostrSecretNotFound')" class="error">Could not found this account
+        in current relay pool</span>
     </ng-container>
   </div>
 
   <div [class.error]="submitted && getFormControlErrors('pin')" class="floating-label pin-field">
-    <input
-      #pin
-      required
-      name="pin"
-      tabindex="2"
-      [maxlength]="pinLength"
-      formControlName="pin"
-      id="addAccountPinField"
-      [class.has-value]="pin.value"
-      [attr.readonly]="loading ? 'readonly' : null"
-      [attr.type]="showPin ? 'text' : 'password'"
-    />
+    <input #pin [attr.required]="pinIsRequired" name="pin" tabindex="2" [maxlength]="pinLength" formControlName="pin"
+      id="addAccountPinField" [class.has-value]="pin.value" [attr.readonly]="loading ? 'readonly' : null"
+      [attr.type]="showPin ? 'text' : 'password'" />
 
     <label for="addAccountPinField">Pin</label>
 
@@ -73,16 +46,9 @@
         <div role="img"></div>
       </div>
     </button>
-    
-    <button
-      type="button"
-      tabindex="7"
-      [attr.title]="showPin ? 'hide pin' : 'show pin'"
-      [class.icon-show]="!showPin"
-      [class.icon-hide]="showPin"
-      (click)="showPin = !showPin"
-      class="bordered icon-info svg-button"
-    >
+
+    <button type="button" tabindex="7" [attr.title]="showPin ? 'hide pin' : 'show pin'" [class.icon-show]="!showPin"
+      [class.icon-hide]="showPin" (click)="showPin = !showPin" class="bordered icon-info svg-button">
 
       <div class="svg-wrapper">
         <div role="img"></div>
@@ -90,7 +56,8 @@
     </button>
 
     <ng-container *ngIf="submitted">
-      <span *ngIf="getFormControlErrorStatus('pin', 'required')" class="error">Include a Pin to improve your privacity</span>
+      <span *ngIf="getFormControlErrorStatus('pin', 'required')" class="error">Include a Pin to improve your
+        privacity</span>
     </ng-container>
   </div>
 
@@ -99,26 +66,20 @@
       <div *ngIf="!loading" class="inline-icon icon-add">
         <div role="img"></div>
       </div>
-  
+
       <tw-loading *ngIf="loading"></tw-loading>
-  
+
       <span>
         Add account
       </span>
     </button>
-  
-    <button
-      *ngIf="accounts.length"
-      type="button"
-      tabindex="3"
-      title="back"
-      (click)="changeStep.next('select-account')"
-      class="button secondary iconed-button"
-    >
+
+    <button *ngIf="accounts.length" type="button" tabindex="3" title="back" (click)="changeStep.next('select-account')"
+      class="button secondary iconed-button">
       <div class="inline-icon icon-back">
         <div role="img"></div>
       </div>
-  
+
       <span>
         Back
       </span>
