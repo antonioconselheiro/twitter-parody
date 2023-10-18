@@ -13,7 +13,7 @@
 </section>
 
 <form [formGroup]="authenticateForm" (submit)="onAuthenticateSubmit($event)" novalidate autocomplete="off">
-  <div [class.error]="showErrors()" class="floating-label pin-field">
+  <div [class.error]="showErrors()" [attr.class]="'floating-label pin-field'+(showPinField ? '' : ' hidden')">
     <input #pin name="pin" tabindex="1" [maxlength]="pinLength" formControlName="pin" id="authenticatePinField"
       [class.has-value]="pin.value" [attr.type]="showPin ? 'text' : 'password'" />
 
