@@ -1,12 +1,12 @@
 <h2>Add account</h2>
 <form [formGroup]="accountForm" (submit)="onAddAccountSubmit($event)" novalidate autocomplete="off">
-  <div [class.error]="submitted && getFormControlErrors('nsec')" class="floating-label">
-    <input #nsec required name="nsec" tabindex="1" maxlength="64" formControlName="nsec" id="addAccountNsecField"
-      [class.has-value]="nsec.value" [attr.readonly]="loading ? 'readonly' : null"
+  <div [class.error]="submitted && getFormControlErrors('nkey')" class="floating-label">
+    <input #nkey required name="nkey" tabindex="1" maxlength="64" formControlName="nkey" id="addAccountNkeyField"
+      [class.has-value]="nkey.value" [attr.readonly]="loading ? 'readonly' : null"
       [attr.type]="showNostrSecret ? 'text' : 'password'" (input)="onNSecInputchange()" />
     <label for="addAccountNsecField">Nostr Key (nsec, npub, nip-05)</label>
 
-    <button type="button" tabindex="4" title="read nsec from qrcode" (click)="readQrcodeUsingCamera(pin)"
+    <button type="button" tabindex="4" title="read nkey from qrcode" (click)="readQrcodeUsingCamera(pin)"
       class="bordered icon-qrcode-read svg-button">
 
       <div class="svg-wrapper">
@@ -24,11 +24,11 @@
     </button>
 
     <ng-container *ngIf="submitted">
-      <span *ngIf="getFormControlErrorStatus('nsec', 'required')" class="error">Nostr Secret cannot be blank</span>
-      <span *ngIf="getFormControlErrorStatus('nsec', 'invalidNostrPublicGivenInstead')" class="error">Nostr Public given
+      <span *ngIf="getFormControlErrorStatus('nkey', 'required')" class="error">Nostr Secret cannot be blank</span>
+      <span *ngIf="getFormControlErrorStatus('nkey', 'invalidNostrPublicGivenInstead')" class="error">Nostr Public given
         instead Nostr Secret</span>
-      <span *ngIf="getFormControlErrorStatus('nsec', 'invalidNostrSecret')" class="error">Invalid Nostr Secret</span>
-      <span *ngIf="getFormControlErrorStatus('nsec', 'nostrSecretNotFound')" class="error">Could not found this account
+      <span *ngIf="getFormControlErrorStatus('nkey', 'invalidNostrSecret')" class="error">Invalid Nostr Secret</span>
+      <span *ngIf="getFormControlErrorStatus('nkey', 'nostrSecretNotFound')" class="error">Could not found this account
         in current relay pool</span>
     </ng-container>
   </div>

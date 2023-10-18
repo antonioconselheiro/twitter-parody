@@ -27,6 +27,7 @@ export class AuthenticateFormComponent implements AfterViewInit {
   showPin = false;
   submitted = false;
   loading = false;
+  readonly pinLength = 8;
 
   authenticateForm = this.fb.group({
     pin: ['', [
@@ -64,7 +65,6 @@ export class AuthenticateFormComponent implements AfterViewInit {
     }
 
     if (account.nsecEncrypted && !pin) {
-      console.log(account.nsecEncrypted)
       this.authenticateForm.controls.pin.setErrors({
         required: true
       })
