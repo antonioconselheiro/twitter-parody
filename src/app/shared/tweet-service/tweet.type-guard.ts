@@ -30,7 +30,7 @@ export class TweetTypeGuard {
     if (!profile) {
       return false;
     }
-    
+
     tweet = this.getShowingTweet(tweet);
     if (!tweet.retweetedBy) {
       return false;
