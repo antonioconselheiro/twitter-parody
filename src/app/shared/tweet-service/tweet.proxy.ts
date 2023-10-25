@@ -7,6 +7,7 @@ import { ITweet } from "@domain/tweet.interface";
 import { ProfileCache } from "@shared/profile-service/profile.cache";
 import { ProfileProxy } from "@shared/profile-service/profile.proxy";
 import { Event } from 'nostr-tools';
+import { TweetTagsConverter } from "./tweet-tags.converter";
 import { TweetApi } from "./tweet.api";
 import { TweetCache } from "./tweet.cache";
 import { TweetTypeGuard } from "./tweet.type-guard";
@@ -17,6 +18,7 @@ export class TweetProxy {
   constructor(
     private tweetApi: TweetApi,
     private tweetTypeGuard: TweetTypeGuard,
+    private tweetTagsConverter: TweetTagsConverter,
     private profileProxy: ProfileProxy,
     private tweetCache: TweetCache
   ) { }
@@ -57,24 +59,33 @@ export class TweetProxy {
     //  e não são associados nas tags :s
     //  https://github.com/users/antonioconselheiro/projects/1?pane=issue&itemId=41105788
     const eventList = rawEvents.map(e => e.id);
-    const relatedEvents = await this.tweetApi.loadRelatedEvents(eventList);
-    const wrapperRelated = this.tweetCache.cache(relatedEvents);
+    const eventRelatedList = rawEvents.map(e => this.tweetTagsConverter
+      .getRelatedEvents(e)
+      .map(wrapper => wrapper[0])
+    ).flat(1);
 
-    const lazyEvents = wrapperRoot.lazy.map(lazy => lazy.id);
-    const lazyEagerLoaded = await this.tweetApi.loadRelatedEvents(lazyEvents);
-    const wrapperLazyEagerLoaded = this.tweetCache.cache(lazyEagerLoaded);
-
-    const relatedEventList = [...new Set(
-      eventList
-        .concat(wrapperRelated.eager.map(e => e.id))
-        .concat(wrapperLazyEagerLoaded.eager.map(e => e.id))
+    const eventsToLoad = [...new Set(
+      eventList.concat(eventRelatedList)
     )];
 
-    const reactions = await this.tweetApi.loadRelatedReactions(relatedEventList);
-    const wrapperReactions = this.tweetCache.cache(reactions);
+    const relatedEvents = await this.tweetApi.loadEvents(eventsToLoad);
+    const wrapperRelated = this.tweetCache.cache(relatedEvents);
+
+    // const lazyEvents = wrapperRoot.lazy.map(lazy => lazy.id);
+    // const lazyEagerLoaded = await this.tweetApi.loadRelatedEvents(lazyEvents);
+    // const wrapperLazyEagerLoaded = this.tweetCache.cache(lazyEagerLoaded);
+
+    // const relatedEventList = [...new Set(
+    //   eventList
+    //     .concat(wrapperRelated.eager.map(e => e.id))
+    //     .concat(wrapperLazyEagerLoaded.eager.map(e => e.id))
+    // )];
+
+    // const reactions = await this.tweetApi.loadRelatedReactions(relatedEventList);
+    // const wrapperReactions = this.tweetCache.cache(reactions);
 
     await this.profileProxy.loadProfiles(
-      wrapperRoot.npubs, wrapperRelated.npubs, wrapperLazyEagerLoaded.npubs, wrapperReactions.npubs
+      wrapperRoot.npubs, wrapperRelated.npubs //, wrapperLazyEagerLoaded.npubs, wrapperReactions.npubs
     );
 
     return rawEvents
