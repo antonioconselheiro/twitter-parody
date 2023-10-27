@@ -28,10 +28,10 @@ export class AuthenticateFormComponent implements AfterViewInit {
   submitted = false;
   loading = false;
   readonly pinLength = 8;
-  showPinField = false;
 
   authenticateForm = this.fb.group({
     pin: ['', [
+      Validators.required.bind(this),
     ]]
   });
 
@@ -41,14 +41,6 @@ export class AuthenticateFormComponent implements AfterViewInit {
     private networkError$: NetworkErrorObservable,
   ) { }
 
-  ngOnInit(): void {
-    if (this.account?.nsecEncrypted) {
-      this.showPinField = true;
-    }
-    else {
-      this.showPinField = false;
-    }
-  }
 
   ngAfterViewInit(): void {
     this.pinField?.nativeElement?.focus();
@@ -73,14 +65,6 @@ export class AuthenticateFormComponent implements AfterViewInit {
     if (!this.authenticateForm.valid || !account) {
       return;
     }
-
-    if (account.nsecEncrypted && !pin) {
-      this.authenticateForm.controls.pin.setErrors({
-        required: true
-      })
-      return;
-    }
-
     this.loading = true;
     try {
       this.profiles$.authenticateAccount(account, pin ?? '')

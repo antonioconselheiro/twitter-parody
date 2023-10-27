@@ -11,7 +11,6 @@ import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-u
 import { AuthModalSteps } from '../auth-modal-steps.type';
 import { ProfileProxy } from '@shared/profile-service/profile.proxy';
 import { IProfile } from '@domain/profile.interface';
-import { Nip5Util } from '@shared/util/nip5.service';
 import { nip19 } from 'nostr-tools';
 
 @Component({
@@ -29,7 +28,6 @@ export class AddAccountFormComponent {
 
   showNostrSecret = false;
   showPin = false;
-  showPinInput = false;
 
   @Output()
   changeStep = new EventEmitter<AuthModalSteps>();
@@ -40,12 +38,13 @@ export class AddAccountFormComponent {
   readonly pinLength = 8;
 
   accountForm = this.fb.group({
-    nkey: ['', [
+    nsec: ['', [
       Validators.required.bind(this),
       CustomValidator.nostrKeys
     ]],
 
     pin: ['', [
+      Validators.required.bind(this),
     ]]
   });
 
@@ -58,61 +57,15 @@ export class AddAccountFormComponent {
     private nostrSecretStatefull: NostrSecretStatefull
   ) { }
 
-  getFormControlErrors(fieldName: 'nkey' | 'pin'): ValidationErrors | null {
+  getFormControlErrors(fieldName: 'nsec' | 'pin'): ValidationErrors | null {
     return this.accountForm.controls[fieldName].errors;
   }
 
-  getFormControlErrorStatus(fieldName: 'nkey' | 'pin', error: string): boolean {
+  getFormControlErrorStatus(fieldName: 'nsec' | 'pin', error: string): boolean {
     const errors = this.accountForm.controls[fieldName].errors || {};
     return errors[error] || false;
   }
 
-  isValidNSec(nsec: string): boolean {
-    try {
-      const { type } = nip19.decode(nsec);
-
-      return type === 'nsec';
-    }
-    catch (err) {
-      return false
-    }
-  }
-
-  isValidNPub(npub: string): boolean {
-    try {
-      const { type } = nip19.decode(npub)
-
-      return type === 'npub';
-    }
-    catch (err) {
-      return false
-    }
-  }
-
-  isValidNip5(nip5: string): boolean {
-    return /^[\w\d]+@[\w\d]+.[\w\d]+$/g.test(nip5);
-  }
-
-  async getNpubFromNip5(nip5: string): Promise<string> {
-    if (this.isValidNip5(nip5 ?? '')) {
-      const pubKey = (await Nip5Util.getNpubByNip5Addr(nip5))?.toString()
-
-      if (pubKey) {
-        nip5 = nip19.npubEncode(pubKey);
-      }
-    }
-
-    return nip5
-  }
-
-  onNSecInputchange(): void {
-    if (this.isValidNSec(this.accountForm.getRawValue().nkey ?? '')) {
-      this.showPinInput = true;
-    }
-    else {
-      this.showPinInput = false;
-    }
-  }
 
   async onAddAccountSubmit(event: SubmitEvent): Promise<void> {
     event.stopPropagation();
@@ -123,19 +76,12 @@ export class AddAccountFormComponent {
       return;
     }
 
-    const { pin, nkey } = this.accountForm.getRawValue()
-    // Valida existencia de pin caso seja um nsec a chave do nostr passada
-    if (this.isValidNSec(nkey ?? '') && !pin) {
-      this.accountForm.controls.pin.setErrors({
-        required: true
-      })
+    const { pin, nsec } = this.accountForm.getRawValue()
+    if (!nsec || !pin) {
       return;
     }
 
-    // Caso seja um nip5, captura a chave pública vinculada (npub) em nostrKey, senão, retorna a propria chave passada por parametro
-    const nostrKey = await this.getNpubFromNip5(nkey ?? '');
-
-    const user = new NostrUser(nostrKey);
+    const user = new NostrUser(nsec);
     this.loading = true;
     this.profileProxy
       .load(user.nostrPublic)
@@ -156,8 +102,8 @@ export class AddAccountFormComponent {
   }
 
   async asyncReadQrcodeUsingCamera(): Promise<void> {
-    const nkey = await this.camera$.readQrCode();
-    this.accountForm.patchValue({ nkey });
+    const nsec = await this.camera$.readQrCode();
+    this.accountForm.patchValue({ nsec });
     return Promise.resolve();
   }
 
@@ -173,7 +119,7 @@ export class AddAccountFormComponent {
       }
 
     } else {
-      this.accountForm.controls['nkey'].setErrors({
+      this.accountForm.controls['nsec'].setErrors({
         nostrSecretNotFound: true
       });
     }
