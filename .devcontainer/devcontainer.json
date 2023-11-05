@@ -15,12 +15,12 @@
 				"ms-azuretools.vscode-docker",
 				"naumovs.color-highlight",
 				"SimonSiefke.svg-preview",
-				"Entytaiment25.CleanWater",
 				"connieth.bubblegum",
 				"manishsencha.readme-preview",
 				"wix.vscode-import-cost",
 				"stylelint.vscode-stylelint",
-				"esbenp.prettier-vscode"
+				"esbenp.prettier-vscode",
+				"krueger71.crt-themes"
 			]
 		}
 	}
