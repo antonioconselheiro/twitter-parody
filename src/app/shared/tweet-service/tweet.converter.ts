@@ -9,7 +9,7 @@ import { ITweet } from '@domain/tweet.interface';
 import { IZap } from '@domain/zap.interface';
 import { HtmlfyService } from '@shared/htmlfy/htmlfy.service';
 import { ProfileConverter } from '@shared/profile-service/profile.converter';
-import { Event, validateEvent, verifySignature } from 'nostr-tools';
+import { Event, verifySignature } from 'nostr-tools';
 import { ITweetRelationedInfoWrapper } from './tweet-relationed-info-wrapper.interface';
 import { TweetTagsConverter } from './tweet-tags.converter';
 import { TweetCache } from './tweet.cache';
@@ -145,7 +145,6 @@ export class TweetConverter {
     let npubs: string[] = [author];
     let retweeted: ITweet;
 
-    const simpleRetweetMatcher = /(^#[0]$)|(^nostr:note[^ ]$)/;
     const contentEvent = this.extractNostrEvent(content);
 
     if (contentEvent) {
@@ -156,7 +155,7 @@ export class TweetConverter {
     } else {
       let idEvent = this.tweetTagsConverter.getMentionedEvent(event);
       if (!idEvent) {
-        idEvent = this.tweetTagsConverter.getFirstRelatedEvent(event)
+        idEvent = this.tweetTagsConverter.getFirstRelatedEvent(event);
         if (!idEvent) {
           console.warn('[RELAY DATA WARNING] mentioned tweet not found in retweet', event);
         }
@@ -167,9 +166,8 @@ export class TweetConverter {
       retweeted = this.createLazyLoadableTweetFromEventId(idEvent || '', pubkey.at(0));
     }
 
-    if (simpleRetweetMatcher.test(content)) {
-      content = '';
-    }
+    const retweetIdentifier = /(#\[0\])|(nostr:note[\da-z]+)/;
+    content = content.replace(retweetIdentifier, '').trim();
 
     const retweetAsTweet: Event<NostrEventKind.Text> = { ...event, content, kind: NostrEventKind.Text };
     const { tweet: retweet, npubs: npubs2 } = this.castEventToTweet(retweetAsTweet, retweeted.id);

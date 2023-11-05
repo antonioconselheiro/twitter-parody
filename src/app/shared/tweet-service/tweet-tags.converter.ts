@@ -75,7 +75,6 @@ export class TweetTagsConverter {
     const matches = event.content.match(/nostr:note[\da-z]+/);
     const match = matches && matches[0] || null;
     if (match) {
-      console.info('match', match);
       const { data } = nip19.decode(match.replace(/^nostr:/, ''));
       return data ? String(data) : null;
     }

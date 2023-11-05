@@ -64,9 +64,11 @@ export class TweetTypeGuard {
         console.error(`Event ${tweet.retweeting} not found in cache, please load the event and the relationed data before try to access it`);
       }
 
-      return TweetCache.get(tweet.retweeting);
-    } else {
-      return tweet;
+      if (this.isSimpleRetweet(tweet)) {
+        return TweetCache.get(tweet.retweeting)
+      }
     }
+
+    return tweet;
   }
 }
