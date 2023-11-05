@@ -15,21 +15,10 @@ export class ProfileEncrypt {
 
   encryptAccount(profile: IProfile, pin?: string): IUnauthenticatedUser | null {
     const nostrSecret = profile.user.nostrSecret;
-    const displayName = profile.display_name || profile.name || '';
+    const displayName = profile.display_name || profile.name;
     const picture = profile.picture || '/assets/profile/default-profile.jpg';
 
-    if (!nostrSecret || !pin) {
-      return {
-        picture,
-        displayName,
-        npub: profile.user.nostrPublic,
-        nip05: profile.nip05,
-        nip05valid: profile.nip05valid,
-        nsecEncrypted: ''
-      }
-    }
-
-    if (!displayName) {
+    if (!nostrSecret || !displayName) {
       return null;
     }
 
@@ -49,10 +38,7 @@ export class ProfileEncrypt {
     };
   }
 
-  decryptAccount(account: IUnauthenticatedUser, pin?: string): NostrUser {
-    if (!account.nsecEncrypted || !pin) {
-      return new NostrUser(account.npub)
-    }
+  decryptAccount(account: IUnauthenticatedUser, pin: string): NostrUser {
     const decrypted = CryptoJS.AES.decrypt(account.nsecEncrypted, pin, {
       iv: this.initializationVector,
       mode: this.mode,

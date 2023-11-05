@@ -40,7 +40,7 @@ export class AddAccountFormComponent {
   accountForm = this.fb.group({
     nsec: ['', [
       Validators.required.bind(this),
-      CustomValidator.nostrKeys
+      CustomValidator.nostrSecret
     ]],
 
     pin: ['', [

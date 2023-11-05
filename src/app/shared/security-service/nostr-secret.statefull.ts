@@ -27,7 +27,7 @@ export class NostrSecretStatefull {
   accounts$ = this.accountsSubject.asObservable();
 
   // eslint-disable-next-line complexity
-  addAccount(profile: IProfile, pin?: string): IUnauthenticatedUser | null {
+  addAccount(profile: IProfile, pin: string): IUnauthenticatedUser | null {
     const unauthenticated = this.profileEncrypt.encryptAccount(profile, pin);
     if (!unauthenticated) {
       return null;
