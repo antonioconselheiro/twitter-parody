@@ -72,9 +72,10 @@ export class TweetTagsConverter {
   }
   
   getNoteMentionedInContent<T extends NostrEventKind>(event: Event<T>): TEventId | null {
-    const matches = event.content.match(/nostr:note[^ ]+/);
+    const matches = event.content.match(/nostr:note[\da-z]+/);
     const match = matches && matches[0] || null;
     if (match) {
+      console.info('match', match);
       const { data } = nip19.decode(match.replace(/^nostr:/, ''));
       return data ? String(data) : null;
     }
