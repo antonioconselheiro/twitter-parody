@@ -11,10 +11,10 @@ import { AuthenticatedProfileObservable } from '@shared/profile-service/authenti
   styleUrls: ['./authenticate-form.component.scss']
 })
 export class AuthenticateFormComponent implements AfterViewInit {
-  
+
   @Input()
   account: IUnauthenticatedUser | null = null;
-  
+
   @Output()
   changeStep = new EventEmitter<AuthModalSteps>();
 
@@ -23,22 +23,24 @@ export class AuthenticateFormComponent implements AfterViewInit {
 
   @ViewChild('pin')
   pinField?: ElementRef;
-  
+
   showPin = false;
   submitted = false;
   loading = false;
+  readonly pinLength = 8;
 
   authenticateForm = this.fb.group({
     pin: ['', [
-      Validators.required.bind(this)
+      Validators.required.bind(this),
     ]]
   });
 
   constructor(
     private fb: FormBuilder,
     private profiles$: AuthenticatedProfileObservable,
-    private networkError$: NetworkErrorObservable
+    private networkError$: NetworkErrorObservable,
   ) { }
+
 
   ngAfterViewInit(): void {
     this.pinField?.nativeElement?.focus();
@@ -60,13 +62,12 @@ export class AuthenticateFormComponent implements AfterViewInit {
 
     const account = this.account;
     const { pin } = this.authenticateForm.getRawValue();
-    if (!this.authenticateForm.valid || !account || !pin) {
+    if (!this.authenticateForm.valid || !account) {
       return;
     }
-
     this.loading = true;
     try {
-      this.profiles$.authenticateAccount(account, pin)
+      this.profiles$.authenticateAccount(account, pin ?? '')
         .then(() => this.close.emit())
         //  FIXME: consigo centralizar o tratamento de catch para promises?
         .catch(e => {

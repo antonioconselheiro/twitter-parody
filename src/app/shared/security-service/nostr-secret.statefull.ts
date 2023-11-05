@@ -27,13 +27,12 @@ export class NostrSecretStatefull {
   accounts$ = this.accountsSubject.asObservable();
 
   // eslint-disable-next-line complexity
-  addAccount(profile: IProfile, pin: string): IUnauthenticatedUser | null {
+  addAccount(profile: IProfile, pin?: string): IUnauthenticatedUser | null {
     const unauthenticated = this.profileEncrypt.encryptAccount(profile, pin);
     if (!unauthenticated) {
       return null;
     }
-
-    this.accounts[unauthenticated.npub] = unauthenticated;
+    this.accounts[unauthenticated.npub] = unauthenticated
     this.update();
     return unauthenticated;
   }
@@ -42,7 +41,7 @@ export class NostrSecretStatefull {
     delete this.accounts[profile.npub];
     this.update();
   }
-  
+
   private update(): void {
     //  FIXME: criar um mecanismo que persita dados
     //  automaticamente em localStorage ou no storage local

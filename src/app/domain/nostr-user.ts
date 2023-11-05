@@ -23,7 +23,7 @@ export class NostrUser {
    * npub decoded
    */
   readonly publicKeyHex: string;
-  
+
   constructor(
     /**
      * npub or nsec
@@ -39,6 +39,7 @@ export class NostrUser {
     } else if (type === 'npub') {
       this.nostrPublic = nostrString;
       this.publicKeyHex = data.toString();
+      console.log('created')
       this.nostrSecret = null;
       this.privateKeyHex = null;
     } else {
