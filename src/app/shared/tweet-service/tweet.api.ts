@@ -50,6 +50,14 @@ export class TweetApi {
         kinds: [
           NostrEventKind.Text
         ]
+      },
+
+      {
+        kinds: [
+          NostrEventKind.Text,
+          NostrEventKind.Repost
+        ],
+        '#e': events
       }
     ]);
   }

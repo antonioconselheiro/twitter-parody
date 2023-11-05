@@ -9,7 +9,7 @@ import { ITweet } from '@domain/tweet.interface';
 import { IZap } from '@domain/zap.interface';
 import { HtmlfyService } from '@shared/htmlfy/htmlfy.service';
 import { ProfileConverter } from '@shared/profile-service/profile.converter';
-import { Event } from 'nostr-tools';
+import { Event, validateEvent, verifySignature } from 'nostr-tools';
 import { ITweetRelationedInfoWrapper } from './tweet-relationed-info-wrapper.interface';
 import { TweetTagsConverter } from './tweet-tags.converter';
 import { TweetCache } from './tweet.cache';
@@ -117,6 +117,26 @@ export class TweetConverter {
     return content;
   }
 
+  extractNostrEvent(content: object | string): Event | false {
+    let eventObject: object;
+    if (typeof content === 'string') {
+      try {
+        eventObject = JSON.parse(content);
+      } catch {
+        return false;
+      }
+    } else {
+      eventObject = content;
+    }
+
+    const event = eventObject as Event;
+    if (verifySignature(event)) {
+      return event;
+    }
+
+    return false;
+  }
+
   private castEventToRetweet(event: Event<NostrEventKind.Repost>): {
     retweet: IRetweet, retweeted: ITweet, npubs: TNostrPublic[]
   } {
@@ -124,17 +144,20 @@ export class TweetConverter {
     const author = this.getAuthorNostrPublicFromEvent(event);
     let npubs: string[] = [author];
     let retweeted: ITweet;
-    const simpleRetweetMatcher = /(^#[0]$)|(^nostr:note[^ ]$)/;
 
-    if (content && !simpleRetweetMatcher.test(content)) {
+    // FIXME:  aqui preciso verificar se content é um JSON com os campos obrigatórios pra compor um event
+    const simpleRetweetMatcher = /(^#[0]$)|(^nostr:note[^ ]$)/;
+    const contentEvent = this.extractNostrEvent(content);
+
+    if (contentEvent) {
       //  FIXME: o elemento que passou pelo parse precisa ser indexado
       //  no cache, pois está ficando sem as informações complementarem
       //  lazy carregadas, como likes, retweets e zaps
-      const retweetedEvent: Event<NostrEventKind.Text> = JSON.parse(content);
+      const retweetedEvent: Event<NostrEventKind.Text> = contentEvent;
       const { tweet, npubs: npubs2 } = this.castEventToTweet(retweetedEvent);
       retweeted = tweet;
       npubs = npubs.concat(npubs2);
-    } else {
+    } else if (simpleRetweetMatcher.test(content)) {
       let idEvent = this.tweetTagsConverter.getMentionedEvent(event);
       if (!idEvent) {
         idEvent = this.tweetTagsConverter.getFirstRelatedEvent(event)
