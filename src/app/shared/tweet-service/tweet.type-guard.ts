@@ -4,7 +4,7 @@ import { NostrEventKind } from '@domain/nostr-event-kind.enum';
 import { IProfile } from '@domain/profile.interface';
 import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';
-import { Event } from 'nostr-tools';
+import { Event, verifySignature } from 'nostr-tools';
 import { TweetCache } from './tweet.cache';
 
 /**
@@ -20,10 +20,14 @@ export class TweetTypeGuard {
   }
 
   isSimpleRetweet(tweet: ITweet): tweet is IRetweet {
-    return tweet.retweeting
-      && tweet.load === DataLoadType.EAGER_LOADED
-      && !String(tweet.htmlFullView).trim().length
-      || false;
+    const isRetweet = tweet.retweeting;
+    if (isRetweet && tweet.load === DataLoadType.EAGER_LOADED) {
+      const nasNoContent = !String(tweet.htmlFullView).trim().length;
+
+      return nasNoContent || false;
+    }
+
+    return false;
   }
 
   isRetweetedByProfile(tweet: ITweet | IRetweet, profile: IProfile | null): tweet is IRetweet {
@@ -70,5 +74,21 @@ export class TweetTypeGuard {
     }
 
     return tweet;
+  }
+
+  isSerializedNostrEvent(serialized: string): boolean {
+    try {
+      return this.isNostrEvent(JSON.parse(serialized));
+    } catch {
+      return false;
+    }
+  }
+
+  isNostrEvent(possiblyNostrEvent: object): possiblyNostrEvent is Event {
+    if (verifySignature(possiblyNostrEvent as Event)) {
+      return true;
+    }
+
+    return false;
   }
 }

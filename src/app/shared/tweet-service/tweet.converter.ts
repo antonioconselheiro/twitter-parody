@@ -118,25 +118,27 @@ export class TweetConverter {
   }
 
   extractNostrEvent(content: object | string): Event | false {
-    let eventObject: object;
+    let event: object;
     if (typeof content === 'string') {
       try {
-        eventObject = JSON.parse(content);
+        event = JSON.parse(content);
       } catch {
         return false;
       }
     } else {
-      eventObject = content;
+      event = content;
     }
 
-    const event = eventObject as Event;
-    if (verifySignature(event)) {
+    if (this.tweetTypeGuard.isNostrEvent(event)) {
       return event;
     }
 
     return false;
   }
 
+  // FIXME: débito, o método atingiu alta complexidade ciclomática,
+  //  remover o disable do lint quando resolver débito
+  // eslint-disable-next-line complexity
   private castEventToRetweet(event: Event<NostrEventKind.Repost>): {
     retweet: IRetweet, retweeted: ITweet, npubs: TNostrPublic[]
   } {
@@ -168,6 +170,9 @@ export class TweetConverter {
 
     const retweetIdentifier = /(#\[0\])|(nostr:note[\da-z]+)/;
     content = content.replace(retweetIdentifier, '').trim();
+    if (this.tweetTypeGuard.isSerializedNostrEvent(content)) {
+      content = '';
+    }
 
     const retweetAsTweet: Event<NostrEventKind.Text> = { ...event, content, kind: NostrEventKind.Text };
     const { tweet: retweet, npubs: npubs2 } = this.castEventToTweet(retweetAsTweet, retweeted.id);
