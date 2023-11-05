@@ -140,24 +140,20 @@ export class TweetConverter {
   private castEventToRetweet(event: Event<NostrEventKind.Repost>): {
     retweet: IRetweet, retweeted: ITweet, npubs: TNostrPublic[]
   } {
-    const content = this.getTweetContent(event);
+    let content = this.getTweetContent(event);
     const author = this.getAuthorNostrPublicFromEvent(event);
     let npubs: string[] = [author];
     let retweeted: ITweet;
 
-    // FIXME:  aqui preciso verificar se content é um JSON com os campos obrigatórios pra compor um event
     const simpleRetweetMatcher = /(^#[0]$)|(^nostr:note[^ ]$)/;
     const contentEvent = this.extractNostrEvent(content);
 
     if (contentEvent) {
-      //  FIXME: o elemento que passou pelo parse precisa ser indexado
-      //  no cache, pois está ficando sem as informações complementarem
-      //  lazy carregadas, como likes, retweets e zaps
       const retweetedEvent: Event<NostrEventKind.Text> = contentEvent;
       const { tweet, npubs: npubs2 } = this.castEventToTweet(retweetedEvent);
       retweeted = tweet;
       npubs = npubs.concat(npubs2);
-    } else if (simpleRetweetMatcher.test(content)) {
+    } else {
       let idEvent = this.tweetTagsConverter.getMentionedEvent(event);
       if (!idEvent) {
         idEvent = this.tweetTagsConverter.getFirstRelatedEvent(event)
@@ -171,7 +167,11 @@ export class TweetConverter {
       retweeted = this.createLazyLoadableTweetFromEventId(idEvent || '', pubkey.at(0));
     }
 
-    const retweetAsTweet: Event<NostrEventKind.Text> = { ...event, content: '', kind: NostrEventKind.Text };
+    if (simpleRetweetMatcher.test(content)) {
+      content = '';
+    }
+
+    const retweetAsTweet: Event<NostrEventKind.Text> = { ...event, content, kind: NostrEventKind.Text };
     const { tweet: retweet, npubs: npubs2 } = this.castEventToTweet(retweetAsTweet, retweeted.id);
     npubs = npubs.concat(npubs2);
     if (retweeted.author) {
@@ -183,7 +183,7 @@ export class TweetConverter {
     };
 
     return {
-      retweet, retweeted: retweeted, npubs
+      retweet, retweeted, npubs
     };
   }
 
