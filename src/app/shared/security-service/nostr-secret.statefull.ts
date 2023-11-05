@@ -32,8 +32,7 @@ export class NostrSecretStatefull {
     if (!unauthenticated) {
       return null;
     }
-
-    this.accounts[unauthenticated.npub] = unauthenticated;
+    this.accounts[unauthenticated.npub] = unauthenticated
     this.update();
     return unauthenticated;
   }
@@ -42,7 +41,7 @@ export class NostrSecretStatefull {
     delete this.accounts[profile.npub];
     this.update();
   }
-  
+
   private update(): void {
     //  FIXME: criar um mecanismo que persita dados
     //  automaticamente em localStorage ou no storage local

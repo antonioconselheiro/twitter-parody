@@ -8,14 +8,14 @@ export function nostrSecretValidatorFactory(): ValidatorFn {
     if (!control.value) {
       return null;
     }
-    
+
     try {
       const { type } = nip19.decode(control.value);
 
       if (type === 'npub') {
         return {
           invalidNostrPublicGivenInstead: true
-        };
+        }
       } else if (type === 'nsec') {
         return null;
       }

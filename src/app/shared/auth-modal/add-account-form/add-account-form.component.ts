@@ -6,12 +6,12 @@ import { CameraObservable } from '@shared/camera/camera.observable';
 import { CustomValidator } from '@shared/custom-validator/custom-validator';
 import { MainErrorObservable } from '@shared/main-error/main-error.observable';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
-import { AuthenticatedProfileObservable } from '@shared/profile-service/authenticated-profile.observable';
 import { NostrSecretStatefull } from '@shared/security-service/nostr-secret.statefull';
 import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-user';
 import { AuthModalSteps } from '../auth-modal-steps.type';
 import { ProfileProxy } from '@shared/profile-service/profile.proxy';
 import { IProfile } from '@domain/profile.interface';
+import { nip19 } from 'nostr-tools';
 
 @Component({
   selector: 'tw-add-account-form',
@@ -35,7 +35,7 @@ export class AddAccountFormComponent {
   @Output()
   selected = new EventEmitter<IUnauthenticatedUser>();
 
-  readonly pinLength = 6;
+  readonly pinLength = 8;
 
   accountForm = this.fb.group({
     nsec: ['', [
@@ -44,7 +44,7 @@ export class AddAccountFormComponent {
     ]],
 
     pin: ['', [
-      Validators.required.bind(this)
+      Validators.required.bind(this),
     ]]
   });
 
@@ -66,7 +66,8 @@ export class AddAccountFormComponent {
     return errors[error] || false;
   }
 
-  onAddAccountSubmit(event: SubmitEvent): void {
+
+  async onAddAccountSubmit(event: SubmitEvent): Promise<void> {
     event.stopPropagation();
     event.preventDefault();
 
@@ -74,8 +75,8 @@ export class AddAccountFormComponent {
     if (!this.accountForm.valid) {
       return;
     }
-    
-    const { nsec, pin } = this.accountForm.getRawValue();
+
+    const { pin, nsec } = this.accountForm.getRawValue()
     if (!nsec || !pin) {
       return;
     }
@@ -84,7 +85,7 @@ export class AddAccountFormComponent {
     this.loading = true;
     this.profileProxy
       .load(user.nostrPublic)
-      .then(profile => this.addAccount(profile, user, pin))
+      .then(profile => this.addAccount(profile, user, pin ?? ''))
       //  FIXME: consigo centralizar o tratamento de catch para promises?
       .catch(e => {
         //  FIXME: validar situações onde realmente pode ocorrer
