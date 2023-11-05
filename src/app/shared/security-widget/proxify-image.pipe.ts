@@ -10,7 +10,8 @@ export class ProxifyImagePipe implements PipeTransform {
   private readonly safeOrigins = [
     'https://imgur.com/',
     'https://i.imgur.com/',
-    'https://imgproxy.iris.to/'
+    'https://imgproxy.iris.to/',
+    'https://m.primal.net/'
   ];
 
   constructor(

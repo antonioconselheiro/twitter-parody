@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { DataLoadType } from '@domain/data-load.type';
-import { NostrEventKind } from '@domain/nostr-event-kind';
+import { NostrEventKind } from '@domain/nostr-event-kind.enum';
 import { IProfile } from '@domain/profile.interface';
 import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';
-import { Event } from 'nostr-tools';
+import { Event, verifySignature } from 'nostr-tools';
 import { TweetCache } from './tweet.cache';
 
 /**
@@ -20,17 +20,21 @@ export class TweetTypeGuard {
   }
 
   isSimpleRetweet(tweet: ITweet): tweet is IRetweet {
-    return tweet.retweeting
-      && tweet.load === DataLoadType.EAGER_LOADED
-      && !String(tweet.htmlFullView).trim().length
-      || false;
+    const isRetweet = tweet.retweeting;
+    if (isRetweet && tweet.load === DataLoadType.EAGER_LOADED) {
+      const nasNoContent = !String(tweet.htmlFullView).trim().length;
+
+      return nasNoContent || false;
+    }
+
+    return false;
   }
 
   isRetweetedByProfile(tweet: ITweet | IRetweet, profile: IProfile | null): tweet is IRetweet {
     if (!profile) {
       return false;
     }
-    
+
     tweet = this.getShowingTweet(tweet);
     if (!tweet.retweetedBy) {
       return false;
@@ -64,9 +68,27 @@ export class TweetTypeGuard {
         console.error(`Event ${tweet.retweeting} not found in cache, please load the event and the relationed data before try to access it`);
       }
 
-      return TweetCache.get(tweet.retweeting);
-    } else {
-      return tweet;
+      if (this.isSimpleRetweet(tweet)) {
+        return TweetCache.get(tweet.retweeting)
+      }
     }
+
+    return tweet;
+  }
+
+  isSerializedNostrEvent(serialized: string): boolean {
+    try {
+      return this.isNostrEvent(JSON.parse(serialized));
+    } catch {
+      return false;
+    }
+  }
+
+  isNostrEvent(possiblyNostrEvent: object): possiblyNostrEvent is Event {
+    if (verifySignature(possiblyNostrEvent as Event)) {
+      return true;
+    }
+
+    return false;
   }
 }

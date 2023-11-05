@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { NostrEventKind } from "@domain/nostr-event-kind";
+import { NostrEventKind } from "@domain/nostr-event-kind.enum";
 import { TNostrPublic } from "@domain/nostr-public.type";
 import { NostrUser } from "@domain/nostr-user";
 import { ApiService } from "@shared/api-service/api.service";

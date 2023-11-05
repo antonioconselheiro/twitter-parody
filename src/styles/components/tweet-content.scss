@@ -3,12 +3,9 @@
     margin-top: .5rem;
     margin-bottom: .5rem;
 
-    /**
-     * FIXME: Preciso resolver de outra maneira, display inline
-     * remove o controlador de tamanho máximo do raw-link
-     *
     > a {
-      display: inline;
-    }*/
+      position: relative;
+      top: 4px;
+    }
   }
 }

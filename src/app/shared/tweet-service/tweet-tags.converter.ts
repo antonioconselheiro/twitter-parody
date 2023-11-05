@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { DataLoadType } from '@domain/data-load.type';
 import { TEventId } from '@domain/event-id.type';
 import { TEventRelationType } from '@domain/event-relation-type.type';
-import { NostrEventKind } from '@domain/nostr-event-kind';
+import { NostrEventKind } from '@domain/nostr-event-kind.enum';
 import { TNostrPublic } from '@domain/nostr-public.type';
 import { ITweet } from '@domain/tweet.interface';
 import { ProfileConverter } from '@shared/profile-service/profile.converter';
@@ -72,7 +72,7 @@ export class TweetTagsConverter {
   }
   
   getNoteMentionedInContent<T extends NostrEventKind>(event: Event<T>): TEventId | null {
-    const matches = event.content.match(/nostr:note[^ ]+/);
+    const matches = event.content.match(/nostr:note[\da-z]+/);
     const match = matches && matches[0] || null;
     if (match) {
       const { data } = nip19.decode(match.replace(/^nostr:/, ''));

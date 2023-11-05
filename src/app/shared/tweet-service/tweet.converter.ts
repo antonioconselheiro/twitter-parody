@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataLoadType } from '@domain/data-load.type';
 import { TEventId } from '@domain/event-id.type';
-import { NostrEventKind } from '@domain/nostr-event-kind';
+import { NostrEventKind } from '@domain/nostr-event-kind.enum';
 import { TNostrPublic } from '@domain/nostr-public.type';
 import { IReaction } from '@domain/reaction.interface';
 import { IRetweet } from '@domain/retweet.interface';
@@ -9,7 +9,7 @@ import { ITweet } from '@domain/tweet.interface';
 import { IZap } from '@domain/zap.interface';
 import { HtmlfyService } from '@shared/htmlfy/htmlfy.service';
 import { ProfileConverter } from '@shared/profile-service/profile.converter';
-import { Event } from 'nostr-tools';
+import { Event, verifySignature } from 'nostr-tools';
 import { ITweetRelationedInfoWrapper } from './tweet-relationed-info-wrapper.interface';
 import { TweetTagsConverter } from './tweet-tags.converter';
 import { TweetCache } from './tweet.cache';
@@ -34,6 +34,7 @@ export class TweetConverter {
       npubs: []
     };
 
+    //  FIXME: resolver débito de complexidade ciclomática
     // TODO: check in tags if tweets have mentions and then, create the threadfy method
     // eslint-disable-next-line complexity
     events.forEach(event => {
@@ -116,27 +117,47 @@ export class TweetConverter {
     return content;
   }
 
+  extractNostrEvent(content: object | string): Event | false {
+    let event: object;
+    if (typeof content === 'string') {
+      try {
+        event = JSON.parse(content);
+      } catch {
+        return false;
+      }
+    } else {
+      event = content;
+    }
+
+    if (this.tweetTypeGuard.isNostrEvent(event)) {
+      return event;
+    }
+
+    return false;
+  }
+
+  // FIXME: débito, o método atingiu alta complexidade ciclomática,
+  //  remover o disable do lint quando resolver débito
+  // eslint-disable-next-line complexity
   private castEventToRetweet(event: Event<NostrEventKind.Repost>): {
     retweet: IRetweet, retweeted: ITweet, npubs: TNostrPublic[]
   } {
-    const content = this.getTweetContent(event);
+    let content = this.getTweetContent(event);
     const author = this.getAuthorNostrPublicFromEvent(event);
     let npubs: string[] = [author];
     let retweeted: ITweet;
-    const simpleRetweetMatcher = /(^#[0]$)|(^nostr:note[^ ]$)/;
 
-    if (content && !simpleRetweetMatcher.test(content)) {
-      //  FIXME: o elemento que passou pelo parse precisa ser indexado
-      //  no cache, pois está ficando sem as informações complementarem
-      //  lazy carregadas, como likes, retweets e zaps
-      const retweetedEvent: Event<NostrEventKind.Text> = JSON.parse(content);
+    const contentEvent = this.extractNostrEvent(content);
+
+    if (contentEvent) {
+      const retweetedEvent: Event<NostrEventKind.Text> = contentEvent;
       const { tweet, npubs: npubs2 } = this.castEventToTweet(retweetedEvent);
       retweeted = tweet;
       npubs = npubs.concat(npubs2);
     } else {
       let idEvent = this.tweetTagsConverter.getMentionedEvent(event);
       if (!idEvent) {
-        idEvent = this.tweetTagsConverter.getFirstRelatedEvent(event)
+        idEvent = this.tweetTagsConverter.getFirstRelatedEvent(event);
         if (!idEvent) {
           console.warn('[RELAY DATA WARNING] mentioned tweet not found in retweet', event);
         }
@@ -147,7 +168,13 @@ export class TweetConverter {
       retweeted = this.createLazyLoadableTweetFromEventId(idEvent || '', pubkey.at(0));
     }
 
-    const retweetAsTweet: Event<NostrEventKind.Text> = { ...event, content: '', kind: NostrEventKind.Text };
+    const retweetIdentifier = /(#\[0\])|(nostr:note[\da-z]+)/;
+    content = content.replace(retweetIdentifier, '').trim();
+    if (this.tweetTypeGuard.isSerializedNostrEvent(content)) {
+      content = '';
+    }
+
+    const retweetAsTweet: Event<NostrEventKind.Text> = { ...event, content, kind: NostrEventKind.Text };
     const { tweet: retweet, npubs: npubs2 } = this.castEventToTweet(retweetAsTweet, retweeted.id);
     npubs = npubs.concat(npubs2);
     if (retweeted.author) {
@@ -159,7 +186,7 @@ export class TweetConverter {
     };
 
     return {
-      retweet, retweeted: retweeted, npubs
+      retweet, retweeted, npubs
     };
   }
 
