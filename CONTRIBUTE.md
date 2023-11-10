@@ -70,7 +70,7 @@ The files for this environment are in the `.devcontainer` folder, where you can 
 - with node installed;
 - with keyboard configured for Brazilian Portuguese;
 - with America/Sao_Paulo timezone;
-- the node tools: angular, husky, typescript and eslint;
+- the node tools: husky, eslint, typescript, angular, compodoc, sass-lint and sassdoc;;
 - In `.devcontainer/devcontainer.json` you can see a set of extensions for vscode libraries and tools used in the project.
 
 ### Devcontainer VSCode Extensions
@@ -85,7 +85,7 @@ Build the Docker containers with no caching:
 Start the Docker containers:
 `docker-compose -f .devcontainer/docker-compose.yml up`
 
-## documentations
+## Documentations
 and interesting technologies to master to enhance your ability to contribute:
 
 - https://www.typescriptlang.org/docs/handbook/typescript-from-scratch.html
