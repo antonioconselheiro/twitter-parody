@@ -14,7 +14,7 @@ what's so funny about this parody?
 ![you wouldn't get it](./docs/you-wouldnt-get-it-joker.gif)
 
 ## Install
-Not released yet, thinking in something like [Obtainium](https://github.com/ImranR98/Obtainium)
+Not released yet
 
 ## How the parody is implemented technically
 angular (scss + rxjs) + nostr-tools
