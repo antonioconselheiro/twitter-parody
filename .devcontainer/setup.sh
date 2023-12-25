@@ -12,7 +12,6 @@ echo "With no spaces, write a label to ssh key:"
 read sshnome
 
 mkdir .ssh
-mkdir node_modules;
 
 ssh-keygen -t ed25519 -C $sshnome -f ".ssh/id_ed25519"
 

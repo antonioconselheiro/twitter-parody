@@ -1,13 +1,5 @@
 version: '3.9'
 
-volumes:
-  node_modules_vol:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./node_modules
-
 services:
   twitter-parody-dev:
     image: twitter-parody-dev
@@ -17,10 +9,8 @@ services:
       dockerfile: ./.devcontainer/Dockerfile
     working_dir: /twitter-parody
     ports:
-      - "9229:9229"
-      - "4200:4200"
+      - "4208:4200"
     volumes:
       - ..:/twitter-parody:cached
       - /var/run/docker.sock:/var/run/docker.sock
-      - node_modules_vol:/twitter-parody/node_modules
     tty: true
