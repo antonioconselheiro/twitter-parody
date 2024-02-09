@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ModalableDirective } from '../modalable.directive';
+import { ModalableDirective } from '@belomonte/async-modal-ngx';
 import { AlertType } from './alert-type.enum';
 
 @Component({
@@ -10,7 +10,6 @@ import { AlertType } from './alert-type.enum';
 })
 export class AlertComponent extends ModalableDirective<{
   message: string,
-  title?: string,
   alertType: AlertType
 }, void> {
 
@@ -18,7 +17,6 @@ export class AlertComponent extends ModalableDirective<{
   readonly ALERT_TYPE_ERROR = AlertType.ERROR;
 
   response = new Subject<void>();
-  titulo: string | null = null;
   mensagem: string | null = null;
   alertType: AlertType | null = null;
 
@@ -26,9 +24,10 @@ export class AlertComponent extends ModalableDirective<{
     if (data) {
       this.mensagem = data.message;
       this.alertType = data.alertType;
-    }
-    if (data?.title) {
-      this.titulo = data.title;
+
+      if (data.title) {
+        this.title = data.title;
+      }
     }
   }
 

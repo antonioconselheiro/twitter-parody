@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ModalableDirective } from '../modalable.directive';
+import { ModalableDirective } from '@belomonte/async-modal-ngx';
 
 @Component({
   selector: 'tw-modal-confirm',
@@ -37,7 +37,6 @@ export class ModalConfirmComponent extends ModalableDirective<{
         this.buttonCancel = data.buttonCancel;
       }
     }
-
   }
 
   onClickButtonOk(): void {

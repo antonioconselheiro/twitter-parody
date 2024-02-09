@@ -4,17 +4,10 @@ import { map } from 'rxjs/operators';
 import { AlertType } from './alert/alert-type.enum';
 import { AlertComponent } from './alert/alert.component';
 import { ModalConfirmComponent } from './modal-confirm/modal-confirm.component';
-import { ModalBuilder } from './modal.builder';
-import { ModalableDirective } from './modalable.directive';
+import { ModalBuilder } from '@belomonte/async-modal-ngx';
 
 @Injectable()
 export class ModalService {
-
-  createModal<EntryType, ReturnType>(
-    component: Type<ModalableDirective<EntryType, ReturnType>>
-  ): ModalBuilder<EntryType, ReturnType> {
-    return new ModalBuilder<EntryType, ReturnType>(component);
-  }
 
   alertSuccess(message: string, title?: string): Observable<void> {
     const data = {

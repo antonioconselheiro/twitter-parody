@@ -1,6 +1,5 @@
 import { Component, HostBinding, HostListener, ViewChild, ViewContainerRef } from '@angular/core';
-import { ModalBuilder } from '../modal.builder';
-import { ModalDirective } from '../modal.directive';
+import { ModalBuilder, ModalDirective } from '@belomonte/async-modal-ngx';
 
 @Component({
   selector: 'tw-custom-modal',
