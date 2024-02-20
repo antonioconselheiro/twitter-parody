@@ -1,5 +1,5 @@
-import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ModalOutletComponent } from '@belomonte/async-modal-ngx';
+import { Component, HostBinding, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ModalBuilder, ModalOutletComponent } from '@belomonte/async-modal-ngx';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -16,6 +16,11 @@ export class MainModalComponent implements OnInit, OnDestroy {
 
   isOpen = false;
 
+  @HostBinding('style.display')
+  get display(): string {
+    return this.isOpen ? 'block' : 'none';
+  }
+
   private subscriptions = new Subscription();
 
   ngOnInit(): void {
@@ -27,7 +32,7 @@ export class MainModalComponent implements OnInit, OnDestroy {
   }
   
   private subscribeModalData(): void {
-    this.subscriptions.add(this.modal.modalInject$.subscribe({
+    this.subscriptions.add(ModalBuilder.modalInject$.subscribe({
       next: metadata => {
         //  casting from unknown
         const data = Object(metadata.data);

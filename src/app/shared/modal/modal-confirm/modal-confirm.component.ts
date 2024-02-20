@@ -8,8 +8,8 @@ import { ModalableDirective } from '@belomonte/async-modal-ngx';
   styleUrls: ['./modal-confirm.component.scss']
 })
 export class ModalConfirmComponent extends ModalableDirective<{
+  title: string,
   message: string,
-  title?: string,
   buttonOk?: string,
   buttonCancel?: string
 }, boolean> {

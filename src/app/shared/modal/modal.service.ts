@@ -9,7 +9,7 @@ import { ModalBuilder } from '@belomonte/async-modal-ngx';
 @Injectable()
 export class ModalService {
 
-  alertSuccess(message: string, title?: string): Observable<void> {
+  alertSuccess(title: string, message: string): Observable<void> {
     const data = {
       message,
       title,
@@ -22,16 +22,19 @@ export class ModalService {
       .build();
   }
 
-  alertError(message: string): Observable<void> {
+  alertError(title: string, message: string): Observable<void> {
+    const data = { title, message, alertType: AlertType.ERROR };
+
     return new ModalBuilder(AlertComponent)
-      .setData({ message, alertType: AlertType.ERROR })
+      .setData(data)
       .setRootCssClasses(['is-error'])
       .build();
   }
 
   confirm(title: string, message: string, buttonOk?: string, buttonCancel?: string): Observable<boolean> {
+    const data = { title, message, buttonOk, buttonCancel };
     return new ModalBuilder(ModalConfirmComponent)
-      .setData({ title, message, buttonOk, buttonCancel })
+      .setData(data)
       .build()
       .pipe(map(result => !!result));
   }

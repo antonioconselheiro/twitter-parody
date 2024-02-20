@@ -68,8 +68,9 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
     } else {
       this.modalService
         .createModal(AuthModalComponent)
-        //.setTitle('Accounts')
-        .setData(null)
+        .setData({
+          title: 'Accounts'
+        })
         .build();
     }
   }
@@ -79,8 +80,8 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
 
     this.modalService
       .createModal(AuthModalComponent)
-      //.setTitle('Accounts')
       .setData({
+        title: 'Accounts',
         currentAuthProfile: this.profile,
         currentStep: 'add-account'
       })

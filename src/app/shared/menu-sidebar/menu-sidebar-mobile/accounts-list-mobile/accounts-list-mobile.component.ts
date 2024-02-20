@@ -38,8 +38,8 @@ export class AccountsListMobileComponent implements OnInit, OnDestroy {
   addAccountModal(): void {
     this.modalService
     .createModal(AuthModalComponent)
-    // .setTitle('Accounts')
     .setData({
+      title: 'Accounts',
       currentAuthProfile: this.profile,
       currentStep: 'add-account'
     })

@@ -4,7 +4,7 @@
   "license": "Unlicense",
   "scripts": {
     "start": "npm run dev",
-    "dev": "ng serve --disable-host-check",
+    "dev": "ng serve --host=0.0.0.0",
     "build": "ng build & sass-lint -c ./.sass-lint.yml -v -q",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
