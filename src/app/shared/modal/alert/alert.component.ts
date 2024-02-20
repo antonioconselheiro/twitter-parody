@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ModalableDirective } from '../modalable.directive';
+import { ModalableDirective } from '@belomonte/async-modal-ngx';
 import { AlertType } from './alert-type.enum';
 
 @Component({
@@ -9,8 +9,8 @@ import { AlertType } from './alert-type.enum';
   styleUrls: ['./alert.component.scss']
 })
 export class AlertComponent extends ModalableDirective<{
+  title: string,
   message: string,
-  title?: string,
   alertType: AlertType
 }, void> {
 
@@ -18,17 +18,13 @@ export class AlertComponent extends ModalableDirective<{
   readonly ALERT_TYPE_ERROR = AlertType.ERROR;
 
   response = new Subject<void>();
-  titulo: string | null = null;
-  mensagem: string | null = null;
+  message: string | null = null;
   alertType: AlertType | null = null;
 
-  override onInjectData(data: { message: string, title?: string, alertType: AlertType } | null): void {
+  override onInjectData(data: { message: string, alertType: AlertType } | null): void {
     if (data) {
-      this.mensagem = data.message;
+      this.message = data.message;
       this.alertType = data.alertType;
-    }
-    if (data?.title) {
-      this.titulo = data.title;
     }
   }
 

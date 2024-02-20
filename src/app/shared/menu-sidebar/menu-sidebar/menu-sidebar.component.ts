@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthModalComponent } from '@shared/auth-modal/auth-modal.component';
-import { ModalService } from '@shared/modal/modal.service';
+import { ModalService } from '@belomonte/async-modal-ngx';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { AuthenticatedProfileObservable } from '@shared/profile-service/authenticated-profile.observable';
 import { CompositeTweetPopoverComponent } from '@shared/tweet-widget/composite-tweet-popover/composite-tweet-popover.component';
@@ -68,8 +68,9 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
     } else {
       this.modalService
         .createModal(AuthModalComponent)
-        .setTitle('Accounts')
-        .setData(null)
+        .setData({
+          title: 'Accounts'
+        })
         .build();
     }
   }
@@ -79,8 +80,8 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
 
     this.modalService
       .createModal(AuthModalComponent)
-      .setTitle('Accounts')
       .setData({
+        title: 'Accounts',
         currentAuthProfile: this.profile,
         currentStep: 'add-account'
       })

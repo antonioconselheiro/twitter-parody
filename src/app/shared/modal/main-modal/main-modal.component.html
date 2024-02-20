@@ -1,6 +1,6 @@
 <section [class.hidden]="!isOpen" class="modal">
   <header>
-    <button tabindex="1" (click)="closeModal()" type="button" class="icon-close svg-button">
+    <button tabindex="1" (click)="close()" type="button" class="icon-close svg-button">
       <div class="svg-wrapper">
         <div role="img"></div>
       </div>
@@ -8,6 +8,9 @@
     <h1>{{title}}</h1>
   </header>
   <div>
-    <ng-template #modalContainer></ng-template>
+    <modal-outlet
+      (opened)="isOpen = true"
+      (closed)="isOpen = false"
+    ></modal-outlet>
   </div>
 </section>

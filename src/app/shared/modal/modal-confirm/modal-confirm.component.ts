@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ModalableDirective } from '../modalable.directive';
+import { ModalableDirective } from '@belomonte/async-modal-ngx';
 
 @Component({
   selector: 'tw-modal-confirm',
@@ -8,26 +8,21 @@ import { ModalableDirective } from '../modalable.directive';
   styleUrls: ['./modal-confirm.component.scss']
 })
 export class ModalConfirmComponent extends ModalableDirective<{
+  title: string,
   message: string,
-  title?: string,
   buttonOk?: string,
   buttonCancel?: string
 }, boolean> {
 
   response = new Subject<boolean | void>();
-  titulo: string | null = null;
-  mensagem: string | null = null;
+  message: string | null = null;
 
   buttonOk = 'Ok';
   buttonCancel = 'Cancelar';
 
-  override onInjectData(data: { message: string, title?: string, buttonOk?: string, buttonCancel?: string } | null): void {
+  override onInjectData(data: { message: string, buttonOk?: string, buttonCancel?: string } | null): void {
     if (data) {
-      this.mensagem = data.message;
-
-      if (data.title) {
-        this.titulo = data.title;
-      }
+      this.message = data.message;
 
       if (data.buttonOk) {
         this.buttonOk = data.buttonOk;
@@ -37,7 +32,6 @@ export class ModalConfirmComponent extends ModalableDirective<{
         this.buttonCancel = data.buttonCancel;
       }
     }
-
   }
 
   onClickButtonOk(): void {
