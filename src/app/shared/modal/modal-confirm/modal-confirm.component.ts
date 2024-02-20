@@ -15,19 +15,14 @@ export class ModalConfirmComponent extends ModalableDirective<{
 }, boolean> {
 
   response = new Subject<boolean | void>();
-  titulo: string | null = null;
-  mensagem: string | null = null;
+  message: string | null = null;
 
   buttonOk = 'Ok';
   buttonCancel = 'Cancelar';
 
-  override onInjectData(data: { message: string, title?: string, buttonOk?: string, buttonCancel?: string } | null): void {
+  override onInjectData(data: { message: string, buttonOk?: string, buttonCancel?: string } | null): void {
     if (data) {
-      this.mensagem = data.message;
-
-      if (data.title) {
-        this.titulo = data.title;
-      }
+      this.message = data.message;
 
       if (data.buttonOk) {
         this.buttonOk = data.buttonOk;

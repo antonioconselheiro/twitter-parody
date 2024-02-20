@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ModalableDirective } from '@shared/modal/modalable.directive';
+import { ModalableDirective } from '@belomonte/async-modal-ngx';
 import { Subject } from 'rxjs';
 
 @Component({
