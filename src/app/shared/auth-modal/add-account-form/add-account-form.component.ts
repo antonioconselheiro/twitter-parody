@@ -2,16 +2,15 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, ValidationErrors, Validators } from '@angular/forms';
 import { DataLoadType } from '@domain/data-load.type';
 import { NostrUser } from '@domain/nostr-user';
+import { IProfile } from '@domain/profile.interface';
 import { CameraObservable } from '@shared/camera/camera.observable';
 import { CustomValidator } from '@shared/custom-validator/custom-validator';
 import { MainErrorObservable } from '@shared/main-error/main-error.observable';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
+import { ProfileProxy } from '@shared/profile-service/profile.proxy';
 import { NostrSecretStatefull } from '@shared/security-service/nostr-secret.statefull';
 import { IUnauthenticatedUser } from '@shared/security-service/unauthenticated-user';
 import { AuthModalSteps } from '../auth-modal-steps.type';
-import { ProfileProxy } from '@shared/profile-service/profile.proxy';
-import { IProfile } from '@domain/profile.interface';
-import { nip19 } from 'nostr-tools';
 
 @Component({
   selector: 'tw-add-account-form',
@@ -65,7 +64,6 @@ export class AddAccountFormComponent {
     const errors = this.accountForm.controls[fieldName].errors || {};
     return errors[error] || false;
   }
-
 
   async onAddAccountSubmit(event: SubmitEvent): Promise<void> {
     event.stopPropagation();

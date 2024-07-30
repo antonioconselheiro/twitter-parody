@@ -1,5 +1,9 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# Beta test library
+belomonte-nostr-credential-ngx-0.0.1.tgz
+belomonte-nostr-ngx-0.0.1.tgz
+
 # Compiled output
 /dist
 /tmp
