@@ -1,10 +1,9 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AuthenticatedProfileObservable, IProfile } from '@belomonte/nostr-credential-ngx';
 import { DataLoadType } from '@domain/data-load.type';
-import { IProfile } from '@domain/profile.interface';
 import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
-import { AuthenticatedProfileObservable } from '@shared/profile-service/authenticated-profile.observable';
 import { TweetConverter } from '@shared/tweet-service/tweet.converter';
 import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
 import { Subscription } from 'rxjs';

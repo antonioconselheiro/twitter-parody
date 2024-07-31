@@ -1,14 +1,13 @@
 import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DataLoadType } from '@domain/data-load.type';
-import { IProfile } from '@domain/profile.interface';
 import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
-import { ProfileCache } from '@shared/profile-service/profile.cache';
 import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
 import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
 import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 import { TweetConverter } from '@shared/tweet-service/tweet.converter';
+import { IProfile, ProfileCache } from '@belomonte/nostr-credential-ngx';
 
 @Component({
   selector: 'tw-tweet-list',

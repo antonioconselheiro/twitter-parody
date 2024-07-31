@@ -2,9 +2,9 @@ import { SafeHtml } from '@angular/platform-browser';
 import Geohash from 'latlon-geohash';
 import { DataLoadType } from './data-load.type';
 import { TEventId } from './event-id.type';
-import { TNostrPublic } from './nostr-public.type';
 import { ITweetReactionMap } from './tweet-reaction-map.interface';
 import { ITweetZapMap } from './tweet-zap-map.interface';
+import { TNostrPublic } from '@belomonte/nostr-ngx';
 
 export type ITweet<T extends DataLoadType | unknown = unknown> = {
   id: TEventId;

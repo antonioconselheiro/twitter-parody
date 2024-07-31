@@ -1,12 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticatedProfileObservable, IProfile } from '@belomonte/nostr-credential-ngx';
 import { DataLoadType } from '@domain/data-load.type';
-import { IProfile } from '@domain/profile.interface';
 import { ITweet } from '@domain/tweet.interface';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
 import { MainErrorObservable } from '@shared/main-error/main-error.observable';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
-import { AuthenticatedProfileObservable } from '@shared/profile-service/authenticated-profile.observable';
 import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
 import { Subscription } from 'rxjs';
 

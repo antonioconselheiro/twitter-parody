@@ -19,7 +19,7 @@ main {
     }
 
     &:not(:last-child) {
-      tw-loading {
+      nostr-loading {
         display: none;
       }
     }

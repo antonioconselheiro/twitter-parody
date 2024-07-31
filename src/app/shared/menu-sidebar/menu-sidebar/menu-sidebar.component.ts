@@ -1,14 +1,12 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthModalComponent } from '@shared/auth-modal/auth-modal.component';
 import { ModalService } from '@belomonte/async-modal-ngx';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
-import { AuthenticatedProfileObservable } from '@shared/profile-service/authenticated-profile.observable';
 import { CompositeTweetPopoverComponent } from '@shared/tweet-widget/composite-tweet-popover/composite-tweet-popover.component';
 import { Subscription } from 'rxjs';
 import { MenuActiveObservable } from '../menu-active.observable';
 import { MenuType } from '../menu-type.enum';
-import { IProfile } from '@domain/profile.interface';
+import { AuthenticatedProfileObservable, CredentialHandlerService, IProfile } from '@belomonte/nostr-credential-ngx';
 
 @Component({
   selector: 'tw-menu-sidebar',
@@ -38,6 +36,7 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private profile$: AuthenticatedProfileObservable,
     private menuActive$: MenuActiveObservable,
+    private credentialHandlerService: CredentialHandlerService,
     private router: Router
   ) { }
 
@@ -66,27 +65,14 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
     if (profile) {
       this.popover.show();
     } else {
-      this.modalService
-        .createModal(AuthModalComponent)
-        .setData({
-          title: 'Accounts'
-        })
-        .build();
+      this.credentialHandlerService.handle();
     }
   }
 
   addExistingAccount(e: Event): void {
     e.stopPropagation();
 
-    this.modalService
-      .createModal(AuthModalComponent)
-      .setData({
-        title: 'Accounts',
-        currentAuthProfile: this.profile,
-        currentStep: 'add-account'
-      })
-      .build();
-
+    this.credentialHandlerService.addAccount();
     this.popover.hide();
   }
 

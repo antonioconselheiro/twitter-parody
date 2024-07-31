@@ -3,8 +3,7 @@ import { Subscription } from 'rxjs';
 import { MenuSidebarMobileObservable } from './menu-sidebar-mobile.observable';
 import { MenuType } from '../menu-type.enum';
 import { MenuActiveObservable } from '../menu-active.observable';
-import { IProfile } from '@domain/profile.interface';
-import { AuthenticatedProfileObservable } from '@shared/profile-service/authenticated-profile.observable';
+import { AuthenticatedProfileObservable, IProfile } from '@belomonte/nostr-credential-ngx';
 
 @Component({
   selector: 'tw-menu-sidebar-mobile',

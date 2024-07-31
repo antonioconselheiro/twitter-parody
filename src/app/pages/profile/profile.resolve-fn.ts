@@ -1,7 +1,6 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
-import { IProfile } from "@domain/profile.interface";
-import { ProfileProxy } from "@shared/profile-service/profile.proxy";
+import { IProfile, ProfileProxy } from "@belomonte/nostr-credential-ngx";
 
 export const profileResolverFn: ResolveFn<IProfile> =
     (route: ActivatedRouteSnapshot) => inject(ProfileProxy).load(route.params['npub']);

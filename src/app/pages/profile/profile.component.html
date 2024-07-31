@@ -19,7 +19,7 @@
     <div class="banner" [style.backgroundImage]="getProfileBanner()">
     </div>
     <div class="edit-profile-container">
-      <tw-profile-picture [profile]="profile"></tw-profile-picture>
+      <nostr-profile-picture [profile]="profile"></nostr-profile-picture>
   
       <button *ngIf="authProfile?.npub === profile.npub" class="button secondary">Edit profile</button>
     </div>
@@ -32,11 +32,11 @@
     </div>
     <div class="bio" [innerHTML]="profile.htmlAbout"></div>
     <div class="additional-information">
-      <span *ngIf="profile.location">
+      <span *ngIf="profile['location']">
         <div class="inline-icon icon-location">
           <div role="img"></div>
         </div>
-        <span>{{profile.location}}</span>
+        <span>{{profile['location']}}</span>
       </span>
       <span *ngIf="profile.website">
         <div class="inline-icon icon-link">

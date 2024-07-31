@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IProfile } from '@domain/profile.interface';
+import { AuthenticatedProfileObservable, IProfile } from '@belomonte/nostr-credential-ngx';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
 import { MainErrorObservable } from '@shared/main-error/main-error.observable';
 import { MenuSidebarMobileObservable } from '@shared/menu-sidebar/menu-sidebar-mobile/menu-sidebar-mobile.observable';
-import { AuthenticatedProfileObservable } from '@shared/profile-service/authenticated-profile.observable';
 import { Subscription } from 'rxjs';
 
 @Component({
