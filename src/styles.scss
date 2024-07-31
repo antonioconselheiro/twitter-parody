@@ -1,61 +1,25 @@
-// default colors
-@import 'styles/themes/defaults';
-
-// dark/light themes
-@import 'styles/themes/darker';
-@import 'styles/themes/dark';
-@import 'styles/themes/light';
-
-//  colored themes
-@import 'styles/themes/blue';
-@import 'styles/themes/yellow';
-@import 'styles/themes/magenta';
-@import 'styles/themes/purple';
-@import 'styles/themes/orange';
-@import 'styles/themes/green';
-
 //  responsivity
 @import 'styles/responsivity/menu-sidebar';
 @import 'styles/responsivity/floating-chat';
 @import 'styles/responsivity/explore-sidebar';
 @import 'styles/responsivity/timeline';
 @import 'styles/responsivity/tweet';
-@import 'styles/responsivity/modal';
 
 //  reset
 @import 'styles/reset';
 
 // elements
 @import 'styles/elements/body';
-@import 'styles/elements/button';
-@import 'styles/elements/heading';
 @import 'styles/elements/time';
-
-//  forms
-@import 'styles/components/forms/button';
-@import 'styles/components/forms/pin-field';
-@import 'styles/components/forms/floating-label';
-
-// svg icons
-@import 'styles/svg-icons';
 
 // components
 @import 'styles/components/colors';
 @import 'styles/components/tl-loading';
-@import 'styles/components/separator';
 @import 'styles/components/bordered';
-@import 'styles/components/svg-button';
-@import 'styles/components/verified';
-@import 'styles/components/header-backable';
 @import 'styles/components/side-container';
 @import 'styles/components/menu-sidebar';
 @import 'styles/components/tweet-content';
-@import 'styles/components/user-info';
 @import 'styles/components/terms';
-@import 'styles/components/raw-link';
-@import 'styles/components/profile-container';
-@import 'styles/components/unauthenticated-account';
-@import 'styles/components/list-menu';
 @import 'styles/components/popover';
 
 // tools

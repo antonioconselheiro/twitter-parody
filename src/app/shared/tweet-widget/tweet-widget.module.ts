@@ -3,9 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { DatetimeWidgetModule } from '@shared/datetime-widget/datetime-widget.module';
-import { LoadingWidgetModule } from '@shared/loading/loading-widget.module';
 import { PopoverWidgetModule } from '@shared/popover-widget/popover-widget.module';
-import { ProfileWidgetModule } from '@shared/profile-widget/profile-widget.module';
 import { SecurityWidgetModule } from '@shared/security-widget/security-widget.module';
 import { AmountModule } from '../amount/amount.module';
 import { TweetApi } from '../tweet-service/tweet.api';
@@ -16,6 +14,7 @@ import { TweetWriteButtonGroupComponent } from './tweet-write-button-group/tweet
 import { TweetWriteComponent } from './tweet-write/tweet-write.component';
 import { TweetComponent } from './tweet/tweet.component';
 import { TweetListComponent } from './tweet-list/tweet-list.component';
+import { LoadingWidgetModule, ProfileWidgetModule } from '@belomonte/nostr-credential-ngx';
 
 @NgModule({
   declarations: [

@@ -1,7 +1,7 @@
 {
   "name": "twitter-parody",
   "version": "0.0.1",
-  "license": "Unlicense",
+  "license": "LICENSE",
   "scripts": {
     "start": "npm run dev",
     "dev": "ng serve --host=0.0.0.0",
