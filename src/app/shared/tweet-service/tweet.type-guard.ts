@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { DataLoadType } from '@domain/data-load.type';
-import { NostrEventKind } from '@domain/nostr-event-kind.enum';
-import { IProfile } from '@domain/profile.interface';
 import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';
-import { Event, verifySignature } from 'nostr-tools';
+import { Event, NostrEvent } from 'nostr-tools';
 import { TweetCache } from './tweet.cache';
+import { NostrEventKind } from '@belomonte/nostr-ngx';
+import { IProfile } from '@belomonte/nostr-credential-ngx';
 
 /**
  * Centralize tweet logics with type guard porpouse
@@ -15,7 +15,10 @@ import { TweetCache } from './tweet.cache';
 })
 export class TweetTypeGuard {
 
-  isKind<T extends NostrEventKind>(event: Event<NostrEventKind>, kind: T): event is Event<T> {
+  /**
+   * @deprecated
+   */
+  isKind<T extends NostrEventKind>(event: NostrEvent, kind: T): boolean {
     return event.kind === kind;
   }
 
@@ -84,11 +87,10 @@ export class TweetTypeGuard {
     }
   }
 
+  /**
+   * FIXME: incluir lógica validando assinatura do evento
+   */
   isNostrEvent(possiblyNostrEvent: object): possiblyNostrEvent is Event {
-    if (verifySignature(possiblyNostrEvent as Event)) {
-      return true;
-    }
-
-    return false;
+    return true;
   }
 }

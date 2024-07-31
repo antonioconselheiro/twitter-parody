@@ -1,5 +1,5 @@
+import { TNostrPublic } from "@belomonte/nostr-ngx";
 import { DataLoadType } from "@domain/data-load.type";
-import { TNostrPublic } from "@domain/nostr-public.type";
 import { ITweet } from "@domain/tweet.interface";
 
 export interface ITweetRelationedInfoWrapper {

@@ -1,9 +1,7 @@
 import { Injectable } from "@angular/core";
+import { NostrConverter, NostrEventKind, NostrService } from "@belomonte/nostr-ngx";
 import { TEventId } from "@domain/event-id.type";
-import { NostrEventKind } from "@domain/nostr-event-kind.enum";
-import { NostrUser } from "@domain/nostr-user";
-import { ApiService } from "@shared/api-service/api.service";
-import { Event } from 'nostr-tools';
+import { NostrEvent } from 'nostr-tools';
 
 @Injectable({
   providedIn: 'root'
@@ -11,40 +9,39 @@ import { Event } from 'nostr-tools';
 export class TweetApi {
 
   constructor(
-    private apiService: ApiService
+    private nostrService: NostrService,
+    private nostrConverter: NostrConverter
   ) { }
 
-  listTweetsFromNostrPublics(npubs: string[]): Promise<Event<NostrEventKind.Text | NostrEventKind.Repost>[]> {
-    return this.apiService.get([
+  listTweetsFromNostrPublics(npubs: string[]): Promise<NostrEvent[]> {
+    return this.nostrService.request([
       {
         kinds: [
           NostrEventKind.Text,
           NostrEventKind.Repost
         ],
-        authors: npubs.map(npub => (new NostrUser(npub)).publicKeyHex),
+        authors: npubs.map(npub => this.nostrConverter.castNostrPublicToPubkey(npub)),
         limit: 25
       }
     ]);
   }
 
-  listReactionsFrom(npub: string): Promise<Event<NostrEventKind.Reaction>[]> {
-    return this.apiService.get([
+  listReactionsFrom(npub: string): Promise<NostrEvent[]> {
+    return this.nostrService.request([
       {
         kinds: [
           NostrEventKind.Reaction
         ],
         authors: [
-          String(new NostrUser(npub))
+          this.nostrConverter.castNostrPublicToPubkey(npub)
         ],
         limit: 25
       }
     ]);
   }
 
-  loadEvents(events: TEventId[]): Promise<Event<
-    NostrEventKind.Text | NostrEventKind.Repost | NostrEventKind.Reaction | NostrEventKind.Zap
-  >[]> {
-    return this.apiService.get([
+  loadEvents(events: TEventId[]): Promise<NostrEvent[]> {
+    return this.nostrService.request([
       {
         ids: events,
         kinds: [
@@ -62,10 +59,8 @@ export class TweetApi {
     ]);
   }
 
-  loadRelatedEvents(events: TEventId[]): Promise<Event<
-    NostrEventKind.Text | NostrEventKind.Repost
-  >[]> {
-    return this.apiService.get([
+  loadRelatedEvents(events: TEventId[]): Promise<NostrEvent[]> {
+    return this.nostrService.request([
       {
         kinds: [
           NostrEventKind.Text,
@@ -76,10 +71,8 @@ export class TweetApi {
     ]);
   }
 
-  loadRelatedReactions(events: TEventId[]): Promise<Event<
-    NostrEventKind.Reaction | NostrEventKind.Zap
-  >[]> {
-    return this.apiService.get([
+  loadRelatedReactions(events: TEventId[]): Promise<NostrEvent[]> {
+    return this.nostrService.request([
       {
         kinds: [
           NostrEventKind.Reaction,

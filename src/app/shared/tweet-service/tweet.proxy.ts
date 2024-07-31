@@ -1,16 +1,13 @@
 import { Injectable } from "@angular/core";
 import { TEventId } from "@domain/event-id.type";
-import { NostrEventKind } from "@domain/nostr-event-kind.enum";
-import { IProfile } from "@domain/profile.interface";
 import { IRetweet } from "@domain/retweet.interface";
 import { ITweet } from "@domain/tweet.interface";
-import { ProfileCache } from "@shared/profile-service/profile.cache";
-import { ProfileProxy } from "@shared/profile-service/profile.proxy";
-import { Event } from 'nostr-tools';
+import { NostrEvent } from 'nostr-tools';
 import { TweetTagsConverter } from "./tweet-tags.converter";
 import { TweetApi } from "./tweet.api";
 import { TweetCache } from "./tweet.cache";
 import { TweetTypeGuard } from "./tweet.type-guard";
+import { IProfile, ProfileCache, ProfileProxy } from "@belomonte/nostr-credential-ngx";
 
 @Injectable()
 export class TweetProxy {
@@ -41,7 +38,7 @@ export class TweetProxy {
     return this.loadRelatedEvents(rawEvents);
   }
 
-  private async loadRelatedEvents(rawEvents: Event<NostrEventKind>[]): Promise<
+  private async loadRelatedEvents(rawEvents: NostrEvent[]): Promise<
     Array<ITweet | IRetweet>
   > {
     if (!rawEvents.length) {
@@ -85,7 +82,7 @@ export class TweetProxy {
     // const wrapperReactions = this.tweetCache.cache(reactions);
 
     await this.profileProxy.loadProfiles(
-      wrapperRoot.npubs, wrapperRelated.npubs //, wrapperLazyEagerLoaded.npubs, wrapperReactions.npubs
+      wrapperRoot.npubs.concat(wrapperRelated.npubs) //, wrapperLazyEagerLoaded.npubs, wrapperReactions.npubs
     );
 
     return rawEvents

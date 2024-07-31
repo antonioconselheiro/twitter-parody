@@ -2,13 +2,11 @@ import { Injectable } from '@angular/core';
 import { DataLoadType } from '@domain/data-load.type';
 import { TEventId } from '@domain/event-id.type';
 import { TEventRelationType } from '@domain/event-relation-type.type';
-import { NostrEventKind } from '@domain/nostr-event-kind.enum';
-import { TNostrPublic } from '@domain/nostr-public.type';
 import { ITweet } from '@domain/tweet.interface';
-import { ProfileConverter } from '@shared/profile-service/profile.converter';
 import Geohash from 'latlon-geohash';
-import { Event, nip19 } from 'nostr-tools';
+import { Event, nip19, NostrEvent } from 'nostr-tools';
 import { TweetTypeGuard } from './tweet.type-guard';
+import { NostrConverter, NostrEventKind, TNostrPublic } from '@belomonte/nostr-ngx';
 
 /**
  * NIP12
@@ -20,13 +18,13 @@ import { TweetTypeGuard } from './tweet.type-guard';
 export class TweetTagsConverter {
 
   constructor(
-    private profilesConverter: ProfileConverter,
-    private tweetTypeGuard: TweetTypeGuard
+    private tweetTypeGuard: TweetTypeGuard,
+    private nostrConverter: NostrConverter
   ) { }
 
   mergeCoordinatesFromEvent(
     tweet: ITweet<DataLoadType.EAGER_LOADED>,
-    event: Event<NostrEventKind>
+    event: NostrEvent
   ): ITweet<DataLoadType.EAGER_LOADED> {
     const [, geohash] = event.tags.find(tag => tag[0] === 'g') || [];
     if (geohash) {
@@ -36,7 +34,7 @@ export class TweetTagsConverter {
     return tweet;
   }
 
-  getRelatedEvents<T extends NostrEventKind>(event: Event<T>): [
+  getRelatedEvents(event: NostrEvent): [
     TEventId, TEventRelationType
   ][] {
     const idIndex = 1;
@@ -52,12 +50,12 @@ export class TweetTagsConverter {
       });
   }
 
-  getFirstRelatedEvent<T extends NostrEventKind>(event: Event<T>): TEventId | null {
+  getFirstRelatedEvent(event: NostrEvent): TEventId | null {
     const matriz = this.getRelatedEvents(event);
     return matriz.at(0)?.at(0) || null;
   }
 
-  getMentionedEvent<T extends NostrEventKind>(event: Event<T>): TEventId | null {
+  getMentionedEvent(event: NostrEvent): TEventId | null {
     const mentionedFound = this
       .getRelatedEvents(event)
       .filter(([,type]) => type === 'mention')
@@ -71,7 +69,7 @@ export class TweetTagsConverter {
     return mentionedFound;
   }
   
-  getNoteMentionedInContent<T extends NostrEventKind>(event: Event<T>): TEventId | null {
+  getNoteMentionedInContent(event: NostrEvent): TEventId | null {
     const matches = event.content.match(/nostr:note[\da-z]+/);
     const match = matches && matches[0] || null;
     if (match) {
@@ -82,7 +80,7 @@ export class TweetTagsConverter {
     return null;
   }
 
-  getRepliedEvent<T extends NostrEventKind>(event: Event<T>): {
+  getRepliedEvent(event: NostrEvent): {
     replied: TEventId | null,
     root: TEventId | null
   } {
@@ -107,28 +105,28 @@ export class TweetTagsConverter {
     return replyData;
   }
 
-  getRelatedProfiles<T extends NostrEventKind>(event: Event<T>): string[] {
+  getRelatedProfiles(event: NostrEvent): string[] {
     return event.tags
       .filter(([type]) => type === 'p')
       .map(([, pubkey]) => pubkey);
   }
 
-  getFirstRelatedProfile<T extends NostrEventKind>(event: Event<T>): string | null {
+  getFirstRelatedProfile(event: NostrEvent): string | null {
     return this.getRelatedProfiles(event).at(0) || null;
   }
 
   getNostrPublicFromTags(event: Event): TNostrPublic[] {
     return event.tags
       .filter(([type]) => type === 'p')
-      .map(([, npub]) => this.profilesConverter.castPubkeyToNostrPublic(npub));
+      .map(([, npub]) => this.nostrConverter.castPubkeyToNostrPublic(npub));
   }
 
-  mergeRetweetingFromEvent(tweet: ITweet, event: Event<NostrEventKind>): void {
+  mergeRetweetingFromEvent(tweet: ITweet, event: NostrEvent): void {
     if (this.tweetTypeGuard.isKind(event, NostrEventKind.Repost)) {
       const idEvent = this.getFirstRelatedEvent(event);
       const pubkey = this.getFirstRelatedProfile(event);
       if (idEvent && pubkey) {
-        tweet.author = this.profilesConverter.castPubkeyToNostrPublic(pubkey);
+        tweet.author = this.nostrConverter.castPubkeyToNostrPublic(pubkey);
         tweet.retweeting = idEvent;
       } else {
         console.warn('[RELAY DATA WARNING] mentioned tweet and/or author not found in retweet', event);

@@ -1,4 +1,4 @@
-import { TNostrPublic } from "./nostr-public.type";
+import { TNostrPublic } from "@belomonte/nostr-ngx";
 import { TEventId } from "./event-id.type";
 
 export interface IReaction {

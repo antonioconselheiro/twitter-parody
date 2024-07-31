@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
-import { TNostrPublic } from '@domain/nostr-public.type';
-import { ProfileCache } from '@shared/profile-service/profile.cache';
+import { ProfileCache } from '@belomonte/nostr-credential-ngx';
+import { TNostrPublic } from '@belomonte/nostr-ngx';
 import { UrlUtil } from '@shared/util/url.service';
 
 @Injectable({
@@ -113,9 +113,9 @@ export class HtmlfyService {
 
     if (matches) {
       [...matches].forEach(match => {
-        const npub = match.replace(/^\{\{|\}\}/g, '');
-        const profile = ProfileCache.profiles[npub];
-        let replace = npub;
+        const npub = match.replace(/^\{\{|\}\}/g, '') as TNostrPublic;
+        const profile = ProfileCache.profiles[npub ];
+        let replace: string = npub;
         if (profile) {
           replace = profile.display_name || profile.name || this.minifyNostrPublic(npub);
         }

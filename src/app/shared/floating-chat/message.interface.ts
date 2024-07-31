@@ -1,4 +1,4 @@
-import { IProfile } from "@domain/profile.interface";
+import { IProfile } from "@belomonte/nostr-credential-ngx";
 
 export interface IMessage {
   text: string;

@@ -1,5 +1,5 @@
 <div *ngIf="loading && !tweet" class="separator tl-loading">
-  <tw-loading></tw-loading>
+  <nostr-loading></nostr-loading>
 </div>
 
 <article [class.separator]="!retweeted" class="read-tweet" *ngFor="let twet of tweets; trackBy: trackByTweetId">
@@ -10,7 +10,7 @@
   
     <div class="tweet-structure">
       <div *ngIf="twet.author">
-        <tw-profile-picture [profile]="getAuthorProfile(twet)"></tw-profile-picture>
+        <nostr-profile-picture [profile]="getAuthorProfile(twet)"></nostr-profile-picture>
       </div>
       <div class="tweet-metadata">
         <header>
@@ -107,7 +107,7 @@
   <ng-container *ngIf="twet.load === LAZY_LOADED">
     <div class="tweet-structure">
       <div *ngIf="twet.author">
-        <tw-profile-picture [profile]="getAuthorProfile(twet)"></tw-profile-picture>
+        <nostr-profile-picture [profile]="getAuthorProfile(twet)"></nostr-profile-picture>
       </div>
       <div class="tweet-metadata">
         <header>
@@ -140,7 +140,7 @@
   </ng-container>
 </article>
 <div *ngIf="loading && tweet" class="separator tl-loading">
-  <tw-loading></tw-loading>
+  <nostr-loading></nostr-loading>
 </div>
 <tw-tweet-image-viewer
   *ngIf="viewing"
