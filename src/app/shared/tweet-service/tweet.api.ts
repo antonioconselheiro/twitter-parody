@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
-import { NostrConverter, NostrEventKind, NostrService } from "@belomonte/nostr-ngx";
-import { TEventId } from "@domain/event-id.type";
+import { Injectable } from '@angular/core';
+import { NostrConverter, NostrEventKind, NostrService, TNostrPublic } from '@belomonte/nostr-ngx';
+import { TEventId } from '@domain/event-id.type';
 import { NostrEvent } from 'nostr-tools';
 
 @Injectable({
@@ -13,11 +13,11 @@ export class TweetApi {
     private nostrConverter: NostrConverter
   ) { }
 
-  listTweetsFromNostrPublics(npubs: string[]): Promise<NostrEvent[]> {
+  listTweetsFromNostrPublics(npubs: TNostrPublic[]): Promise<NostrEvent[]> {
     return this.nostrService.request([
       {
         kinds: [
-          NostrEventKind.Text,
+          NostrEventKind.ShortTextNote,
           NostrEventKind.Repost
         ],
         authors: npubs.map(npub => this.nostrConverter.castNostrPublicToPubkey(npub)),
@@ -26,7 +26,7 @@ export class TweetApi {
     ]);
   }
 
-  listReactionsFrom(npub: string): Promise<NostrEvent[]> {
+  listReactionsFrom(npub: TNostrPublic): Promise<NostrEvent[]> {
     return this.nostrService.request([
       {
         kinds: [
@@ -45,13 +45,13 @@ export class TweetApi {
       {
         ids: events,
         kinds: [
-          NostrEventKind.Text
+          NostrEventKind.ShortTextNote
         ]
       },
 
       {
         kinds: [
-          NostrEventKind.Text,
+          NostrEventKind.ShortTextNote,
           NostrEventKind.Repost
         ],
         '#e': events
@@ -63,7 +63,7 @@ export class TweetApi {
     return this.nostrService.request([
       {
         kinds: [
-          NostrEventKind.Text,
+          NostrEventKind.ShortTextNote,
           NostrEventKind.Repost
         ],
         '#e': events

@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
+import { IProfile } from '@belomonte/nostr-credential-ngx';
 import { DataLoadType } from '@domain/data-load.type';
 import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';
 import { Event, NostrEvent } from 'nostr-tools';
 import { TweetCache } from './tweet.cache';
-import { NostrEventKind } from '@belomonte/nostr-ngx';
-import { IProfile } from '@belomonte/nostr-credential-ngx';
 
 /**
  * Centralize tweet logics with type guard porpouse
@@ -18,7 +17,7 @@ export class TweetTypeGuard {
   /**
    * @deprecated
    */
-  isKind<T extends NostrEventKind>(event: NostrEvent, kind: T): boolean {
+  isKind(event: NostrEvent, kind: number): boolean {
     return event.kind === kind;
   }
 

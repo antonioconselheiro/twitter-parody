@@ -32,11 +32,11 @@
     </div>
     <div class="bio" [innerHTML]="profile.htmlAbout"></div>
     <div class="additional-information">
-      <span *ngIf="profile.location">
+      <span *ngIf="profile['location']">
         <div class="inline-icon icon-location">
           <div role="img"></div>
         </div>
-        <span>{{profile.location}}</span>
+        <span>{{profile['location']}}</span>
       </span>
       <span *ngIf="profile.website">
         <div class="inline-icon icon-link">

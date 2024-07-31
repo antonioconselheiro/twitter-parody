@@ -37,7 +37,7 @@ export class TweetConverter {
     // TODO: check in tags if tweets have mentions and then, create the threadfy method
     // eslint-disable-next-line complexity
     events.forEach(event => {
-      const isSimpleText = this.tweetTypeGuard.isKind(event, NostrEventKind.Text);
+      const isSimpleText = this.tweetTypeGuard.isKind(event, NostrEventKind.ShortTextNote);
       const isRepost = this.tweetTypeGuard.isKind(event, NostrEventKind.Repost);
       const isReaction = this.tweetTypeGuard.isKind(event, NostrEventKind.Reaction);
       const isZap = this.tweetTypeGuard.isKind(event, NostrEventKind.Zap);
@@ -173,7 +173,7 @@ export class TweetConverter {
       content = '';
     }
 
-    const retweetAsTweet: NostrEvent = { ...event, content, kind: NostrEventKind.Text };
+    const retweetAsTweet: NostrEvent = { ...event, content, kind: NostrEventKind.ShortTextNote };
     const { tweet: retweet, npubs: npubs2 } = this.castEventToTweet(retweetAsTweet, retweeted.id);
     npubs = npubs.concat(npubs2);
     if (retweeted.author) {

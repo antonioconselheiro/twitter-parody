@@ -8,6 +8,7 @@ import { TweetApi } from "./tweet.api";
 import { TweetCache } from "./tweet.cache";
 import { TweetTypeGuard } from "./tweet.type-guard";
 import { IProfile, ProfileCache, ProfileProxy } from "@belomonte/nostr-credential-ngx";
+import { TNostrPublic } from "@belomonte/nostr-ngx";
 
 @Injectable()
 export class TweetProxy {
@@ -24,14 +25,14 @@ export class TweetProxy {
     return TweetCache.get(idEvent);
   }
 
-  async listTweetsFromNostrPublic(npub: string): Promise<
+  async listTweetsFromNostrPublic(npub: TNostrPublic): Promise<
     Array<ITweet | IRetweet>
   > {
     const rawEvents = await this.tweetApi.listTweetsFromNostrPublics([npub]);
     return this.loadRelatedEvents(rawEvents);
   }
 
-  async listReactionsFromNostrPublic(npub: string): Promise<
+  async listReactionsFromNostrPublic(npub: TNostrPublic): Promise<
     Array<ITweet | IRetweet>
   > {
     const rawEvents = await this.tweetApi.listReactionsFrom(npub);
