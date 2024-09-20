@@ -44,5 +44,3 @@ Bitcoin onchain donate: <a href="bitcoin:bc1qrm99lmmpwk7zsh7njpgthw87yvdm38j2lzp
 
 ## Contribute
 - See [CONTRIBUTE.md](./CONTRIBUTE.md)
-- Veja também o vídeo em português com overview sobre o projeto:
-[https://www.youtube.com/watch?v=Bf7hpO8GSy4](https://www.youtube.com/watch?v=Bf7hpO8GSy4)
