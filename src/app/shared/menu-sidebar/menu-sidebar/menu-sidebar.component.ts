@@ -6,7 +6,7 @@ import { CompositeTweetPopoverComponent } from '@shared/tweet-widget/composite-t
 import { Subscription } from 'rxjs';
 import { MenuActiveObservable } from '../menu-active.observable';
 import { MenuType } from '../menu-type.enum';
-import { AuthenticatedProfileObservable, CredentialHandlerService, IProfile } from '@belomonte/nostr-credential-ngx';
+import { AuthenticatedProfileObservable, CredentialHandlerService, IProfile } from '@belomonte/nostr-gui-ngx';
 
 @Component({
   selector: 'tw-menu-sidebar',

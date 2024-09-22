@@ -7,7 +7,7 @@ import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
 import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
 import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 import { TweetConverter } from '@shared/tweet-service/tweet.converter';
-import { IProfile, ProfileCache } from '@belomonte/nostr-credential-ngx';
+import { IProfile, ProfileCache } from '@belomonte/nostr-gui-ngx';
 
 @Component({
   selector: 'tw-tweet-list',

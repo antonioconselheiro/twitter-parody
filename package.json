@@ -1,7 +1,7 @@
 {
   "name": "twitter-parody",
   "version": "0.0.1",
-  "license": "LICENSE",
+  "license": "Ungovernable",
   "scripts": {
     "start": "npm run dev",
     "dev": "ng serve --host=0.0.0.0",
@@ -29,13 +29,11 @@
     "@belomonte/nostr-gui-ngx": "file:belomonte-nostr-gui-ngx-0.0.1.tgz",
     "@belomonte/nostr-ngx": "file:belomonte-nostr-ngx-0.0.1.tgz",
     "@ctrl/ngx-emoji-mart": "^9.2.0",
-    "calc-js": "^2.0.7",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
-    "crypto-js": "^4.1.1",
     "latlon-geohash": "^2.0.0",
     "moment": "^2.29.4",
-    "nostr-tools": "^2.7.1",
+    "nostr-tools": "^2.7.2",
     "qr-scanner": "^1.4.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

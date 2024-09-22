@@ -1,5 +1,4 @@
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
-import { DataLoadType } from '@domain/data-load.type';
 import { ITweet } from '@domain/tweet.interface';
 import { ICloseable } from '@shared/util/closeable.interface';
 

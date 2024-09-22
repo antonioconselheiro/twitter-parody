@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
-import { ProfileCache } from '@belomonte/nostr-credential-ngx';
+import { ProfileCache } from '@belomonte/nostr-gui-ngx';
 import { TNostrPublic } from '@belomonte/nostr-ngx';
 import { UrlUtil } from '@shared/util/url.service';
 

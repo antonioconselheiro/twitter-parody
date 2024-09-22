@@ -1,5 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Calc } from 'calc-js';
 
 @Pipe({
   name: 'amount'
@@ -20,29 +19,16 @@ export class AmountPipe implements PipeTransform {
     } else if (value < thirdFormatStyle) {
       const commaBase = 10;
       const reduceSize = 1_000;
-      const mil = new Calc(value)
-        .divide(reduceSize)
-        .multiply(commaBase)
-        .pipe(n => Math.floor(n))
-        .divide(commaBase)
-        .finish();
+      const mil = Math.floor((value / reduceSize) * commaBase) / commaBase;
 
-        const milFormatted = String(mil).replace(/\./, ',');
-        return `${milFormatted} mil`;
+      const milFormatted = String(mil).replace(/\./, ',');
+      return `${milFormatted} mil`;
     } else {
       const commaBase = 10;
-      const mi = new Calc(value) 
-        .divide(thirdFormatStyle)
-        .multiply(commaBase)
-        .pipe(n => Math.floor(n))
-        .divide(commaBase)
-        .finish();
+      const mi = Math.floor((value / thirdFormatStyle) * commaBase) / commaBase;
 
-        const miFormatted = String(mi).replace(/\./, ',');
-        return `${miFormatted} mi`;
+      const miFormatted = String(mi).replace(/\./, ',');
+      return `${miFormatted} mi`;
     }
-
-
   }
-
 }

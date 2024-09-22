@@ -13,7 +13,7 @@ export type ITweet<T extends DataLoadType | unknown = unknown> = {
   zaps: ITweetZapMap;
   rootRepling?: TEventId;
   repling?: TEventId;
-  retweetedBy?: { [attr: TEventId]: TNostrPublic };
+  retweetedBy?: { [eventId: string]: TNostrPublic };
   retweeting?: TEventId;
   replies?: TEventId[];
 } & ({

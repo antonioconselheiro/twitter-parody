@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { IMessage } from './message.interface';
-import { IProfile } from '@belomonte/nostr-credential-ngx';
+import { IProfile } from '@belomonte/nostr-gui-ngx';
 
 @Component({
   selector: 'tw-floating-chat',

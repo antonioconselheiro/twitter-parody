@@ -14,7 +14,7 @@ import { TweetWriteButtonGroupComponent } from './tweet-write-button-group/tweet
 import { TweetWriteComponent } from './tweet-write/tweet-write.component';
 import { TweetComponent } from './tweet/tweet.component';
 import { TweetListComponent } from './tweet-list/tweet-list.component';
-import { LoadingWidgetModule, ProfileWidgetModule } from '@belomonte/nostr-credential-ngx';
+import { LoadingWidgetModule, ProfileWidgetModule } from '@belomonte/nostr-gui-ngx';
 
 @NgModule({
   declarations: [

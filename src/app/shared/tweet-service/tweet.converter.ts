@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { NostrConverter, NostrEventKind, TNostrPublic } from '@belomonte/nostr-ngx';
 import { DataLoadType } from '@domain/data-load.type';
 import { TEventId } from '@domain/event-id.type';
 import { IReaction } from '@domain/reaction.interface';
@@ -11,8 +12,6 @@ import { ITweetRelationedInfoWrapper } from './tweet-relationed-info-wrapper.int
 import { TweetTagsConverter } from './tweet-tags.converter';
 import { TweetCache } from './tweet.cache';
 import { TweetTypeGuard } from './tweet.type-guard';
-import { ProfileConverter } from '@belomonte/nostr-credential-ngx';
-import { NostrConverter, NostrEventKind, TNostrPublic } from '@belomonte/nostr-ngx';
 
 @Injectable({
   providedIn: 'root'

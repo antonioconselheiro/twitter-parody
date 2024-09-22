@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AuthenticatedProfileObservable, IProfile } from '@belomonte/nostr-credential-ngx';
+import { AuthenticatedProfileObservable, IProfile } from '@belomonte/nostr-gui-ngx';
 import { DataLoadType } from '@domain/data-load.type';
 import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';

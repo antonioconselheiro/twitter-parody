@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { IProfile } from '@belomonte/nostr-credential-ngx';
+import { IProfile } from '@belomonte/nostr-gui-ngx';
 
 @Component({
   selector: 'tw-floating-chat-messages',

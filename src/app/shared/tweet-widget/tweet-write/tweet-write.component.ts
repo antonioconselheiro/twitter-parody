@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthenticatedProfileObservable, IProfile } from '@belomonte/nostr-credential-ngx';
+import { AuthenticatedProfileObservable, IProfile } from '@belomonte/nostr-gui-ngx';
 import { Subscription } from 'rxjs';
 
 @Component({

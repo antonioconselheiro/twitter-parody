@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthenticatedProfileObservable, IProfile } from '@belomonte/nostr-credential-ngx';
+import { AuthenticatedProfileObservable, IProfile } from '@belomonte/nostr-gui-ngx';
 import { DataLoadType } from '@domain/data-load.type';
 import { ITweet } from '@domain/tweet.interface';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';

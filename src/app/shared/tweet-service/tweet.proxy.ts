@@ -7,7 +7,7 @@ import { TweetTagsConverter } from "./tweet-tags.converter";
 import { TweetApi } from "./tweet.api";
 import { TweetCache } from "./tweet.cache";
 import { TweetTypeGuard } from "./tweet.type-guard";
-import { IProfile, ProfileCache, ProfileProxy } from "@belomonte/nostr-credential-ngx";
+import { IProfile, ProfileCache, ProfileProxy } from "@belomonte/nostr-gui-ngx";
 import { TNostrPublic } from "@belomonte/nostr-ngx";
 
 @Injectable()
@@ -28,14 +28,14 @@ export class TweetProxy {
   async listTweetsFromNostrPublic(npub: TNostrPublic): Promise<
     Array<ITweet | IRetweet>
   > {
-    const rawEvents = await this.tweetApi.listTweetsFromNostrPublics([npub]);
+    const rawEvents = await this.tweetApi.listTweetsFromPubkeyList([npub]);
     return this.loadRelatedEvents(rawEvents);
   }
 
   async listReactionsFromNostrPublic(npub: TNostrPublic): Promise<
     Array<ITweet | IRetweet>
   > {
-    const rawEvents = await this.tweetApi.listReactionsFrom(npub);
+    const rawEvents = await this.tweetApi.listReactionsFromPubkey(npub);
     return this.loadRelatedEvents(rawEvents);
   }
 

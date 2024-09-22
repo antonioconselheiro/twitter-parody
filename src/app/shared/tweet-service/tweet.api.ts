@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NostrConverter, NostrEventKind, NostrService, TNostrPublic } from '@belomonte/nostr-ngx';
+import { NostrEventKind, NostrPool } from '@belomonte/nostr-ngx';
 import { TEventId } from '@domain/event-id.type';
 import { NostrEvent } from 'nostr-tools';
 
@@ -9,31 +9,30 @@ import { NostrEvent } from 'nostr-tools';
 export class TweetApi {
 
   constructor(
-    private nostrService: NostrService,
-    private nostrConverter: NostrConverter
+    private npool: NostrPool
   ) { }
 
-  listTweetsFromNostrPublics(npubs: TNostrPublic[]): Promise<NostrEvent[]> {
-    return this.nostrService.request([
+  listTweetsFromPubkeyList(pubkeys: Array<string>): Promise<NostrEvent[]> {
+    return this.npool.request([
       {
         kinds: [
           NostrEventKind.ShortTextNote,
           NostrEventKind.Repost
         ],
-        authors: npubs.map(npub => this.nostrConverter.castNostrPublicToPubkey(npub)),
+        authors: pubkeys,
         limit: 25
       }
     ]);
   }
 
-  listReactionsFrom(npub: TNostrPublic): Promise<NostrEvent[]> {
-    return this.nostrService.request([
+  listReactionsFromPubkey(pubkey: string): Promise<NostrEvent[]> {
+    return this.npool.request([
       {
         kinds: [
           NostrEventKind.Reaction
         ],
         authors: [
-          this.nostrConverter.castNostrPublicToPubkey(npub)
+          pubkey
         ],
         limit: 25
       }
@@ -41,7 +40,7 @@ export class TweetApi {
   }
 
   loadEvents(events: TEventId[]): Promise<NostrEvent[]> {
-    return this.nostrService.request([
+    return this.npool.request([
       {
         ids: events,
         kinds: [
@@ -60,7 +59,7 @@ export class TweetApi {
   }
 
   loadRelatedEvents(events: TEventId[]): Promise<NostrEvent[]> {
-    return this.nostrService.request([
+    return this.npool.request([
       {
         kinds: [
           NostrEventKind.ShortTextNote,
@@ -72,7 +71,7 @@ export class TweetApi {
   }
 
   loadRelatedReactions(events: TEventId[]): Promise<NostrEvent[]> {
-    return this.nostrService.request([
+    return this.npool.request([
       {
         kinds: [
           NostrEventKind.Reaction,

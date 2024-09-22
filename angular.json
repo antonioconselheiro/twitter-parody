@@ -34,7 +34,7 @@
             ],
             "styles": [
               "src/styles.scss",
-              "node_modules/@belomonte/nostr-credential-ngx/styles.scss",
+              "node_modules/@belomonte/nostr-gui-ngx/styles.scss",
               "node_modules/@ctrl/ngx-emoji-mart/picker.css"
             ],
             "scripts": []

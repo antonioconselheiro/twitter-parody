@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ITheme } from './theme.interface';
-import { AuthenticatedProfileObservable, IProfile } from '@belomonte/nostr-credential-ngx';
+import { AuthenticatedProfileObservable, IProfile } from '@belomonte/nostr-gui-ngx';
 
 @Injectable({
   providedIn: 'root'

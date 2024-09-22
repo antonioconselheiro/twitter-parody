@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IProfile } from '@belomonte/nostr-credential-ngx';
+import { IProfile } from '@belomonte/nostr-gui-ngx';
 import { DataLoadType } from '@domain/data-load.type';
 import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';

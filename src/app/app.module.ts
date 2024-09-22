@@ -21,8 +21,8 @@ import { ProfileModule } from './pages/profile/profile.module';
 import { TimelineModule } from './pages/timeline/timeline.module';
 import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.module';
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
-import { LoadingWidgetModule, ProfileServiceModule } from '@belomonte/nostr-credential-ngx';
-import { NostrModule } from '@belomonte/nostr-ngx';
+import { LoadingWidgetModule } from '@belomonte/nostr-gui-ngx';
+import { NostrModule, ProfileModule as NostrProfileModule } from '@belomonte/nostr-ngx';
 
 @NgModule({
   declarations: [
@@ -48,7 +48,7 @@ import { NostrModule } from '@belomonte/nostr-ngx';
     //  shared service module
     UtilModule,
     MainErrorModule,
-    ProfileServiceModule,
+    NostrProfileModule,
     TweetServiceModule,
     HtmlfyServiceModule,
 

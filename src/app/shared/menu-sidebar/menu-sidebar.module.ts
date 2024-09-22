@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CredentialManagerWidgetModule, ProfileWidgetModule } from '@belomonte/nostr-credential-ngx';
+import { CredentialManagerWidgetModule, ProfileWidgetModule } from '@belomonte/nostr-gui-ngx';
 import { PopoverWidgetModule } from '@shared/popover-widget/popover-widget.module';
 import { MenuActiveObservable } from './menu-active.observable';
 import { MenuSidebarMobileComponent } from './menu-sidebar-mobile/menu-sidebar-mobile.component';
