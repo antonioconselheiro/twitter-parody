@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IRetweet } from '@domain/retweet.interface';
-import { ITweet } from '@domain/tweet.interface';
+import { Tweet } from '@domain/tweet.interface';
 import { verifyEvent } from 'nostr-tools';
 import { NostrMetadata } from '@nostrify/nostrify';
 
@@ -12,7 +12,7 @@ import { NostrMetadata } from '@nostrify/nostrify';
 })
 export class TweetTypeGuard {
 
-  isSimpleRetweet(tweet: ITweet): tweet is IRetweet {
+  isSimpleRetweet(tweet: Tweet): tweet is IRetweet {
     if (tweet.retweeting) {
       const nasNoContent = !String(tweet.htmlFullView).trim().length;
 
@@ -22,7 +22,7 @@ export class TweetTypeGuard {
     return false;
   }
 
-  isRetweetedByProfile(tweet: ITweet | IRetweet, pubkey: string | null): tweet is IRetweet {
+  isRetweetedByProfile(tweet: Tweet | IRetweet, pubkey: string | null): tweet is IRetweet {
     if (!pubkey) {
       return false;
     }
@@ -35,7 +35,7 @@ export class TweetTypeGuard {
     return Object.values(tweet.retweetedBy).includes(pubkey);
   }
 
-  isLikedByProfile(tweet: ITweet | IRetweet, profile: NostrMetadata | null): boolean {
+  isLikedByProfile(tweet: Tweet | IRetweet, profile: NostrMetadata | null): boolean {
     tweet = this.getShowingTweet(tweet);
     const reactions = Object.values(tweet.reactions);
     if (!profile || !reactions.length) {
@@ -49,9 +49,9 @@ export class TweetTypeGuard {
    * Show note if is a simple text, but if it's a retweet
    * it shows the retweeted note
    */
-  getShowingTweet(tweet: ITweet | IRetweet): ITweet;
-  getShowingTweet(tweet: ITweet | IRetweet | null): ITweet | null;
-  getShowingTweet(tweet: ITweet | IRetweet | null): ITweet | null {
+  getShowingTweet(tweet: Tweet | IRetweet): Tweet;
+  getShowingTweet(tweet: Tweet | IRetweet | null): Tweet | null;
+  getShowingTweet(tweet: Tweet | IRetweet | null): Tweet | null {
     if (!tweet) {
       return null;
     } else if (tweet.retweeting) {

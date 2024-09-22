@@ -33,11 +33,11 @@ export class ThemeObservable extends BehaviorSubject<ITheme> {
 
   private bindProfileSubscription(): void {
     this.profile$.subscribe({
-      next: profile => this.next(this.themeFromProfile(profile))
+      next: profile => this.next(this.themeFromProfile(profile?.metadata))
     });
   }
 
-  private themeFromProfile(profile: NostrMetadata | null): { base: string, color: string } {
+  private themeFromProfile(profile: NostrMetadata | undefined): { base: string, color: string } {
     // FIXME: remover any
     const base = (profile as any)?.theme || 'darker';
     const color = (profile as any)?.color || 'blue';

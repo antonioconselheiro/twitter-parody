@@ -1,12 +1,13 @@
 import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { IRetweet } from '@domain/retweet.interface';
-import { ITweet } from '@domain/tweet.interface';
+import { Tweet } from '@domain/tweet.interface';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
 import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
 import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 import { TweetConverter } from '@shared/tweet-service/tweet.converter';
 import { NostrMetadata } from '@nostrify/nostrify';
+import { NostrPool, ProfileService } from '@belomonte/nostr-ngx';
 
 @Component({
   selector: 'tw-tweet-list',
@@ -20,7 +21,7 @@ export class TweetListComponent {
   loading = true;
 
   @Input()
-  tweets: Array<ITweet | IRetweet> = [];
+  tweets: Array<Tweet | IRetweet> = [];
 
   /**
    * This represents the root tweet of a thread of chained
@@ -28,12 +29,12 @@ export class TweetListComponent {
    * shown in this tweet list
    */
   @Input()
-  set tweet(tweet: ITweet | IRetweet | null) {
+  set tweet(tweet: Tweet | IRetweet | null) {
     this.interceptedTweet = tweet;
     this.interceptTweet(tweet);
   }
 
-  get tweet(): ITweet | IRetweet | null {
+  get tweet(): Tweet | IRetweet | null {
     return this.interceptedTweet;
   }
 
@@ -44,17 +45,17 @@ export class TweetListComponent {
    * comment is shown
    */
   @Input()
-  set retweeted(tweet: ITweet | null) {
+  set retweeted(tweet: Tweet | null) {
     this.interceptedRetweet = tweet;
     this.interceptRetweet(tweet);
   }
 
-  get retweeted(): ITweet | null {
+  get retweeted(): Tweet | null {
     return this.interceptedRetweet;
   }
 
-  private interceptedRetweet: ITweet | null = null;
-  private interceptedTweet: ITweet | IRetweet | null = null;
+  private interceptedRetweet: Tweet | null = null;
+  private interceptedTweet: Tweet | IRetweet | null = null;
 
   @ViewChild('tweetActions', { read: PopoverComponent })
   share!: PopoverComponent;
@@ -64,25 +65,27 @@ export class TweetListComponent {
   constructor(
     private tweetTypeGuard: TweetTypeGuard,
     private tweetConverter: TweetConverter,
-    private tweetProxy: TweetProxy
+    private tweetProxy: TweetProxy,
+    private profileService: ProfileService,
+    private npool: NostrPool
   ) { }
 
-  getRetweetAuthorName(tweet: ITweet): string {
-    const author = ProfileCache.profiles[tweet.author];
-    return author.display_name || author.name || '';
+  async getRetweetAuthorName(tweet: Tweet): string {
+    const author = await this.profileService.get(tweet.author);
+    return author && (author.display_name || author.name) || '';
   }
 
-  getAuthorProfile(tweet: ITweet): NostrMetadata | null {
+  getAuthorProfile(tweet: Tweet): NostrMetadata | null {
     //  FIXME: dar um jeito do template não precisar chamar
     //  diversas vezes um método com essa complexidade
     return this.tweetProxy.getTweetOrRetweetedAuthorProfile(tweet);
   }
 
-  isSimpleRetweet(tweet: ITweet): tweet is IRetweet {
+  isSimpleRetweet(tweet: Tweet): tweet is IRetweet {
     return this.tweetTypeGuard.isSimpleRetweet(tweet);
   }
 
-  showMentionedTweetInRetweet(tweet: ITweet | IRetweet): boolean {
+  showMentionedTweetInRetweet(tweet: Tweet | IRetweet): boolean {
     const has = this.tweetConverter.getRetweet(tweet);
     if (!has) {
       return false;
@@ -95,11 +98,11 @@ export class TweetListComponent {
     return true;
   }
 
-  getRetweet(tweet: ITweet | IRetweet): ITweet | null {
+  getRetweet(tweet: Tweet | IRetweet): Tweet | null {
     return this.tweetConverter.getRetweet(tweet);
   }
 
-  getAuthorName(tweet: ITweet): string {
+  getAuthorName(tweet: Tweet): string {
     const author = this.getAuthorProfile(tweet);
     if (!author) {
       return '';
@@ -108,21 +111,23 @@ export class TweetListComponent {
     return author.display_name || author.name || '';
   }
 
-  private interceptTweet(tweet: ITweet | IRetweet | null): void {
+  private async interceptTweet(tweet: Tweet | IRetweet | null): Promise<void> {
     if (tweet) {
       const repliesId = (tweet.replies || []);
-      const replies = repliesId.map(reply => this.tweetProxy.get(reply))
+      const repliesPromise = repliesId.map(reply => this.npool.query([{ ids: [ reply ], limit: 1 }]));
+      const events = (await Promise.all(repliesPromise)).flat(2);
+      const replies = this.tweetConverter.castResultsetToTweets(events);
       this.tweets = [tweet, ...replies];
     }
   }
 
-  private interceptRetweet(tweet: ITweet | null): void {
+  private interceptRetweet(tweet: Tweet | null): void {
     if (tweet) {
       this.tweets = [ tweet ];
     }
   }
 
-  trackByTweetId(i: number, tweet: ITweet): string {
+  trackByTweetId(i: number, tweet: Tweet): string {
     return tweet.id;
   }
 

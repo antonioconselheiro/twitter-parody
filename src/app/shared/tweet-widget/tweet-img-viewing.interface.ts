@@ -1,7 +1,6 @@
-import { DataLoadType } from "@domain/data-load.type";
-import { ITweet } from "@domain/tweet.interface";
+import { Tweet } from "@domain/tweet.interface";
 
 export interface ITweetImgViewing {
-  tweet: ITweet<DataLoadType.EAGER_LOADED>;
+  tweet: Tweet;
   img: string;
 }

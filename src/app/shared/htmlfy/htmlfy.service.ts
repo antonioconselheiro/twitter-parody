@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
-import { ProfileCache } from '@belomonte/nostr-gui-ngx';
-import { TNostrPublic } from '@belomonte/nostr-ngx';
+import { NostrConverter, NPub, ProfileCache } from '@belomonte/nostr-ngx';
 import { UrlUtil } from '@shared/util/url.service';
 
 @Injectable({
@@ -10,7 +9,9 @@ import { UrlUtil } from '@shared/util/url.service';
 export class HtmlfyService {
 
   constructor(
-    private urlUtil: UrlUtil
+    private urlUtil: UrlUtil,
+    private nostrConverter: NostrConverter,
+    private profileCache: ProfileCache
   ) { }
 
   safify(content: string): SafeHtml {
@@ -113,8 +114,9 @@ export class HtmlfyService {
 
     if (matches) {
       [...matches].forEach(match => {
-        const npub = match.replace(/^\{\{|\}\}/g, '') as TNostrPublic;
-        const profile = ProfileCache.profiles[npub ];
+        const npub = match.replace(/^\{\{|\}\}/g, '') as NPub;
+        const pubkey = this.nostrConverter.casNPubToPubkey(npub);
+        const profile = this.profileCache.get(pubkey);
         let replace: string = npub;
         if (profile) {
           replace = profile.display_name || profile.name || this.minifyNostrPublic(npub);
@@ -127,7 +129,7 @@ export class HtmlfyService {
     return content;
   }
 
-  private minifyNostrPublic(npub: TNostrPublic): string {
+  private minifyNostrPublic(npub: NPub): string {
     return npub.replace(/(^.{7})(.+)(.{3}$)/g, '$1…$3');
   }
 

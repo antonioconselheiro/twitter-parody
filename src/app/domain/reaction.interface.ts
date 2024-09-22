@@ -1,8 +1,8 @@
-import { TNostrPublic } from "@belomonte/nostr-ngx";
+import { NPub } from "@belomonte/nostr-ngx";
 
-export interface IReaction {
+export interface Reaction {
   id: string;
   content: string;
   tweet: string;
-  author: TNostrPublic;
+  author: NPub;
 }

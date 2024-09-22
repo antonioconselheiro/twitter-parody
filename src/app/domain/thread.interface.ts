@@ -1,3 +1,3 @@
-import { ITweet } from "./tweet.interface";
+import { Tweet } from "./tweet.interface";
 
-export type IThread = Array<ITweet>;
+export type IThread = Array<Tweet>;

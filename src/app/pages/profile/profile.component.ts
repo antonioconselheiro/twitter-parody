@@ -1,13 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthenticatedAccountObservable } from '@belomonte/nostr-ngx';
-import { ITweet } from '@domain/tweet.interface';
-import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
-import { MainErrorObservable } from '@shared/main-error/main-error.observable';
-import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
-import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
-import { Subscription } from 'rxjs';
+import { Account, AuthenticatedAccountObservable } from '@belomonte/nostr-ngx';
+import { Tweet } from '@domain/tweet.interface';
 import { NostrMetadata } from '@nostrify/nostrify';
+import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'tw-profile',
@@ -21,17 +18,14 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
   loading = true;
 
   profile: NostrMetadata | null = null;
-  authProfile: NostrMetadata | null = null;
+  account: Account | null = null;
 
-  tweets: Array<ITweet> = [];
+  tweets: Array<Tweet> = [];
   subscriptions = new Subscription();
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private profile$: AuthenticatedAccountObservable,
-    private error$: MainErrorObservable,
-    private networkError$: NetworkErrorObservable,
-    private tweetProxy: TweetProxy,
     private router: Router
   ) {
     super();
@@ -40,7 +34,6 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
   override ngOnInit(): void {
     this.bindAuthenticatedProfileSubscription();
     this.loadProfileTweets(this.activatedRoute.snapshot.data['profile'])
-      .catch(e => this.networkError$.next(e))
       .finally(() => this.loading = false);
 
     this.getProfileFromActivatedRoute();
@@ -62,7 +55,7 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
 
   private bindAuthenticatedProfileSubscription(): void {
     this.subscriptions.add(this.profile$.subscribe({
-      next: profile => this.authProfile = profile
+      next: account => this.account = account
     }));
   }
 
@@ -72,14 +65,14 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
         this.profile = wrapper['profile'];
         this.tweets = [];
         document.body.scrollTo(0, 0);
-        this.loadProfileTweets(wrapper['profile']).catch(e => this.error$.next(e));
+        this.loadProfileTweets(wrapper['profile']);
       }
     }));
   }
   
   private async loadProfileTweets(profile: NostrMetadata): Promise<void> {
     this.profile = profile;
-    this.tweets = await this.tweetProxy.listTweetsFromPubkey(profile.npub);
+   //  this.tweets = await this.tweetProxy.listTweetsFromPubkey(profile.npub);
 
     this.subscriptions.add(this.activatedRoute.data.subscribe({
       next: data => this.profile = data['profile']
@@ -90,11 +83,11 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
     this.profile = this.activatedRoute.snapshot.data['profile'];
     if (this.profile) {
       this.title = this.profile.display_name || this.profile.name || 'Profile';
-      this.loadProfileTweets(this.profile).catch(e => this.error$.next(e));
+      this.loadProfileTweets(this.profile);
     }
   }
 
   goHome(): void {
-    this.router.navigate(['home']).catch(e => this.error$.next(e));
+    this.router.navigate(['home']);
   }
 }

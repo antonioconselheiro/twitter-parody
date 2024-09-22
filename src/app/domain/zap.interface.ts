@@ -1,5 +1,5 @@
-import { IReaction } from "./reaction.interface";
+import { Reaction } from "./reaction.interface";
 
-export interface IZap extends IReaction {
+export interface Zap extends Reaction {
   amount?: number;
 }

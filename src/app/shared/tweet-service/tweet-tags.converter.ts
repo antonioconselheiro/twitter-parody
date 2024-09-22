@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EventRelationType } from '@domain/event-relation-type.type';
-import { ITweet } from '@domain/tweet.interface';
+import { Tweet } from '@domain/tweet.interface';
 import Geohash from 'latlon-geohash';
 import { Event, nip19, NostrEvent } from 'nostr-tools';
 import { TweetTypeGuard } from './tweet.type-guard';
@@ -21,9 +21,9 @@ export class TweetTagsConverter {
   ) { }
 
   mergeCoordinatesFromEvent(
-    tweet: ITweet,
+    tweet: Tweet,
     event: NostrEvent
-  ): ITweet {
+  ): Tweet {
     const [, geohash] = event.tags.find(tag => tag[0] === 'g') || [];
     if (geohash) {
       tweet.location = Geohash.decode(geohash);
@@ -119,7 +119,7 @@ export class TweetTagsConverter {
       .map(([, npub]) => this.nostrConverter.castPubkeyToNostrPublic(npub));
   }
 
-  mergeRetweetingFromEvent(tweet: ITweet, event: NostrEvent): void {
+  mergeRetweetingFromEvent(tweet: Tweet, event: NostrEvent): void {
     if (this.tweetTypeGuard.isKind(event, NostrEventKind.Repost)) {
       const idEvent = this.getFirstRelatedEvent(event);
       const pubkey = this.getFirstRelatedProfile(event);

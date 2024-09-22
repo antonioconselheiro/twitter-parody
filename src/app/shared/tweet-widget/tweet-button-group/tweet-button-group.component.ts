@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AuthenticatedAccountObservable } from '@belomonte/nostr-ngx';
 import { IRetweet } from '@domain/retweet.interface';
-import { ITweet } from '@domain/tweet.interface';
+import { Tweet } from '@domain/tweet.interface';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { TweetConverter } from '@shared/tweet-service/tweet.converter';
 import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
@@ -18,7 +18,7 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
 
   @Input()
-  tweet: ITweet | IRetweet | null = null;
+  tweet: Tweet | IRetweet | null = null;
 
   @ViewChild('tweetShare', { read: PopoverComponent })
   share!: PopoverComponent;
@@ -45,19 +45,19 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
     }));
   }
 
-  isRetweetedByYou(tweet: ITweet | IRetweet): boolean {
+  isRetweetedByYou(tweet: Tweet | IRetweet): boolean {
     return this.tweetTypeGuard.isRetweetedByProfile(tweet, this.profile);
   }
 
-  isLikedByYou(tweet: ITweet | IRetweet): boolean {
+  isLikedByYou(tweet: Tweet | IRetweet): boolean {
     return this.tweetTypeGuard.isLikedByProfile(tweet, this.profile);
   }
 
-  getRetweetedLength(tweet: ITweet | IRetweet): number {
+  getRetweetedLength(tweet: Tweet | IRetweet): number {
     return this.tweetConverter.getRetweetedLength(tweet);
   }
 
-  getTweetReactionsLength(tweet?: ITweet | null): number {
+  getTweetReactionsLength(tweet?: Tweet | null): number {
     return this.tweetConverter.getTweetReactionsLength(tweet);
   }
 }

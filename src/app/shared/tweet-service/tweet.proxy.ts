@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { NostrPool, ProfileService } from "@belomonte/nostr-ngx";
 import { IRetweet } from "@domain/retweet.interface";
-import { ITweet } from "@domain/tweet.interface";
+import { Tweet } from "@domain/tweet.interface";
 import { NostrEvent } from 'nostr-tools';
 import { TweetTagsConverter } from "./tweet-tags.converter";
 import { TweetApi } from "./tweet.api";
@@ -19,21 +19,21 @@ export class TweetProxy {
   ) { }
 
   async listTweetsFromPubkey(pubkey: string): Promise<
-    Array<ITweet | IRetweet>
+    Array<Tweet | IRetweet>
   > {
     const rawEvents = await this.tweetApi.listTweetsFromPubkeyList([pubkey]);
     return this.loadRelatedEvents(rawEvents);
   }
 
   async listReactionsFromNostrPublic(pubkey: string): Promise<
-    Array<ITweet | IRetweet>
+    Array<Tweet | IRetweet>
   > {
     const rawEvents = await this.tweetApi.listReactionsFromPubkey(pubkey);
     return this.loadRelatedEvents(rawEvents);
   }
 
   private async loadRelatedEvents(rawEvents: NostrEvent[]): Promise<
-    Array<ITweet | IRetweet>
+    Array<Tweet | IRetweet>
   > {
     if (!rawEvents.length) {
       return Promise.resolve([]);
@@ -97,7 +97,7 @@ export class TweetProxy {
   //  FIXME: dar um jeito do template não precisar chamar
   //  diversas vezes um método com essa complexidade
   // eslint-disable-next-line complexity
-  getTweetOrRetweetedAuthorProfile(tweet: ITweet): IProfile | null {
+  getTweetOrRetweetedAuthorProfile(tweet: Tweet): IProfile | null {
     if (this.tweetTypeGuard.isSimpleRetweet(tweet)) {
       const retweeted = TweetCache.eagerTweets[tweet.retweeting] || TweetCache.lazyTweets[tweet.retweeting];
       if (retweeted.author) {

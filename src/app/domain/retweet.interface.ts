@@ -1,5 +1,5 @@
-import { ITweet } from "./tweet.interface";
+import { Tweet } from "./tweet.interface";
 
-export interface IRetweet extends ITweet {
+export interface IRetweet extends Tweet {
   retweeting: string;
 }

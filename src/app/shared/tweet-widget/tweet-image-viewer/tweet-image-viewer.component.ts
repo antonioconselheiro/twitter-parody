@@ -1,5 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
-import { ITweet } from '@domain/tweet.interface';
+import { Tweet } from '@domain/tweet.interface';
 import { ICloseable } from '@shared/util/closeable.interface';
 
 @Component({
@@ -10,7 +10,7 @@ import { ICloseable } from '@shared/util/closeable.interface';
 export class TweetImageViewerComponent implements ICloseable {
 
   @Input()
-  tweet: ITweet<DataLoadType.EAGER_LOADED> | null = null;
+  tweet: Tweet<DataLoadType.EAGER_LOADED> | null = null;
 
   @Input()
   activeImage = '';

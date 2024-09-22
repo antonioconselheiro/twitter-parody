@@ -60,10 +60,10 @@
     <nostr-profile-picture [profile]="profile"></nostr-profile-picture>
     <div class="user-info">
       <span class="user-name">
-        {{profile.display_name || profile.name}}
-        <span *ngIf="profile.nip05valid" class="user-verified"></span>
+        {{profile.metadata?.display_name || profile.metadata?.name}}
+        <span *ngIf="profile.metadata?.nip05valid" class="user-verified"></span>
       </span>
-      <span *ngIf="profile.nip05" class="user-nip5">{{profile.nip05}}</span>
+      <span *ngIf="profile.metadata?.nip05" class="user-nip5">{{profile.metadata?.nip05}}</span>
     </div>
   </ng-container>
   <ng-container *ngIf="!profile">

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IRetweet } from '@domain/retweet.interface';
-import { ITweet } from '@domain/tweet.interface';
+import { Tweet } from '@domain/tweet.interface';
 import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
 import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 
@@ -23,23 +23,23 @@ export class TweetComponent {
   imgList: string[] = [];
   imgs: [string, string?][] = [];
 
-  interceptedTweet: ITweet | IRetweet | null = null;
+  interceptedTweet: Tweet | IRetweet | null = null;
 
   constructor(
     private tweetTypeGuard: TweetTypeGuard
   ) {}
   
   @Input()
-  set tweet(tweet: ITweet | IRetweet | null) {
+  set tweet(tweet: Tweet | IRetweet | null) {
     this.interceptedTweet = tweet;
     this.showingTweet = this.tweetTypeGuard.getShowingTweet(this.tweet);
   }
   
-  get tweet(): ITweet | IRetweet | null {
+  get tweet(): Tweet | IRetweet | null {
     return this.interceptedTweet;
   }
 
-  showingTweet: ITweet | null = null;
+  showingTweet: Tweet | null = null;
 
   showMoreTextButton(): boolean {
     const smallViewLength = String(this.interceptedTweet?.htmlSmallView || '').length

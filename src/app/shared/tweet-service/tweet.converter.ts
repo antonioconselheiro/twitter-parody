@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
-import { NostrConverter, NostrEventKind, TNostrPublic } from '@belomonte/nostr-ngx';
-import { IReaction } from '@domain/reaction.interface';
+import { NostrConverter, NostrEventKind, NostrGuard, TNostrPublic } from '@belomonte/nostr-ngx';
+import { Reaction } from '@domain/reaction.interface';
 import { IRetweet } from '@domain/retweet.interface';
-import { ITweet } from '@domain/tweet.interface';
-import { IZap } from '@domain/zap.interface';
+import { Tweet } from '@domain/tweet.interface';
+import { Zap } from '@domain/zap.interface';
 import { HtmlfyService } from '@shared/htmlfy/htmlfy.service';
 import { Event, NostrEvent } from 'nostr-tools';
 import { ITweetRelationedInfoWrapper } from './tweet-relationed-info-wrapper.interface';
 import { TweetTagsConverter } from './tweet-tags.converter';
-import { TweetCache } from './tweet.cache';
 import { TweetTypeGuard } from './tweet.type-guard';
 
 @Injectable({
@@ -17,6 +16,7 @@ import { TweetTypeGuard } from './tweet.type-guard';
 export class TweetConverter {
 
   constructor(
+    private guard: NostrGuard,
     private tweetTagsConverter: TweetTagsConverter,
     private htmlfyService: HtmlfyService,
     private tweetTypeGuard: TweetTypeGuard,
@@ -27,17 +27,17 @@ export class TweetConverter {
     const relationed: ITweetRelationedInfoWrapper = {
       eager: [],
       lazy: [],
-      npubs: []
+      pubkeys: []
     };
 
     //  FIXME: resolver débito de complexidade ciclomática
     // TODO: check in tags if tweets have mentions and then, create the threadfy method
     // eslint-disable-next-line complexity
     events.forEach(event => {
-      const isSimpleText = this.tweetTypeGuard.isKind(event, NostrEventKind.ShortTextNote);
-      const isRepost = this.tweetTypeGuard.isKind(event, NostrEventKind.Repost);
-      const isReaction = this.tweetTypeGuard.isKind(event, NostrEventKind.Reaction);
-      const isZap = this.tweetTypeGuard.isKind(event, NostrEventKind.Zap);
+      const isSimpleText = this.guard.isKind(event, NostrEventKind.ShortTextNote);
+      const isRepost = this.guard.isKind(event, NostrEventKind.Repost);
+      const isReaction = this.guard.isKind(event, NostrEventKind.Reaction);
+      const isZap = this.guard.isKind(event, NostrEventKind.Zap);
 
       if (isSimpleText) {
         //  FIXME: https://github.com/users/antonioconselheiro/projects/1/views/1?pane=issue&itemId=41105788
@@ -52,7 +52,7 @@ export class TweetConverter {
           }
         }
 
-        relationed.npubs = relationed.npubs.concat(npubs);
+        relationed.pubkeys = relationed.pubkeys.concat(npubs);
       } else if (isRepost) {
         const { retweet, retweeted, npubs } = this.castEventToRetweet(event);
         if (retweet) {
@@ -64,30 +64,30 @@ export class TweetConverter {
         } else {
           relationed.eager.push(retweeted);
         }
-        relationed.npubs = relationed.npubs.concat(npubs);
+        relationed.pubkeys = relationed.pubkeys.concat(npubs);
       } else if (isReaction) {
         const result = this.castEventReactionToLazyLoadTweet(event);
         if (result) {
           const { lazy, npubs } = result;
           relationed.lazy.push(lazy);
-          relationed.npubs = relationed.npubs.concat(npubs);
+          relationed.pubkeys = relationed.pubkeys.concat(npubs);
         }
       } else if (isZap) {
         const result = this.castEventZapToLazyLoadTweet(event);
         if (result) {
           const { lazy, npubs } = result;
           relationed.lazy.push(lazy);
-          relationed.npubs = relationed.npubs.concat(npubs);
+          relationed.pubkeys = relationed.pubkeys.concat(npubs);
         }
       }
     });
 
-    relationed.npubs = [...new Set(relationed.npubs)];
+    relationed.pubkeys = [...new Set(relationed.pubkeys)];
 
     return relationed;
   }
 
-  getTweetReactionsLength(tweet?: ITweet | null): number {
+  getTweetReactionsLength(tweet?: Tweet | null): number {
     if (!tweet) {
       return 0;
     }
@@ -96,7 +96,7 @@ export class TweetConverter {
     return Object.keys(tweet.reactions).length;
   }
 
-  getRetweetedLength(tweet: ITweet | IRetweet): number {
+  getRetweetedLength(tweet: Tweet | IRetweet): number {
     tweet = this.tweetTypeGuard.getShowingTweet(tweet);
     return Object.keys(tweet.retweetedBy || {}).length || 0;
   }
@@ -136,12 +136,12 @@ export class TweetConverter {
   //  remover o disable do lint quando resolver débito
   // eslint-disable-next-line complexity
   private castEventToRetweet(event: NostrEvent): {
-    retweet: IRetweet, retweeted: ITweet, npubs: TNostrPublic[]
+    retweet: IRetweet, retweeted: Tweet, npubs: TNostrPublic[]
   } {
     let content = this.getTweetContent(event);
     const author = this.getAuthorNostrPublicFromEvent(event);
     let npubs: TNostrPublic[] = [author];
-    let retweeted: ITweet;
+    let retweeted: Tweet;
 
     const contentEvent = this.extractNostrEvent(content);
 
@@ -187,7 +187,7 @@ export class TweetConverter {
   }
 
   private castEventZapToLazyLoadTweet(event: NostrEvent): {
-    lazy: ITweet<DataLoadType.LAZY_LOADED>, npubs: TNostrPublic[]
+    lazy: Tweet<DataLoadType.LAZY_LOADED>, npubs: TNostrPublic[]
   } | null {
     const idEvent = this.tweetTagsConverter.getFirstRelatedEvent(event);
     const pubkey = this.tweetTagsConverter.getFirstRelatedProfile(event);
@@ -199,7 +199,7 @@ export class TweetConverter {
     const npub = this.nostrConverter.castPubkeyToNostrPublic(pubkey);
     const npubs = [npub];
 
-    const reaction: IZap = {
+    const reaction: Zap = {
       id: event.id,
       author: npub,
       content: event.content,
@@ -213,7 +213,7 @@ export class TweetConverter {
   }
 
   private castEventReactionToLazyLoadTweet(event: NostrEvent): {
-    lazy: ITweet<DataLoadType.LAZY_LOADED>, npubs: TNostrPublic[]
+    lazy: Tweet<DataLoadType.LAZY_LOADED>, npubs: TNostrPublic[]
   } | null {
     const idEvent = this.tweetTagsConverter.getFirstRelatedEvent(event);
     if (!idEvent) {
@@ -224,7 +224,7 @@ export class TweetConverter {
     const npub = this.nostrConverter.castPubkeyToNostrPublic(event.pubkey);
     const npubs = [npub];
 
-    const reaction: IReaction = {
+    const reaction: Reaction = {
       id: event.id,
       content: event.content,
       tweet: idEvent,
@@ -239,8 +239,8 @@ export class TweetConverter {
 
   createLazyLoadableTweetFromEventId(
     idEvent: string, pubkey?: string
-  ): ITweet<DataLoadType.LAZY_LOADED> {
-    const tweet: ITweet<DataLoadType.LAZY_LOADED> = {
+  ): Tweet<DataLoadType.LAZY_LOADED> {
+    const tweet: Tweet<DataLoadType.LAZY_LOADED> = {
       id: idEvent,
       reactions: {},
       zaps: {},
@@ -258,11 +258,11 @@ export class TweetConverter {
     return this.nostrConverter.castPubkeyToNostrPublic(event.pubkey);
   }
 
-  private instanceTweet(event: NostrEvent, author: TNostrPublic): ITweet<DataLoadType.EAGER_LOADED> {
+  private instanceTweet(event: NostrEvent, author: TNostrPublic): Tweet<DataLoadType.EAGER_LOADED> {
     const content = this.getTweetContent(event);
     const { urls, imageList, videoUrl, imgMatriz } = this.htmlfyService.separateImageAndLinks(content);
 
-    const tweet: ITweet<DataLoadType.EAGER_LOADED> = {
+    const tweet: Tweet<DataLoadType.EAGER_LOADED> = {
       id: event.id, author, reactions: {},
       zaps: {}, created: this.getTweetCreated(event),
       load: DataLoadType.EAGER_LOADED,
@@ -299,17 +299,17 @@ export class TweetConverter {
   }
 
   private castEventToTweet(event: NostrEvent, retweeting: string): {
-    retweeted: ITweet, tweet: IRetweet, npubs: Array<TNostrPublic>
+    retweeted: Tweet, tweet: IRetweet, npubs: Array<TNostrPublic>
   };
   private castEventToTweet(event: NostrEvent): {
-    retweeted?: ITweet, tweet: ITweet<DataLoadType.EAGER_LOADED>, npubs: Array<TNostrPublic>
+    retweeted?: Tweet, tweet: Tweet, npubs: Array<TNostrPublic>
   };
   private castEventToTweet(event: NostrEvent, retweeting?: string): {
-    retweeted?: ITweet, tweet: ITweet<DataLoadType.EAGER_LOADED> | IRetweet, npubs: Array<TNostrPublic>
+    retweeted?: Tweet, tweet: Tweet | IRetweet, npubs: Array<TNostrPublic>
   } {
     const author = this.getAuthorNostrPublicFromEvent(event);
     let npubs: TNostrPublic[] = [author];
-    let retweeted: ITweet | undefined = undefined;
+    let retweeted: Tweet | undefined = undefined;
     const tweet = this.instanceTweet(event, author);
     
     if (retweeting) {
@@ -337,7 +337,7 @@ export class TweetConverter {
     return event.created_at || 0;
   }
 
-  extractEventsFromTweets(tweets: ITweet[]): string[] {
+  extractEventsFromTweets(tweets: Tweet[]): string[] {
     return tweets.map(tweet => {
       const replies = tweet.replies || [];
       const repling = tweet.repling ? [tweet.repling] : [];
@@ -348,9 +348,9 @@ export class TweetConverter {
     }).flat(1);
   }
 
-  getRetweet(tweet: IRetweet): ITweet;
-  getRetweet(tweet?: ITweet | IRetweet): ITweet | null;
-  getRetweet(tweet?: ITweet | IRetweet): ITweet | null {
+  getRetweet(tweet: IRetweet): Tweet;
+  getRetweet(tweet?: Tweet | IRetweet): Tweet | null;
+  getRetweet(tweet?: Tweet | IRetweet): Tweet | null {
     if (!tweet || !tweet.retweeting) {
       return null;
     }

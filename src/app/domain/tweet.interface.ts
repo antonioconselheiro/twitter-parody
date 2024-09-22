@@ -1,13 +1,13 @@
 import { SafeHtml } from '@angular/platform-browser';
 import { NPub } from '@belomonte/nostr-ngx';
 import Geohash from 'latlon-geohash';
-import { ITweetReactionMap } from './tweet-reaction-map.interface';
-import { ITweetZapMap } from './tweet-zap-map.interface';
+import { TweetReactionRecord } from './tweet-reaction.record';
+import { TweetZapRecord } from './tweet-zap.record';
 
-export interface ITweet {
+export interface Tweet {
   id: string;
-  reactions: ITweetReactionMap;
-  zaps: ITweetZapMap;
+  reactions: TweetReactionRecord;
+  zaps: TweetZapRecord;
   rootRepling?: string;
   repling?: string;
   retweetedBy?: { [eventId: string]: NPub };
