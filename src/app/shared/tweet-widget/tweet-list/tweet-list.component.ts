@@ -1,5 +1,4 @@
 import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
-import { DataLoadType } from '@domain/data-load.type';
 import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
@@ -7,7 +6,7 @@ import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
 import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
 import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 import { TweetConverter } from '@shared/tweet-service/tweet.converter';
-import { IProfile, ProfileCache } from '@belomonte/nostr-gui-ngx';
+import { NostrMetadata } from '@nostrify/nostrify';
 
 @Component({
   selector: 'tw-tweet-list',
@@ -16,9 +15,6 @@ import { IProfile, ProfileCache } from '@belomonte/nostr-gui-ngx';
   encapsulation: ViewEncapsulation.None
 })
 export class TweetListComponent {
-
-  readonly EAGER_LOADED = DataLoadType.EAGER_LOADED;
-  readonly LAZY_LOADED = DataLoadType.LAZY_LOADED;
 
   @Input()
   loading = true;
@@ -71,18 +67,18 @@ export class TweetListComponent {
     private tweetProxy: TweetProxy
   ) { }
 
-  getRetweetAuthorName(tweet: ITweet<DataLoadType.EAGER_LOADED>): string {
+  getRetweetAuthorName(tweet: ITweet): string {
     const author = ProfileCache.profiles[tweet.author];
     return author.display_name || author.name || '';
   }
 
-  getAuthorProfile(tweet: ITweet): IProfile | null {
+  getAuthorProfile(tweet: ITweet): NostrMetadata | null {
     //  FIXME: dar um jeito do template não precisar chamar
     //  diversas vezes um método com essa complexidade
     return this.tweetProxy.getTweetOrRetweetedAuthorProfile(tweet);
   }
 
-  isSimpleRetweet(tweet: ITweet<DataLoadType.EAGER_LOADED>): tweet is IRetweet {
+  isSimpleRetweet(tweet: ITweet): tweet is IRetweet {
     return this.tweetTypeGuard.isSimpleRetweet(tweet);
   }
 
@@ -113,7 +109,7 @@ export class TweetListComponent {
   }
 
   private interceptTweet(tweet: ITweet | IRetweet | null): void {
-    if (tweet && tweet.load === DataLoadType.EAGER_LOADED) {
+    if (tweet) {
       const repliesId = (tweet.replies || []);
       const replies = repliesId.map(reply => this.tweetProxy.get(reply))
       this.tweets = [tweet, ...replies];
@@ -121,7 +117,7 @@ export class TweetListComponent {
   }
 
   private interceptRetweet(tweet: ITweet | null): void {
-    if (tweet && tweet.load === DataLoadType.EAGER_LOADED) {
+    if (tweet) {
       this.tweets = [ tweet ];
     }
   }

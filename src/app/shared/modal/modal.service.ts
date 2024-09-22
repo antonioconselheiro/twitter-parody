@@ -1,10 +1,10 @@
-import { Injectable, Type } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { ModalBuilder } from '@belomonte/async-modal-ngx';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AlertType } from './alert/alert-type.enum';
 import { AlertComponent } from './alert/alert.component';
 import { ModalConfirmComponent } from './modal-confirm/modal-confirm.component';
-import { ModalBuilder } from '@belomonte/async-modal-ngx';
 
 @Injectable()
 export class ModalService {

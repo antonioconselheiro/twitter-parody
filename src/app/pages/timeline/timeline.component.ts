@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthenticatedProfileObservable, IProfile } from '@belomonte/nostr-gui-ngx';
+import { NostrMetadata } from '@nostrify/nostrify';
+import { AuthenticatedAccountObservable } from '@belomonte/nostr-ngx';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
 import { MainErrorObservable } from '@shared/main-error/main-error.observable';
 import { MenuSidebarMobileObservable } from '@shared/menu-sidebar/menu-sidebar-mobile/menu-sidebar-mobile.observable';
@@ -15,11 +16,11 @@ export class TimelineComponent extends AbstractEntitledComponent implements OnIn
   override title = 'Home';
   private subscriptions = new Subscription();
 
-  authProfile: IProfile | null = null;
+  authProfile?: NostrMetadata;
 
   constructor(
     private menuSidebarMobile$: MenuSidebarMobileObservable,
-    private profiles$: AuthenticatedProfileObservable,
+    private profiles$: AuthenticatedAccountObservable,
     private error$: MainErrorObservable
   ) {
     super();
@@ -32,7 +33,7 @@ export class TimelineComponent extends AbstractEntitledComponent implements OnIn
   
   private bindProfileSubscription(): void {
     this.subscriptions.add(this.profiles$.subscribe({
-      next: profile => this.authProfile = profile,
+      next: profile => this.authProfile = profile?.metadata,
       error: error => this.error$.next(error)
     }));
   }

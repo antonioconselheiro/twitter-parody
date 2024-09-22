@@ -1,9 +1,8 @@
 import { TNostrPublic } from "@belomonte/nostr-ngx";
-import { TEventId } from "./event-id.type";
 
 export interface IReaction {
-  id: TEventId;
+  id: string;
   content: string;
-  tweet: TEventId;
+  tweet: string;
   author: TNostrPublic;
 }

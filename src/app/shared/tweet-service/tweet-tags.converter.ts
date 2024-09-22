@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DataLoadType } from '@domain/data-load.type';
-import { TEventId } from '@domain/event-id.type';
-import { TEventRelationType } from '@domain/event-relation-type.type';
+import { EventRelationType } from '@domain/event-relation-type.type';
 import { ITweet } from '@domain/tweet.interface';
 import Geohash from 'latlon-geohash';
 import { Event, nip19, NostrEvent } from 'nostr-tools';
@@ -23,9 +21,9 @@ export class TweetTagsConverter {
   ) { }
 
   mergeCoordinatesFromEvent(
-    tweet: ITweet<DataLoadType.EAGER_LOADED>,
+    tweet: ITweet,
     event: NostrEvent
-  ): ITweet<DataLoadType.EAGER_LOADED> {
+  ): ITweet {
     const [, geohash] = event.tags.find(tag => tag[0] === 'g') || [];
     if (geohash) {
       tweet.location = Geohash.decode(geohash);
@@ -35,7 +33,7 @@ export class TweetTagsConverter {
   }
 
   getRelatedEvents(event: NostrEvent): [
-    TEventId, TEventRelationType
+    string, EventRelationType
   ][] {
     const idIndex = 1;
     const typeIndex = 3;
@@ -43,19 +41,19 @@ export class TweetTagsConverter {
     return event.tags
       .filter(([type]) => type === 'e')
       .map(event => {
-        const idEvent: TEventId = event[idIndex];
-        const relationType = (event[typeIndex] || '') as TEventRelationType;
+        const idEvent = event[idIndex];
+        const relationType = (event[typeIndex] || '') as EventRelationType;
 
         return [ idEvent, relationType ];
       });
   }
 
-  getFirstRelatedEvent(event: NostrEvent): TEventId | null {
+  getFirstRelatedEvent(event: NostrEvent): string | null {
     const matriz = this.getRelatedEvents(event);
     return matriz.at(0)?.at(0) || null;
   }
 
-  getMentionedEvent(event: NostrEvent): TEventId | null {
+  getMentionedEvent(event: NostrEvent): string | null {
     const mentionedFound = this
       .getRelatedEvents(event)
       .filter(([,type]) => type === 'mention')
@@ -69,7 +67,7 @@ export class TweetTagsConverter {
     return mentionedFound;
   }
   
-  getNoteMentionedInContent(event: NostrEvent): TEventId | null {
+  getNoteMentionedInContent(event: NostrEvent): string | null {
     const matches = event.content.match(/nostr:note[\da-z]+/);
     const match = matches && matches[0] || null;
     if (match) {
@@ -81,12 +79,12 @@ export class TweetTagsConverter {
   }
 
   getRepliedEvent(event: NostrEvent): {
-    replied: TEventId | null,
-    root: TEventId | null
+    replied: string | null,
+    root: string | null
   } {
     const replyData: {
-      replied: TEventId | null,
-      root: TEventId | null
+      replied: string | null,
+      root: string | null
     } = {
       replied: null,
       root: null

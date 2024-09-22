@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { NostrConverter, NostrEventKind, TNostrPublic } from '@belomonte/nostr-ngx';
-import { DataLoadType } from '@domain/data-load.type';
-import { TEventId } from '@domain/event-id.type';
 import { IReaction } from '@domain/reaction.interface';
 import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';
@@ -300,13 +298,13 @@ export class TweetConverter {
     return tweet;
   }
 
-  private castEventToTweet(event: NostrEvent, retweeting: TEventId): {
+  private castEventToTweet(event: NostrEvent, retweeting: string): {
     retweeted: ITweet, tweet: IRetweet, npubs: Array<TNostrPublic>
   };
   private castEventToTweet(event: NostrEvent): {
     retweeted?: ITweet, tweet: ITweet<DataLoadType.EAGER_LOADED>, npubs: Array<TNostrPublic>
   };
-  private castEventToTweet(event: NostrEvent, retweeting?: TEventId): {
+  private castEventToTweet(event: NostrEvent, retweeting?: string): {
     retweeted?: ITweet, tweet: ITweet<DataLoadType.EAGER_LOADED> | IRetweet, npubs: Array<TNostrPublic>
   } {
     const author = this.getAuthorNostrPublicFromEvent(event);
@@ -339,7 +337,7 @@ export class TweetConverter {
     return event.created_at || 0;
   }
 
-  extractEventsFromTweets(tweets: ITweet[]): TEventId[] {
+  extractEventsFromTweets(tweets: ITweet[]): string[] {
     return tweets.map(tweet => {
       const replies = tweet.replies || [];
       const repling = tweet.repling ? [tweet.repling] : [];

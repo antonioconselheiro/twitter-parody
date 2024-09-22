@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthenticatedProfileObservable, IProfile } from '@belomonte/nostr-gui-ngx';
+import { AuthenticatedAccountObservable } from '@belomonte/nostr-ngx';
 import { Subscription } from 'rxjs';
+import { NostrMetadata } from '@nostrify/nostrify';
 
 @Component({
   selector: 'tw-tweet-write',
@@ -12,15 +13,15 @@ export class TweetWriteComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   tweet = '';
-  profile: IProfile | null = null;
+  profile?: NostrMetadata;
   
   constructor(
-    private profile$: AuthenticatedProfileObservable
+    private profile$: AuthenticatedAccountObservable
   ) { }
 
   ngOnInit(): void {
     this.subscriptions.add(this.profile$.subscribe({
-      next: profile => this.profile = profile 
+      next: profile => this.profile = profile?.metadata
     }));
   }
 

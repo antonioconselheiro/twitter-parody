@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { DataLoadType } from '@domain/data-load.type';
 import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';
 import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
@@ -11,9 +10,6 @@ import { ITweetImgViewing } from '../tweet-img-viewing.interface';
   styleUrls: ['./tweet.component.scss']
 })
 export class TweetComponent {
-
-  readonly EAGER_LOADED = DataLoadType.EAGER_LOADED;
-  readonly LAZY_LOADED = DataLoadType.LAZY_LOADED;
 
   @Input()
   showImages = true;
@@ -46,12 +42,10 @@ export class TweetComponent {
   showingTweet: ITweet | null = null;
 
   showMoreTextButton(): boolean {
-    if (this.interceptedTweet && this.interceptedTweet.load === DataLoadType.EAGER_LOADED) {
-      const smallViewLength = String(this.interceptedTweet.htmlSmallView).length
-      const fullViewLength = String(this.interceptedTweet.htmlFullView).length;
+    const smallViewLength = String(this.interceptedTweet?.htmlSmallView || '').length
+    const fullViewLength = String(this.interceptedTweet?.htmlFullView || '').length;
 
-      return smallViewLength !== fullViewLength;
-    }
+    return smallViewLength !== fullViewLength;
 
     return false;
   }

@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { IProfile } from '@belomonte/nostr-gui-ngx';
-import { DataLoadType } from '@domain/data-load.type';
 import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';
-import { Event, NostrEvent } from 'nostr-tools';
-import { TweetCache } from './tweet.cache';
+import { verifyEvent } from 'nostr-tools';
+import { NostrMetadata } from '@nostrify/nostrify';
 
 /**
  * Centralize tweet logics with type guard porpouse
@@ -14,16 +12,8 @@ import { TweetCache } from './tweet.cache';
 })
 export class TweetTypeGuard {
 
-  /**
-   * @deprecated
-   */
-  isKind(event: NostrEvent, kind: number): boolean {
-    return event.kind === kind;
-  }
-
   isSimpleRetweet(tweet: ITweet): tweet is IRetweet {
-    const isRetweet = tweet.retweeting;
-    if (isRetweet && tweet.load === DataLoadType.EAGER_LOADED) {
+    if (tweet.retweeting) {
       const nasNoContent = !String(tweet.htmlFullView).trim().length;
 
       return nasNoContent || false;
@@ -32,8 +22,8 @@ export class TweetTypeGuard {
     return false;
   }
 
-  isRetweetedByProfile(tweet: ITweet | IRetweet, profile: IProfile | null): tweet is IRetweet {
-    if (!profile) {
+  isRetweetedByProfile(tweet: ITweet | IRetweet, pubkey: string | null): tweet is IRetweet {
+    if (!pubkey) {
       return false;
     }
 
@@ -42,10 +32,10 @@ export class TweetTypeGuard {
       return false;
     }
 
-    return Object.values(tweet.retweetedBy).includes(profile.npub);
+    return Object.values(tweet.retweetedBy).includes(pubkey);
   }
 
-  isLikedByProfile(tweet: ITweet | IRetweet, profile: IProfile | null): boolean {
+  isLikedByProfile(tweet: ITweet | IRetweet, profile: NostrMetadata | null): boolean {
     tweet = this.getShowingTweet(tweet);
     const reactions = Object.values(tweet.reactions);
     if (!profile || !reactions.length) {
@@ -80,16 +70,9 @@ export class TweetTypeGuard {
 
   isSerializedNostrEvent(serialized: string): boolean {
     try {
-      return this.isNostrEvent(JSON.parse(serialized));
+      return verifyEvent(JSON.parse(serialized));
     } catch {
       return false;
     }
-  }
-
-  /**
-   * FIXME: incluir lógica validando assinatura do evento
-   */
-  isNostrEvent(possiblyNostrEvent: object): possiblyNostrEvent is Event {
-    return true;
   }
 }

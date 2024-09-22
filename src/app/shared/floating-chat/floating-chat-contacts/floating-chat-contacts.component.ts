@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IMessage } from '../message.interface';
-import { IProfile } from '@belomonte/nostr-gui-ngx';
+import { NostrMetadata } from '@nostrify/nostrify';
 
 @Component({
   selector: 'tw-floating-chat-contacts',
@@ -11,7 +11,7 @@ import { IProfile } from '@belomonte/nostr-gui-ngx';
 export class FloatingChatContactsComponent {
 
   @Output()
-  choose = new EventEmitter<IProfile>();
+  choose = new EventEmitter<NostrMetadata>();
 
   @Output()
   collapse = new EventEmitter<boolean>();

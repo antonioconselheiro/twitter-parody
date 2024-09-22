@@ -1,12 +1,12 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AuthenticatedProfileObservable, IProfile } from '@belomonte/nostr-gui-ngx';
-import { DataLoadType } from '@domain/data-load.type';
+import { AuthenticatedAccountObservable } from '@belomonte/nostr-ngx';
 import { IRetweet } from '@domain/retweet.interface';
 import { ITweet } from '@domain/tweet.interface';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { TweetConverter } from '@shared/tweet-service/tweet.converter';
 import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
 import { Subscription } from 'rxjs';
+import { NostrMetadata } from '@nostrify/nostrify';
 
 @Component({
   selector: 'tw-tweet-button-group',
@@ -14,9 +14,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./tweet-button-group.component.scss']
 })
 export class TweetButtonGroupComponent implements OnInit, OnDestroy {
-
-  readonly EAGER_LOADED = DataLoadType.EAGER_LOADED;
-  readonly LAZY_LOADED = DataLoadType.LAZY_LOADED;
 
   subscriptions = new Subscription();
 
@@ -26,12 +23,12 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   @ViewChild('tweetShare', { read: PopoverComponent })
   share!: PopoverComponent;
 
-  profile: IProfile | null = null;
+  profile: NostrMetadata | null = null;
 
   constructor(
     private tweetConverter: TweetConverter,
     private tweetTypeGuard: TweetTypeGuard,
-    private profile$: AuthenticatedProfileObservable
+    private profile$: AuthenticatedAccountObservable
   ) { }
 
   ngOnInit(): void {

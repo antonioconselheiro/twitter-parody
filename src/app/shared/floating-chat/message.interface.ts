@@ -1,7 +1,7 @@
-import { IProfile } from "@belomonte/nostr-gui-ngx";
+import { NostrMetadata } from '@nostrify/nostrify';
 
 export interface IMessage {
   text: string;
   time: number;
-  author: IProfile;
+  author: NostrMetadata;
 }

@@ -1,14 +1,11 @@
 import { Injectable } from "@angular/core";
-import { TEventId } from "@domain/event-id.type";
+import { NostrPool, ProfileService } from "@belomonte/nostr-ngx";
 import { IRetweet } from "@domain/retweet.interface";
 import { ITweet } from "@domain/tweet.interface";
 import { NostrEvent } from 'nostr-tools';
 import { TweetTagsConverter } from "./tweet-tags.converter";
 import { TweetApi } from "./tweet.api";
-import { TweetCache } from "./tweet.cache";
 import { TweetTypeGuard } from "./tweet.type-guard";
-import { IProfile, ProfileCache, ProfileProxy } from "@belomonte/nostr-gui-ngx";
-import { TNostrPublic } from "@belomonte/nostr-ngx";
 
 @Injectable()
 export class TweetProxy {
@@ -17,25 +14,21 @@ export class TweetProxy {
     private tweetApi: TweetApi,
     private tweetTypeGuard: TweetTypeGuard,
     private tweetTagsConverter: TweetTagsConverter,
-    private profileProxy: ProfileProxy,
-    private tweetCache: TweetCache
+    private profileService: ProfileService,
+    private npool: NostrPool
   ) { }
 
-  get(idEvent: TEventId): ITweet | IRetweet {
-    return TweetCache.get(idEvent);
-  }
-
-  async listTweetsFromNostrPublic(npub: TNostrPublic): Promise<
+  async listTweetsFromPubkey(pubkey: string): Promise<
     Array<ITweet | IRetweet>
   > {
-    const rawEvents = await this.tweetApi.listTweetsFromPubkeyList([npub]);
+    const rawEvents = await this.tweetApi.listTweetsFromPubkeyList([pubkey]);
     return this.loadRelatedEvents(rawEvents);
   }
 
-  async listReactionsFromNostrPublic(npub: TNostrPublic): Promise<
+  async listReactionsFromNostrPublic(pubkey: string): Promise<
     Array<ITweet | IRetweet>
   > {
-    const rawEvents = await this.tweetApi.listReactionsFromPubkey(npub);
+    const rawEvents = await this.tweetApi.listReactionsFromPubkey(pubkey);
     return this.loadRelatedEvents(rawEvents);
   }
 
@@ -82,7 +75,7 @@ export class TweetProxy {
     // const reactions = await this.tweetApi.loadRelatedReactions(relatedEventList);
     // const wrapperReactions = this.tweetCache.cache(reactions);
 
-    await this.profileProxy.loadProfiles(
+    await this.profileService.loadProfiles(
       wrapperRoot.npubs.concat(wrapperRelated.npubs) //, wrapperLazyEagerLoaded.npubs, wrapperReactions.npubs
     );
 

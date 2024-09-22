@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthenticatedProfileObservable, IProfile } from '@belomonte/nostr-gui-ngx';
-import { DataLoadType } from '@domain/data-load.type';
+import { AuthenticatedAccountObservable } from '@belomonte/nostr-ngx';
 import { ITweet } from '@domain/tweet.interface';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
 import { MainErrorObservable } from '@shared/main-error/main-error.observable';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
 import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
 import { Subscription } from 'rxjs';
+import { NostrMetadata } from '@nostrify/nostrify';
 
 @Component({
   selector: 'tw-profile',
@@ -20,15 +20,15 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
 
   loading = true;
 
-  profile: IProfile | null = null;
-  authProfile: IProfile | null = null;
+  profile: NostrMetadata | null = null;
+  authProfile: NostrMetadata | null = null;
 
-  tweets: ITweet<DataLoadType.EAGER_LOADED>[] = [];
+  tweets: Array<ITweet> = [];
   subscriptions = new Subscription();
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private profile$: AuthenticatedProfileObservable,
+    private profile$: AuthenticatedAccountObservable,
     private error$: MainErrorObservable,
     private networkError$: NetworkErrorObservable,
     private tweetProxy: TweetProxy,
@@ -77,13 +77,9 @@ export class ProfileComponent extends AbstractEntitledComponent implements OnIni
     }));
   }
   
-  private async loadProfileTweets(profile: IProfile): Promise<void> {
+  private async loadProfileTweets(profile: NostrMetadata): Promise<void> {
     this.profile = profile;
-    const tweets = await this.tweetProxy.listTweetsFromNostrPublic(profile.npub);
-
-    this.tweets = tweets.filter(
-      (tweet): tweet is ITweet<DataLoadType.EAGER_LOADED> => tweet.load === DataLoadType.EAGER_LOADED
-    );
+    this.tweets = await this.tweetProxy.listTweetsFromPubkey(profile.npub);
 
     this.subscriptions.add(this.activatedRoute.data.subscribe({
       next: data => this.profile = data['profile']

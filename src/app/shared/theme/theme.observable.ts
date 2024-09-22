@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
+import { AuthenticatedAccountObservable } from '@belomonte/nostr-ngx';
 import { BehaviorSubject } from 'rxjs';
 import { ITheme } from './theme.interface';
-import { AuthenticatedProfileObservable, IProfile } from '@belomonte/nostr-gui-ngx';
+import { NostrMetadata } from '@nostrify/nostrify';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class ThemeObservable extends BehaviorSubject<ITheme> {
   private static instance: ThemeObservable | null = null;
 
   constructor(
-    private profile$: AuthenticatedProfileObservable
+    private profile$: AuthenticatedAccountObservable
   ) {
     const profile: any = profile$.getValue(); // FIXME: remover any
     const base = profile?.theme || 'darker';
@@ -36,7 +37,7 @@ export class ThemeObservable extends BehaviorSubject<ITheme> {
     });
   }
 
-  private themeFromProfile(profile: IProfile | null): { base: string, color: string } {
+  private themeFromProfile(profile: NostrMetadata | null): { base: string, color: string } {
     // FIXME: remover any
     const base = (profile as any)?.theme || 'darker';
     const color = (profile as any)?.color || 'blue';

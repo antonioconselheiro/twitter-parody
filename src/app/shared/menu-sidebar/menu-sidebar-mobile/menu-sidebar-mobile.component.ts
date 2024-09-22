@@ -1,9 +1,10 @@
 import { Component, HostBinding, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { AuthenticatedAccountObservable } from '@belomonte/nostr-ngx';
 import { Subscription } from 'rxjs';
-import { MenuSidebarMobileObservable } from './menu-sidebar-mobile.observable';
-import { MenuType } from '../menu-type.enum';
 import { MenuActiveObservable } from '../menu-active.observable';
-import { AuthenticatedProfileObservable, IProfile } from '@belomonte/nostr-gui-ngx';
+import { MenuType } from '../menu-type.enum';
+import { MenuSidebarMobileObservable } from './menu-sidebar-mobile.observable';
+import { NostrMetadata } from '@nostrify/nostrify';
 
 @Component({
   selector: 'tw-menu-sidebar-mobile',
@@ -22,13 +23,13 @@ export class MenuSidebarMobileComponent implements OnInit, OnDestroy {
   @HostBinding('class.active')
   showing = false;
 
-  profile: IProfile | null = null;
+  profile: NostrMetadata | null = null;
   menuActive: MenuType | null = null;
 
   touchStart = 0;
 
   constructor(
-    private profile$: AuthenticatedProfileObservable,
+    private profile$: AuthenticatedAccountObservable,
     private menuActive$: MenuActiveObservable,
     private menuSidebarMobile$: MenuSidebarMobileObservable
   ) { }

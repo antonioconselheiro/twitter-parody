@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { NostrEventKind, NostrPool } from '@belomonte/nostr-ngx';
-import { TEventId } from '@domain/event-id.type';
 import { NostrEvent } from 'nostr-tools';
 
 @Injectable({
@@ -39,7 +38,7 @@ export class TweetApi {
     ]);
   }
 
-  loadEvents(events: TEventId[]): Promise<NostrEvent[]> {
+  loadEvents(events: string[]): Promise<NostrEvent[]> {
     return this.npool.request([
       {
         ids: events,
@@ -58,7 +57,7 @@ export class TweetApi {
     ]);
   }
 
-  loadRelatedEvents(events: TEventId[]): Promise<NostrEvent[]> {
+  loadRelatedEvents(events: string[]): Promise<NostrEvent[]> {
     return this.npool.request([
       {
         kinds: [
@@ -70,7 +69,7 @@ export class TweetApi {
     ]);
   }
 
-  loadRelatedReactions(events: TEventId[]): Promise<NostrEvent[]> {
+  loadRelatedReactions(events: string[]): Promise<NostrEvent[]> {
     return this.npool.request([
       {
         kinds: [

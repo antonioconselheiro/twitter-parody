@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { IProfile } from '@belomonte/nostr-gui-ngx';
+import { NostrMetadata } from '@nostrify/nostrify';
 
 @Component({
   selector: 'tw-floating-chat-messages',
@@ -18,5 +18,5 @@ export class FloatingChatMessagesComponent {
   collapsed = true;
 
   @Input()
-  contact: IProfile | null = null;
+  contact: NostrMetadata | null = null;
 }

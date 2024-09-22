@@ -1,1 +1,1 @@
-export type TEventRelationType = 'mention' | 'root' | 'reply';
+export type EventRelationType = 'mention' | 'root' | 'reply';

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { IMessage } from './message.interface';
-import { IProfile } from '@belomonte/nostr-gui-ngx';
+import { NostrMetadata } from '@nostrify/nostrify';
 
 @Component({
   selector: 'tw-floating-chat',
@@ -11,7 +11,7 @@ export class FloatingChatComponent {
   //  TODO: persistir essa informação no localstorage ou no armazemanto do app
   collapsed = true;
 
-  talkingContact: IProfile | null = null;
+  talkingContact: NostrMetadata | null = null;
 
   @Input()
   lastMessageFromEachContactedProfile: IMessage[] = [];

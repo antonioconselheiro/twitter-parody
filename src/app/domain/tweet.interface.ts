@@ -1,24 +1,19 @@
 import { SafeHtml } from '@angular/platform-browser';
+import { NPub } from '@belomonte/nostr-ngx';
 import Geohash from 'latlon-geohash';
-import { DataLoadType } from './data-load.type';
-import { TEventId } from './event-id.type';
 import { ITweetReactionMap } from './tweet-reaction-map.interface';
 import { ITweetZapMap } from './tweet-zap-map.interface';
-import { TNostrPublic } from '@belomonte/nostr-ngx';
 
-export type ITweet<T extends DataLoadType | unknown = unknown> = {
-  id: TEventId;
-  load: T;
+export interface ITweet {
+  id: string;
   reactions: ITweetReactionMap;
   zaps: ITweetZapMap;
-  rootRepling?: TEventId;
-  repling?: TEventId;
-  retweetedBy?: { [eventId: string]: TNostrPublic };
-  retweeting?: TEventId;
-  replies?: TEventId[];
-} & ({
-  load: DataLoadType.EAGER_LOADED;
-  author: TNostrPublic;
+  rootRepling?: string;
+  repling?: string;
+  retweetedBy?: { [eventId: string]: NPub };
+  retweeting?: string;
+  replies?: string[];
+  author: NPub;
   content: string;
 
   /**
@@ -40,7 +35,4 @@ export type ITweet<T extends DataLoadType | unknown = unknown> = {
   location?: Geohash.Point;
   created: number;
   view?: number;
-} | {
-  load: DataLoadType.LAZY_LOADED;
-  author?: TNostrPublic;
-})
+}
