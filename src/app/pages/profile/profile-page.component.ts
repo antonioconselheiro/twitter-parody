@@ -7,11 +7,11 @@ import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-en
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'tw-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  selector: 'tw-profile-page',
+  templateUrl: './profile-page.component.html',
+  styleUrls: ['./profile-page.component.scss']
 })
-export class ProfileComponent extends AbstractEntitledComponent implements OnInit, OnDestroy {
+export class ProfilePageComponent extends AbstractEntitledComponent implements OnInit, OnDestroy {
 
   override title = 'Profile';
 

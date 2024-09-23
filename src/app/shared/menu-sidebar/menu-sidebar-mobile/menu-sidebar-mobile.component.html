@@ -1,15 +1,15 @@
-<nav class="menu-sidebar" *ngIf="profile">
+<nav class="menu-sidebar" *ngIf="account && account.metadata">
   <header>
     <div class="profile-menu">
-      <nostr-profile-picture [profile]="profile"></nostr-profile-picture>
-      <!-- <tw-accounts-list-mobile [profile]="profile"></tw-accounts-list-mobile> -->
+      <nostr-profile-picture [profile]="account"></nostr-profile-picture>
+      <tw-accounts-list-mobile [profile]="account"></tw-accounts-list-mobile>
 
       <div class="user-info">
         <span class="user-name">
-          {{profile.display_name || profile.name}}
-          <span *ngIf="profile.nip05valid" class="user-verified"></span>
+          {{account.metadata.display_name || account.metadata.name}}
+          <span *ngIf="account.isNip05Valid" class="user-verified"></span>
         </span>
-        <span *ngIf="profile.nip05" class="user-nip5">{{profile.nip05}}</span>
+        <span *ngIf="account.metadata.nip05" class="user-nip5">{{account.metadata.nip05}}</span>
       </div>
       <div class="following">
         <span>345 following</span>
@@ -18,7 +18,7 @@
     </div>
   </header>
   <ul>
-    <li tabindex="101" *ngIf="profile && profile.npub" [class.active]="menuActive === MENU_TYPE_PROFILE" role="link" routerLink="/p/{{profile.npub}}">
+    <li tabindex="101" *ngIf="account && account.npub" [class.active]="menuActive === MENU_TYPE_PROFILE" role="link" routerLink="/p/{{account.npub}}">
       <div title="Profile" class="menu-icon icon-profile"></div>
       <span>Profile</span>
     </li>
@@ -41,7 +41,7 @@
     </li>
   </ul>
   <footer class="terms">
-    <a href="https://raw.githubusercontent.com/antonioconselheiro/twitter-parody/master/LICENSE" target="_BLANK">All rights open under unlicense license</a> · <span>Maranata</span> · <span (click)="terms()">Jesus is coming</span>
+    <a href="https://raw.githubusercontent.com/antonioconselheiro/twitter-parody/master/LICENSE" target="_BLANK">All rights open under ungovernable license</a> · <span>Maranata</span> · <span (click)="terms()">Jesus is coming</span>
   </footer>
 </nav>
 

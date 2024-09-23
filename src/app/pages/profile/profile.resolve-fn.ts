@@ -1,7 +1,6 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
-import { ProfileService } from '@belomonte/nostr-ngx';
-import { NostrMetadata } from '@nostrify/nostrify';
+import { Account, ProfileService } from '@belomonte/nostr-ngx';
 
-export const profileResolverFn: ResolveFn<NostrMetadata | null> =
-    (route: ActivatedRouteSnapshot) => inject(ProfileService).get(route.params['npub']);
+export const profileResolverFn: ResolveFn<Account> =
+    (route: ActivatedRouteSnapshot) => inject(ProfileService).getAccountUsingNPub(route.params['npub']);

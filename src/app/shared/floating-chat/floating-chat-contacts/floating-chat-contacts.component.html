@@ -20,7 +20,7 @@
         <header>
           <span class="user-name">
             {{message.author.display_name || message.author.name}}
-            <span *ngIf="message.author.nip05valid" class="user-verified"></span>
+            <span *ngIf="message.author.isNip05Valid" class="user-verified"></span>
           </span>
           <span *ngIf="message.author.nip05" class="user-nip5">{{message.author.nip05}}</span>
           <time [attr.datetime]="message.time | datetimeIso">· {{message.time | datetimeText}}</time>

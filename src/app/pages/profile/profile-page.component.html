@@ -10,7 +10,7 @@
     <div class="user-info">
       <span class="user-name">
         {{profile.display_name || profile.name}}
-        <span *ngIf="profile.nip05valid" class="user-verified"></span>
+        <span *ngIf="profile.isNip05Valid" class="user-verified"></span>
       </span>
       <span class="color-lowest-contrast">13,5 mil tweets</span>
     </div>
@@ -26,7 +26,7 @@
     <div class="user-info">
       <span class="user-name">
         {{profile.display_name || profile.name}}
-        <span *ngIf="profile.nip05valid" class="user-verified"></span>
+        <span *ngIf="profile.isNip05Valid" class="user-verified"></span>
       </span>
       <span *ngIf="profile.nip05" class="user-nip5">{{profile.nip05}}</span>
     </div>

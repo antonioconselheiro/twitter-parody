@@ -18,7 +18,7 @@ import { ListsModule } from './pages/lists/lists.module';
 import { MessagesModule } from './pages/messages/messages.module';
 import { NetworkModule } from './pages/network/network.module';
 import { NotificationsModule } from './pages/notifications/notifications.module';
-import { ProfileModule } from './pages/profile/profile.module';
+import { ProfilePageModule } from './pages/profile/profile-page.module';
 import { TimelineModule } from './pages/timeline/timeline.module';
 import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.module';
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
@@ -54,7 +54,7 @@ import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
     NetworkModule,
     MessagesModule,
     ExploreModule,
-    ProfileModule,
+    ProfilePageModule,
     ListsModule,
     CommunitiesModule,
 

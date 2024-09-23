@@ -1,18 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ProfileWidgetModule } from '@belomonte/nostr-gui-ngx';
-import { ProfileComponent } from './profile.component';
+import { ProfilePageComponent } from './profile-page.component';
 
 @NgModule({
   declarations: [
-    ProfileComponent
+    ProfilePageComponent
   ],
   imports: [
     CommonModule,
     ProfileWidgetModule
   ],
   exports: [
-    ProfileComponent
+    ProfilePageComponent
   ]
 })
-export class ProfileModule { }
+export class ProfilePageModule { }

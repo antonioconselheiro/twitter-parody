@@ -5,7 +5,7 @@ import { ExploreComponent } from './pages/explore/explore.component';
 import { ListsComponent } from './pages/lists/lists.component';
 import { MessagesComponent } from './pages/messages/messages.component';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
-import { ProfileComponent } from './pages/profile/profile.component';
+import { ProfilePageComponent } from './pages/profile/profile-page.component';
 import { TimelineComponent } from './pages/timeline/timeline.component';
 import { profileResolverFn } from './pages/profile/profile.resolve-fn';
 import { menuActiveResolverFn } from '@shared/menu-sidebar/menu-active.resolve-fn';
@@ -59,7 +59,7 @@ const routes: Routes = [
 
   {
     path: 'p/:npub',
-    component: ProfileComponent,
+    component: ProfilePageComponent,
     runGuardsAndResolvers: 'pathParamsChange',
     resolve: {
       profile: profileResolverFn,

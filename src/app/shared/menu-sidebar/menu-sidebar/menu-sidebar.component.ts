@@ -8,7 +8,6 @@ import { CompositeTweetPopoverComponent } from '@shared/tweet-widget/composite-t
 import { Subscription } from 'rxjs';
 import { MenuActiveObservable } from '../menu-active.observable';
 import { MenuType } from '../menu-type.enum';
-import { NostrMetadata } from '@nostrify/nostrify';
 
 @Component({
   selector: 'tw-menu-sidebar',
@@ -28,7 +27,7 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
   readonly MENU_TYPE_COMMUNITIES = MenuType.COMMUNITIES;
   readonly MENU_TYPE_PROFILE = MenuType.PROFILE;
 
-  profile: Account | null = null;
+  account: Account | null = null;
   menuActive: MenuType | null = null;
   
   @ViewChild('authPopover', { read: PopoverComponent })
@@ -49,7 +48,7 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
 
   private bindProfileSubscription(): void {
     this.subscriptions.add(this.profile$.subscribe(
-      profile => this.profile = profile
+      profile => this.account = profile
     ));
   }
 
@@ -63,8 +62,9 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  onProfileMenuClick(profile: NostrMetadata | null): void {
-    if (profile) {
+  //  TODO: review this, method purpouse
+  onProfileMenuClick(account: Account | null): void {
+    if (account) {
       this.popover.show();
     } else {
       this.credentialHandlerService.addAccount();

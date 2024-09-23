@@ -17,7 +17,7 @@
           <address *ngIf="getAuthorProfile(twet)" class="author user-info">
             <span class="user-name">
               {{this.getAuthorName(twet)}}
-              <span *ngIf="getAuthorProfile(twet)?.nip05valid" class="user-verified"></span>
+              <span *ngIf="getAuthorProfile(twet)?.isNip05Valid" class="user-verified"></span>
             </span>
             <span *ngIf="getAuthorProfile(twet)?.nip05" class="user-nip5">
               {{getAuthorProfile(twet)?.nip05}}
@@ -114,7 +114,7 @@
           <address *ngIf="getAuthorProfile(twet)" class="author user-info">
             <span class="user-name">
               {{this.getAuthorName(twet)}}
-              <span *ngIf="getAuthorProfile(twet)?.nip05valid" class="user-verified"></span>
+              <span *ngIf="getAuthorProfile(twet)?.isNip05Valid" class="user-verified"></span>
             </span>
             <span *ngIf="getAuthorProfile(twet)?.nip05" class="user-nip5">{{getAuthorProfile(twet)?.nip05}}</span>
           </address>
