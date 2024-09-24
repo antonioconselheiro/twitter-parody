@@ -5,8 +5,8 @@
     </div>
   </button>
   <div class="user-info">
-    <span class="user-name">{{contact?.display_name || contact?.name}}</span>
-    <span class="user-nip5">{{contact?.nip05}}</span>
+    <span class="user-name">{{contact?.metadata?.display_name || contact?.metadata?.name}}</span>
+    <span class="user-nip5">{{contact?.metadata?.nip05}}</span>
   </div>
   <button type="button" title="collapse" (click)="collapse.next(!collapsed)" [class.icon-double-down]="!collapsed" [class.icon-double-up]="collapsed" class="svg-button">
     <div class="svg-wrapper">

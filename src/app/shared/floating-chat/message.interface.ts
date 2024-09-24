@@ -1,7 +1,7 @@
-import { NostrMetadata } from '@nostrify/nostrify';
+import { Account } from '@belomonte/nostr-ngx';
 
-export interface IMessage {
+export interface DirectMessage {
   text: string;
   time: number;
-  author: NostrMetadata;
+  author: Account;
 }

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { IMessage } from './message.interface';
-import { NostrMetadata } from '@nostrify/nostrify';
+import { Account } from '@belomonte/nostr-ngx';
+import { DirectMessage } from './message.interface';
 
 @Component({
   selector: 'tw-floating-chat',
@@ -11,8 +11,8 @@ export class FloatingChatComponent {
   //  TODO: persistir essa informação no localstorage ou no armazemanto do app
   collapsed = true;
 
-  talkingContact: NostrMetadata | null = null;
+  talkingContact: Account | null = null;
 
   @Input()
-  lastMessageFromEachContactedProfile: IMessage[] = [];
+  lastMessageFromEachContactedProfile: DirectMessage[] = [];
 }

@@ -17,8 +17,8 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
 
   loading = true;
 
-  profile: NostrMetadata | null = null;
-  account: Account | null = null;
+  viewing: Account | null = null;
+  authenticated: Account | null = null;
 
   tweets: Array<Tweet> = [];
   subscriptions = new Subscription();
@@ -33,11 +33,12 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
 
   override ngOnInit(): void {
     this.bindAuthenticatedProfileSubscription();
-    this.loadProfileTweets(this.activatedRoute.snapshot.data['profile'])
-      .finally(() => this.loading = false);
-
     this.getProfileFromActivatedRoute();
     this.bindViewingProfile();
+
+    this.loadProfileTweets(this.activatedRoute.snapshot.data['account'])
+      .finally(() => this.loading = false);
+
     super.ngOnInit();
   }
 
@@ -46,8 +47,8 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
   }
 
   getProfileBanner(): string {
-    if (this.profile && this.profile.banner) {
-      return `url("${this.profile.banner}")`;
+    if (this.viewing && this.viewing.metadata && this.viewing.metadata.banner) {
+      return `url("${this.viewing.metadata.banner}")`;
     } else {
       return `url("/assets/profile/default-banner.jpg")`;
     }
@@ -55,14 +56,14 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
 
   private bindAuthenticatedProfileSubscription(): void {
     this.subscriptions.add(this.profile$.subscribe({
-      next: account => this.account = account
+      next: account => this.viewing = account
     }));
   }
 
   private bindViewingProfile(): void {
     this.subscriptions.add(this.activatedRoute.data.subscribe({
       next: wrapper => {
-        this.profile = wrapper['profile'];
+        this.viewing = wrapper['profile'];
         this.tweets = [];
         document.body.scrollTo(0, 0);
         this.loadProfileTweets(wrapper['profile']);
@@ -70,20 +71,20 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
     }));
   }
   
-  private async loadProfileTweets(profile: NostrMetadata): Promise<void> {
-    this.profile = profile;
-   //  this.tweets = await this.tweetProxy.listTweetsFromPubkey(profile.npub);
+  private async loadProfileTweets(account: Account): Promise<void> {
+    this.viewing = account;
+   //  FIXME: this.tweets = await this.tweetProxy.listTweetsFromPubkey(profile.npub);
 
     this.subscriptions.add(this.activatedRoute.data.subscribe({
-      next: data => this.profile = data['profile']
+      next: data => this.viewing = data['profile']
     }));
   }
   
   private getProfileFromActivatedRoute(): void {
-    this.profile = this.activatedRoute.snapshot.data['profile'];
-    if (this.profile) {
-      this.title = this.profile.display_name || this.profile.name || 'Profile';
-      this.loadProfileTweets(this.profile);
+    this.viewing = this.activatedRoute.snapshot.data['profile'];
+    if (this.viewing) {
+      this.title = this.viewing.metadata?.display_name || this.viewing.metadata?.name || 'Profile';
+      this.loadProfileTweets(this.viewing);
     }
   }
 

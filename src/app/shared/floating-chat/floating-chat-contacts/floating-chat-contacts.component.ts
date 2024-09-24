@@ -1,7 +1,8 @@
 /* eslint-disable max-lines */
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { IMessage } from '../message.interface';
+import { DirectMessage } from '../message.interface';
 import { NostrMetadata } from '@nostrify/nostrify';
+import { Account } from '@belomonte/nostr-ngx';
 
 @Component({
   selector: 'tw-floating-chat-contacts',
@@ -11,7 +12,7 @@ import { NostrMetadata } from '@nostrify/nostrify';
 export class FloatingChatContactsComponent {
 
   @Output()
-  choose = new EventEmitter<NostrMetadata>();
+  choose = new EventEmitter<Account>();
 
   @Output()
   collapse = new EventEmitter<boolean>();
@@ -20,5 +21,5 @@ export class FloatingChatContactsComponent {
   collapsed = true;
 
   @Input()
-  contacteds: IMessage[] = [];
+  contacteds: DirectMessage[] = [];
 }

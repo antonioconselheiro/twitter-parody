@@ -4,14 +4,13 @@ import QrScanner from 'qr-scanner';
 import { Subscription } from 'rxjs';
 import { CameraFunctions } from './camera-functions.enum';
 import { CameraObservable } from './camera.observable';
-import { ICloseable } from '@shared/util/closeable.interface';
 
 @Component({
   selector: 'tw-camera',
   templateUrl: './camera.component.html',
   styleUrls: ['./camera.component.scss']
 })
-export class CameraComponent implements OnInit, OnDestroy, ICloseable {
+export class CameraComponent implements OnInit, OnDestroy {
 
   @ViewChild('video', { read: ElementRef })
   videoEl?: ElementRef<HTMLVideoElement>;

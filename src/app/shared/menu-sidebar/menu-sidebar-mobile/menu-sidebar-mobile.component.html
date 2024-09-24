@@ -1,8 +1,8 @@
 <nav class="menu-sidebar" *ngIf="account && account.metadata">
   <header>
     <div class="profile-menu">
-      <nostr-profile-picture [profile]="account"></nostr-profile-picture>
-      <tw-accounts-list-mobile [profile]="account"></tw-accounts-list-mobile>
+      <nostr-profile-picture [account]="account"></nostr-profile-picture>
+      <!-- <tw-accounts-list-mobile [account]="account"></tw-accounts-list-mobile> -->
 
       <div class="user-info">
         <span class="user-name">

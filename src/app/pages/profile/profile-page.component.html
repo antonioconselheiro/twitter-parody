@@ -1,4 +1,4 @@
-<ng-container *ngIf="profile">
+<ng-container *ngIf="viewing">
   <header class="header-backable">
     <div>
       <button (click)="goHome()" title="back" type="button" class="icon-back svg-button">
@@ -9,8 +9,8 @@
     </div>
     <div class="user-info">
       <span class="user-name">
-        {{profile.display_name || profile.name}}
-        <span *ngIf="profile.isNip05Valid" class="user-verified"></span>
+        {{viewing.metadata?.display_name || viewing.metadata?.name}}
+        <span *ngIf="viewing.isNip05Valid" class="user-verified"></span>
       </span>
       <span class="color-lowest-contrast">13,5 mil tweets</span>
     </div>
@@ -19,37 +19,40 @@
     <div class="banner" [style.backgroundImage]="getProfileBanner()">
     </div>
     <div class="edit-profile-container">
-      <nostr-profile-picture [profile]="profile"></nostr-profile-picture>
+      <nostr-profile-picture [account]="viewing"></nostr-profile-picture>
   
-      <button *ngIf="authProfile?.npub === profile.npub" class="button secondary">Edit profile</button>
+      <button *ngIf="authenticated?.npub === viewing.npub" class="button secondary">Edit profile</button>
     </div>
     <div class="user-info">
       <span class="user-name">
-        {{profile.display_name || profile.name}}
-        <span *ngIf="profile.isNip05Valid" class="user-verified"></span>
+        {{viewing.metadata?.display_name || viewing.metadata?.name}}
+        <span *ngIf="viewing.isNip05Valid" class="user-verified"></span>
       </span>
-      <span *ngIf="profile.nip05" class="user-nip5">{{profile.nip05}}</span>
+      <span *ngIf="viewing.metadata?.nip05" class="user-nip5">{{viewing.metadata?.nip05}}</span>
     </div>
-    <div class="bio" [innerHTML]="profile.htmlAbout"></div>
+    <!-- FIXME: preciso enviar o htmlAbout de outra maneira, ou processa-lo aqui mesmo, não sei
+     <div class="bio" [innerHTML]="viewing.metadata?.htmlAbout"></div>
+     -->
     <div class="additional-information">
-      <span *ngIf="profile['location']">
+      <span *ngIf="viewing.metadata?.['location']">
         <div class="inline-icon icon-location">
           <div role="img"></div>
         </div>
-        <span>{{profile['location']}}</span>
+        <span>{{viewing.metadata?.['location']}}</span>
       </span>
-      <span *ngIf="profile.website">
+      <span *ngIf="viewing.metadata?.website">
         <div class="inline-icon icon-link">
           <div role="img"></div>
         </div>
-        <a [href]="profile.website">{{profile.website}}</a>
+        <a [href]="viewing.metadata?.website">{{viewing.metadata?.website}}</a>
       </span>
-      <span *ngIf="profile.created_at">
+      <!-- FIXME: de onde eu tiro a informação de quando o usuário criou sua conta no nostr?
+      <span *ngIf="viewing.metadata?.created_at">
         <div class="inline-icon icon-calendar">
           <div role="img"></div>
         </div>
         <span>Joined in August 2021</span>
-      </span>
+      </span> -->
     </div>
     <div class="follow-container">
       <a role="button"><strong>2.324</strong><span> following</span></a>
@@ -75,6 +78,6 @@
     </a>
   </nav>
   <section>
-    <tw-tweet-list [loading]="loading" [tweets]="tweets"></tw-tweet-list>
+    <!-- FIXME: <tw-tweet-list [loading]="loading" [tweets]="tweets"></tw-tweet-list> -->
   </section>
 </ng-container>
