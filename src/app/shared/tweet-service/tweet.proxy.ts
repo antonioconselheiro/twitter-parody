@@ -7,7 +7,9 @@ import { TweetTagsConverter } from "./tweet-tags.converter";
 import { TweetApi } from "./tweet.api";
 import { TweetTypeGuard } from "./tweet.type-guard";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TweetProxy {
 
   constructor(
