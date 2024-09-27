@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MainErrorObservable } from '@shared/main-error/main-error.observable';
 import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
-import { ITheme } from '@shared/theme/theme.interface';
+import { Theme } from '@shared/theme/theme.interface';
 import { ThemeObservable } from '@shared/theme/theme.observable';
 import { Subscription } from 'rxjs';
 
@@ -45,7 +45,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }));
   }
 
-  private setCurrentTheme(theme: ITheme): void {
+  private setCurrentTheme(theme: Theme): void {
     if (['darker', 'light', 'dark'].includes(theme.base)) {
       document.body.setAttribute('data-theme', theme.base);
     }

@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { ITheme } from '@shared/theme/theme.interface';
+import { Theme } from '@shared/theme/theme.interface';
 import { ThemeObservable } from '@shared/theme/theme.observable';
 import { Subscription } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
 export class TweetWriteButtonGroupComponent implements OnInit, OnDestroy {
 
   private subscriptions = new Subscription();
-  private currentTheme: ITheme | null = null;
+  private currentTheme: Theme | null = null;
 
   @Output()
   emoji = new EventEmitter<string>();

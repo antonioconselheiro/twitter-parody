@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AuthenticatedAccountObservable } from '@belomonte/nostr-ngx';
 import { BehaviorSubject } from 'rxjs';
-import { ITheme } from './theme.interface';
+import { Theme } from './theme.interface';
 import { NostrMetadata } from '@nostrify/nostrify';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ThemeObservable extends BehaviorSubject<ITheme> {
+export class ThemeObservable extends BehaviorSubject<Theme> {
 
   private static instance: ThemeObservable | null = null;
 
