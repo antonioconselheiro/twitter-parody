@@ -70,10 +70,10 @@
           "builder": "@angular-builders/custom-webpack:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "twitter-parody:build:production"
+              "buildTarget": "twitter-parody:build:production"
             },
             "development": {
-              "browserTarget": "twitter-parody:build:development"
+              "buildTarget": "twitter-parody:build:development"
             }
           },
           "defaultConfiguration": "development"
