@@ -14,7 +14,7 @@
       </div>
       <div class="tweet-metadata">
         <header>
-          <address *ngIf="getAuthorProfile(twet)" class="author user-info">
+          <address *ngIf="getAuthorProfile(twet)" class="author userInfo">
             <span class="user-name">
               {{this.getAuthorName(twet)}}
               <span *ngIf="getAuthorProfile(twet)?.isNip05Valid" class="user-verified"></span>
@@ -32,51 +32,35 @@
           <tw-popover #tweetActions>
             <ul class="popover-list">
               <li role="button">
-                <div class="inline-icon icon-unfollow">
-                  <div role="img"></div>
-                </div>
+                <nostr-svg-render class="inlineIcon" name="readTweet/options/unfollow"></nostr-svg-render>
                 Delete
               </li>
               <li role="button">
-                <div class="inline-icon icon-pin-tweet">
-                  <div role="img"></div>
-                </div>
+                <nostr-svg-render class="inlineIcon" name="readTweet/options/pinTweet"></nostr-svg-render>
                 Pin to your Profile
               </li>
               <li role="button">
-                <div class="inline-icon icon-unfollow">
-                  <div role="img"></div>
-                </div>
+                <nostr-svg-render class="inlineIcon" name="readTweet/options/unfollow"></nostr-svg-render>
                 Unfollow &#64;name
               </li>
               <li role="button">
-                <div class="inline-icon icon-add-list">
-                  <div role="img"></div>
-                </div>
+                <nostr-svg-render class="inlineIcon" name="readTweet/options/addList"></nostr-svg-render>
                 Add/Remove &#64;name from Lists
               </li>
               <li role="button">
-                <div class="inline-icon icon-silence">
-                  <div role="img"></div>
-                </div>
+                <nostr-svg-render class="inlineIcon" name="readTweet/options/silence"></nostr-svg-render>
                 Silence &#64;name
               </li>
               <li role="button">
-                <div class="inline-icon icon-block">
-                  <div role="img"></div>
-                </div>
+                <nostr-svg-render class="inlineIcon" name="readTweet/options/block"></nostr-svg-render>
                 Block &#64;name
               </li>
               <li role="button">
-                <div class="inline-icon icon-report">
-                  <div role="img"></div>
-                </div>
+                <nostr-svg-render class="inlineIcon" name="readTweet/options/report"></nostr-svg-render>
                 Report &#64;name
               </li>
               <li role="button">
-                <div class="inline-icon icon-view">
-                  <div role="img"></div>
-                </div>
+                <nostr-svg-render class="inlineIcon" name="readTweet/view"></nostr-svg-render>
                 Event detail
               </li>
             </ul>
@@ -109,7 +93,7 @@
       </div>
       <div class="tweet-metadata">
         <header>
-          <address *ngIf="getAuthorProfile(twet)" class="author user-info">
+          <address *ngIf="getAuthorProfile(twet)" class="author userInfo">
             <span class="user-name">
               {{this.getAuthorName(twet)}}
               <span *ngIf="getAuthorProfile(twet)?.isNip05Valid" class="user-verified"></span>

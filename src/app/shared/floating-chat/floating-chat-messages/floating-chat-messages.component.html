@@ -2,7 +2,7 @@
   <button (click)="back.emit()" title="back" type="button" class="back-button svgButton">
     <nostr-svg-render name="left"></nostr-svg-render>
   </button>
-  <div class="user-info">
+  <div class="userInfo">
     <span class="user-name">{{contact?.metadata?.display_name || contact?.metadata?.name}}</span>
     <span class="user-nip5">{{contact?.metadata?.nip05}}</span>
   </div>

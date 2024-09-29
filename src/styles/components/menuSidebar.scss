@@ -1,8 +1,8 @@
 //  main menu for android and desktop
-nav.menu-sidebar,
-nav.menu-bottombar {
+nav.menuSidebar,
+nav.menuBottombar {
 
-  .menu-icon {
+  .menuIcon {
     width: 27px;
     height: 27px;
     min-width: 27px;
@@ -54,81 +54,81 @@ nav.menu-bottombar {
   }
 
   li {
-    .icon-home {
-      mask-image: url('/assets/menu-sidebar/home.svg');
+    .iconHome {
+      mask-image: url('/assets/menuSidebar/home.svg');
     }
 
-    .icon-explore {
-      mask-image: url('/assets/menu-sidebar/explore.svg');
+    .iconExplore {
+      mask-image: url('/assets/menuSidebar/explore.svg');
     }
 
-    .icon-notifications {
-      mask-image: url('/assets/menu-sidebar/notifications.svg');
+    .iconNotifications {
+      mask-image: url('/assets/menuSidebar/notifications.svg');
     }
 
-    .icon-messages {
-      mask-image: url('/assets/menu-sidebar/messages.svg');
+    .iconMessages {
+      mask-image: url('/assets/menuSidebar/messages.svg');
     }
 
-    .icon-lists {
-      mask-image: url('/assets/menu-sidebar/lists.svg');
+    .iconLists {
+      mask-image: url('/assets/menuSidebar/lists.svg');
     }
 
-    .icon-bookmark {
-      mask-image: url('/assets/menu-sidebar/bookmark.svg');
+    .iconBookmark {
+      mask-image: url('/assets/menuSidebar/bookmark.svg');
     }
 
-    .icon-communities {
-      mask-image: url('/assets/menu-sidebar/communities.svg');
+    .iconCommunities {
+      mask-image: url('/assets/menuSidebar/communities.svg');
     }
 
-    .icon-profile {
-      mask-image: url('/assets/menu-sidebar/profile.svg');
+    .iconProfile {
+      mask-image: url('/assets/menuSidebar/profile.svg');
     }
 
-    .icon-more {
-      mask-image: url('/assets/menu-sidebar/more.svg');
+    .iconMore {
+      mask-image: url('/assets/menuSidebar/more.svg');
     }
 
     &.active {
       font-weight: bolder;
 
-      .icon-home {
-        mask-image: url('/assets/menu-sidebar/home-active.svg');
+      .iconHome {
+        mask-image: url('/assets/menuSidebar/homeActive.svg');
       }
 
-      .icon-explore {
-        mask-image: url('/assets/menu-sidebar/explore-active.svg');
+      .iconExplore {
+        mask-image: url('/assets/menuSidebar/exploreActive.svg');
       }
 
-      .icon-notifications {
-        mask-image: url('/assets/menu-sidebar/notifications-active.svg');
+      .iconNotifications {
+        mask-image: url('/assets/menuSidebar/notificationsActive.svg');
       }
 
-      .icon-messages {
-        mask-image: url('/assets/menu-sidebar/messages-active.svg');
+      .iconMessages {
+        mask-image: url('/assets/menuSidebar/messagesActive.svg');
       }
 
-      .icon-lists {
-        mask-image: url('/assets/menu-sidebar/lists-active.svg');
+      .iconLists {
+        mask-image: url('/assets/menuSidebar/listsActive.svg');
       }
 
-      .icon-bookmark {
-        mask-image: url('/assets/menu-sidebar/bookmark-active.svg');
+      .iconBookmark {
+        mask-image: url('/assets/menuSidebar/bookmarkActive.svg');
       }
 
-      .icon-communities {
-        mask-image: url('/assets/menu-sidebar/communities-active.svg');
+      .iconCommunities {
+        mask-image: url('/assets/menuSidebar/communitiesActive.svg');
       }
 
-      .icon-profile {
-        mask-image: url('/assets/menu-sidebar/profile-active.svg');
+      .iconProfile {
+        mask-image: url('/assets/menuSidebar/profileActive.svg');
       }
     }
   }
 }
 
-nav.menu-sidebar {
+nav.menuSidebar {
   ul {
     flex-direction: column;
     max-width: 95%;
@@ -145,8 +145,8 @@ nav.menu-sidebar {
   }
 }
 
-.menu-sidebar ~ .profile-menu,
-.menu-sidebar .profile-menu {
+.menuSidebar ~ .profileMenu,
+.menuSidebar .profileMenu {
   border-radius: 50px;
   display: flex;
   cursor: pointer;

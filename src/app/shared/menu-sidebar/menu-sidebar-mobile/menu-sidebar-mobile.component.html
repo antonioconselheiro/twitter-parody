@@ -1,10 +1,10 @@
-<nav class="menu-sidebar" *ngIf="account && account.metadata">
+<nav class="menuSidebar" *ngIf="account && account.metadata">
   <header>
-    <div class="profile-menu">
+    <div class="profileMenu">
       <nostr-profile-picture [account]="account"></nostr-profile-picture>
       <!-- <tw-accounts-list-mobile [account]="account"></tw-accounts-list-mobile> -->
 
-      <div class="user-info">
+      <div class="userInfo">
         <span class="user-name">
           {{account.metadata.display_name || account.metadata.name}}
           <span *ngIf="account.isNip05Valid" class="user-verified"></span>
@@ -19,24 +19,24 @@
   </header>
   <ul>
     <li tabindex="101" *ngIf="account && account.npub" [class.active]="menuActive === MENU_TYPE_PROFILE" role="link" routerLink="/p/{{account.npub}}">
-      <div title="Profile" class="menu-icon icon-profile"></div>
+      <div title="Profile" class="menuIcon icon-profile"></div>
       <span>Profile</span>
     </li>
     <li tabindex="102" [class.active]="menuActive === MENU_TYPE_LISTS" role="link" routerLink="/lists">
-      <div title="Lists" class="menu-icon icon-lists"></div>
+      <div title="Lists" class="menuIcon icon-lists"></div>
       <span>Lists</span>
     </li>
     <li tabindex="103" [class.active]="menuActive === MENU_TYPE_BOOKMARKS" role="link" routerLink="/bookmarks">
-      <div title="Bookmark" class="menu-icon icon-bookmark"></div>
+      <div title="Bookmark" class="menuIcon icon-bookmark"></div>
       <span>Bookmark</span>
     </li>
     <li tabindex="104" [class.active]="menuActive === MENU_TYPE_COMMUNITIES" role="link" routerLink="/communities">
-      <div title="Communities" class="menu-icon icon-communities"></div>
+      <div title="Communities" class="menuIcon icon-communities"></div>
       <span>Communities</span>
     </li>
 
     <li tabindex="105" role="link">
-      <div title="More" class="menu-icon icon-more"></div>
+      <div title="More" class="menuIcon icon-more"></div>
       <span>More</span>
     </li>
   </ul>

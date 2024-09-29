@@ -22,10 +22,10 @@ button.tweet {
   height: 55px;
   padding: 1rem;
 
-  > div.icon-tweet {
+  > div.iconTweet {
     display: var(--menusidebarDisplayTweetButtonIcon);
     background: var(--primaryText);
-    mask-image: url('/assets/menu-sidebar/tweet.svg');
+    mask-image: url('/assets/menuSidebar/tweet.svg');
   }
 
   > span {
@@ -33,7 +33,7 @@ button.tweet {
   }
 }
 
-.menu-sidebar {
+.menuSidebar {
   li {
     span {
       display: var(--menusidebarDisplayLabels);
@@ -42,7 +42,7 @@ button.tweet {
   }
 }
 
-.profile-menu {
+.profileMenu {
   align-items: center;
   min-width: 235px;
 
@@ -51,7 +51,7 @@ button.tweet {
     margin: var(--menusidebarProfileMargin);
   }
 
-  .user-info {
+  .userInfo {
     display: var(--menusidebarDisplayFlexLabels);
     flex: 1 1 0;
   }

@@ -5,7 +5,7 @@
         <nostr-svg-render name="left"></nostr-svg-render>
       </button>
     </div>
-    <div class="user-info">
+    <div class="userInfo">
       <span class="user-name">
         {{viewing.metadata?.display_name || viewing.metadata?.name}}
         <span *ngIf="viewing.isNip05Valid" class="user-verified"></span>
@@ -21,7 +21,7 @@
   
       <button *ngIf="authenticated?.npub === viewing.npub" class="button secondary">Edit profile</button>
     </div>
-    <div class="user-info">
+    <div class="userInfo">
       <span class="user-name">
         {{viewing.metadata?.display_name || viewing.metadata?.name}}
         <span *ngIf="viewing.isNip05Valid" class="user-verified"></span>
@@ -33,22 +33,16 @@
      -->
     <div class="additional-information">
       <span *ngIf="viewing.metadata?.['location']">
-        <div class="inline-icon icon-location">
-          <div role="img"></div>
-        </div>
+        <nostr-svg-render class="inlineIcon" name="location"></nostr-svg-render>
         <span>{{viewing.metadata?.['location']}}</span>
       </span>
       <span *ngIf="viewing.metadata?.website">
-        <div class="inline-icon icon-link">
-          <div role="img"></div>
-        </div>
+        <nostr-svg-render class="inlineIcon" name="link"></nostr-svg-render>
         <a [href]="viewing.metadata?.website">{{viewing.metadata?.website}}</a>
       </span>
       <!-- FIXME: de onde eu tiro a informação de quando o usuário criou sua conta no nostr?
       <span *ngIf="viewing.metadata?.created_at">
-        <div class="inline-icon icon-calendar">
-          <div role="img"></div>
-        </div>
+        <nostr-svg-render class="inlineIcon" name="calendar"></nostr-svg-render>
         <span>Joined in August 2021</span>
       </span> -->
     </div>
