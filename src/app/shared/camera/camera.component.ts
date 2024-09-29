@@ -1,5 +1,4 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MainErrorObservable } from '@shared/main-error/main-error.observable';
 import QrScanner from 'qr-scanner';
 import { Subscription } from 'rxjs';
 import { CameraFunctions } from './camera-functions.enum';
@@ -21,8 +20,7 @@ export class CameraComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   constructor(
-    private camera$: CameraObservable,
-    private error$: MainErrorObservable
+    private camera$: CameraObservable
   ) { }
 
   ngOnInit(): void {
@@ -37,8 +35,7 @@ export class CameraComponent implements OnInit, OnDestroy {
         //  para que o video disponível na estrutura do DOM
         // eslint-disable-next-line ban/ban
         setTimeout(() => this.onStatusUpdate(status));
-      },
-      error: error => this.error$.next(error)
+      }
     }));
   }
 
@@ -54,7 +51,7 @@ export class CameraComponent implements OnInit, OnDestroy {
     const video = this.videoEl?.nativeElement;
     if (video) {
       if (status === CameraFunctions.READ_QR_CODE) {
-        this.readQRCode(video).catch(e => this.error$.next(e));
+        this.readQRCode(video);
       }
     }
   }

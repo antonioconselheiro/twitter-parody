@@ -5,7 +5,6 @@ import { IdbNCacheModule, NostrConfigModule, NostrModule, ProfileModule } from '
 import { CameraModule } from '@shared/camera/camera.module';
 import { FloatingChatModule } from '@shared/floating-chat/floating-chat.module';
 import { HtmlfyServiceModule } from '@shared/htmlfy/htmlfy-service.module';
-import { MainErrorModule } from '@shared/main-error/main-error.module';
 import { ModalModule } from '@shared/modal/modal.module';
 import { ThemeModule } from '@shared/theme/theme.module';
 import { UtilModule } from '@shared/util/util.module';
@@ -22,6 +21,7 @@ import { ProfilePageModule } from './pages/profile/profile-page.module';
 import { TimelineModule } from './pages/timeline/timeline.module';
 import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.module';
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
+import { SvgLoaderModule } from './shared/svg-loader/svg-loader.module'
 
 @NgModule({
   declarations: [
@@ -30,8 +30,8 @@ import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-
     NostrModule,
+    SvgLoaderModule,
     IdbNCacheModule,
     NostrConfigModule.config({
       defaultProfile: {
@@ -61,7 +61,6 @@ import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
 
     //  shared service module
     UtilModule,
-    MainErrorModule,
     ProfileModule,
     HtmlfyServiceModule,
 

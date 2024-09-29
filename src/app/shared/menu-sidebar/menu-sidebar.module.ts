@@ -8,6 +8,7 @@ import { MenuSidebarMobileComponent } from './menu-sidebar-mobile/menu-sidebar-m
 import { MenuSidebarMobileObservable } from './menu-sidebar-mobile/menu-sidebar-mobile.observable';
 import { MenuSidebarComponent } from './menu-sidebar/menu-sidebar.component';
 import { MobileBottomNavigationComponent } from './mobile-bottom-navigation/mobile-bottom-navigation.component';
+import { SvgLoaderModule } from '@shared/svg-loader/svg-loader.module';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { MobileBottomNavigationComponent } from './mobile-bottom-navigation/mobi
   imports: [
     CommonModule,
     RouterModule,
+    SvgLoaderModule,
     PopoverWidgetModule,
     ProfileWidgetModule,
     CredentialManagerWidgetModule

@@ -1,14 +1,10 @@
 <header>
   <div>Messages</div>
-  <button title="new message" type="button" class="icon-new-message svg-button">
-    <div class="svg-wrapper">
-      <div alt="new message" role="img"></div>
-    </div>
+  <button title="new message" type="button" class="svgButton">
+    <nostr-svg-render name="newMessage"></nostr-svg-render>
   </button>
-  <button type="button" title="collapse" (click)="collapse.next(!collapsed)" [class.icon-double-down]="!collapsed" [class.icon-double-up]="collapsed" class="svg-button">
-    <div class="svg-wrapper">
-      <div alt="collapse" role="img"></div>
-    </div>
+  <button type="button" title="collapse" (click)="collapse.next(!collapsed)" class="svgButton">
+    <nostr-svg-render [name]="collapsed ? 'arrow/doubleUp' : 'arrow/doubleDown'"></nostr-svg-render>
   </button>
 </header>
 

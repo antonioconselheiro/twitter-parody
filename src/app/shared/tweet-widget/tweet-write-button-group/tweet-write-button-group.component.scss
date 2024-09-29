@@ -10,7 +10,7 @@
   width: 180px;
   margin: 0 0 .5rem 10px;
 
-  button.svg-button {
+  button.svgButton {
     div[role=img] {
       background-color: var(--primary);
       width: 20.2px;
@@ -26,7 +26,7 @@ button.tweet {
   font-size: 16px;
 }
 
-.emoji-mart {
+.emojiMart {
   position: absolute;
   z-index: 200;
   top: 3rem;

@@ -1,33 +1,23 @@
 <div [class.full]="!showTweets" class="main-image">
-  <button (click)="close()" title="close" type="button" class="icon-close svg-button">
-    <div class="svg-wrapper">
-      <div alt="close" role="img"></div>
-    </div>
+  <button (click)="close()" title="close" type="button" class="svgButton">
+    <nostr-svg-render name="close"></nostr-svg-render>
   </button>
 
-  <button *ngIf="hasPreviousImage()" (click)="showPreviousImage()" title="show previous image" type="button" class="icon-left svg-button">
-    <div class="svg-wrapper">
-      <div alt="close" role="img"></div>
-    </div>
+  <button *ngIf="hasPreviousImage()" (click)="showPreviousImage()" title="show previous image" type="button" class="svgButton">
+    <nostr-svg-render name="left"></nostr-svg-render>
   </button>
 
-  <button *ngIf="hasNextImage()" (click)="showNextImage()" title="show next image" type="button" class="icon-right svg-button">
-    <div class="svg-wrapper">
-      <div alt="close" role="img"></div>
-    </div>
+  <button *ngIf="hasNextImage()" (click)="showNextImage()" title="show next image" type="button" class="svgButton">
+    <nostr-svg-render name="right"></nostr-svg-render>
   </button>
 
   <button
     type="button"
     [attr.title]="showTweets ? 'hide tweets' : 'show tweets'"
-    [class.icon-double-left]="!showTweets"
-    [class.icon-double-right]="showTweets"
     (click)="showTweets = !showTweets"
-    class="tweets-controller svg-button"
+    class="tweets-controller svgButton"
   >
-    <div class="svg-wrapper">
-      <div role="img"></div>
-    </div>
+    <nostr-svg-render [name]="showTweets ? 'arrow/doubleRight' : 'arrow/doubleLeft'"></nostr-svg-render>
   </button>
 
   <img [src]="activeImage" />

@@ -1,32 +1,22 @@
 <div class="writing-tweet-button-tray">
-  <button type="button" class="icon-upload-image svg-button">
-    <div class="svg-wrapper">
-      <div role="img"></div>
-    </div>
+  <button type="button" class="svgButton">
+    <nostr-svg-render name="uploadImage"></nostr-svg-render>
   </button>
   
-  <button type="button" class="icon-gif svg-button">
-    <div class="svg-wrapper">
-      <div role="img"></div>
-    </div>
+  <button type="button" class="svgButton">
+    <nostr-svg-render name="gif"></nostr-svg-render>
   </button>
   
-  <button type="button" class="icon-poll svg-button">
-    <div class="svg-wrapper">
-      <div role="img"></div>
-    </div>
+  <button type="button" class="svgButton">
+    <nostr-svg-render name="poll"></nostr-svg-render>
   </button>
   
-  <button (click)="toggleEmojiMart()" type="button" class="icon-emoticon svg-button">
-    <div class="svg-wrapper">
-      <div role="img"></div>
-    </div>
+  <button (click)="toggleEmojiMart()" type="button" class="svgButton">
+    <nostr-svg-render name="emoticon"></nostr-svg-render>
   </button>
   
-  <button type="button" disabled class="icon-location svg-button">
-    <div class="svg-wrapper">
-      <div role="img"></div>
-    </div>
+  <button type="button" disabled class="svgButton">
+    <nostr-svg-render name="location"></nostr-svg-render>
   </button>
 </div>  
 
@@ -35,7 +25,7 @@
   #emojiMart
   set="twitter"
   [class.hidden]="!emojiMartOpen"
-  class="emoji-mart"
+  class="emojiMart"
   (emojiSelect)="addEmoji($event)"
   [darkMode]="isDarkMode()"
   [emojiTooltip]="true"

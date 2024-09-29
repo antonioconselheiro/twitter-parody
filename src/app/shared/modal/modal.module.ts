@@ -5,10 +5,12 @@ import { ModalConfirmComponent } from './modal-confirm/modal-confirm.component';
 import { ModalService } from './modal.service';
 import { MainModalComponent } from './main-modal/main-modal.component';
 import { AsyncModalModule } from '@belomonte/async-modal-ngx';
+import { SvgLoaderModule } from '@shared/svg-loader/svg-loader.module';
 
 @NgModule({
   imports: [
     CommonModule,
+    SvgLoaderModule,
     AsyncModalModule
   ],
   declarations: [

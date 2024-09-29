@@ -40,10 +40,10 @@
     margin: 1rem;
     position: absolute;
 
-    .svg-wrapper {
+    nostr-svg-render {
       background-color: var(--headerColor);
 
-      [role=img] {
+      svg {
         background-color: var(--highContrast);
       }
     }

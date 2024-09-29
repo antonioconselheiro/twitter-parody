@@ -1,17 +1,13 @@
 <header>
-  <button (click)="back.emit()" title="back" type="button" class="back-button icon-back svg-button">
-    <div class="svg-wrapper">
-      <div role="img"></div>
-    </div>
+  <button (click)="back.emit()" title="back" type="button" class="back-button svgButton">
+    <nostr-svg-render name="left"></nostr-svg-render>
   </button>
   <div class="user-info">
     <span class="user-name">{{contact?.metadata?.display_name || contact?.metadata?.name}}</span>
     <span class="user-nip5">{{contact?.metadata?.nip05}}</span>
   </div>
-  <button type="button" title="collapse" (click)="collapse.next(!collapsed)" [class.icon-double-down]="!collapsed" [class.icon-double-up]="collapsed" class="svg-button">
-    <div class="svg-wrapper">
-      <div role="img"></div>
-    </div>
+  <button type="button" title="collapse" (click)="collapse.next(!collapsed)" class="svgButton">
+    <nostr-svg-render [name]="collapsed ? 'arrow/doubleUp' : 'arrow/doubleDown'"></nostr-svg-render>
   </button>
 </header>
 <aside *ngIf="!collapsed">
@@ -27,31 +23,23 @@
     <time datetime="2023-09-01T14:30:00">Hoje, 14:30</time>
   </section>
   <footer>
-    <button title="upload image" type="button" class="icon-upload-image svg-button">
-      <div class="svg-wrapper">
-        <div role="img"></div>
-      </div>
+    <button title="upload image" type="button" class="svgButton">
+      <nostr-svg-render name="uploadImage"></nostr-svg-render>
     </button>
     
-    <button title="gif" type="button" class="icon-gif svg-button">
-      <div class="svg-wrapper">
-        <div role="img"></div>
-      </div>
+    <button title="gif" type="button" class="svgButton">
+      <nostr-svg-render name="gif"></nostr-svg-render>
     </button>
 
-    <button title="choose emoticon" type="button" class="icon-emoticon svg-button">
-      <div class="svg-wrapper">
-        <div role="img"></div>
-      </div>
+    <button title="choose emoticon" type="button" class="svgButton">
+      <nostr-svg-render name="emoticon"></nostr-svg-render>
     </button>
   
     <div class="chat-input">
       <input #message type="text" title="Start a new message" placeholder="Start a new message" />
     
-      <button [attr.disabled]="message.value.length ? null : 'disabled'" title="send message" type="button" class="icon-send svg-button">
-        <div class="svg-wrapper">
-          <div alt="send message" role="img"></div>
-        </div>
+      <button [attr.disabled]="message.value.length ? null : 'disabled'" title="send message" type="button" class="svgButton">
+        <nostr-svg-render name="send"></nostr-svg-render>
       </button>
     </div>
   </footer>

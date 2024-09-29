@@ -72,10 +72,6 @@ export class MenuSidebarMobileComponent implements OnInit, OnDestroy {
     }
   }
 
-  terms(): void {
-    alert('Ancestral property of King Jesus Christ');
-  }
-
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }

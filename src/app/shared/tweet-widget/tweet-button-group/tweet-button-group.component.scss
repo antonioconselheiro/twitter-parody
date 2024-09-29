@@ -3,7 +3,7 @@
   position: relative;
   justify-content: space-between;
 
-  button.svg-button {
+  button.svgButton {
     >.amount {
       white-space: nowrap;
       color: var(--lowContrast);
@@ -12,13 +12,13 @@
     }
 
     &.icon-reply {
-      div[role=img] {
+      svg {
         mask-image: url('/assets/read-tweet/reply.svg');
       }
     }
 
     &.icon-retweet {
-      div[role=img] {
+      svg {
         mask-image: url('/assets/read-tweet/retweet.svg');
       }
 
@@ -27,7 +27,7 @@
           color: var(--imgButtonRetweet);
         }
 
-        div[role=img] {
+        svg {
           mask-image: url('/assets/read-tweet/retweet-active.svg');
           background-color: var(--imgButtonRetweet);
         }
@@ -35,26 +35,26 @@
 
       &:hover,
       &:active {
-        div[role=img] {
+        svg {
           background-color: var(--imgButtonRetweet) !important;
         }
       }
 
       &:hover {
-        .svg-wrapper {
+        nostr-svg-render {
           background-color: var(--imgButtonRetweetHover);
         }
       }
 
       &:active {
-        .svg-wrapper {
+        nostr-svg-render {
           background-color: var(--imgButtonRetweetActive);
         }
       }
     }
 
     &.icon-like {
-      div[role=img] {
+      svg {
         mask-image: url('/assets/read-tweet/like.svg');
       }
 
@@ -63,7 +63,7 @@
           color: var(--imgButtonLike);
         }
 
-        div[role=img] {
+        svg {
           mask-image: url('/assets/read-tweet/like-active.svg');
           background-color: var(--imgButtonLike);
         }
@@ -71,19 +71,19 @@
 
       &:hover,
       &:active {
-        div[role=img] {
+        svg {
           background-color: var(--imgButtonLike) !important;
         }
       }
 
       &:hover {
-        .svg-wrapper {
+        nostr-svg-render {
           background-color: var(--imgButtonLikeHover);
         }
       }
 
       &:active {
-        .svg-wrapper {
+        nostr-svg-render {
           background-color: var(--imgButtonLikeActive);
         }
       }

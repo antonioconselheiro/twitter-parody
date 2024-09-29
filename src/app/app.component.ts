@@ -1,6 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MainErrorObservable } from '@shared/main-error/main-error.observable';
-import { NetworkErrorObservable } from '@shared/main-error/network-error.observable';
 import { Theme } from '@shared/theme/theme.interface';
 import { ThemeObservable } from '@shared/theme/theme.observable';
 import { Subscription } from 'rxjs';
@@ -16,33 +14,17 @@ export class AppComponent implements OnInit, OnDestroy {
   isModalOpen = false;
 
   constructor(
-    private error$: MainErrorObservable,
-    private network$: NetworkErrorObservable,
     private theme$: ThemeObservable
   ) { }
 
   ngOnInit(): void {
     this.bindThemes();
-    this.bindErrorSubscription();
-    this.bindNetworkErrorSubscription();
   }
 
   private bindThemes(): void {
     this.subscriptions.add(this.theme$.subscribe({
       next: theme => this.setCurrentTheme(theme)
     }));    
-  }
-
-  private bindErrorSubscription(): void {
-    this.subscriptions.add(this.error$.subscribe({
-      next: error => console.error(error)
-    }));
-  }
-
-  private bindNetworkErrorSubscription(): void {
-    this.subscriptions.add(this.network$.subscribe({
-      next: error => console.error(error)
-    }));
   }
 
   private setCurrentTheme(theme: Theme): void {

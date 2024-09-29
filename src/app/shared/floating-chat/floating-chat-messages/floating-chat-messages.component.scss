@@ -24,7 +24,7 @@ aside {
   display: flex;
   flex-direction: column;
 
-  .svg-wrapper [role=img] {
+  nostr-svg-render svg {
     background-color: var(--primary);
   }
   

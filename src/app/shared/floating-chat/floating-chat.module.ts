@@ -1,10 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FloatingChatComponent } from './floating-chat.component';
-import { FloatingChatMessagesComponent } from './floating-chat-messages/floating-chat-messages.component';
-import { FloatingChatContactsComponent } from './floating-chat-contacts/floating-chat-contacts.component';
-import { DatetimeWidgetModule } from '@shared/datetime-widget/datetime-widget.module';
+import { NgModule } from '@angular/core';
 import { ProfileWidgetModule } from '@belomonte/nostr-gui-ngx';
+import { DatetimeWidgetModule } from '@shared/datetime-widget/datetime-widget.module';
+import { SvgLoaderModule } from '@shared/svg-loader/svg-loader.module';
+import { FloatingChatContactsComponent } from './floating-chat-contacts/floating-chat-contacts.component';
+import { FloatingChatMessagesComponent } from './floating-chat-messages/floating-chat-messages.component';
+import { FloatingChatComponent } from './floating-chat.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { ProfileWidgetModule } from '@belomonte/nostr-gui-ngx';
   imports: [
     CommonModule,
     DatetimeWidgetModule,
-    ProfileWidgetModule
+    ProfileWidgetModule,
+    SvgLoaderModule
   ],
   exports: [
     FloatingChatComponent

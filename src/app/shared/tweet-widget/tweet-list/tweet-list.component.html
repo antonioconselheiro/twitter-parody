@@ -25,10 +25,8 @@
             <time *ngIf="twet.created" [attr.datetime]="twet.created | datetimeIso">{{twet.created | datetimeText}}</time>
           </address>
   
-          <button (click)="tweetActions.show()" class="svg-button ellipsis">
-            <div class="svg-wrapper">
-              <div role="img"></div>
-            </div>
+          <button (click)="tweetActions.show()" class="svgButton">
+            <nostr-svg-render name="ellipsis"></nostr-svg-render>
           </button>
   
           <tw-popover #tweetActions>
@@ -119,10 +117,8 @@
             <span *ngIf="getAuthorProfile(twet)?.nip05" class="user-nip5">{{getAuthorProfile(twet)?.nip05}}</span>
           </address>
   
-          <button class="svg-button ellipsis">
-            <div class="svg-wrapper">
-              <div role="img"></div>
-            </div>
+          <button class="svgButton">
+            <nostr-svg-render name="ellipsis"></nostr-svg-render>
           </button>
         </header>
   

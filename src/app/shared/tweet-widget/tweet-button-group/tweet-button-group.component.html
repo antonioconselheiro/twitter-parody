@@ -1,53 +1,37 @@
 <ng-container *ngIf="tweet">
 
-  <button type="button" class="icon-reply svg-button">
-    <div class="svg-wrapper">
-      <div role="img"></div>
-    </div>
+  <button type="button" class="svgButton">
+    <nostr-svg-render name="reply"></nostr-svg-render>
     <span class="amount">{{tweet.replies?.length || 0 | amount}}</span>
   </button>
-  <button [class.active]="isRetweetedByYou(tweet)" type="button" class="icon-retweet svg-button">
-    <div class="svg-wrapper">
-      <div role="img"></div>
-    </div>
+  <button [class.active]="isRetweetedByYou(tweet)" type="button" class="svgButton">
+    <nostr-svg-render name="retweet"></nostr-svg-render>
     <span class="amount">{{getRetweetedLength(tweet) | amount}}</span>
   </button>
-  <button [class.active]="isLikedByYou(tweet)" type="button" class="icon-like svg-button">
-    <div class="svg-wrapper">
-      <div role="img"></div>
-    </div>
+  <button [class.active]="isLikedByYou(tweet)" type="button" class="svgButton">
+    <nostr-svg-render name="like"></nostr-svg-render>
     <span class="amount">{{getTweetReactionsLength(tweet) | amount}}</span>
   </button>
-  <button *ngIf="tweet && tweet.load === EAGER_LOADED && tweet.view" type="button" class="icon-view svg-button">
-    <div class="svg-wrapper">
-      <div role="img"></div>
-    </div>
+  <button *ngIf="tweet && tweet.view" type="button" class="svgButton">
+    <nostr-svg-render name="view"></nostr-svg-render>
     <span class="amount">{{tweet.view | amount}}</span>
   </button>
-  <button (click)="share.show()" type="button" class="icon-share svg-button">
-    <div class="svg-wrapper">
-      <div role="img"></div>
-    </div>
+  <button (click)="share.show()" type="button" class="svgButton">
+    <nostr-svg-render name="share"></nostr-svg-render>
   </button>
   
   <tw-popover #tweetShare>
     <ul class="popover-list">
       <li role="button">
-        <div class="inline-icon icon-link">
-          <div role="img"></div>
-        </div>
+        <nostr-svg-render class="inlineIcon" name="link"></nostr-svg-render>
         Copy link
       </li>
       <li role="button">
-        <div class="inline-icon icon-new-message">
-          <div role="img"></div>
-        </div>
+        <nostr-svg-render class="inlineIcon" name="newMessage"></nostr-svg-render>
         Send by Private Message
       </li>
       <li role="button">
-        <div class="inline-icon icon-add-bookmark">
-          <div role="img"></div>
-        </div>
+        <nostr-svg-render class="inlineIcon" name="addBookmark"></nostr-svg-render>
         Bookmark Tweet
       </li>
     </ul>

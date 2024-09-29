@@ -67,10 +67,8 @@
     </div>
   </ng-container>
   <ng-container *ngIf="!account">
-    <button title="login" type="button" class="login-button icon-unlock svg-button bordered">
-      <div class="svg-wrapper">
-        <div alt="login" role="img"></div>
-      </div>
+    <button title="login" type="button" class="login-button svgButton bordered">
+      <nostr-svg-render name="unlock"></nostr-svg-render>
     </button>
     <div class="user-info">Authenticate</div>
   </ng-container>
