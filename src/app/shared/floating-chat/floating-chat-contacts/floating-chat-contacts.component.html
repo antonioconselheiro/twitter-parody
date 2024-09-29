@@ -14,11 +14,11 @@
       <nostr-profile-picture [profile]="message.author"></nostr-profile-picture>
       <article>
         <header>
-          <span class="user-name">
+          <span class="userName">
             {{message.author.metadata?.display_name || message.author.metadata?.name}}
-            <span *ngIf="message.author.isNip05Valid" class="user-verified"></span>
+            <span *ngIf="message.author.isNip05Valid" class="userVerified"></span>
           </span>
-          <span *ngIf="message.author.metadata?.nip05" class="user-nip5">{{message.author.metadata?.nip05}}</span>
+          <span *ngIf="message.author.metadata?.nip05" class="userNip5">{{message.author.metadata?.nip05}}</span>
           <time [attr.datetime]="message.time | datetimeIso">· {{message.time | datetimeText}}</time>
         </header>
 

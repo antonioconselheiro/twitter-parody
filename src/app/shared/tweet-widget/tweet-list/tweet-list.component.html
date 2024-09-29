@@ -2,24 +2,24 @@
   <nostr-loading></nostr-loading>
 </div>
 
-<article [class.separator]="!retweeted" class="read-tweet" *ngFor="let twet of tweets; trackBy: trackByTweetId">
+<article [class.separator]="!retweeted" class="readTweet" *ngFor="let twet of tweets; trackBy: trackByTweetId">
   <ng-container *ngIf="twet.load === EAGER_LOADED">
-    <a *ngIf="isSimpleRetweet(twet)" href="javascript:void(0)" class="retweet-origin">
+    <a *ngIf="isSimpleRetweet(twet)" href="javascript:void(0)" class="retweetOrigin">
       {{getRetweetAuthorName(twet)}} has retweeted
     </a>
   
-    <div class="tweet-structure">
+    <div class="tweetStructure">
       <div *ngIf="twet.author">
         <nostr-profile-picture [profile]="getAuthorProfile(twet)"></nostr-profile-picture>
       </div>
-      <div class="tweet-metadata">
+      <div class="tweetMetadata">
         <header>
           <address *ngIf="getAuthorProfile(twet)" class="author userInfo">
-            <span class="user-name">
+            <span class="userName">
               {{this.getAuthorName(twet)}}
-              <span *ngIf="getAuthorProfile(twet)?.isNip05Valid" class="user-verified"></span>
+              <span *ngIf="getAuthorProfile(twet)?.isNip05Valid" class="userVerified"></span>
             </span>
-            <span *ngIf="getAuthorProfile(twet)?.nip05" class="user-nip5">
+            <span *ngIf="getAuthorProfile(twet)?.nip05" class="userNip5">
               {{getAuthorProfile(twet)?.nip05}}
             </span>
             <time *ngIf="twet.created" [attr.datetime]="twet.created | datetimeIso">{{twet.created | datetimeText}}</time>
@@ -68,7 +68,7 @@
         </header>
   
         <tw-tweet
-          class="tweet-content"
+          class="tweetContent"
           (imgOpen)="onImgOpen($event)"
           [tweet]="twet"
           [showImages]="twet !== tweet"
@@ -76,7 +76,7 @@
         ></tw-tweet>
 
         <tw-tweet-list
-          class="bordered retweet-content"
+          class="bordered retweetContent"
           *ngIf="getRetweet(twet) && twet.content"
           [loading]="false"
           [retweeted]="getRetweet(twet)"
@@ -91,14 +91,14 @@
       <div *ngIf="twet.author">
         <nostr-profile-picture [profile]="getAuthorProfile(twet)"></nostr-profile-picture>
       </div>
-      <div class="tweet-metadata">
+      <div class="tweetMetadata">
         <header>
           <address *ngIf="getAuthorProfile(twet)" class="author userInfo">
-            <span class="user-name">
+            <span class="userName">
               {{this.getAuthorName(twet)}}
-              <span *ngIf="getAuthorProfile(twet)?.isNip05Valid" class="user-verified"></span>
+              <span *ngIf="getAuthorProfile(twet)?.isNip05Valid" class="userVerified"></span>
             </span>
-            <span *ngIf="getAuthorProfile(twet)?.nip05" class="user-nip5">{{getAuthorProfile(twet)?.nip05}}</span>
+            <span *ngIf="getAuthorProfile(twet)?.nip05" class="userNip5">{{getAuthorProfile(twet)?.nip05}}</span>
           </address>
   
           <button class="svgButton">
@@ -107,7 +107,7 @@
         </header>
   
         <tw-tweet
-          class="tweet-content"
+          class="tweetContent"
           (imgOpen)="onImgOpen($event)"
           [tweet]="twet"
           [showImages]="twet !== tweet"

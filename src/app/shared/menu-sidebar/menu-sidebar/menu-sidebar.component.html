@@ -4,7 +4,7 @@
   </header>
   <ul>
     <li tabindex="101" [class.active]="menuActive === MENU_TYPE_HOME" role="link" routerLink="/home">
-      <div class="has-updates"></div>
+      <div class="hasUpdates"></div>
       <div title="Home" class="menuIcon iconHome"></div>
       <span>Home</span>
     </li>
@@ -13,12 +13,12 @@
       <span>Explore</span>
     </li>
     <li tabindex="103" [class.active]="menuActive === MENU_TYPE_NOTIFICATIONS" role="link" routerLink="/notifications">
-      <div class="has-updates">5</div>
+      <div class="hasUpdates">5</div>
       <div title="Notifications" class="menuIcon iconNotifications"></div>
       <span>Notifications</span>
     </li>
     <li tabindex="104" [class.active]="menuActive === MENU_TYPE_MESSAGES" role="link" routerLink="/messages">
-      <div class="has-updates">3</div>
+      <div class="hasUpdates">3</div>
       <div title="Messages" class="menuIcon iconMessages"></div>
       <span>Messages</span>
     </li>
@@ -59,11 +59,11 @@
   <ng-container *ngIf="account">
     <nostr-profile-picture [account]="account"></nostr-profile-picture>
     <div class="userInfo">
-      <span class="user-name">
+      <span class="userName">
         {{account.metadata?.display_name || account.metadata?.name}}
-        <span *ngIf="account" class="user-verified"></span>
+        <span *ngIf="account" class="userVerified"></span>
       </span>
-      <span *ngIf="account.metadata?.nip05" class="user-nip5">{{account.metadata?.nip05}}</span>
+      <span *ngIf="account.metadata?.nip05" class="userNip5">{{account.metadata?.nip05}}</span>
     </div>
   </ng-container>
   <ng-container *ngIf="!account">

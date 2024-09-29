@@ -11,13 +11,13 @@
       margin-left: .5rem;
     }
 
-    &.icon-reply {
+    &.iconReply {
       svg {
         mask-image: url('/assets/read-tweet/reply.svg');
       }
     }
 
-    &.icon-retweet {
+    &.iconRetweet {
       svg {
         mask-image: url('/assets/read-tweet/retweet.svg');
       }
@@ -53,7 +53,7 @@
       }
     }
 
-    &.icon-like {
+    &.iconLike {
       svg {
         mask-image: url('/assets/read-tweet/like.svg');
       }

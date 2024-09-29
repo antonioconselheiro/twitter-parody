@@ -10,7 +10,7 @@ header {
     padding: 23px 16px;
   }
 
-  .mobile-header {
+  .mobileHeader {
     display: var(--headingMobileDisplay);
 
     nostr-profile-picture {
@@ -33,11 +33,11 @@ tw-tweet-write {
   display: var(--embededWriteTweetDisplay);
 }
 
-.header-height {
+.headerHeight {
   height: 123px;
 }
 
-.show-more {
+.showMore {
   padding: 15px;
   display: flex;
   cursor: pointer;

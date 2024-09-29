@@ -2,7 +2,7 @@ header {
   display: flex;
   padding: 1rem;
 
-  .back-button {
+  .backButton {
     margin-right: 1rem;
   }
 
@@ -10,7 +10,7 @@ header {
     display: flex;
     flex-direction: column;
 
-    .user-name {
+    .userName {
       font-size: 20px;
       width: 230px;
       overflow: hidden;
@@ -36,7 +36,7 @@ aside {
   footer {
     display: flex;
   
-    .chat-input {
+    .chatInput {
       background-color: var(--lowBase);
       display: flex;
       border-radius: 25px;

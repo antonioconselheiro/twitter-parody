@@ -2,16 +2,16 @@
 /// Any new container in right sidebar
 ///
 /// @group Components
-/// @class .side-container
+/// @class .sideContainer
 ///
 /// @example
 /// ```
-///  <tw-live-spaces-shortcut class="side-container"></tw-live-spaces-shortcut>
-///  <tw-trending-topics-shortcut class="side-container"></tw-trending-topics-shortcut>
-///  <tw-follow-suggestions class="side-container"></tw-follow-suggestions>
+///  <tw-live-spaces-shortcut class="sideContainer"></tw-live-spaces-shortcut>
+///  <tw-trending-topics-shortcut class="sideContainer"></tw-trending-topics-shortcut>
+///  <tw-follow-suggestions class="sideContainer"></tw-follow-suggestions>
 /// ```
 ///
-.side-container {
+.sideContainer {
   display: block;
   border-radius: 20px;
   background-color: var(--lowBase);

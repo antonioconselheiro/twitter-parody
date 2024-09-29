@@ -1,4 +1,4 @@
-.read-tweet {
+.readTweet {
   padding: .25rem;
   padding-right: .75rem;
   cursor: pointer;
@@ -8,7 +8,7 @@
     transition: background-color .3s;
   }
 
-  .retweet-origin {
+  .retweetOrigin {
     color: var(--lowestContrast);
     font-weight: bold;
     font-size: 13px;
@@ -33,16 +33,16 @@
     }
   }
 
-  .tweet-structure {
+  .tweetStructure {
     display: flex;
 
-    .tweet-metadata {
+    .tweetMetadata {
       display: flex;
       flex-direction: column;
       overflow: hidden;
       width: 100%;
 
-      .retweet-content {
+      .retweetContent {
         border-radius: 15px;
         margin-top: .75rem;
       }
@@ -59,11 +59,11 @@
           align-items: center;
           width: 90%;
 
-          .user-name {
+          .userName {
             max-width: 65%;
           }
 
-          .user-nip5 {
+          .userNip5 {
             max-width: 20%;
             margin-left: 4px;
           }

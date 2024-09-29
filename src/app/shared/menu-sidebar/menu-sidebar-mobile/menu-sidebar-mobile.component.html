@@ -5,11 +5,11 @@
       <!-- <tw-accounts-list-mobile [account]="account"></tw-accounts-list-mobile> -->
 
       <div class="userInfo">
-        <span class="user-name">
+        <span class="userName">
           {{account.metadata.display_name || account.metadata.name}}
-          <span *ngIf="account.isNip05Valid" class="user-verified"></span>
+          <span *ngIf="account.isNip05Valid" class="userVerified"></span>
         </span>
-        <span *ngIf="account.metadata.nip05" class="user-nip5">{{account.metadata.nip05}}</span>
+        <span *ngIf="account.metadata.nip05" class="userNip5">{{account.metadata.nip05}}</span>
       </div>
       <div class="following">
         <span>345 following</span>
@@ -19,24 +19,24 @@
   </header>
   <ul>
     <li tabindex="101" *ngIf="account && account.npub" [class.active]="menuActive === MENU_TYPE_PROFILE" role="link" routerLink="/p/{{account.npub}}">
-      <div title="Profile" class="menuIcon icon-profile"></div>
+      <div title="Profile" class="menuIcon iconProfile"></div>
       <span>Profile</span>
     </li>
     <li tabindex="102" [class.active]="menuActive === MENU_TYPE_LISTS" role="link" routerLink="/lists">
-      <div title="Lists" class="menuIcon icon-lists"></div>
+      <div title="Lists" class="menuIcon iconLists"></div>
       <span>Lists</span>
     </li>
     <li tabindex="103" [class.active]="menuActive === MENU_TYPE_BOOKMARKS" role="link" routerLink="/bookmarks">
-      <div title="Bookmark" class="menuIcon icon-bookmark"></div>
+      <div title="Bookmark" class="menuIcon iconBookmark"></div>
       <span>Bookmark</span>
     </li>
     <li tabindex="104" [class.active]="menuActive === MENU_TYPE_COMMUNITIES" role="link" routerLink="/communities">
-      <div title="Communities" class="menuIcon icon-communities"></div>
+      <div title="Communities" class="menuIcon iconCommunities"></div>
       <span>Communities</span>
     </li>
 
     <li tabindex="105" role="link">
-      <div title="More" class="menuIcon icon-more"></div>
+      <div title="More" class="menuIcon iconMore"></div>
       <span>More</span>
     </li>
   </ul>

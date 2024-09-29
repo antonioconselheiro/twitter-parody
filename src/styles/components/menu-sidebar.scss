@@ -25,7 +25,7 @@ nav.menuBottombar {
         background-color: var(--baseHover);
       }
 
-      .has-updates {
+      .hasUpdates {
         background-color: var(--primary);
         color: var(--primaryText);
         border-radius: 50%;
@@ -55,74 +55,74 @@ nav.menuBottombar {
 
   li {
     .iconHome {
-      mask-image: url('/assets/menuSidebar/home.svg');
+      mask-image: url('/assets/menu-sidebar/home.svg');
     }
 
     .iconExplore {
-      mask-image: url('/assets/menuSidebar/explore.svg');
+      mask-image: url('/assets/menu-sidebar/explore.svg');
     }
 
     .iconNotifications {
-      mask-image: url('/assets/menuSidebar/notifications.svg');
+      mask-image: url('/assets/menu-sidebar/notifications.svg');
     }
 
     .iconMessages {
-      mask-image: url('/assets/menuSidebar/messages.svg');
+      mask-image: url('/assets/menu-sidebar/messages.svg');
     }
 
     .iconLists {
-      mask-image: url('/assets/menuSidebar/lists.svg');
+      mask-image: url('/assets/menu-sidebar/lists.svg');
     }
 
     .iconBookmark {
-      mask-image: url('/assets/menuSidebar/bookmark.svg');
+      mask-image: url('/assets/menu-sidebar/bookmark.svg');
     }
 
     .iconCommunities {
-      mask-image: url('/assets/menuSidebar/communities.svg');
+      mask-image: url('/assets/menu-sidebar/communities.svg');
     }
 
     .iconProfile {
-      mask-image: url('/assets/menuSidebar/profile.svg');
+      mask-image: url('/assets/menu-sidebar/profile.svg');
     }
 
     .iconMore {
-      mask-image: url('/assets/menuSidebar/more.svg');
+      mask-image: url('/assets/menu-sidebar/more.svg');
     }
 
     &.active {
       font-weight: bolder;
 
       .iconHome {
-        mask-image: url('/assets/menuSidebar/homeActive.svg');
+        mask-image: url('/assets/menu-sidebar/homeActive.svg');
       }
 
       .iconExplore {
-        mask-image: url('/assets/menuSidebar/exploreActive.svg');
+        mask-image: url('/assets/menu-sidebar/exploreActive.svg');
       }
 
       .iconNotifications {
-        mask-image: url('/assets/menuSidebar/notificationsActive.svg');
+        mask-image: url('/assets/menu-sidebar/notificationsActive.svg');
       }
 
       .iconMessages {
-        mask-image: url('/assets/menuSidebar/messagesActive.svg');
+        mask-image: url('/assets/menu-sidebar/messagesActive.svg');
       }
 
       .iconLists {
-        mask-image: url('/assets/menuSidebar/listsActive.svg');
+        mask-image: url('/assets/menu-sidebar/listsActive.svg');
       }
 
       .iconBookmark {
-        mask-image: url('/assets/menuSidebar/bookmarkActive.svg');
+        mask-image: url('/assets/menu-sidebar/bookmarkActive.svg');
       }
 
       .iconCommunities {
-        mask-image: url('/assets/menuSidebar/communitiesActive.svg');
+        mask-image: url('/assets/menu-sidebar/communitiesActive.svg');
       }
 
       .iconProfile {
-        mask-image: url('/assets/menuSidebar/profileActive.svg');
+        mask-image: url('/assets/menu-sidebar/profileActive.svg');
       }
     }
   }
@@ -152,7 +152,7 @@ nav.menuSidebar {
   cursor: pointer;
   user-select: none;
   margin: .5rem;
-  min-width: var(--menusidebarProfileMinWidth);
+  min-width: var(--menu-sidebarProfileMinWidth);
   transition: background-color .3s;
 
   &:hover,
@@ -164,14 +164,14 @@ nav.menuSidebar {
     background-color: var(--baseActive);
   }
 
-  .user-info {
+  .userInfo {
     flex-direction: column;
     white-space: nowrap;
     font-size: 15px;
     overflow: hidden;
     position: relative;
 
-    >span {
+    > span {
       overflow: hidden;
       text-overflow: ellipsis;
     }
