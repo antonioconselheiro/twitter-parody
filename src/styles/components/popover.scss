@@ -42,7 +42,7 @@
     display: none;
   }
 
-  &.has-arrow {
+  &.hasArrow {
     &::after {
       content: '';
       position: absolute;
@@ -91,7 +91,7 @@
   }
 }
 
-ul.popover-list {
+ul.popoverList {
   margin: 0;
   padding: 0;
   list-style-type: none;

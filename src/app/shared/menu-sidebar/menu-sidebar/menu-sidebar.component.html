@@ -50,8 +50,8 @@
 </nav>
 
 <div (click)="onProfileMenuClick(account)" role="button" class="profileMenu" [class.bordered]="!account">
-  <tw-popover class="auth-popover has-arrow bottom" #authPopover>
-    <ul class="popover-list">
+  <tw-popover class="authPopover hasArrow bottom" #authPopover>
+    <ul class="popoverList">
       <li (click)="addExistingAccount($event)" role="button">Add existing account</li>
       <li (click)="logout($event)" role="button">Logout</li>
     </ul>
@@ -67,7 +67,7 @@
     </div>
   </ng-container>
   <ng-container *ngIf="!account">
-    <button title="login" type="button" class="login-button svgButton bordered">
+    <button title="login" type="button" class="loginButton svgButton bordered">
       <nostr-svg-render name="unlock"></nostr-svg-render>
     </button>
     <div class="userInfo">Authenticate</div>

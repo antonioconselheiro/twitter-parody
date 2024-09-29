@@ -46,7 +46,7 @@ button.tweet {
   align-items: center;
   min-width: 235px;
 
-  .login-button,
+  .loginButton,
   .profile {
     margin: var(--menusidebarProfileMargin);
   }
@@ -68,7 +68,7 @@ button.tweet {
     margin-right: 1rem;
   }
 
-  .auth-popover {
+  .authPopover {
     bottom: 85px;
     width: 300px;
   }

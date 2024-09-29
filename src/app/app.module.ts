@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { LoadingWidgetModule } from '@belomonte/nostr-gui-ngx';
+import { CredentialManagerWidgetModule, LoadingWidgetModule } from '@belomonte/nostr-gui-ngx';
 import { IdbNCacheModule, NostrConfigModule, NostrModule, ProfileModule } from '@belomonte/nostr-ngx';
 import { CameraModule } from '@shared/camera/camera.module';
 import { FloatingChatModule } from '@shared/floating-chat/floating-chat.module';
@@ -21,7 +21,7 @@ import { ProfilePageModule } from './pages/profile/profile-page.module';
 import { TimelineModule } from './pages/timeline/timeline.module';
 import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.module';
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
-import { SvgLoaderModule } from './shared/svg-loader/svg-loader.module'
+import { SvgLoaderModule } from './shared/svg-loader/svg-loader.module';
 
 @NgModule({
   declarations: [
@@ -30,8 +30,8 @@ import { SvgLoaderModule } from './shared/svg-loader/svg-loader.module'
   imports: [
     BrowserModule,
     AppRoutingModule,
+
     NostrModule,
-    SvgLoaderModule,
     IdbNCacheModule,
     NostrConfigModule.config({
       defaultProfile: {
@@ -47,6 +47,8 @@ import { SvgLoaderModule } from './shared/svg-loader/svg-loader.module'
         }
       }
     }),
+    SvgLoaderModule,
+    CredentialManagerWidgetModule,
 
     // pages eager loaded module
     TimelineModule,

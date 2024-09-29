@@ -67,7 +67,7 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
     if (account) {
       this.popover.show();
     } else {
-      this.credentialHandlerService.addAccount();
+      this.credentialHandlerService.login();
     }
   }
 
