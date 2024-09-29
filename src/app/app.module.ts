@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { CredentialManagerWidgetModule, LoadingWidgetModule } from '@belomonte/nostr-gui-ngx';
+import { CredentialManagerWidgetModule, LoadingWidgetModule, CameraModule } from '@belomonte/nostr-gui-ngx';
 import { IdbNCacheModule, NostrConfigModule, NostrModule, ProfileModule } from '@belomonte/nostr-ngx';
-import { CameraModule } from '@shared/camera/camera.module';
 import { FloatingChatModule } from '@shared/floating-chat/floating-chat.module';
 import { HtmlfyServiceModule } from '@shared/htmlfy/htmlfy-service.module';
 import { ModalModule } from '@shared/modal/modal.module';
@@ -31,6 +30,7 @@ import { SvgLoaderModule } from './shared/svg-loader/svg-loader.module';
     BrowserModule,
     AppRoutingModule,
 
+    CameraModule,
     NostrModule,
     IdbNCacheModule,
     NostrConfigModule.config({
@@ -67,7 +67,6 @@ import { SvgLoaderModule } from './shared/svg-loader/svg-loader.module';
     HtmlfyServiceModule,
 
     //  widgets
-    CameraModule,
     MenuSidebarModule,
     ExploreSidebarModule,
     LoadingWidgetModule,
