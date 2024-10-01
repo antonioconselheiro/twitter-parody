@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthenticatedAccountObservable } from '@belomonte/nostr-ngx';
+import { CurrentAccountObservable } from '@belomonte/nostr-ngx';
 import { BehaviorSubject } from 'rxjs';
 import { Theme } from './theme.interface';
 import { NostrMetadata } from '@nostrify/nostrify';
@@ -12,7 +12,7 @@ export class ThemeObservable extends BehaviorSubject<Theme> {
   private static instance: ThemeObservable | null = null;
 
   constructor(
-    private profile$: AuthenticatedAccountObservable
+    private profile$: CurrentAccountObservable
   ) {
     const profile: any = profile$.getValue(); // FIXME: remover any
     const base = profile?.theme || 'darker';

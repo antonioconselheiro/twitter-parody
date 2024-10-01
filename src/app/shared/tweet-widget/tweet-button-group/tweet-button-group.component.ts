@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AuthenticatedAccountObservable } from '@belomonte/nostr-ngx';
+import { CurrentAccountObservable } from '@belomonte/nostr-ngx';
 import { IRetweet } from '@domain/retweet.interface';
 import { Tweet } from '@domain/tweet.interface';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
@@ -28,7 +28,7 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   constructor(
     private tweetConverter: TweetConverter,
     private tweetTypeGuard: TweetTypeGuard,
-    private profile$: AuthenticatedAccountObservable
+    private profile$: CurrentAccountObservable
   ) { }
 
   ngOnInit(): void {

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalService } from '@belomonte/async-modal-ngx';
 import { CredentialHandlerService } from '@belomonte/nostr-gui-ngx';
-import { Account, AuthenticatedAccountObservable } from '@belomonte/nostr-ngx';
+import { Account, CurrentAccountObservable } from '@belomonte/nostr-ngx';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { CompositeTweetPopoverComponent } from '@shared/tweet-widget/composite-tweet-popover/composite-tweet-popover.component';
 import { Subscription } from 'rxjs';
@@ -35,7 +35,7 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
 
   constructor(
     private modalService: ModalService,
-    private profile$: AuthenticatedAccountObservable,
+    private profile$: CurrentAccountObservable,
     private menuActive$: MenuActiveObservable,
     private credentialHandlerService: CredentialHandlerService,
     private router: Router
@@ -48,7 +48,7 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
 
   private bindProfileSubscription(): void {
     this.subscriptions.add(this.profile$.subscribe(
-      profile => this.account = profile
+      account => this.account = account
     ));
   }
 

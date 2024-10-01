@@ -1,5 +1,5 @@
 import { Component, HostBinding, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { Account, AuthenticatedAccountObservable } from '@belomonte/nostr-ngx';
+import { Account, CurrentAccountObservable } from '@belomonte/nostr-ngx';
 import { Subscription } from 'rxjs';
 import { MenuActiveObservable } from '../menu-active.observable';
 import { MenuType } from '../menu-type.enum';
@@ -28,7 +28,7 @@ export class MenuSidebarMobileComponent implements OnInit, OnDestroy {
   touchStart = 0;
 
   constructor(
-    private profile$: AuthenticatedAccountObservable,
+    private profile$: CurrentAccountObservable,
     private menuActive$: MenuActiveObservable,
     private menuSidebarMobile$: MenuSidebarMobileObservable
   ) { }

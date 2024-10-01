@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Account, AuthenticatedAccountObservable } from '@belomonte/nostr-ngx';
+import { Account, CurrentAccountObservable } from '@belomonte/nostr-ngx';
 import { Tweet } from '@domain/tweet.interface';
 import { NostrMetadata } from '@nostrify/nostrify';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
@@ -25,7 +25,7 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private profile$: AuthenticatedAccountObservable,
+    private profile$: CurrentAccountObservable,
     private router: Router
   ) {
     super();
