@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Account, CurrentAccountObservable } from '@belomonte/nostr-ngx';
 import { Tweet } from '@domain/tweet.interface';
-import { NostrMetadata } from '@nostrify/nostrify';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
 import { Subscription } from 'rxjs';
 
