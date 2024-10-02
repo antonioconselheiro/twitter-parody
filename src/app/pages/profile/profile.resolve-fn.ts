@@ -3,4 +3,4 @@ import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
 import { Account, ProfileService } from '@belomonte/nostr-ngx';
 
 export const profileResolverFn: ResolveFn<Account> =
-    (route: ActivatedRouteSnapshot) => inject(ProfileService).getAccountUsingNPub(route.params['npub']);
+    (route: ActivatedRouteSnapshot) => inject(ProfileService).loadAccountUsingNPub(route.params['npub']);

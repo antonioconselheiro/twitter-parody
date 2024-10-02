@@ -116,10 +116,10 @@ export class HtmlfyService {
       [...matches].forEach(match => {
         const npub = match.replace(/^\{\{|\}\}/g, '') as NPub;
         const pubkey = this.nostrConverter.casNPubToPubkey(npub);
-        const profile = this.profileCache.get(pubkey);
+        const resultset = this.profileCache.get(pubkey);
         let replace: string = npub;
-        if (profile) {
-          replace = profile.display_name || profile.name || this.minifyNostrPublic(npub);
+        if (resultset && resultset.metadata) {
+          replace = resultset.metadata.display_name || resultset.metadata.name || this.minifyNostrPublic(npub);
         }
 
         content = content.replace(new RegExp(match, 'g'), replace)
