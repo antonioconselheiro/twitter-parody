@@ -37,7 +37,7 @@ export class ThemeObservable extends BehaviorSubject<Theme> {
     });
   }
 
-  private themeFromProfile(profile: NostrMetadata | undefined): { base: string, color: string } {
+  private themeFromProfile(profile: NostrMetadata | undefined | null): { base: string, color: string } {
     // FIXME: remover any
     const base = (profile as any)?.theme || 'darker';
     const color = (profile as any)?.color || 'blue';
