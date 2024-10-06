@@ -31,14 +31,14 @@
     <!-- FIXME: preciso enviar o htmlAbout de outra maneira, ou processa-lo aqui mesmo, não sei
      <div class="bio" [innerHTML]="viewing.metadata?.htmlAbout"></div>
      -->
-    <div class="additional-information">
+    <div class="additionalInformation">
       <span *ngIf="viewing.metadata?.['location']">
         <nostr-svg-render class="inlineIcon" name="location"></nostr-svg-render>
         <span>{{viewing.metadata?.['location']}}</span>
       </span>
       <span *ngIf="viewing.metadata?.website">
         <nostr-svg-render class="inlineIcon" name="link"></nostr-svg-render>
-        <a [href]="viewing.metadata?.website">{{viewing.metadata?.website}}</a>
+        <a target="_blank" [href]="viewing.metadata?.website">{{viewing.metadata?.website}}</a>
       </span>
       <!-- FIXME: de onde eu tiro a informação de quando o usuário criou sua conta no nostr?
       <span *ngIf="viewing.metadata?.created_at">
