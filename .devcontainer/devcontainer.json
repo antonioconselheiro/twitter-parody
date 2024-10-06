@@ -19,7 +19,8 @@
         "wix.vscode-import-cost",
         "stylelint.vscode-stylelint",
         "esbenp.prettier-vscode",
-        "Pustur.calamity-vscode"
+        "Pustur.calamity-vscode",
+        "mohd-akram.vscode-html-format"
       ]
 		}
 	}

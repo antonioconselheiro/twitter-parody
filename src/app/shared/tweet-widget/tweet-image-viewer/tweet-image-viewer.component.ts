@@ -1,16 +1,15 @@
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { Tweet } from '@domain/tweet.interface';
-import { ICloseable } from '@shared/util/closeable.interface';
 
 @Component({
   selector: 'tw-tweet-image-viewer',
   templateUrl: './tweet-image-viewer.component.html',
   styleUrls: ['./tweet-image-viewer.component.scss']
 })
-export class TweetImageViewerComponent implements ICloseable {
+export class TweetImageViewerComponent {
 
   @Input()
-  tweet: Tweet<DataLoadType.EAGER_LOADED> | null = null;
+  tweet: Tweet | null = null;
 
   @Input()
   activeImage = '';

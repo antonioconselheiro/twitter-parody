@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { NostrEventKind, NostrPool } from '@belomonte/nostr-ngx';
-import { NostrEvent } from 'nostr-tools';
+import { NostrPool } from '@belomonte/nostr-ngx';
+import { kinds, NostrEvent } from 'nostr-tools';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +12,11 @@ export class TweetApi {
   ) { }
 
   listTweetsFromPubkeyList(pubkeys: Array<string>): Promise<NostrEvent[]> {
-    return this.npool.request([
+    return this.npool.query([
       {
         kinds: [
-          NostrEventKind.ShortTextNote,
-          NostrEventKind.Repost
+          kinds.ShortTextNote,
+          kinds.Repost
         ],
         authors: pubkeys,
         limit: 25
@@ -25,10 +25,10 @@ export class TweetApi {
   }
 
   listReactionsFromPubkey(pubkey: string): Promise<NostrEvent[]> {
-    return this.npool.request([
+    return this.npool.query([
       {
         kinds: [
-          NostrEventKind.Reaction
+          kinds.Reaction
         ],
         authors: [
           pubkey
@@ -39,18 +39,18 @@ export class TweetApi {
   }
 
   loadEvents(events: string[]): Promise<NostrEvent[]> {
-    return this.npool.request([
+    return this.npool.query([
       {
         ids: events,
         kinds: [
-          NostrEventKind.ShortTextNote
+          kinds.ShortTextNote
         ]
       },
 
       {
         kinds: [
-          NostrEventKind.ShortTextNote,
-          NostrEventKind.Repost
+          kinds.ShortTextNote,
+          kinds.Repost
         ],
         '#e': events
       }
@@ -58,11 +58,11 @@ export class TweetApi {
   }
 
   loadRelatedEvents(events: string[]): Promise<NostrEvent[]> {
-    return this.npool.request([
+    return this.npool.query([
       {
         kinds: [
-          NostrEventKind.ShortTextNote,
-          NostrEventKind.Repost
+          kinds.ShortTextNote,
+          kinds.Repost
         ],
         '#e': events
       }
@@ -70,11 +70,11 @@ export class TweetApi {
   }
 
   loadRelatedReactions(events: string[]): Promise<NostrEvent[]> {
-    return this.npool.request([
+    return this.npool.query([
       {
         kinds: [
-          NostrEventKind.Reaction,
-          NostrEventKind.Zap
+          kinds.Reaction,
+          kinds.Zap
         ],
         '#e': events
       }

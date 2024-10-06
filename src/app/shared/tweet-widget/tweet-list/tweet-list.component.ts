@@ -7,7 +7,7 @@ import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
 import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 import { TweetConverter } from '@shared/tweet-service/tweet.converter';
 import { NostrMetadata } from '@nostrify/nostrify';
-import { NostrPool, ProfileService } from '@belomonte/nostr-ngx';
+import { Account, NostrPool, ProfileService } from '@belomonte/nostr-ngx';
 
 @Component({
   selector: 'tw-tweet-list',
@@ -70,12 +70,13 @@ export class TweetListComponent {
     private npool: NostrPool
   ) { }
 
-  async getRetweetAuthorName(tweet: Tweet): string {
-    const author = await this.profileService.get(tweet.author);
+  async getRetweetAuthorName(tweet: Tweet): Promise<string> {
+    const account = await this.profileService.loadAccount(tweet.author);
+    const author = account && account.metadata;
     return author && (author.display_name || author.name) || '';
   }
 
-  getAuthorProfile(tweet: Tweet): NostrMetadata | null {
+  getAuthorProfile(tweet: Tweet): Account | null {
     //  FIXME: dar um jeito do template não precisar chamar
     //  diversas vezes um método com essa complexidade
     return this.tweetProxy.getTweetOrRetweetedAuthorProfile(tweet);

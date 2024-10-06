@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
+import { NostrConverter, NostrGuard, NPub } from '@belomonte/nostr-ngx';
 import { EventRelationType } from '@domain/event-relation-type.type';
 import { Tweet } from '@domain/tweet.interface';
 import Geohash from 'latlon-geohash';
-import { Event, nip19, NostrEvent } from 'nostr-tools';
-import { TweetTypeGuard } from './tweet.type-guard';
-import { NostrConverter, NostrEventKind, TNostrPublic } from '@belomonte/nostr-ngx';
+import { Event, kinds, nip19, NostrEvent } from 'nostr-tools';
 
 /**
  * NIP12
@@ -16,7 +15,7 @@ import { NostrConverter, NostrEventKind, TNostrPublic } from '@belomonte/nostr-n
 export class TweetTagsConverter {
 
   constructor(
-    private tweetTypeGuard: TweetTypeGuard,
+    private guard: NostrGuard,
     private nostrConverter: NostrConverter
   ) { }
 
@@ -113,18 +112,18 @@ export class TweetTagsConverter {
     return this.getRelatedProfiles(event).at(0) || null;
   }
 
-  getNostrPublicFromTags(event: Event): TNostrPublic[] {
+  getNostrPublicFromTags(event: Event): NPub[] {
     return event.tags
       .filter(([type]) => type === 'p')
-      .map(([, npub]) => this.nostrConverter.castPubkeyToNostrPublic(npub));
+      .map(([, npub]) => this.nostrConverter.castPubkeyToNpub(npub));
   }
 
   mergeRetweetingFromEvent(tweet: Tweet, event: NostrEvent): void {
-    if (this.tweetTypeGuard.isKind(event, NostrEventKind.Repost)) {
+    if (this.guard.isKind(event, kinds.Repost)) {
       const idEvent = this.getFirstRelatedEvent(event);
       const pubkey = this.getFirstRelatedProfile(event);
       if (idEvent && pubkey) {
-        tweet.author = this.nostrConverter.castPubkeyToNostrPublic(pubkey);
+        tweet.author = this.nostrConverter.castPubkeyToNpub(pubkey);
         tweet.retweeting = idEvent;
       } else {
         console.warn('[RELAY DATA WARNING] mentioned tweet and/or author not found in retweet', event);

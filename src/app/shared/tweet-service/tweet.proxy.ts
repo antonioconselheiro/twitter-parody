@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { NostrPool, ProfileService } from "@belomonte/nostr-ngx";
+import { Account, NostrPool, ProfileService } from "@belomonte/nostr-ngx";
 import { IRetweet } from "@domain/retweet.interface";
 import { Tweet } from "@domain/tweet.interface";
 import { NostrEvent } from 'nostr-tools';
@@ -99,7 +99,7 @@ export class TweetProxy {
   //  FIXME: dar um jeito do template não precisar chamar
   //  diversas vezes um método com essa complexidade
   // eslint-disable-next-line complexity
-  getTweetOrRetweetedAuthorProfile(tweet: Tweet): IProfile | null {
+  getTweetOrRetweetedAuthorProfile(tweet: Tweet): Promise<Account | null> {
     if (this.tweetTypeGuard.isSimpleRetweet(tweet)) {
       const retweeted = TweetCache.eagerTweets[tweet.retweeting] || TweetCache.lazyTweets[tweet.retweeting];
       if (retweeted.author) {
