@@ -125,7 +125,7 @@ export class TweetConverter {
       event = content;
     }
 
-    if (this.tweetTypeGuard.isNostrEvent(event)) {
+    if (this.guard.isNostrEvent(event)) {
       return event;
     }
 
@@ -235,23 +235,6 @@ export class TweetConverter {
     lazy.reactions[event.id] = reaction;
 
     return { lazy, npubs };
-  }
-
-  createLazyLoadableTweetFromEventId(
-    idEvent: string, pubkey?: string
-  ): Tweet<DataLoadType.LAZY_LOADED> {
-    const tweet: Tweet<DataLoadType.LAZY_LOADED> = {
-      id: idEvent,
-      reactions: {},
-      zaps: {},
-      load: DataLoadType.LAZY_LOADED
-    };
-
-    if (pubkey) {
-      tweet.author = this.nostrConverter.castPubkeyToNpub(pubkey);
-    }
-
-    return tweet;
   }
 
   getAuthorNostrPublicFromEvent(event: Event): NPub {
