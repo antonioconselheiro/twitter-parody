@@ -1,18 +1,16 @@
 import { Inject, Injectable } from '@angular/core';
-import { MAIN_NCACHE_TOKEN, NostrGuard } from '@belomonte/nostr-ngx';
+import { Account, MAIN_NCACHE_TOKEN, NostrGuard } from '@belomonte/nostr-ngx';
 import { NCache, NostrEvent } from '@nostrify/nostrify';
 import { kinds } from 'nostr-tools';
-import { Feed } from '../../view-model/feed.type';
+import { ReactionViewModel } from 'src/app/view-model/reaction.view-model';
+import { ZapViewModel } from 'src/app/view-model/zap.view-model';
 import { RepostNoteViewModel } from '../../view-model/repost-note.view-model';
 import { SimpleTextNoteViewModel } from '../../view-model/simple-text-note.view-model';
 import { SortedNostrViewModelSet } from '../../view-model/sorted-nostr-view-model.set';
-import { UnloadedFeedRefences } from '../../view-model/unloaded-feed-references.interface';
 import { ReactionMapper } from './reaction.mapper';
+import { RelatedFeedAggregator } from '../../view-model/related-info-aggregator.interface';
 import { SimpleTextMapper } from './simple-text.mapper';
 import { ZapMapper } from './zap.mapper';
-import { RelatedFeedAggregator } from './related-info-aggregator.interface';
-import { ReactionViewModel } from 'src/app/view-model/reaction.view-model';
-import { ZapViewModel } from 'src/app/view-model/zap.view-model';
 
 @Injectable({
   providedIn: 'root'
@@ -27,14 +25,12 @@ export class FeedMapper {
     @Inject(MAIN_NCACHE_TOKEN) private ncache: NCache
   ) { }
 
-  toViewModel(events: Array<NostrEvent>): Promise<{
-    feed: Feed;
-    unloaded: UnloadedFeedRefences
-  }> {
+  toViewModel(events: Array<NostrEvent>): Promise<RelatedFeedAggregator> {
     const reactions = new Array<ReactionViewModel>();
     const zaps = new Array<ZapViewModel>();
     const aggregator: RelatedFeedAggregator = {
       feed: new SortedNostrViewModelSet<SimpleTextNoteViewModel | RepostNoteViewModel>,
+      accounts: new Set<Account>,
       unloaded: {
         pubkey: [],
         idevent: []

@@ -4,10 +4,12 @@ import { TagsMapper } from './tags.mapper';
 import { SimpleTextMapper } from './simple-text.mapper';
 import { ZapMapper } from './zap.mapper';
 import { ReactionMapper } from './reaction.mapper';
+import { HtmlfyServiceModule } from '@shared/htmlfy/htmlfy-service.module';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    HtmlfyServiceModule
   ],
   providers: [
     SimpleTextMapper,

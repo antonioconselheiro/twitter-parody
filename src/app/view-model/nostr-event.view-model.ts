@@ -1,5 +1,3 @@
-import { Account } from '@belomonte/nostr-ngx';
-
 /**
  * properties that all ready to render nostr event will bring
  */
@@ -11,9 +9,9 @@ export interface NostrEventViewModel {
   id: string;
 
   /**
-   * prefetched author data
+   * author pubkey
    */
-  author: Account;
+  author: string;
 
   //  TODO: study how render it using angular date pipe and internacionalization
   //  TODO: in long term, include time2blocks alternative

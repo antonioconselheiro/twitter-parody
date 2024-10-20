@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { MAIN_NCACHE_TOKEN } from '@belomonte/nostr-ngx';
-import { NCache } from '@nostrify/nostrify';
+import { NCache, NostrEvent } from '@nostrify/nostrify';
+import { HtmlfyService } from '@shared/htmlfy/htmlfy.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,10 +9,11 @@ import { NCache } from '@nostrify/nostrify';
 export class SimpleTextMapper {
 
   constructor(
+    private htmlfyService: HtmlfyService,
     @Inject(MAIN_NCACHE_TOKEN) private ncache: NCache
   ) { }
 
-  toViewModel() {
+  toViewModel(event: NostrEvent):  {
 
   }
 }

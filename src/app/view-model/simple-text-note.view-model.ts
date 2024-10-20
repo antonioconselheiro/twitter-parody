@@ -1,8 +1,11 @@
 import { NostrEventViewModel } from './nostr-event.view-model';
 import { ParsedNostrContent } from './parsed-nostr-content.interface';
 import { ReactionViewModel } from './reaction.view-model';
+import { NoteReplyContext } from './note-reply-context.interface';
 import { SortedNostrViewModelSet } from './sorted-nostr-view-model.set';
 import { ZapViewModel } from './zap.view-model';
+import Geohash from 'latlon-geohash';
+import { NoteResourcesContext } from './note-resources-context.interface';
 
 /**
  * This interface represents the simple text note
@@ -29,5 +32,17 @@ export interface SimpleTextNoteViewModel extends NostrEventViewModel {
   /**
    * array with event id of each event that reposted this event
    */
-  reposts: Array<string>;
+  repostedBy: Array<string>;
+
+  /**
+   * data about repling and be replied
+   */
+  replyContext: NoteReplyContext;
+
+  /**
+   * hyperlinks and multimidia related to the note
+   */
+  media: NoteResourcesContext;
+
+  location?: Geohash.Point;
 }
