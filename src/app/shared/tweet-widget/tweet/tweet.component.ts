@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { IRetweet } from '@domain/retweet.interface';
-import { Tweet } from '@domain/tweet.interface';
+import { Retweet } from 'src/app/deprecated-domain/retweet.interface';
+import { Tweet } from 'src/app/deprecated-domain/tweet.interface';
 import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
 import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 
@@ -23,19 +23,19 @@ export class TweetComponent {
   imgList: string[] = [];
   imgs: [string, string?][] = [];
 
-  interceptedTweet: Tweet | IRetweet | null = null;
+  interceptedTweet: Tweet | Retweet | null = null;
 
   constructor(
     private tweetTypeGuard: TweetTypeGuard
   ) {}
   
   @Input()
-  set tweet(tweet: Tweet | IRetweet | null) {
+  set tweet(tweet: Tweet | Retweet | null) {
     this.interceptedTweet = tweet;
     this.showingTweet = this.tweetTypeGuard.getShowingTweet(this.tweet);
   }
   
-  get tweet(): Tweet | IRetweet | null {
+  get tweet(): Tweet | Retweet | null {
     return this.interceptedTweet;
   }
 

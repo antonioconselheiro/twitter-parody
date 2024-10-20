@@ -38,7 +38,7 @@
         <nostr-svg-render class="inlineIcon" name="link"></nostr-svg-render>
         <a target="_blank" [href]="viewing.metadata?.website">{{viewing.metadata?.website}}</a>
       </span>
-      <span *ngIf="viewing.metadata?.created_at">
+      <span *ngIf="viewing.metadata?.['created_at']">
         <nostr-svg-render class="inlineIcon" name="calendar"></nostr-svg-render>
         <span>Joined in August 2021</span>
       </span>

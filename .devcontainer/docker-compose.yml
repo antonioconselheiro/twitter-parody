@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   twitter-parody-dev:
     image: twitter-parody-dev

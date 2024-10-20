@@ -1,5 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
-import { Tweet } from '@domain/tweet.interface';
+import { Tweet } from 'src/app/deprecated-domain/tweet.interface';
 
 @Component({
   selector: 'tw-tweet-image-viewer',

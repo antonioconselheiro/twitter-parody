@@ -1,5 +1,5 @@
 import { SafeHtml } from '@angular/platform-browser';
-import { NPub } from '@belomonte/nostr-ngx';
+import { NostrPublicUser } from '@belomonte/nostr-ngx';
 import Geohash from 'latlon-geohash';
 import { TweetReactionRecord } from './tweet-reaction.record';
 import { TweetZapRecord } from './tweet-zap.record';
@@ -10,10 +10,10 @@ export interface Tweet {
   zaps: TweetZapRecord;
   rootRepling?: string;
   repling?: string;
-  retweetedBy?: { [eventId: string]: NPub };
+  retweetedBy?: { [eventId: string]: NostrPublicUser };
   retweeting?: string;
   replies?: string[];
-  author: NPub;
+  author: NostrPublicUser;
   content: string;
 
   /**

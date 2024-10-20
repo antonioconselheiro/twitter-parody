@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
-import { IRetweet } from '@domain/retweet.interface';
-import { Tweet } from '@domain/tweet.interface';
+import { Retweet } from 'src/app/deprecated-domain/retweet.interface';
+import { Tweet } from 'src/app/deprecated-domain/tweet.interface';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
 import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
@@ -21,7 +21,7 @@ export class TweetListComponent {
   loading = true;
 
   @Input()
-  tweets: Array<Tweet | IRetweet> = [];
+  tweets: Array<Tweet | Retweet> = [];
 
   /**
    * This represents the root tweet of a thread of chained
@@ -29,12 +29,12 @@ export class TweetListComponent {
    * shown in this tweet list
    */
   @Input()
-  set tweet(tweet: Tweet | IRetweet | null) {
+  set tweet(tweet: Tweet | Retweet | null) {
     this.interceptedTweet = tweet;
     this.interceptTweet(tweet);
   }
 
-  get tweet(): Tweet | IRetweet | null {
+  get tweet(): Tweet | Retweet | null {
     return this.interceptedTweet;
   }
 
@@ -55,7 +55,7 @@ export class TweetListComponent {
   }
 
   private interceptedRetweet: Tweet | null = null;
-  private interceptedTweet: Tweet | IRetweet | null = null;
+  private interceptedTweet: Tweet | Retweet | null = null;
 
   @ViewChild('tweetActions', { read: PopoverComponent })
   share!: PopoverComponent;
@@ -82,11 +82,11 @@ export class TweetListComponent {
     return this.tweetProxy.getTweetOrRetweetedAuthorProfile(tweet);
   }
 
-  isSimpleRetweet(tweet: Tweet): tweet is IRetweet {
+  isSimpleRetweet(tweet: Tweet): tweet is Retweet {
     return this.tweetTypeGuard.isSimpleRetweet(tweet);
   }
 
-  showMentionedTweetInRetweet(tweet: Tweet | IRetweet): boolean {
+  showMentionedTweetInRetweet(tweet: Tweet | Retweet): boolean {
     const has = this.tweetConverter.getRetweet(tweet);
     if (!has) {
       return false;
@@ -99,7 +99,7 @@ export class TweetListComponent {
     return true;
   }
 
-  getRetweet(tweet: Tweet | IRetweet): Tweet | null {
+  getRetweet(tweet: Tweet | Retweet): Tweet | null {
     return this.tweetConverter.getRetweet(tweet);
   }
 
@@ -112,7 +112,7 @@ export class TweetListComponent {
     return author.display_name || author.name || '';
   }
 
-  private async interceptTweet(tweet: Tweet | IRetweet | null): Promise<void> {
+  private async interceptTweet(tweet: Tweet | Retweet | null): Promise<void> {
     if (tweet) {
       const repliesId = (tweet.replies || []);
       const repliesPromise = repliesId.map(reply => this.npool.query([{ ids: [ reply ], limit: 1 }]));

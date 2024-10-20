@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Account, NostrPool, ProfileService } from "@belomonte/nostr-ngx";
-import { IRetweet } from "@domain/retweet.interface";
-import { Tweet } from "@domain/tweet.interface";
+import { Retweet } from "src/app/deprecated-domain/retweet.interface";
+import { Tweet } from "src/app/deprecated-domain/tweet.interface";
 import { NostrEvent } from 'nostr-tools';
 import { TweetTagsConverter } from "./tweet-tags.converter";
 import { TweetApi } from "./tweet.api";
@@ -21,21 +21,21 @@ export class TweetProxy {
   ) { }
 
   async listTweetsFromPubkey(pubkey: string): Promise<
-    Array<Tweet | IRetweet>
+    Array<Tweet | Retweet>
   > {
     const rawEvents = await this.tweetApi.listTweetsFromPubkeyList([pubkey]);
     return this.loadRelatedEvents(rawEvents);
   }
 
   async listReactionsFromNostrPublic(pubkey: string): Promise<
-    Array<Tweet | IRetweet>
+    Array<Tweet | Retweet>
   > {
     const rawEvents = await this.tweetApi.listReactionsFromPubkey(pubkey);
     return this.loadRelatedEvents(rawEvents);
   }
 
   private async loadRelatedEvents(rawEvents: NostrEvent[]): Promise<
-    Array<Tweet | IRetweet>
+    Array<Tweet | Retweet>
   > {
     if (!rawEvents.length) {
       return Promise.resolve([]);

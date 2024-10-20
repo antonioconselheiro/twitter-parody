@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { NostrConverter, NostrGuard, NPub } from '@belomonte/nostr-ngx';
-import { Reaction } from '@domain/reaction.interface';
-import { IRetweet } from '@domain/retweet.interface';
-import { Tweet } from '@domain/tweet.interface';
-import { Zap } from '@domain/zap.interface';
+import { Reaction } from 'src/app/deprecated-domain/reaction.interface';
+import { Retweet } from 'src/app/deprecated-domain/retweet.interface';
+import { Tweet } from 'src/app/deprecated-domain/tweet.interface';
+import { Zap } from 'src/app/deprecated-domain/zap.interface';
 import { HtmlfyService } from '@shared/htmlfy/htmlfy.service';
 import { Event, kinds, NostrEvent } from 'nostr-tools';
-import { ITweetRelationedInfoWrapper } from './tweet-relationed-info-wrapper.interface';
+import { TweetRelationedInfoWrapper } from './tweet-relationed-info-wrapper.interface';
 import { TweetTagsConverter } from './tweet-tags.converter';
 import { TweetTypeGuard } from './tweet.type-guard';
 
@@ -23,8 +23,8 @@ export class TweetConverter {
     private nostrConverter: NostrConverter
   ) { }
 
-  castResultsetToTweets(events: NostrEvent[]): ITweetRelationedInfoWrapper {
-    const relationed: ITweetRelationedInfoWrapper = {
+  castResultsetToTweets(events: NostrEvent[]): TweetRelationedInfoWrapper {
+    const relationed: TweetRelationedInfoWrapper = {
       eager: [],
       lazy: [],
       pubkeys: []
@@ -45,11 +45,7 @@ export class TweetConverter {
         relationed.eager.push(tweet);
 
         if (retweeted) {
-          if (retweeted.load === DataLoadType.LAZY_LOADED) {
-            relationed.lazy.push(retweeted);
-          } else {
-            relationed.eager.push(retweeted);
-          }
+          relationed.eager.push(retweeted);
         }
 
         relationed.pubkeys = relationed.pubkeys.concat(npubs);
@@ -59,11 +55,8 @@ export class TweetConverter {
           relationed.eager.push(retweet);
         }
 
-        if (retweeted.load === DataLoadType.LAZY_LOADED) {
-          relationed.lazy.push(retweeted);
-        } else {
-          relationed.eager.push(retweeted);
-        }
+
+        relationed.eager.push(retweeted);
         relationed.pubkeys = relationed.pubkeys.concat(npubs);
       } else if (isReaction) {
         const result = this.castEventReactionToLazyLoadTweet(event);
@@ -96,7 +89,7 @@ export class TweetConverter {
     return Object.keys(tweet.reactions).length;
   }
 
-  getRetweetedLength(tweet: Tweet | IRetweet): number {
+  getRetweetedLength(tweet: Tweet | Retweet): number {
     tweet = this.tweetTypeGuard.getShowingTweet(tweet);
     return Object.keys(tweet.retweetedBy || {}).length || 0;
   }
@@ -136,7 +129,7 @@ export class TweetConverter {
   //  remover o disable do lint quando resolver débito
   // eslint-disable-next-line complexity
   private castEventToRetweet(event: NostrEvent): {
-    retweet: IRetweet, retweeted: Tweet, npubs: NPub[]
+    retweet: Retweet, retweeted: Tweet, npubs: NPub[]
   } {
     let content = this.getTweetContent(event);
     const author = this.getAuthorNostrPublicFromEvent(event);
@@ -281,13 +274,13 @@ export class TweetConverter {
   }
 
   private castEventToTweet(event: NostrEvent, retweeting: string): {
-    retweeted: Tweet, tweet: IRetweet, npubs: Array<NPub>
+    retweeted: Tweet, tweet: Retweet, npubs: Array<NPub>
   };
   private castEventToTweet(event: NostrEvent): {
     retweeted?: Tweet, tweet: Tweet, npubs: Array<NPub>
   };
   private castEventToTweet(event: NostrEvent, retweeting?: string): {
-    retweeted?: Tweet, tweet: Tweet | IRetweet, npubs: Array<NPub>
+    retweeted?: Tweet, tweet: Tweet | Retweet, npubs: Array<NPub>
   } {
     const author = this.getAuthorNostrPublicFromEvent(event);
     let npubs: NPub[] = [author];
@@ -330,9 +323,9 @@ export class TweetConverter {
     }).flat(1);
   }
 
-  getRetweet(tweet: IRetweet): Tweet;
-  getRetweet(tweet?: Tweet | IRetweet): Tweet | null;
-  getRetweet(tweet?: Tweet | IRetweet): Tweet | null {
+  getRetweet(tweet: Retweet): Tweet;
+  getRetweet(tweet?: Tweet | Retweet): Tweet | null;
+  getRetweet(tweet?: Tweet | Retweet): Tweet | null {
     if (!tweet || !tweet.retweeting) {
       return null;
     }

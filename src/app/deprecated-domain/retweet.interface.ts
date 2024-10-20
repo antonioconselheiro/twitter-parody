@@ -1,5 +1,5 @@
 import { Tweet } from "./tweet.interface";
 
-export interface IRetweet extends Tweet {
+export interface Retweet extends Tweet {
   retweeting: string;
 }

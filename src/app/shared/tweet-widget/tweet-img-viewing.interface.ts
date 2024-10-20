@@ -1,4 +1,4 @@
-import { Tweet } from "@domain/tweet.interface";
+import { Tweet } from "src/app/deprecated-domain/tweet.interface";
 
 export interface ITweetImgViewing {
   tweet: Tweet;
