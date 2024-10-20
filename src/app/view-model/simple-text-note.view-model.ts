@@ -44,5 +44,8 @@ export interface SimpleTextNoteViewModel extends NostrEventViewModel {
    */
   media: NoteResourcesContext;
 
+  /**
+   * Note attached location if g tag is included
+   */
   location?: Geohash.Point;
 }

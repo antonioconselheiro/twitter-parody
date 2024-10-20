@@ -4,7 +4,7 @@ import { Reaction } from 'src/app/deprecated-domain/reaction.interface';
 import { Retweet } from 'src/app/deprecated-domain/retweet.interface';
 import { Tweet } from 'src/app/deprecated-domain/tweet.interface';
 import { Zap } from 'src/app/deprecated-domain/zap.interface';
-import { HtmlfyService } from '@shared/htmlfy/htmlfy.service';
+import { DefaultHtmlfyService } from '@shared/htmlfy/default-htmlfy.service';
 import { Event, kinds, NostrEvent } from 'nostr-tools';
 import { TweetRelationedInfoWrapper } from './tweet-relationed-info-wrapper.interface';
 import { TweetTagsConverter } from './tweet-tags.converter';
@@ -18,7 +18,7 @@ export class TweetConverter {
   constructor(
     private guard: NostrGuard,
     private tweetTagsConverter: TweetTagsConverter,
-    private htmlfyService: HtmlfyService,
+    private htmlfyService: DefaultHtmlfyService,
     private tweetTypeGuard: TweetTypeGuard,
     private nostrConverter: NostrConverter
   ) { }

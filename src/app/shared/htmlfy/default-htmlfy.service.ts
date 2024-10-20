@@ -6,7 +6,7 @@ import { UrlUtil } from '@shared/util/url.service';
 @Injectable({
   providedIn: 'root'
 })
-export class HtmlfyService {
+export class DefaultHtmlfyService {
 
   constructor(
     private urlUtil: UrlUtil,
@@ -115,7 +115,7 @@ export class HtmlfyService {
     if (matches) {
       [...matches].forEach(match => {
         const npub = match.replace(/^\{\{|\}\}/g, '') as NPub;
-        const pubkey = this.nostrConverter.casNPubToPubkey(npub);
+        const pubkey = this.nostrConverter.convertNPubToPubkey(npub);
         const resultset = this.profileCache.get(pubkey);
         let replace: string = npub;
         if (resultset && resultset.metadata) {
