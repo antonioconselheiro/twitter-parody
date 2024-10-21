@@ -32,6 +32,7 @@ export class FeedMapper {
     const zaps = new Map<string, Array<ZapViewModel>>();
     const aggregator: RelatedFeedAggregator = {
       feed: new SortedNostrViewModelSet<SimpleTextNoteViewModel | RepostNoteViewModel>,
+      referenced: new Map<string, SimpleTextNoteViewModel | RepostNoteViewModel>,
       accounts: new Set<Account>,
       unloaded: {
         pubkey: [],
@@ -91,6 +92,26 @@ export class FeedMapper {
     reactions: Map<string, Array<ReactionViewModel>>,
     zaps: Map<string, Array<ZapViewModel>>
   ): RelatedFeedAggregator {
+    [...aggregator.feed, ...aggregator.referenced.values()].forEach(viewModel => {
+      const zapList = zaps.get(viewModel.id) || [];
+      const reactionList = reactions.get(viewModel.id) || [];
 
+      viewModel.zaps = new SortedNostrViewModelSet<ZapViewModel>();
+      viewModel.reactions = {};
+
+      zapList.forEach(zap => viewModel.zaps.add(zap));
+      reactionList.forEach(reaction => {
+        let sorted: SortedNostrViewModelSet<ReactionViewModel>;
+        if (!viewModel.reactions[reaction.content]) {
+          sorted = viewModel.reactions[reaction.content] = new SortedNostrViewModelSet<ReactionViewModel>();
+        } else {
+          sorted = viewModel.reactions[reaction.content];
+        }
+
+        sorted.add(reaction);
+      });
+    });
+
+    return aggregator;
   }
 }
