@@ -15,5 +15,5 @@ export interface NoteResourcesContext {
   /**
    * Included video url
    */
-  videoUrl?: string;
+  videoList: string[];
 }

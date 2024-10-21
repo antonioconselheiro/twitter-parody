@@ -5,6 +5,7 @@ import { DefaultHtmlfyService } from '@shared/htmlfy/default-htmlfy.service';
 import { HTML_PARSER_TOKEN } from '@shared/htmlfy/html-parser.token';
 import { RepostNoteViewModel } from '../../view-model/repost-note.view-model';
 import { SimpleTextNoteViewModel } from '../../view-model/simple-text-note.view-model';
+import { NoteResourcesContext } from '../../view-model/context/note-resources-context.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -18,20 +19,17 @@ export class SimpleTextMapper {
 
   toViewModel(event: NostrEvent): SimpleTextNoteViewModel | RepostNoteViewModel {
     const content = event.content || '';
+    const resources = this.extractReferencesFromContent(content);
   }
 
-  private extractReferencesFromContent(content: string) {
-    urls: string[],
-    imageList: string[],
-    videoList: string[]
-  } {
+  private extractReferencesFromContent(content: string): NoteResourcesContext {
     const links = this.extractUrls(content);
     const isImageRegex = /\.(png|jpg|jpeg|gif|svg|webp)$|^data:/;
     const isVideoRegex = /\.(mp4)$/;
 
     const imageList = new Array<string>();
     const videoList = new Array<string>();
-    const urls = new Array<string>();
+    const hyperlinks = new Array<string>();
 
     links.forEach(link => {
       const isImage = isImageRegex.test(link);
@@ -41,12 +39,12 @@ export class SimpleTextMapper {
       } else if (isVideo) {
         videoList.push(link);
       } else {
-        urls.push(link);
+        hyperlinks.push(link);
       }
     });
 
     return {
-      urls,
+      hyperlinks,
       imageList,
       videoList
     };

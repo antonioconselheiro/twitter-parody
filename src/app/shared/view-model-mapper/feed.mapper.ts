@@ -31,9 +31,9 @@ export class FeedMapper {
     const reactions = new Map<string, Array<ReactionViewModel>>();
     const zaps = new Map<string, Array<ZapViewModel>>();
     const aggregator: RelatedFeedAggregator = {
-      feed: new SortedNostrViewModelSet<SimpleTextNoteViewModel | RepostNoteViewModel>,
-      referenced: new Map<string, SimpleTextNoteViewModel | RepostNoteViewModel>,
-      accounts: new Set<Account>,
+      feed: new SortedNostrViewModelSet<SimpleTextNoteViewModel | RepostNoteViewModel>(),
+      referenced: new Map<string, SimpleTextNoteViewModel | RepostNoteViewModel>(),
+      accounts: new Set<Account>(),
       unloaded: {
         pubkey: [],
         idevent: []
