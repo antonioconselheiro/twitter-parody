@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CurrentAccountObservable } from '@belomonte/nostr-ngx';
-import { Retweet } from 'src/app/deprecated-domain/retweet.interface';
-import { Tweet } from 'src/app/deprecated-domain/tweet.interface';
+import { Retweet } from '../../deprecated-domain/retweet.interface';
+import { Tweet } from '../../deprecated-domain/tweet.interface';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { TweetConverter } from '@shared/tweet-service/tweet.converter';
 import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';

@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Retweet } from 'src/app/deprecated-domain/retweet.interface';
-import { Tweet } from 'src/app/deprecated-domain/tweet.interface';
+import { Retweet } from '../../deprecated-domain/retweet.interface';
+import { Tweet } from '../../deprecated-domain/tweet.interface';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
 import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';

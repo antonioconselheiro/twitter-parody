@@ -27,50 +27,6 @@ export class DefaultHtmlfyService {
     return content;
   }
 
-  private extractUrls(content: string): string[] {
-    const getUrlsRegex = /(\bhttps?:\/\/[^"\s]+\b)/g;
-    const matches = content.match(getUrlsRegex);
-    if (!matches || !matches.length) {
-      return [];
-    }
-
-    return Array.from(matches);
-  }
-
-  separateImageAndLinks(content: string): {
-    urls: string[],
-    imgMatriz: [string, string?][],
-    imageList: string[],
-    videoUrl?: string
-  } {
-    const links = this.extractUrls(content);
-    const isImageRegex = /\.(png|jpg|jpeg|gif|svg|webp)$/;
-    const isVideoRegex = /\.(mp4)$/;
-
-    const imageList = new Array<string>();
-    let videoUrl: string | undefined = undefined;
-    const urls = new Array<string>();
-
-    links.forEach(link => {
-      const isImage = isImageRegex.test(link);
-      const isVideo = isVideoRegex.test(link);
-      if (isImage) {
-        imageList.push(link);
-      } else if (isVideo) {
-        videoUrl = link;
-      } else {
-        urls.push(link);
-      }
-    });
-
-    return {
-      urls,
-      imgMatriz: this.imageListToMatriz(imageList),
-      imageList,
-      videoUrl
-    };
-  }
-
   private imageListToMatriz(imgList: string[]): [string, string?][] {
     const pair = 2;
 

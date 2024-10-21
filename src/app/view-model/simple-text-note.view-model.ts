@@ -1,11 +1,12 @@
 import { NostrEventViewModel } from './nostr-event.view-model';
-import { ParsedNostrContent } from './parsed-nostr-content.interface';
+import { ParsedNostrContent } from './context/parsed-nostr-content.interface';
 import { ReactionViewModel } from './reaction.view-model';
-import { NoteReplyContext } from './note-reply-context.interface';
+import { NoteReplyContext } from './context/note-reply-context.interface';
 import { SortedNostrViewModelSet } from './sorted-nostr-view-model.set';
 import { ZapViewModel } from './zap.view-model';
 import Geohash from 'latlon-geohash';
-import { NoteResourcesContext } from './note-resources-context.interface';
+import { NoteResourcesContext } from './context/note-resources-context.interface';
+import { RepostNoteViewModel } from './repost-note.view-model';
 
 /**
  * This interface represents the simple text note
@@ -17,6 +18,11 @@ export interface SimpleTextNoteViewModel extends NostrEventViewModel {
    * Event content, with the raw value and the html parsed value
    */
   content: ParsedNostrContent;
+
+  /**
+   * The reposted event
+   */
+  reposting?: Array<SimpleTextNoteViewModel | RepostNoteViewModel>;
 
   /**
    * Record with all reacted reactions.

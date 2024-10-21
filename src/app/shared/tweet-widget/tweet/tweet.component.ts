@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Retweet } from 'src/app/deprecated-domain/retweet.interface';
-import { Tweet } from 'src/app/deprecated-domain/tweet.interface';
+import { Retweet } from '../../deprecated-domain/retweet.interface';
+import { Tweet } from '../../deprecated-domain/tweet.interface';
 import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
 import { ITweetImgViewing } from '../tweet-img-viewing.interface';
 

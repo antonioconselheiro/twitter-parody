@@ -6,9 +6,9 @@ import { NostrEventViewModel } from './nostr-event.view-model';
 export interface ReactionViewModel extends NostrEventViewModel {
 
   /**
-   * id of reacted event
+   * id of reacted event, It can be only one, but can be a list also
    */
-  reactedTo: string;
+  reactedTo: Array<string>;
 
   /**
    * one char or one emoji

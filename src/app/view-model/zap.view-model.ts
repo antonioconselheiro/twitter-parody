@@ -1,8 +1,8 @@
-import { NostrEventViewModel } from "./nostr-event.view-model";
+import { ReactionViewModel } from "./reaction.view-model";
 
 /**
  * Ready to render zap data
  */
-export interface ZapViewModel extends NostrEventViewModel {
+export interface ZapViewModel extends ReactionViewModel {
   amount: number;
 }

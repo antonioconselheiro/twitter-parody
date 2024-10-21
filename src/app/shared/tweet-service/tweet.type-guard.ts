@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Retweet } from 'src/app/deprecated-domain/retweet.interface';
-import { Tweet } from 'src/app/deprecated-domain/tweet.interface';
+import { Retweet } from '../../deprecated-domain/retweet.interface';
+import { Tweet } from '../../deprecated-domain/tweet.interface';
 import { verifyEvent } from 'nostr-tools';
 import { NostrMetadata } from '@nostrify/nostrify';
 

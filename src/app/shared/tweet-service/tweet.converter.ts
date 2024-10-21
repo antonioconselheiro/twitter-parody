@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { NostrConverter, NostrGuard, NPub } from '@belomonte/nostr-ngx';
-import { Reaction } from 'src/app/deprecated-domain/reaction.interface';
-import { Retweet } from 'src/app/deprecated-domain/retweet.interface';
-import { Tweet } from 'src/app/deprecated-domain/tweet.interface';
-import { Zap } from 'src/app/deprecated-domain/zap.interface';
+import { Reaction } from '../../deprecated-domain/reaction.interface';
+import { Retweet } from '../../deprecated-domain/retweet.interface';
+import { Tweet } from '../../deprecated-domain/tweet.interface';
+import { Zap } from '../../deprecated-domain/zap.interface';
 import { DefaultHtmlfyService } from '@shared/htmlfy/default-htmlfy.service';
 import { Event, kinds, NostrEvent } from 'nostr-tools';
 import { TweetRelationedInfoWrapper } from './tweet-relationed-info-wrapper.interface';
