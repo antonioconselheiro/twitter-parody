@@ -1,4 +1,4 @@
 import { InjectionToken } from "@angular/core";
-import { DefaultHtmlfyService } from "./default-htmlfy.service";
+import { NoteHtmlfier } from "./note-htmlfier.interface";
 
-export const HTML_PARSER_TOKEN = new InjectionToken<DefaultHtmlfyService>('HtmlParser');
+export const HTML_PARSER_TOKEN = new InjectionToken<NoteHtmlfier>('HtmlParser');

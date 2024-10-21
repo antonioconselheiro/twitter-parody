@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DefaultHtmlfyService } from './default-htmlfy.service';
+import { DefaultHtmlfy } from './default.htmlfy';
 import { HTML_PARSER_TOKEN } from './html-parser.token';
 
 @NgModule({
@@ -8,10 +8,10 @@ import { HTML_PARSER_TOKEN } from './html-parser.token';
     CommonModule
   ],
   providers: [
-    DefaultHtmlfyService,
+    DefaultHtmlfy,
     {
       provide: HTML_PARSER_TOKEN,
-      useClass: DefaultHtmlfyService
+      useClass: DefaultHtmlfy
     }
   ]
 })

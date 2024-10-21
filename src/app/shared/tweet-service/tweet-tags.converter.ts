@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NostrConverter, NostrGuard, NPub } from '@belomonte/nostr-ngx';
-import { EventRelationType } from '../../view-model/event-relation.type';
+import { EventRelationType } from '@view-model/event-relation.type';
 import { Tweet } from '../../deprecated-domain/tweet.interface';
 import Geohash from 'latlon-geohash';
 import { Event, kinds, nip19, NostrEvent } from 'nostr-tools';

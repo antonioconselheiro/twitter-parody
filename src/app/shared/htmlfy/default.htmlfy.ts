@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 import { NostrConverter, NPub, ProfileCache } from '@belomonte/nostr-ngx';
 import { UrlUtil } from '@shared/util/url.service';
+import { NoteHtmlfier } from './note-htmlfier.interface';
+import { NoteResourcesContext } from '@view-model/context/note-resources-context.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DefaultHtmlfyService {
+export class DefaultHtmlfy implements NoteHtmlfier {
 
   constructor(
     private urlUtil: UrlUtil,
@@ -27,6 +29,48 @@ export class DefaultHtmlfyService {
     return content;
   }
 
+    /**
+     * extract links, images and videos from content 
+     */
+    extractMedia(content: string): NoteResourcesContext {
+      const links = this.extractUrls(content);
+      const isImageRegex = /\.(png|jpg|jpeg|gif|svg|webp)$|^data:/;
+      const isVideoRegex = /\.(mp4)$/;
+  
+      const imageList = new Array<string>();
+      const videoList = new Array<string>();
+      const hyperlinks = new Array<string>();
+  
+      links.forEach(link => {
+        const isImage = isImageRegex.test(link);
+        const isVideo = isVideoRegex.test(link);
+        if (isImage) {
+          imageList.push(link);
+        } else if (isVideo) {
+          videoList.push(link);
+        } else {
+          hyperlinks.push(link);
+        }
+      });
+  
+      return {
+        hyperlinks,
+        imageList,
+        videoList
+      };
+    }
+  
+    private extractUrls(content: string): string[] {
+      const getUrlsRegex = /(\bhttps?:\/\/[^"\s]+\b)/g;
+      const matches = content.match(getUrlsRegex);
+      if (!matches || !matches.length) {
+        return [];
+      }
+  
+      return Array.from(matches);
+    }
+
+  //  FIXME: this code keeps in twitter parody and should be not include in core library
   private imageListToMatriz(imgList: string[]): [string, string?][] {
     const pair = 2;
 

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { MAIN_NCACHE_TOKEN } from '@belomonte/nostr-ngx';
 import { NCache, NostrEvent } from '@nostrify/nostrify';
-import { RepostNoteViewModel } from '../../view-model/repost-note.view-model';
+import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
 
 @Injectable({
   providedIn: 'root'
