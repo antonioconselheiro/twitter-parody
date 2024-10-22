@@ -1,21 +1,19 @@
 import { Inject, Injectable } from '@angular/core';
 import { MAIN_NCACHE_TOKEN } from '@belomonte/nostr-ngx';
 import { NCache, NostrEvent } from '@nostrify/nostrify';
-import { kinds } from 'nostr-tools';
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
 import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
-import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
-import { ZapViewModel } from '@view-model/zap.view-model';
+import { kinds } from 'nostr-tools';
 import { ReactionMapper } from './reaction.mapper';
 import { ZapMapper } from './zap.mapper';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SimpleTextMapper {
+export class SimpleTextMapper implements ViewModelMapper<ViewModelData, ViewModelList = Array<ViewModelData>> {
 
   constructor(
     @Inject(HTML_PARSER_TOKEN) private htmlfier: NoteHtmlfier,
@@ -25,8 +23,7 @@ export class SimpleTextMapper {
   ) { }
 
   async toViewModel(event: NostrEvent): Promise<SimpleTextNoteViewModel | RepostNoteViewModel> {
-
-    await this.ncache.query([
+    const events = await this.ncache.query([
       {
         kinds: [
           kinds.Reaction,
@@ -44,8 +41,8 @@ export class SimpleTextMapper {
       createdAt: event.created_at,
       content: this.htmlfier.parse(event),
       media: this.htmlfier.extractMedia(event),
-      reactions: {},
-      zaps: new SortedNostrViewModelSet<ZapViewModel>(),
+      reactions: this.reactionMapper.toViewModelList(events),
+      zaps: this.zapMapper.toViewModelList(events),
       replyContext: this.getReplyContext(event),
       repostedBy: this.getRepostedBy(event)
     };
