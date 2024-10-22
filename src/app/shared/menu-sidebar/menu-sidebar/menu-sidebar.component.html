@@ -3,38 +3,38 @@
     <img alt="twitter logo" title="twitter logo" src="/assets/logo/dark-logo.png" />
   </header>
   <ul>
-    <li tabindex="101" [class.active]="menuActive === MENU_TYPE_HOME" role="link" routerLink="/home">
+    <li tabindex="101" [class.active]="menuActive === menuTypeHome" role="link" routerLink="/home">
       <div class="hasUpdates"></div>
       <div title="Home" class="menuIcon iconHome"></div>
       <span>Home</span>
     </li>
-    <li tabindex="102" [class.active]="menuActive === MENU_TYPE_EXPLORE" role="link" routerLink="/explore">
+    <li tabindex="102" [class.active]="menuActive === menuTypeExplore" role="link" routerLink="/explore">
       <div title="Explore" class="menuIcon iconExplore"></div>
       <span>Explore</span>
     </li>
-    <li tabindex="103" [class.active]="menuActive === MENU_TYPE_NOTIFICATIONS" role="link" routerLink="/notifications">
+    <li tabindex="103" [class.active]="menuActive === menuTypeNotifications" role="link" routerLink="/notifications">
       <div class="hasUpdates">5</div>
       <div title="Notifications" class="menuIcon iconNotifications"></div>
       <span>Notifications</span>
     </li>
-    <li tabindex="104" [class.active]="menuActive === MENU_TYPE_MESSAGES" role="link" routerLink="/messages">
+    <li tabindex="104" [class.active]="menuActive === menuTypeMessages" role="link" routerLink="/messages">
       <div class="hasUpdates">3</div>
       <div title="Messages" class="menuIcon iconMessages"></div>
       <span>Messages</span>
     </li>
-    <li tabindex="105" [class.active]="menuActive === MENU_TYPE_LISTS" role="link" routerLink="/lists">
+    <li tabindex="105" [class.active]="menuActive === menuTypeLists" role="link" routerLink="/lists">
       <div title="Lists" class="menuIcon iconLists"></div>
       <span>Lists</span>
     </li>
-    <li tabindex="106" [class.active]="menuActive === MENU_TYPE_BOOKMARKS" role="link" routerLink="/bookmarks">
+    <li tabindex="106" [class.active]="menuActive === menuTypeBookmarks" role="link" routerLink="/bookmarks">
       <div title="Bookmark" class="menuIcon iconBookmark"></div>
       <span>Bookmark</span>
     </li>
-    <li tabindex="107" [class.active]="menuActive === MENU_TYPE_COMMUNITIES" role="link" routerLink="/communities">
+    <li tabindex="107" [class.active]="menuActive === menuTypeCommunities" role="link" routerLink="/communities">
       <div title="Communities" class="menuIcon iconCommunities"></div>
       <span>Communities</span>
     </li>
-    <li tabindex="108" *ngIf="account && account.npub" [class.active]="menuActive === MENU_TYPE_PROFILE" role="link" routerLink="/p/{{account.npub}}">
+    <li tabindex="108" *ngIf="account && account.npub" [class.active]="menuActive === menuTypeProfile" role="link" routerLink="/p/{{account.npub}}">
       <div title="Profile" class="menuIcon iconProfile"></div>
       <span>Profile</span>
     </li>

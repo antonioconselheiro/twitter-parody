@@ -4,6 +4,7 @@
     "project": "./tsconfig.json"
   },
   "plugins": [
+    "@angular-eslint",
     "ban"
   ],
   "ignorePatterns": [
@@ -29,7 +30,7 @@
             "style": "camelCase"
           }
         ],
-        "component-selector": [
+        "@angular-eslint/component-selector": [
           "error",
           {
             "type": "element",
@@ -40,25 +41,39 @@
         "@angular-eslint/no-output-native": [
           "off"
         ],
-        "@angular-eslint/no-host-metadata-property": [
-          "off"
-        ],
+        "@angular-eslint/no-host-metadata-property": "off",
         "@typescript-eslint/naming-convention": [
-          "warn",
+          "error",
+          {
+            "selector": [
+              "typeProperty",
+              "objectLiteralProperty"
+            ],
+            "custom": {
+              "regex": "(^#[a-z]+|^[a-z_]+$|^[a-z]+([A-Z][a-z]*)*$|^wss?://[a-z]+(\\.[a-z]+)+$)",
+              "match": true
+            },
+            "format": null
+          },
           {
             "selector": [
               "classProperty",
-              "objectLiteralProperty",
-              "typeProperty",
               "classMethod",
               "objectLiteralMethod",
               "typeMethod",
-              "accessor",
-              "enumMember"
+              "accessor"
             ],
             "format": [
               "camelCase",
-              "PascalCase",
+              "PascalCase"
+            ]
+          },
+
+          {
+            "selector": [
+              "enumMember"
+            ],
+            "format": [
               "UPPER_CASE"
             ]
           }

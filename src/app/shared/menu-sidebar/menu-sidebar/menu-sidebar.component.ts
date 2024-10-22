@@ -18,14 +18,14 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
 
   private subscriptions = new Subscription();
 
-  readonly MENU_TYPE_HOME = MenuType.HOME;
-  readonly MENU_TYPE_EXPLORE = MenuType.EXPLORE;
-  readonly MENU_TYPE_NOTIFICATIONS = MenuType.NOTIFICATIONS;
-  readonly MENU_TYPE_MESSAGES = MenuType.MESSAGES;
-  readonly MENU_TYPE_LISTS = MenuType.LISTS;
-  readonly MENU_TYPE_BOOKMARKS = MenuType.BOOKMARKS;
-  readonly MENU_TYPE_COMMUNITIES = MenuType.COMMUNITIES;
-  readonly MENU_TYPE_PROFILE = MenuType.PROFILE;
+  readonly menuTypeHome = MenuType.HOME;
+  readonly menuTypeExplore = MenuType.EXPLORE;
+  readonly menuTypeNotifications = MenuType.NOTIFICATIONS;
+  readonly menuTypeMessages = MenuType.MESSAGES;
+  readonly menuTypeLists = MenuType.LISTS;
+  readonly menuTypeBookmarks = MenuType.BOOKMARKS;
+  readonly menuTypeCommunities = MenuType.COMMUNITIES;
+  readonly menuTypeProfile = MenuType.PROFILE;
 
   account: Account | null = null;
   menuActive: MenuType | null = null;

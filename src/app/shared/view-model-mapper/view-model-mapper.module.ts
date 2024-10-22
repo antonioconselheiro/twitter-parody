@@ -4,12 +4,12 @@ import { TagsMapper } from './tags.mapper';
 import { SimpleTextMapper } from './simple-text.mapper';
 import { ZapMapper } from './zap.mapper';
 import { ReactionMapper } from './reaction.mapper';
-import { HtmlfyServiceModule } from '@shared/htmlfy/htmlfy-service.module';
+import { NoteHtmlfierModule } from '@shared/htmlfier/note-htmlfier.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    HtmlfyServiceModule
+    NoteHtmlfierModule
   ],
   providers: [
     SimpleTextMapper,

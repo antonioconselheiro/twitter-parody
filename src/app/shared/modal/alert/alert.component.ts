@@ -14,8 +14,8 @@ export class AlertComponent extends ModalableDirective<{
   alertType: AlertType
 }, void> {
 
-  readonly ALERT_TYPE_SUCCESS = AlertType.SUCCESS;
-  readonly ALERT_TYPE_ERROR = AlertType.ERROR;
+  readonly alertTypeSuccess = AlertType.SUCCESS;
+  readonly alertTypeError = AlertType.ERROR;
 
   response = new Subject<void>();
   message: string | null = null;

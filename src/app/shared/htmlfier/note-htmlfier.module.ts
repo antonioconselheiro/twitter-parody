@@ -1,18 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DefaultHtmlfy } from './default.htmlfy';
+import { DefaultHtmlfier } from './default.htmlfier';
 import { HTML_PARSER_TOKEN } from './html-parser.token';
 
+/**
+ * this is a service module, exclusive for service providing.
+ */
 @NgModule({
   imports: [
     CommonModule
   ],
   providers: [
-    DefaultHtmlfy,
+    DefaultHtmlfier,
     {
       provide: HTML_PARSER_TOKEN,
-      useClass: DefaultHtmlfy
+      useClass: DefaultHtmlfier
     }
   ]
 })
-export class HtmlfyServiceModule { }
+export class NoteHtmlfierModule { }

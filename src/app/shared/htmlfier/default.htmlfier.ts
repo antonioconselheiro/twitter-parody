@@ -8,7 +8,7 @@ import { NoteResourcesContext } from '@view-model/context/note-resources-context
 @Injectable({
   providedIn: 'root'
 })
-export class DefaultHtmlfy implements NoteHtmlfier {
+export class DefaultHtmlfier implements NoteHtmlfier {
 
   constructor(
     private urlUtil: UrlUtil,

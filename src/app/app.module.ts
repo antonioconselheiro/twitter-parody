@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CredentialManagerWidgetModule, LoadingWidgetModule, CameraModule } from '@belomonte/nostr-gui-ngx';
 import { IdbNCacheModule, NostrModule, ProfileModule } from '@belomonte/nostr-ngx';
 import { FloatingChatModule } from '@shared/floating-chat/floating-chat.module';
-import { HtmlfyServiceModule } from '@shared/htmlfy/htmlfy-service.module';
+import { NoteHtmlfierModule } from '@shared/htmlfier/note-htmlfier.module';
 import { ModalModule } from '@shared/modal/modal.module';
 import { ThemeModule } from '@shared/theme/theme.module';
 import { UtilModule } from '@shared/util/util.module';
@@ -63,7 +63,7 @@ import { SvgLoaderModule } from './shared/svg-loader/svg-loader.module';
     //  shared service module
     UtilModule,
     ProfileModule,
-    HtmlfyServiceModule,
+    NoteHtmlfierModule,
 
     //  widgets
     MenuSidebarModule,

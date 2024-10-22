@@ -26,6 +26,7 @@
     ],
     "paths": {
       "@domain/*": ["src/app/deprecated-domain/*"],
+      "@view-model/*": ["src/app/view-model/*"],
       "@shared/*": ["src/app/shared/*"]
     }
   },

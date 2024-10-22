@@ -1,17 +1,17 @@
 <nav class="menuBottombar">
   <ul>
-    <li tabindex="106" [class.active]="menuActive === MENU_TYPE_HOME" role="link" routerLink="/home">
+    <li tabindex="106" [class.active]="menuActive === menuTypeHome" role="link" routerLink="/home">
       <div class="hasUpdates"></div>
       <div title="Home" class="menuIcon iconHome"></div>
     </li>
-    <li tabindex="107" [class.active]="menuActive === MENU_TYPE_EXPLORE" role="link" routerLink="/explore">
+    <li tabindex="107" [class.active]="menuActive === menuTypeExplore" role="link" routerLink="/explore">
       <div title="Explore" class="menuIcon iconExplore"></div>
     </li>
-    <li tabindex="108" [class.active]="menuActive === MENU_TYPE_NOTIFICATIONS" role="link" routerLink="/notifications">
+    <li tabindex="108" [class.active]="menuActive === menuTypeNotifications" role="link" routerLink="/notifications">
       <div class="hasUpdates">5</div>
       <div title="Notifications" class="menuIcon iconNotifications"></div>
     </li>
-    <li tabindex="109" [class.active]="menuActive === MENU_TYPE_MESSAGES" role="link" routerLink="/messages">
+    <li tabindex="109" [class.active]="menuActive === menuTypeMessages" role="link" routerLink="/messages">
       <div class="hasUpdates">3</div>
       <div title="Messages" class="menuIcon iconMessages"></div>
     </li>

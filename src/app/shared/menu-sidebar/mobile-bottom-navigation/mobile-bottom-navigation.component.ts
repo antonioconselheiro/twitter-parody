@@ -12,10 +12,10 @@ export class MobileBottomNavigationComponent implements OnInit, OnDestroy {
 
   private subscriptions = new Subscription();
 
-  readonly MENU_TYPE_HOME = MenuType.HOME;
-  readonly MENU_TYPE_EXPLORE = MenuType.EXPLORE;
-  readonly MENU_TYPE_NOTIFICATIONS = MenuType.NOTIFICATIONS;
-  readonly MENU_TYPE_MESSAGES = MenuType.MESSAGES;
+  readonly menuTypeHome = MenuType.HOME;
+  readonly menuTypeExplore = MenuType.EXPLORE;
+  readonly menuTypeNotifications = MenuType.NOTIFICATIONS;
+  readonly menuTypeMessages = MenuType.MESSAGES;
 
   menuActive: MenuType | null = null;
 
