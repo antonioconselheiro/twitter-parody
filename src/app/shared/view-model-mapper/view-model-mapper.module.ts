@@ -5,6 +5,7 @@ import { SimpleTextMapper } from './simple-text.mapper';
 import { ZapMapper } from './zap.mapper';
 import { ReactionMapper } from './reaction.mapper';
 import { NoteHtmlfierModule } from '@shared/htmlfier/note-htmlfier.module';
+import { RepostMapper } from './repost.mapper';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { NoteHtmlfierModule } from '@shared/htmlfier/note-htmlfier.module';
   ],
   providers: [
     SimpleTextMapper,
+    RepostMapper,
     ReactionMapper,
     ZapMapper,
     TagsMapper
