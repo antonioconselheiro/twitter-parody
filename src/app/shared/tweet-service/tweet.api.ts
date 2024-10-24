@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NostrEvent, NostrPool } from '@belomonte/nostr-ngx';
-import { kinds } from 'nostr-tools';
-import { ShortTextNote, Repost, Reaction, Zap } from 'nostr-tools/kinds';
+import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
 
 @Injectable({
   providedIn: 'root'

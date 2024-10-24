@@ -1,4 +1,7 @@
 {
     "workbench.colorTheme": "Sappho",
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "prettier.singleQuote": true,
+    "editor.formatOnSave": true,
+    "remote.forwardOnOpen": false
 }

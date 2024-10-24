@@ -2,7 +2,7 @@ import { Account } from '@belomonte/nostr-ngx';
 import { Feed } from './feed.type';
 import { UnloadedFeedReferences } from './unloaded-feed-references.interface';
 
-export interface RelatedFeedAggregator {
+export interface FeedAggregator {
   /**
    * Simple text note and repost note
    */
@@ -14,8 +14,7 @@ export interface RelatedFeedAggregator {
   accounts: Set<Account>;
 
   /**
-   * Related events and pubkeys that could not possible to find
-   * anything in cache and must be load using differents relays
+   * user and events not find and not loaded
    */
   unloaded: UnloadedFeedReferences;
 }

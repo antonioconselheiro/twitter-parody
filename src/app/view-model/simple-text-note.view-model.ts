@@ -7,6 +7,7 @@ import { ZapViewModel } from './zap.view-model';
 import Geohash from 'latlon-geohash';
 import { NoteResourcesContext } from './context/note-resources-context.interface';
 import { RepostNoteViewModel } from './repost-note.view-model';
+import { HexString } from '@belomonte/nostr-ngx'
 
 /**
  * This interface represents the simple text note
@@ -38,7 +39,7 @@ export interface SimpleTextNoteViewModel extends NostrEventViewModel {
   /**
    * array with event id of each event that reposted this event
    */
-  repostedBy: Array<string>;
+  repostedBy: Array<HexString>;
 
   /**
    * data about repling and be replied
