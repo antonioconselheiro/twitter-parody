@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { MAIN_NCACHE_TOKEN, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
+import { HexString, MAIN_NCACHE_TOKEN, NostrEvent, NostrGuard, unixDate } from '@belomonte/nostr-ngx';
 import { NCache } from '@nostrify/nostrify';
 import { ReactionViewModel } from '@view-model/reaction.view-model';
 import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
@@ -30,26 +30,17 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record
   }
 
   private toSingleViewModel(event: NostrEvent<Reaction>): Promise<ReactionViewModel> {
-    const idEvent = this.tweetTagsConverter.getFirstRelatedEvent(event);
-    if (!idEvent) {
-      console.warn('[RELAY DATA WARNING] reaction not tagged with event: ', event);
-      return null;
-    }
+    const reactedTo: Array<HexString> = event.tags
+      .filter(([type, idEvent]) => type === 'e' && this.guard.isHexadecimal(idEvent))
+      .map((touple) => touple[1]);
 
-    const npub = this.nostrConverter.castPubkeyToNpub(event.pubkey);
-    const npubs = [npub];
-
-    const reaction: ReactionViewModel = {
+    return Promise.resolve({
       id: event.id,
       content: event.content,
-      tweet: idEvent,
-      author: npub
-    };
-
-    const lazy = this.createLazyLoadableTweetFromEventId(idEvent);
-    lazy.reactions[event.id] = reaction;
-
-    return { lazy, npubs };
+      reactedTo,
+      author: event.pubkey,
+      createdAt: event.created_at
+    });
   }
 
   private toMultipleViewModel(events: Array<NostrEvent>): Promise<Record<string, SortedNostrViewModelSet<ReactionViewModel>>> {
