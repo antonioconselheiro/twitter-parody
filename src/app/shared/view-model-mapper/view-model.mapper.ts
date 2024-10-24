@@ -1,7 +1,7 @@
-import { NostrEvent } from '@nostrify/nostrify';
 import { NostrEventViewModel } from '@view-model/nostr-event.view-model';
 import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
 import { SingleViewModelMapper } from './single-view-model.mapper';
+import { NostrEvent } from '@belomonte/nostr-ngx';
 
 /**
  * NostrEvent Mapper to ViewModel.

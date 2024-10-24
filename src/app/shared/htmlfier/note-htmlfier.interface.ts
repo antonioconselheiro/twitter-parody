@@ -1,5 +1,5 @@
 import { SafeHtml } from "@angular/platform-browser";
-import { NostrEvent } from "@nostrify/nostrify";
+import { NostrEvent } from "@belomonte/nostr-ngx";
 import { NoteResourcesContext } from "@view-model/context/note-resources-context.interface";
 import { ParsedNostrContent } from "@view-model/context/parsed-nostr-content.interface";
 

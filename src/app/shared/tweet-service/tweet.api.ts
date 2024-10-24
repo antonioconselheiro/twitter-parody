@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { NostrPool } from '@belomonte/nostr-ngx';
-import { kinds, NostrEvent } from 'nostr-tools';
+import { NostrEvent, NostrPool } from '@belomonte/nostr-ngx';
+import { kinds } from 'nostr-tools';
+import { ShortTextNote, Repost, Reaction, Zap } from 'nostr-tools/kinds';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,8 @@ export class TweetApi {
     return this.npool.query([
       {
         kinds: [
-          kinds.ShortTextNote,
-          kinds.Repost
+          ShortTextNote,
+          Repost
         ],
         authors: pubkeys,
         limit: 25
@@ -28,7 +29,7 @@ export class TweetApi {
     return this.npool.query([
       {
         kinds: [
-          kinds.Reaction
+          Reaction
         ],
         authors: [
           pubkey
@@ -43,14 +44,14 @@ export class TweetApi {
       {
         ids: events,
         kinds: [
-          kinds.ShortTextNote
+          ShortTextNote
         ]
       },
 
       {
         kinds: [
-          kinds.ShortTextNote,
-          kinds.Repost
+          ShortTextNote,
+          Repost
         ],
         '#e': events
       }
@@ -61,8 +62,8 @@ export class TweetApi {
     return this.npool.query([
       {
         kinds: [
-          kinds.ShortTextNote,
-          kinds.Repost
+          ShortTextNote,
+          Repost
         ],
         '#e': events
       }
@@ -73,8 +74,8 @@ export class TweetApi {
     return this.npool.query([
       {
         kinds: [
-          kinds.Reaction,
-          kinds.Zap
+          Reaction,
+          Zap
         ],
         '#e': events
       }

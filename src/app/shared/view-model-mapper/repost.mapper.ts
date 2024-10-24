@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
-import { MAIN_NCACHE_TOKEN, NostrGuard } from '@belomonte/nostr-ngx';
-import { NCache, NostrEvent } from '@nostrify/nostrify';
+import { MAIN_NCACHE_TOKEN, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
+import { NCache } from '@nostrify/nostrify';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 

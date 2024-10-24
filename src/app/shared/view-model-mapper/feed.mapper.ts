@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
-import { Account, MAIN_NCACHE_TOKEN, NostrGuard } from '@belomonte/nostr-ngx';
-import { NCache, NostrEvent } from '@nostrify/nostrify';
+import { Account, MAIN_NCACHE_TOKEN, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
+import { NCache } from '@nostrify/nostrify';
 import { ReactionViewModel } from '@view-model/reaction.view-model';
 import { RelatedFeedAggregator } from '@view-model/related-info-aggregator.interface';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
@@ -11,6 +11,7 @@ import { kinds } from 'nostr-tools';
 import { RepostMapper } from './repost.mapper';
 import { SimpleTextMapper } from './simple-text.mapper';
 import { ViewModelMapper } from './view-model.mapper';
+import { Repost, ShortTextNote } from 'nostr-tools/kinds';
 
 @Injectable({
   providedIn: 'root'
@@ -47,9 +48,9 @@ export class FeedMapper implements ViewModelMapper<SimpleTextNoteViewModel | Rep
     };
 
     events.forEach(event => {
-      if (this.guard.isKind(event, kinds.ShortTextNote)) {
+      if (this.guard.isKind(event, ShortTextNote)) {
         this.feedSimpleText(event, aggregator);
-      } else if (this.guard.isKind(event, kinds.Repost)) {
+      } else if (this.guard.isKind(event, Repost)) {
         this.feedRepost(event, aggregator);
       }
     });

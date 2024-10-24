@@ -1,4 +1,4 @@
-import { NPub } from "@belomonte/nostr-ngx";
+import { NPub } from 'nostr-tools/nip19';
 
 export interface Reaction {
   id: string;

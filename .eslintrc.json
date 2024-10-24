@@ -50,7 +50,7 @@
               "objectLiteralProperty"
             ],
             "custom": {
-              "regex": "(^#[a-z]+|^[a-z_]+$|^[a-z]+([A-Z][a-z]*)*$|^wss?://[a-z]+(\\.[a-z]+)+$)",
+              "regex": "(^#[a-z\\d]+|^[a-z_\\d]+$|^[a-z\\d]+([A-Z\\d][a-z\\d]*)*$|^wss?://[a-z\\d]+(\\.[a-z\\d]+)+$)",
               "match": true
             },
             "format": null

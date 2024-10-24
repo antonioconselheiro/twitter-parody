@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
-import { NostrConverter, NPub, ProfileCache } from '@belomonte/nostr-ngx';
+import { NostrConverter, ProfileCache } from '@belomonte/nostr-ngx';
 import { UrlUtil } from '@shared/util/url.service';
 import { NoteHtmlfier } from './note-htmlfier.interface';
 import { NoteResourcesContext } from '@view-model/context/note-resources-context.interface';
+import { NPub } from 'nostr-tools/nip19';
 
 @Injectable({
   providedIn: 'root'

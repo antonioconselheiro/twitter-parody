@@ -1,8 +1,7 @@
 import { Injectable } from "@angular/core";
-import { Account, NostrPool, ProfileService } from "@belomonte/nostr-ngx";
+import { Account, NostrEvent, NostrPool, ProfileService } from "@belomonte/nostr-ngx";
 import { Retweet } from "../../deprecated-domain/retweet.interface";
 import { Tweet } from "../../deprecated-domain/tweet.interface";
-import { NostrEvent } from 'nostr-tools';
 import { TweetTagsConverter } from "./tweet-tags.converter";
 import { TweetApi } from "./tweet.api";
 import { TweetTypeGuard } from "./tweet.type-guard";

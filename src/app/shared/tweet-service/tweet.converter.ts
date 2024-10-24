@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { NostrConverter, NostrGuard, NPub } from '@belomonte/nostr-ngx';
+import { NostrConverter, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
+import { DefaultHtmlfier } from '@shared/htmlfier/default.htmlfier';
+import { Event, kinds } from 'nostr-tools';
+import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
+import { NPub } from 'nostr-tools/nip19';
 import { Reaction } from '../../deprecated-domain/reaction.interface';
 import { Retweet } from '../../deprecated-domain/retweet.interface';
 import { Tweet } from '../../deprecated-domain/tweet.interface';
 import { Zap } from '../../deprecated-domain/zap.interface';
-import { DefaultHtmlfier } from '@shared/htmlfier/default.htmlfier';
-import { Event, kinds, NostrEvent } from 'nostr-tools';
 import { TweetRelationedInfoWrapper } from './tweet-relationed-info-wrapper.interface';
 import { TweetTagsConverter } from './tweet-tags.converter';
 import { TweetTypeGuard } from './tweet.type-guard';
@@ -34,10 +36,10 @@ export class TweetConverter {
     // TODO: check in tags if tweets have mentions and then, create the threadfy method
     // eslint-disable-next-line complexity
     events.forEach(event => {
-      const isSimpleText = this.guard.isKind(event, kinds.ShortTextNote);
-      const isRepost = this.guard.isKind(event, kinds.Repost);
-      const isReaction = this.guard.isKind(event, kinds.Reaction);
-      const isZap = this.guard.isKind(event, kinds.Zap);
+      const isSimpleText = this.guard.isKind(event, ShortTextNote);
+      const isRepost = this.guard.isKind(event, Repost);
+      const isReaction = this.guard.isKind(event, Reaction);
+      const isZap = this.guard.isKind(event, Zap);
 
       if (isSimpleText) {
         //  FIXME: https://github.com/users/antonioconselheiro/projects/1/views/1?pane=issue&itemId=41105788
@@ -163,7 +165,7 @@ export class TweetConverter {
       content = '';
     }
 
-    const retweetAsTweet: NostrEvent = { ...event, content, kind: kinds.ShortTextNote };
+    const retweetAsTweet: NostrEvent = { ...event, content, kind: ShortTextNote };
     const { tweet: retweet, npubs: npubs2 } = this.castEventToTweet(retweetAsTweet, retweeted.id);
     npubs = npubs.concat(npubs2);
     if (retweeted.author) {
