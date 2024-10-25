@@ -13,12 +13,9 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
     @Inject(MAIN_NCACHE_TOKEN) private ncache: NCache
   ) { }
 
+  // eslint-disable-next-line complexity
   toViewModel(event: NostrEvent): Promise<RepostNoteViewModel> {
-    let content = this.getTweetContent(event);
-    const author = this.getAuthorNostrPublicFromEvent(event);
-    let npubs: NPub[] = [author];
-    let retweeted: Tweet;
-
+    const content = event.content || '';
     const contentEvent = this.extractNostrEvent(content);
 
     if (contentEvent) {
@@ -60,5 +57,24 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
     return {
       retweet, retweeted, npubs
     };
+  }
+
+  private extractNostrEvent(content: object | string): Event | false {
+    let event: object;
+    if (typeof content === 'string') {
+      try {
+        event = JSON.parse(content);
+      } catch {
+        return false;
+      }
+    } else {
+      event = content;
+    }
+
+    if (this.guard.isNostrEvent(event)) {
+      return event;
+    }
+
+    return false;
   }
 }

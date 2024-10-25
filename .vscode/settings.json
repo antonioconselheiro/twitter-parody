@@ -1,7 +1,7 @@
 {
-    "workbench.colorTheme": "Sappho",
-    "editor.tabSize": 2,
-    "prettier.singleQuote": true,
-    "editor.formatOnSave": true,
-    "remote.forwardOnOpen": false
+  "workbench.colorTheme": "Lilac Cherry Blossom (Dark)",
+  "editor.tabSize": 2,
+  "prettier.singleQuote": true,
+  "editor.formatOnSave": true,
+  "remote.forwardOnOpen": false
 }

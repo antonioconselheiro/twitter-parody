@@ -1,13 +1,12 @@
 {
-  "name": "Existing Docker Compose (Extend)",
-  "dockerComposeFile": [
-    "docker-compose.yml"
-  ],
+  "name": "Twitter Parody Dev",
+  "dockerComposeFile": ["docker-compose.yml"],
   "service": "twitter-parody-dev",
-	"workspaceFolder": "/twitter-parody",
-	"customizations": {
-		"vscode": {
-			"extensions": [
+  "workspaceFolder": "/twitter-parody",
+  "postCreateCommand": "./auth.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
         "Angular.ng-template",
         "ms-vscode.vscode-typescript-next",
         "dbaeumer.vscode-eslint",
@@ -22,6 +21,6 @@
         "mohd-akram.vscode-html-format",
         "MoustafaEl-Shaboury.lilac-cherry-blossom-dark"
       ]
-		}
-	}
+    }
+  }
 }

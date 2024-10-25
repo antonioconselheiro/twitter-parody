@@ -5,11 +5,12 @@ RUN npm install npx -g --force
 
 WORKDIR /twitter-parody
 
-COPY ./.gitconfig /root/.gitconfig
-COPY ./.ssh /root/.ssh
-
-ENV LANG C.UTF-8
-ENV TZ America/Sao_Paulo
+ENV LANG=C.UTF-8
+ENV LANGUAGE=C.UTF-8
+ENV LC_ALL=C.UTF-8
+ENV TZ=America/Sao_Paulo
+ENV DEBUG_COLORS=true
+ENV FORCE_COLOR=true
 
 EXPOSE 9229
 EXPOSE 4200

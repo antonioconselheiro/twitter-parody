@@ -43,7 +43,17 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record
     });
   }
 
-  private toMultipleViewModel(events: Array<NostrEvent>): Promise<Record<string, SortedNostrViewModelSet<ReactionViewModel>>> {
+  private async toMultipleViewModel(events: Array<NostrEvent>): Promise<Record<string, SortedNostrViewModelSet<ReactionViewModel>>> {
+    const reactionRecord: Record<string, SortedNostrViewModelSet<ReactionViewModel>> = {};
 
+    for await (const event of events) {
+      if (this.guard.isKind(event, Reaction)) {
+        const sortedSet = reactionRecord[event.content] || new SortedNostrViewModelSet<ReactionViewModel>();
+        const viewModel = await this.toSingleViewModel(event);
+        sortedSet.add(viewModel);
+      }
+    }
+
+    return Promise.resolve(reactionRecord);
   }
 }
