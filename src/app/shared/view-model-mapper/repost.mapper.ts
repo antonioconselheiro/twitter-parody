@@ -3,26 +3,34 @@ import { MAIN_NCACHE_TOKEN, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx'
 import { NCache } from '@nostrify/nostrify';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
 import { SingleViewModelMapper } from './single-view-model.mapper';
+import { SimpleTextMapper } from './simple-text.mapper';
+import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
+import { Repost, ShortTextNote } from 'nostr-tools/kinds';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> {
+
   constructor(
     private guard: NostrGuard,
+    private simpleTextMapper: SimpleTextMapper,
     @Inject(MAIN_NCACHE_TOKEN) private ncache: NCache
   ) { }
 
   // eslint-disable-next-line complexity
-  toViewModel(event: NostrEvent): Promise<RepostNoteViewModel> {
+  async toViewModel(event: NostrEvent): Promise<RepostNoteViewModel> {
     const content = event.content || '';
     const contentEvent = this.extractNostrEvent(content);
+    let retweeted: SimpleTextNoteViewModel | RepostNoteViewModel;
 
     if (contentEvent) {
-      const retweetedEvent: NostrEvent = contentEvent;
-      const { tweet, npubs: npubs2 } = this.castEventToTweet(retweetedEvent);
-      retweeted = tweet;
-      npubs = npubs.concat(npubs2);
+      if (this.guard.isKind(contentEvent, ShortTextNote)) {
+        retweeted = await this.simpleTextMapper.toViewModel(contentEvent);
+      } else if (this.guard.isKind(contentEvent, Repost)) {
+        //  there is no way to get infinity recursively, this was a stringified json
+        retweeted = await this.toViewModel(event);
+      }
     } else {
       let idEvent = this.tweetTagsConverter.getMentionedEvent(event);
       if (!idEvent) {

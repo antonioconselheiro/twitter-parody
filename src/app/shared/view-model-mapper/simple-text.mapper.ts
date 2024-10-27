@@ -6,11 +6,10 @@ import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
 import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
+import { Reaction, ShortTextNote, Zap } from 'nostr-tools/kinds';
 import { ReactionMapper } from './reaction.mapper';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { ZapMapper } from './zap.mapper';
-import { kinds } from 'nostr-tools';
-import { Reaction, ShortTextNote, Zap } from 'nostr-tools/kinds';
 
 @Injectable({
   providedIn: 'root'
@@ -60,10 +59,10 @@ export class SimpleTextMapper implements SingleViewModelMapper<SimpleTextNoteVie
   }
 
   private getReplyContext(event: NostrEvent): NoteReplyContext {
-    
+
   }
 
   private getRepostedBy(event: NostrEvent): Array<string> {
-    
+
   }
 }
