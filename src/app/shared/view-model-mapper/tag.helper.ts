@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HexString, NostrEvent } from '@belomonte/nostr-ngx';
+import { HexString, NostrEvent, NostrTagPointerRelated } from '@belomonte/nostr-ngx';
 import { EventRelationType } from '@view-model/event-relation.type';
+import { nip19 } from "nostr-tools";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TagHelper {
   getRelatedEvents(event: NostrEvent): [
     string, EventRelationType
@@ -75,10 +78,10 @@ export class TagHelper {
     return replyData;
   }
 
-  getPubkeyTags(event: NostrEvent): Array<[string, HexString, ...string[]]> {
+  getPubkeyTags(event: NostrEvent): Array<NostrTagPointerRelated<'p'>> {
     //  TODO: 
     return event.tags
-      .filter(([type]) => type === 'p');
+      .filter((tag): tag is NostrTagPointerRelated<'p'> => tag[0] === 'p');
   }
 
   getPubkeys(event: NostrEvent): HexString[] {
@@ -87,7 +90,7 @@ export class TagHelper {
       .map(([, pubkey]) => pubkey);
   }
 
-  getFirstRelatedProfile(event: NostrEvent): string | null {
-    return this.getRelatedProfiles(event).at(0) || null;
+  getFirstProfile(event: NostrEvent): string | null {
+    return this.getPubkeys(event).at(0) || null;
   }
 }

@@ -6,6 +6,7 @@ import { SingleViewModelMapper } from './single-view-model.mapper';
 import { SimpleTextMapper } from './simple-text.mapper';
 import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
 import { Repost, ShortTextNote } from 'nostr-tools/kinds';
+import { TagHelper } from './tag.helper';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
 
   constructor(
     private guard: NostrGuard,
+    private tagHelper: TagHelper,
     private simpleTextMapper: SimpleTextMapper,
     @Inject(MAIN_NCACHE_TOKEN) private ncache: NCache
   ) { }
@@ -32,22 +34,31 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
         retweeted = await this.toViewModel(event);
       }
     } else {
-      let idEvent = this.tweetTagsConverter.getMentionedEvent(event);
+      let idEvent = this.tagHelper.getMentionedEvent(event);
       if (!idEvent) {
-        idEvent = this.tweetTagsConverter.getFirstRelatedEvent(event);
+        idEvent = this.tagHelper.getFirstRelatedEvent(event);
         if (!idEvent) {
           console.warn('[RELAY DATA WARNING] mentioned tweet not found in retweet', event);
         }
       }
 
-      const pubkey = this.tweetTagsConverter.getRelatedProfiles(event);
+      const pubkey = this.tagHelper.getPubkeys(event);
       //  TODO: validate it use pubkey.at(0) here is secure in retweeted events
-      retweeted = this.createLazyLoadableTweetFromEventId(idEvent || '', pubkey.at(0));
+      if (idEvent) {
+        //  TODO: não quero ficar fazendo query pra carregar evento por id
+        //  e não achei nada no ncache que me permita acessar eventos por ai
+        //  até onde percebi, então vou substituir a interface padrão de cache
+        //  para uma nova que ainda definirei
+        const event = await this.ncache.query
+
+      }
     }
 
+    //  this is not recommended to use, but must be supported to read:
+    //  https://github.com/nostr-protocol/nips/blob/dde8c81a87f01131ed2eec0dd653cd5b79900b82/08.md
     const retweetIdentifier = /(#\[0\])|(nostr:note[\da-z]+)/;
     content = content.replace(retweetIdentifier, '').trim();
-    if (this.tweetTypeGuard.isSerializedNostrEvent(content)) {
+    if (this.guard.isSerializedNostrEvent(content)) {
       content = '';
     }
 

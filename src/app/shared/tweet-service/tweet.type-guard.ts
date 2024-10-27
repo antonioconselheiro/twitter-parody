@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
+import { NostrMetadata } from '@nostrify/nostrify';
 import { Retweet } from '../../deprecated-domain/retweet.interface';
 import { Tweet } from '../../deprecated-domain/tweet.interface';
-import { verifyEvent } from 'nostr-tools';
-import { NostrMetadata } from '@nostrify/nostrify';
 
 /**
  * Centralize tweet logics with type guard porpouse
@@ -68,11 +67,5 @@ export class TweetTypeGuard {
     return tweet;
   }
 
-  isSerializedNostrEvent(serialized: string): boolean {
-    try {
-      return verifyEvent(JSON.parse(serialized));
-    } catch {
-      return false;
-    }
-  }
+
 }
