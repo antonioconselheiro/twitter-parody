@@ -1,9 +1,9 @@
-import { Inject, Injectable } from '@angular/core';
-import { HexString, MAIN_NCACHE_TOKEN, NostrEvent, NostrGuard, unixDate } from '@belomonte/nostr-ngx';
-import { NCache } from '@nostrify/nostrify';
+import { Injectable } from '@angular/core';
+import { NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
 import { ReactionViewModel } from '@view-model/reaction.view-model';
 import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
 import { Reaction } from 'nostr-tools/kinds';
+import { TagHelper } from './tag.helper';
 import { ViewModelMapper } from './view-model.mapper';
 
 @Injectable({
@@ -12,8 +12,8 @@ import { ViewModelMapper } from './view-model.mapper';
 export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record<string, SortedNostrViewModelSet<ReactionViewModel>>> {
 
   constructor(
-    private guard: NostrGuard,
-    @Inject(MAIN_NCACHE_TOKEN) private ncache: NCache
+    private tagHelper: TagHelper,
+    private guard: NostrGuard
   ) { }
 
   toViewModel(event: NostrEvent): Promise<ReactionViewModel | null>;
@@ -30,9 +30,7 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record
   }
 
   private toSingleViewModel(event: NostrEvent<Reaction>): Promise<ReactionViewModel> {
-    const reactedTo: Array<HexString> = event.tags
-      .filter(([type, idEvent]) => type === 'e' && this.guard.isHexadecimal(idEvent))
-      .map((touple) => touple[1]);
+    const reactedTo = this.tagHelper.listIdsFromTag('e', event);
 
     return Promise.resolve({
       id: event.id,

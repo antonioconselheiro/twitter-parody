@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HexString, NostrEvent, NostrTagPointerRelated } from '@belomonte/nostr-ngx';
+import { HexString, NostrEvent, NostrGuard, TagPointerRelated } from '@belomonte/nostr-ngx';
 import { EventRelationType } from '@view-model/event-relation.type';
 import { nip19 } from "nostr-tools";
 
@@ -7,6 +7,52 @@ import { nip19 } from "nostr-tools";
   providedIn: 'root'
 })
 export class TagHelper {
+
+  constructor(
+    private guard: NostrGuard
+  ) { }
+
+  /**
+   * find tag for type
+   * @returns list of tags
+   */
+  listTagsByType<T extends string>(type: T, event: NostrEvent): Array<[T, ...string[]]> {
+    return event.tags
+      .filter((event): event is [T, ...string[]] => event[0] === type);
+  }
+
+  /**
+   * find all tags of a type filled with a hexadecimal id in the first value
+   * @returns list of ids
+   */
+  listIdsFromTag(type: string, event: NostrEvent): Array<HexString> {
+    return event.tags
+      .filter((tag): tag is [typeof type, HexString] => tag[0] === type && this.guard.isHexadecimal(tag[1]))
+      .map(([, idEvent]) => idEvent);
+  }
+
+  /**
+   * find tag for type
+   * @returns first tag matching to the type
+   */
+  getTagByType<T extends string>(type: T, event: NostrEvent): [T, ...string[]] | null {
+    return event.tags
+      .find((event): event is [T, ...string[]] => event[0] === type) || null;
+  }
+
+  /**
+   * get the first value of the first tag of the given type
+   * @returns first value of the first find tag
+   */
+  getTagValueByType(type: string, event: NostrEvent): string | null {
+    const tag = this.getTagByType(type, event);
+    if (tag && tag[1]) {
+      return tag[1];
+    }
+
+    return null;
+  }
+
   getRelatedEvents(event: NostrEvent): [
     string, EventRelationType
   ][] {
@@ -78,10 +124,9 @@ export class TagHelper {
     return replyData;
   }
 
-  getPubkeyTags(event: NostrEvent): Array<NostrTagPointerRelated<'p'>> {
-    //  TODO: 
+  getPubkeyTags(event: NostrEvent): Array<TagPointerRelated<'p'>> {
     return event.tags
-      .filter((tag): tag is NostrTagPointerRelated<'p'> => tag[0] === 'p');
+      .filter((tag): tag is TagPointerRelated<'p'> => tag[0] === 'p');
   }
 
   getPubkeys(event: NostrEvent): HexString[] {

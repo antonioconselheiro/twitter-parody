@@ -1,8 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
-import { Account, MAIN_NCACHE_TOKEN, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
-import { NCache } from '@nostrify/nostrify';
-import { ReactionViewModel } from '@view-model/reaction.view-model';
+import { Account, InMemoryNCache, LOCAL_CACHE_TOKEN, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
 import { FeedAggregator } from '@view-model/feed-aggregator.interface';
+import { ReactionViewModel } from '@view-model/reaction.view-model';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
 import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
 import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
@@ -21,7 +20,7 @@ export class FeedMapper implements ViewModelMapper<SimpleTextNoteViewModel | Rep
     private guard: NostrGuard,
     private repostMapper: RepostMapper,
     private simpleTextMapper: SimpleTextMapper,
-    @Inject(MAIN_NCACHE_TOKEN) private ncache: NCache
+    @Inject(LOCAL_CACHE_TOKEN) private ncache: InMemoryNCache
   ) { }
 
   toViewModel(event: NostrEvent<ShortTextNote>): Promise<SimpleTextNoteViewModel | RepostNoteViewModel>;

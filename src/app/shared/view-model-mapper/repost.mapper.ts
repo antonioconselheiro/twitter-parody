@@ -1,11 +1,10 @@
 import { Inject, Injectable } from '@angular/core';
-import { MAIN_NCACHE_TOKEN, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
-import { NCache } from '@nostrify/nostrify';
+import { InMemoryNCache, LOCAL_CACHE_TOKEN, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
-import { SingleViewModelMapper } from './single-view-model.mapper';
-import { SimpleTextMapper } from './simple-text.mapper';
 import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
 import { Repost, ShortTextNote } from 'nostr-tools/kinds';
+import { SimpleTextMapper } from './simple-text.mapper';
+import { SingleViewModelMapper } from './single-view-model.mapper';
 import { TagHelper } from './tag.helper';
 
 @Injectable({
@@ -17,7 +16,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
     private guard: NostrGuard,
     private tagHelper: TagHelper,
     private simpleTextMapper: SimpleTextMapper,
-    @Inject(MAIN_NCACHE_TOKEN) private ncache: NCache
+    @Inject(LOCAL_CACHE_TOKEN) private ncache: InMemoryNCache
   ) { }
 
   // eslint-disable-next-line complexity
@@ -49,13 +48,14 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
         //  e não achei nada no ncache que me permita acessar eventos por ai
         //  até onde percebi, então vou substituir a interface padrão de cache
         //  para uma nova que ainda definirei
-        const event = await this.ncache.query
+        const event = await this.ncache.get(idEvent)
 
       }
     }
 
-    //  this is not recommended to use, but must be supported to read:
+    //  this is not recommended to use in your events, but must be supported to read:
     //  https://github.com/nostr-protocol/nips/blob/dde8c81a87f01131ed2eec0dd653cd5b79900b82/08.md
+    //  FIXME: pode conter diversas referências para notes neste formato, preciso de uma transformação melhor do que essa
     const retweetIdentifier = /(#\[0\])|(nostr:note[\da-z]+)/;
     content = content.replace(retweetIdentifier, '').trim();
     if (this.guard.isSerializedNostrEvent(content)) {

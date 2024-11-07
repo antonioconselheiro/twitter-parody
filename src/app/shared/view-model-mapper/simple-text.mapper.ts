@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { MAIN_NCACHE_TOKEN, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
-import { NCache } from '@nostrify/nostrify';
+import { InMemoryNCache, LOCAL_CACHE_TOKEN, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
@@ -18,7 +17,7 @@ export class SimpleTextMapper implements SingleViewModelMapper<SimpleTextNoteVie
 
   constructor(
     @Inject(HTML_PARSER_TOKEN) private htmlfier: NoteHtmlfier,
-    @Inject(MAIN_NCACHE_TOKEN) private ncache: NCache,
+    @Inject(LOCAL_CACHE_TOKEN) private ncache: InMemoryNCache,
     private reactionMapper: ReactionMapper,
     private zapMapper: ZapMapper,
     private guard: NostrGuard
@@ -43,14 +42,17 @@ export class SimpleTextMapper implements SingleViewModelMapper<SimpleTextNoteVie
       }
     ]);
 
+    const reactions = await this.reactionMapper.toViewModel(events);
+    const zaps = await this.zapMapper.toViewModel(events);
+
     const note: SimpleTextNoteViewModel = {
       id: event.id,
       author: event.pubkey,
       createdAt: event.created_at,
       content: this.htmlfier.parse(event),
       media: this.htmlfier.extractMedia(event),
-      reactions: await this.reactionMapper.toViewModel(events),
-      zaps: await this.zapMapper.toViewModel(events),
+      reactions,
+      zaps,
       replyContext: this.getReplyContext(event),
       repostedBy: this.getRepostedBy(event)
     };
