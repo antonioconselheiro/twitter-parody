@@ -2,26 +2,30 @@ import { Inject, Injectable } from '@angular/core';
 import { InMemoryNCache, LOCAL_CACHE_TOKEN, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
-import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
 import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
-import { Reaction, ShortTextNote, Zap } from 'nostr-tools/kinds';
+import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
+import { AbstractNoteMapper } from './abstract-note.mapper';
 import { ReactionMapper } from './reaction.mapper';
 import { SingleViewModelMapper } from './single-view-model.mapper';
+import { TagHelper } from './tag.helper';
 import { ZapMapper } from './zap.mapper';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SimpleTextMapper implements SingleViewModelMapper<SimpleTextNoteViewModel | RepostNoteViewModel> {
+export class SimpleTextMapper extends AbstractNoteMapper implements SingleViewModelMapper<SimpleTextNoteViewModel | RepostNoteViewModel> {
 
   constructor(
     @Inject(HTML_PARSER_TOKEN) private htmlfier: NoteHtmlfier,
     @Inject(LOCAL_CACHE_TOKEN) private ncache: InMemoryNCache,
     private reactionMapper: ReactionMapper,
     private zapMapper: ZapMapper,
-    private guard: NostrGuard
-  ) { }
+    protected tagHelper: TagHelper,
+    protected guard: NostrGuard
+  ) {
+    super();
+  }
 
   async toViewModel(event: NostrEvent<ShortTextNote>): Promise<SimpleTextNoteViewModel | RepostNoteViewModel>;
   async toViewModel(event: NostrEvent): Promise<SimpleTextNoteViewModel | RepostNoteViewModel | null>;
@@ -33,6 +37,8 @@ export class SimpleTextMapper implements SingleViewModelMapper<SimpleTextNoteVie
     const events = await this.ncache.query([
       {
         kinds: [
+          ShortTextNote,
+          Repost,
           Reaction,
           Zap
         ],
@@ -53,18 +59,12 @@ export class SimpleTextMapper implements SingleViewModelMapper<SimpleTextNoteVie
       media: this.htmlfier.extractMedia(event),
       reactions,
       zaps,
-      replyContext: this.getReplyContext(event),
-      repostedBy: this.getRepostedBy(event)
+      replyContext: this.getReplyContext(event, events),
+      repostedBy: this.getRepostedBy(event, events)
     };
 
     return note;
   }
 
-  private getReplyContext(event: NostrEvent): NoteReplyContext {
 
-  }
-
-  private getRepostedBy(event: NostrEvent): Array<string> {
-
-  }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HexString, NostrEvent, NostrGuard, TagPointerRelated } from '@belomonte/nostr-ngx';
+import { HexString, NostrEvent, NostrEventRelation, NostrGuard, TagPointerRelated } from '@belomonte/nostr-ngx';
 import { EventRelationType } from '@view-model/event-relation.type';
 import { nip19 } from "nostr-tools";
 
@@ -69,18 +69,27 @@ export class TagHelper {
       });
   }
 
+  /**
+   * get all event hash from a relation type, like 'root' and 'reply', but for mention you may prefer use getMentionedEvent method
+   */
+  getRelatedEventsByRelationType(event: NostrEvent, type: NostrEventRelation): Array<HexString> {
+    return this
+      .getRelatedEvents(event)
+      .filter(([, relationType]) => relationType === type)
+      .map(([idEvent]) => idEvent);
+  }
+
   getFirstRelatedEvent(event: NostrEvent): string | null {
     const matrix = this.getRelatedEvents(event);
     return matrix.at(0)?.at(0) || null;
   }
 
-  getMentionedEvent(event: NostrEvent): string | null {
-    const mentionedFound = this
-      .getRelatedEvents(event)
-      .filter(([, type]) => type === 'mention')
-      .map(([idEvent]) => idEvent)
-      .at(0) || null;
-
+  /**
+   * get a list of event ids from tags associated with 'mention', if no event is found in tags,
+   * the content of event will search for nostr:nevent1 and nostr:note1 inside
+   */
+  getMentionedEvent(event: NostrEvent): Array<HexString> {
+    const mentionedFound = this.getRelatedEventsByRelationType(event, 'mention');
     if (!mentionedFound) {
       return this.getNoteMentionedInContent(event);
     }
@@ -88,15 +97,16 @@ export class TagHelper {
     return mentionedFound;
   }
 
-  getNoteMentionedInContent(event: NostrEvent): string | null {
-    const matches = event.content.match(/nostr:note[\da-z]+/);
-    const match = matches && matches[0] || null;
-    if (match) {
-      const { data } = nip19.decode(match.replace(/^nostr:/, ''));
-      return data ? String(data) : null;
+  /**
+   * get a list of event ids from content that matches with nostr:nevent1 or nostr:note1
+   */
+  getNoteMentionedInContent(event: NostrEvent): Array<HexString> {
+    const matches = event.content.match(/nostr:(note1|event1)[\da-z]+/);
+    if (matches) {
+      return matches.map(match => nip19.decode(match.replace(/^nostr:/, '')).data.toString())
     }
 
-    return null;
+    return [];
   }
 
   getRepliedEvent(event: NostrEvent): {
