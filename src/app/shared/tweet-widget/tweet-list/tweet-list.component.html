@@ -2,9 +2,9 @@
   <nostr-loading></nostr-loading>
 </div>
 
-<article [class.separator]="!retweeted" class="readTweet" *ngFor="let twet of tweets; trackBy: trackByTweetId">
-  <a *ngIf="isSimpleRetweet(twet)" href="javascript:void(0)" class="retweetOrigin">
-    {{getRetweetAuthorName(twet)}} has retweeted
+<article [class.separator]="!retweeted" class="readTweet" *ngFor="let tweet of feed?.feed; trackBy: trackByTweetId">
+  <a *ngIf="isSimpleRetweet(tweet)" href="javascript:void(0)" class="retweetOrigin">
+    {{tweet.author.name}} has retweeted
   </a>
 
   <div class="tweetStructure">
