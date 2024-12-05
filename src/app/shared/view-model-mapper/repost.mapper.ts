@@ -4,7 +4,7 @@ import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
 import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
-import { Repost, ShortTextNote } from 'nostr-tools/kinds';
+import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
 import { AbstractNoteMapper } from './abstract-note.mapper';
 import { ReactionMapper } from './reaction.mapper';
 import { SimpleTextMapper } from './simple-text.mapper';
@@ -33,33 +33,27 @@ export class RepostMapper extends AbstractNoteMapper implements SingleViewModelM
   async toViewModel(event: NostrEvent): Promise<RepostNoteViewModel> {
     const content = event.content || '';
     const contentEvent = this.extractNostrEvent(content);
-    let retweeted: SimpleTextNoteViewModel | RepostNoteViewModel | NostrEvent | null;
+    const reposting = new Array<SimpleTextNoteViewModel | RepostNoteViewModel>();
 
     if (contentEvent) {
+      let retweeted: SimpleTextNoteViewModel | RepostNoteViewModel | null;
       if (this.guard.isKind(contentEvent, ShortTextNote)) {
         retweeted = await this.simpleTextMapper.toViewModel(contentEvent);
+        reposting.push(retweeted);
       } else if (this.guard.isKind(contentEvent, Repost)) {
         //  there is no way to get infinity recursively, this was a stringified json
         retweeted = await this.toViewModel(event);
+        reposting.push(retweeted);
       }
+
     } else {
-      let [idEvent = null] = this.tagHelper.getMentionedEvent(event);
-      if (!idEvent) {
-        idEvent = this.tagHelper.getFirstRelatedEvent(event);
-      }
+      const mentions = this.tagHelper.getMentionedEvent(event);
 
-      if (idEvent) {
-        retweeted = await this.ncache.get(idEvent);
-      } else {
-        console.warn('[RELAY DATA WARNING] mentioned tweet not found in retweet', event);
-      }
-
-      //  TODO: validate it use pubkey.at(0) here is secure in retweeted events
-      if (idEvent) {
-        const respoted = await this.ncache.get(idEvent);
-        if (respoted) {
-          const viewModel = await this.toViewModel(respoted);
-
+      for await (let idEvent of mentions) {
+        const retweeted = await this.ncache.get(idEvent);
+        if (retweeted) {
+          const viewModel = await this.toViewModel(retweeted);
+          reposting.push(viewModel);
         }
       }
     }
@@ -77,44 +71,23 @@ export class RepostMapper extends AbstractNoteMapper implements SingleViewModelM
         ]
       }
     ]);
+
     const reactions = await this.reactionMapper.toViewModel(events);
     const zaps = await this.zapMapper.toViewModel(events);
-
     const note: RepostNoteViewModel = {
       id: event.id,
       author: event.pubkey,
       createdAt: event.created_at,
       content: this.htmlfier.parse(event),
       media: this.htmlfier.extractMedia(event),
+      reposting,
       reactions,
       zaps,
       replyContext: this.getReplyContext(event, events),
       repostedBy: this.getRepostedBy(event, events)
     };
 
-    //  this is not recommended to use in your events, but must be supported to read:
-    //  https://github.com/nostr-protocol/nips/blob/dde8c81a87f01131ed2eec0dd653cd5b79900b82/08.md
-    //  FIXME: pode conter diversas referências para notes neste formato, preciso de uma transformação melhor do que essa
-    const retweetIdentifier = /(#\[\d+\])|(nostr:note[\da-z]+)/;
-    content = content.replace(retweetIdentifier, '').trim();
-    if (this.guard.isSerializedNostrEvent(content)) {
-      content = '';
-    }
-
-    const retweetAsTweet: NostrEvent = { ...event, content, kind: ShortTextNote };
-    const { tweet: retweet, npubs: npubs2 } = this.castEventToTweet(retweetAsTweet, retweeted.id);
-    npubs = npubs.concat(npubs2);
-    if (retweeted.author) {
-      npubs.push(retweeted.author);
-    }
-
-    retweeted.retweetedBy = {
-      [event.id]: author
-    };
-
-    return {
-      retweet, retweeted, npubs
-    };
+    return note;
   }
 
   private extractNostrEvent(content: object | string): NostrEvent | false {
