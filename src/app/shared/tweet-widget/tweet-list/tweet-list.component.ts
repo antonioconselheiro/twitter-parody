@@ -1,13 +1,11 @@
-import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Retweet } from '../../deprecated-domain/retweet.interface';
-import { Tweet } from '../../deprecated-domain/tweet.interface';
+import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Account, NostrPool, ProfileService } from '@belomonte/nostr-ngx';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
+import { TweetConverter } from '@shared/tweet-service/tweet.converter';
 import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
 import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
-import { ITweetImgViewing } from '../tweet-img-viewing.interface';
-import { TweetConverter } from '@shared/tweet-service/tweet.converter';
-import { NostrMetadata } from '@nostrify/nostrify';
-import { Account, NostrPool, ProfileService } from '@belomonte/nostr-ngx';
+import { TweetImageViewing } from '../tweet-img-viewing.interface';
+import { FeedAggregator } from '@view-model/feed-aggregator.interface';
 
 @Component({
   selector: 'tw-tweet-list',
@@ -15,13 +13,13 @@ import { Account, NostrPool, ProfileService } from '@belomonte/nostr-ngx';
   styleUrls: ['./tweet-list.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class TweetListComponent {
+export class TweetListComponent implements OnInit {
 
   @Input()
   loading = true;
 
   @Input()
-  tweets: Array<Tweet | Retweet> = [];
+  feed: FeedAggregator | null = null;
 
   /**
    * This represents the root tweet of a thread of chained
@@ -60,7 +58,7 @@ export class TweetListComponent {
   @ViewChild('tweetActions', { read: PopoverComponent })
   share!: PopoverComponent;
 
-  viewing: ITweetImgViewing | null = null;
+  viewing: TweetImageViewing | null = null;
 
   constructor(
     private tweetTypeGuard: TweetTypeGuard,
@@ -70,13 +68,17 @@ export class TweetListComponent {
     private npool: NostrPool
   ) { }
 
+  ngOnInit(): void {
+
+  }
+
   async getRetweetAuthorName(tweet: Tweet): Promise<string> {
     const account = await this.profileService.loadAccount(tweet.author);
     const author = account && account.metadata;
     return author && (author.display_name || author.name) || '';
   }
 
-  getAuthorProfile(tweet: Tweet): Account | null {
+  getAuthorProfile(tweet: Tweet): Promise<Account | null> {
     //  FIXME: dar um jeito do template não precisar chamar
     //  diversas vezes um método com essa complexidade
     return this.tweetProxy.getTweetOrRetweetedAuthorProfile(tweet);
@@ -115,7 +117,7 @@ export class TweetListComponent {
   private async interceptTweet(tweet: Tweet | Retweet | null): Promise<void> {
     if (tweet) {
       const repliesId = (tweet.replies || []);
-      const repliesPromise = repliesId.map(reply => this.npool.query([{ ids: [ reply ], limit: 1 }]));
+      const repliesPromise = repliesId.map(reply => this.npool.query([{ ids: [reply], limit: 1 }]));
       const events = (await Promise.all(repliesPromise)).flat(2);
       const replies = this.tweetConverter.castResultsetToTweets(events);
       this.tweets = [tweet, ...replies];
@@ -124,7 +126,7 @@ export class TweetListComponent {
 
   private interceptRetweet(tweet: Tweet | null): void {
     if (tweet) {
-      this.tweets = [ tweet ];
+      this.tweets = [tweet];
     }
   }
 
@@ -132,7 +134,7 @@ export class TweetListComponent {
     return tweet.id;
   }
 
-  onImgOpen(viewing: ITweetImgViewing | null): void {
+  onImgOpen(viewing: TweetImageViewing | null): void {
     this.viewing = viewing;
   }
 }

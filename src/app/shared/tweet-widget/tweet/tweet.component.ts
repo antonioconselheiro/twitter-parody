@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Retweet } from '../../deprecated-domain/retweet.interface';
 import { Tweet } from '../../deprecated-domain/tweet.interface';
 import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
-import { ITweetImgViewing } from '../tweet-img-viewing.interface';
+import { TweetImageViewing } from '../tweet-img-viewing.interface';
 
 @Component({
   selector: 'tw-tweet',
@@ -18,7 +18,7 @@ export class TweetComponent {
   isFull = false;
 
   @Output()
-  imgOpen = new EventEmitter<ITweetImgViewing | null>();
+  imgOpen = new EventEmitter<TweetImageViewing | null>();
 
   imgList: string[] = [];
   imgs: [string, string?][] = [];
@@ -27,14 +27,14 @@ export class TweetComponent {
 
   constructor(
     private tweetTypeGuard: TweetTypeGuard
-  ) {}
-  
+  ) { }
+
   @Input()
   set tweet(tweet: Tweet | Retweet | null) {
     this.interceptedTweet = tweet;
     this.showingTweet = this.tweetTypeGuard.getShowingTweet(this.tweet);
   }
-  
+
   get tweet(): Tweet | Retweet | null {
     return this.interceptedTweet;
   }

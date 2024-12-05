@@ -9,17 +9,17 @@
 
   <div class="tweetStructure">
     <div *ngIf="twet.author">
-      <nostr-profile-picture [profile]="getAuthorProfile(twet)"></nostr-profile-picture>
+      <nostr-profile-picture [profile]="getAuthorProfile(twet) | async"></nostr-profile-picture>
     </div>
     <div class="tweetMetadata">
       <header>
-        <address *ngIf="getAuthorProfile(twet)" class="author userInfo">
+        <address *ngIf="getAuthorProfile(twet) | async" class="author userInfo">
           <span class="userName">
             {{this.getAuthorName(twet)}}
-            <span *ngIf="getAuthorProfile(twet)?.isNip05Valid" class="userVerified"></span>
+            <span *ngIf="(getAuthorProfile(twet)  | async)?.isNip05Valid" class="userVerified"></span>
           </span>
-          <span *ngIf="getAuthorProfile(twet)?.nip05" class="userNip5">
-            {{getAuthorProfile(twet)?.nip05}}
+          <span *ngIf="(getAuthorProfile(twet)  | async)?.nip05" class="userNip5">
+            {{(getAuthorProfile(twet)  | async)?.nip05}}
           </span>
           <time *ngIf="twet.created" [attr.datetime]="twet.created | datetimeIso">{{twet.created | datetimeText}}</time>
         </address>
