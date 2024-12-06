@@ -17,4 +17,9 @@ export interface RepostNoteViewModel extends Omit<SimpleTextNoteViewModel, 'cont
    * The reposted event
    */
   reposting: Array<SimpleTextNoteViewModel | RepostNoteViewModel>;
+
+  /**
+   * If event have only one reposting and the content comes empty
+   */
+  isSimpleRepost: boolean;
 }

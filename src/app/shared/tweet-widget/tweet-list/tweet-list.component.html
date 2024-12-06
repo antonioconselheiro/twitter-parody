@@ -3,9 +3,9 @@
 </div>
 
 <ng-container *ngFor="let tweet of feed?.feed; trackBy: trackByTweetId">
-  <article [class.separator]="!retweeted" class="readTweet">
-    <a *ngIf="isSimpleRetweet(tweet)" href="javascript:void(0)" class="retweetOrigin">
-      {{tweet.author.name}} has retweeted
+  <article [class.separator]="!tweet.reposting?.length" class="readTweet">
+    <a *ngIf="!tweet.content && tweet.reposting?.length" href="javascript:void(0)" class="retweetOrigin">
+      {{tweet.author.displayName}} has retweeted
     </a>
   
     <div class="tweetStructure">
@@ -15,12 +15,12 @@
           <address *ngIf="tweet.author" class="author userInfo">
             <span class="userName">
               {{tweet.author.displayName}}
-              <span *ngIf="tweet.author.isNip05Valid" class="userVerified"></span>
+              <span *ngIf="tweet.author.nip05?.valid" class="userVerified"></span>
             </span>
-            <span *ngIf="(getAuthorProfile(twet)  | async)?.nip05" class="userNip5">
-              {{(getAuthorProfile(twet)  | async)?.nip05}}
+            <span *ngIf="tweet.author.nip05?.address" class="userNip5">
+              {{tweet.author.nip05?.address}}
             </span>
-            <time *ngIf="twet.created" [attr.datetime]="twet.created | datetimeIso">{{twet.created | datetimeText}}</time>
+            <time *ngIf="tweet.createdAt" [attr.datetime]="tweet.createdAt | datetimeIso">{{tweet.createdAt | datetimeText}}</time>
           </address>
   
           <button (click)="tweetActions.show()" class="svgButton">
@@ -65,6 +65,7 @@
           </tw-popover>
         </header>
   
+        <!--
         <tw-tweet
           class="tweetContent"
           (imgOpen)="onImgOpen($event)"
@@ -72,15 +73,18 @@
           [showImages]="twet !== tweet"
           [isFull]="twet === tweet"
         ></tw-tweet>
+        -->
   
-        <tw-tweet-list
-          class="bordered retweetContent"
-          *ngIf="getRetweet(twet) && twet.content"
-          [loading]="false"
-          [retweeted]="getRetweet(twet)"
-        ></tw-tweet-list>
+        <!--
+          <tw-tweet-list
+            class="bordered retweetContent"
+            *ngIf="getRetweet(twet) && twet.content"
+            [loading]="false"
+            [retweeted]="getRetweet(twet)"
+          ></tw-tweet-list>
+        -->
   
-        <tw-tweet-button-group *ngIf="!retweeted" [tweet]="twet"></tw-tweet-button-group>
+        <tw-tweet-button-group *ngIf="!tweet.reposting?.length" [tweet]="tweet"></tw-tweet-button-group>
       </div>
     </div>
   </article>

@@ -1,12 +1,10 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { CurrentAccountObservable } from '@belomonte/nostr-ngx';
-import { Retweet } from '../../deprecated-domain/retweet.interface';
-import { Tweet } from '../../deprecated-domain/tweet.interface';
+import { Account, CurrentAccountObservable } from '@belomonte/nostr-ngx';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { TweetConverter } from '@shared/tweet-service/tweet.converter';
-import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
+import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
+import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
 import { Subscription } from 'rxjs';
-import { NostrMetadata } from '@nostrify/nostrify';
 
 @Component({
   selector: 'tw-tweet-button-group',
@@ -18,16 +16,15 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
 
   @Input()
-  tweet: Tweet | Retweet | null = null;
+  tweet: SimpleTextNoteViewModel | RepostNoteViewModel | null = null;
 
   @ViewChild('tweetShare', { read: PopoverComponent })
   share!: PopoverComponent;
 
-  profile: NostrMetadata | null = null;
+  profile: Account | null = null;
 
   constructor(
     private tweetConverter: TweetConverter,
-    private tweetTypeGuard: TweetTypeGuard,
     private profile$: CurrentAccountObservable
   ) { }
 
@@ -45,19 +42,19 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
     }));
   }
 
-  isRetweetedByYou(tweet: Tweet | Retweet): boolean {
+  isRetweetedByYou(tweet: SimpleTextNoteViewModel | RepostNoteViewModel): boolean {
     return this.tweetTypeGuard.isRetweetedByProfile(tweet, this.profile);
   }
 
-  isLikedByYou(tweet: Tweet | Retweet): boolean {
+  isLikedByYou(tweet: SimpleTextNoteViewModel | RepostNoteViewModel): boolean {
     return this.tweetTypeGuard.isLikedByProfile(tweet, this.profile);
   }
 
-  getRetweetedLength(tweet: Tweet | Retweet): number {
+  getRetweetedLength(tweet: SimpleTextNoteViewModel | RepostNoteViewModel): number {
     return this.tweetConverter.getRetweetedLength(tweet);
   }
 
-  getTweetReactionsLength(tweet?: Tweet | null): number {
+  getTweetReactionsLength(tweet?: SimpleTextNoteViewModel | null): number {
     return this.tweetConverter.getTweetReactionsLength(tweet);
   }
 }
