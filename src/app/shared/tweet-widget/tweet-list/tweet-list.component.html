@@ -1,91 +1,91 @@
-<div *ngIf="loading && !tweet" class="separator tl-loading">
+<div *ngIf="loading && !feed" class="separator tl-loading">
   <nostr-loading></nostr-loading>
 </div>
 
-<article [class.separator]="!retweeted" class="readTweet" *ngFor="let tweet of feed?.feed; trackBy: trackByTweetId">
-  <a *ngIf="isSimpleRetweet(tweet)" href="javascript:void(0)" class="retweetOrigin">
-    {{tweet.author.name}} has retweeted
-  </a>
-
-  <div class="tweetStructure">
-    <div *ngIf="twet.author">
-      <nostr-profile-picture [profile]="getAuthorProfile(twet) | async"></nostr-profile-picture>
+<ng-container *ngFor="let tweet of feed?.feed; trackBy: trackByTweetId">
+  <article [class.separator]="!retweeted" class="readTweet">
+    <a *ngIf="isSimpleRetweet(tweet)" href="javascript:void(0)" class="retweetOrigin">
+      {{tweet.author.name}} has retweeted
+    </a>
+  
+    <div class="tweetStructure">
+      <nostr-profile-picture [profile]="tweet.author"></nostr-profile-picture>
+      <div class="tweetMetadata">
+        <header>
+          <address *ngIf="tweet.author" class="author userInfo">
+            <span class="userName">
+              {{tweet.author.displayName}}
+              <span *ngIf="tweet.author.isNip05Valid" class="userVerified"></span>
+            </span>
+            <span *ngIf="(getAuthorProfile(twet)  | async)?.nip05" class="userNip5">
+              {{(getAuthorProfile(twet)  | async)?.nip05}}
+            </span>
+            <time *ngIf="twet.created" [attr.datetime]="twet.created | datetimeIso">{{twet.created | datetimeText}}</time>
+          </address>
+  
+          <button (click)="tweetActions.show()" class="svgButton">
+            <nostr-svg-render name="ellipsis"></nostr-svg-render>
+          </button>
+  
+          <tw-popover #tweetActions>
+            <ul class="popoverList">
+              <li role="button">
+                <nostr-svg-render class="inlineIcon" name="readTweet/options/unfollow"></nostr-svg-render>
+                Delete
+              </li>
+              <li role="button">
+                <nostr-svg-render class="inlineIcon" name="readTweet/options/pinTweet"></nostr-svg-render>
+                Pin to your Profile
+              </li>
+              <li role="button">
+                <nostr-svg-render class="inlineIcon" name="readTweet/options/unfollow"></nostr-svg-render>
+                Unfollow &#64;name
+              </li>
+              <li role="button">
+                <nostr-svg-render class="inlineIcon" name="readTweet/options/addList"></nostr-svg-render>
+                Add/Remove &#64;name from Lists
+              </li>
+              <li role="button">
+                <nostr-svg-render class="inlineIcon" name="readTweet/options/silence"></nostr-svg-render>
+                Silence &#64;name
+              </li>
+              <li role="button">
+                <nostr-svg-render class="inlineIcon" name="readTweet/options/block"></nostr-svg-render>
+                Block &#64;name
+              </li>
+              <li role="button">
+                <nostr-svg-render class="inlineIcon" name="readTweet/options/report"></nostr-svg-render>
+                Report &#64;name
+              </li>
+              <li role="button">
+                <nostr-svg-render class="inlineIcon" name="readTweet/view"></nostr-svg-render>
+                Event detail
+              </li>
+            </ul>
+          </tw-popover>
+        </header>
+  
+        <tw-tweet
+          class="tweetContent"
+          (imgOpen)="onImgOpen($event)"
+          [tweet]="twet"
+          [showImages]="twet !== tweet"
+          [isFull]="twet === tweet"
+        ></tw-tweet>
+  
+        <tw-tweet-list
+          class="bordered retweetContent"
+          *ngIf="getRetweet(twet) && twet.content"
+          [loading]="false"
+          [retweeted]="getRetweet(twet)"
+        ></tw-tweet-list>
+  
+        <tw-tweet-button-group *ngIf="!retweeted" [tweet]="twet"></tw-tweet-button-group>
+      </div>
     </div>
-    <div class="tweetMetadata">
-      <header>
-        <address *ngIf="getAuthorProfile(twet) | async" class="author userInfo">
-          <span class="userName">
-            {{this.getAuthorName(twet)}}
-            <span *ngIf="(getAuthorProfile(twet)  | async)?.isNip05Valid" class="userVerified"></span>
-          </span>
-          <span *ngIf="(getAuthorProfile(twet)  | async)?.nip05" class="userNip5">
-            {{(getAuthorProfile(twet)  | async)?.nip05}}
-          </span>
-          <time *ngIf="twet.created" [attr.datetime]="twet.created | datetimeIso">{{twet.created | datetimeText}}</time>
-        </address>
-
-        <button (click)="tweetActions.show()" class="svgButton">
-          <nostr-svg-render name="ellipsis"></nostr-svg-render>
-        </button>
-
-        <tw-popover #tweetActions>
-          <ul class="popoverList">
-            <li role="button">
-              <nostr-svg-render class="inlineIcon" name="readTweet/options/unfollow"></nostr-svg-render>
-              Delete
-            </li>
-            <li role="button">
-              <nostr-svg-render class="inlineIcon" name="readTweet/options/pinTweet"></nostr-svg-render>
-              Pin to your Profile
-            </li>
-            <li role="button">
-              <nostr-svg-render class="inlineIcon" name="readTweet/options/unfollow"></nostr-svg-render>
-              Unfollow &#64;name
-            </li>
-            <li role="button">
-              <nostr-svg-render class="inlineIcon" name="readTweet/options/addList"></nostr-svg-render>
-              Add/Remove &#64;name from Lists
-            </li>
-            <li role="button">
-              <nostr-svg-render class="inlineIcon" name="readTweet/options/silence"></nostr-svg-render>
-              Silence &#64;name
-            </li>
-            <li role="button">
-              <nostr-svg-render class="inlineIcon" name="readTweet/options/block"></nostr-svg-render>
-              Block &#64;name
-            </li>
-            <li role="button">
-              <nostr-svg-render class="inlineIcon" name="readTweet/options/report"></nostr-svg-render>
-              Report &#64;name
-            </li>
-            <li role="button">
-              <nostr-svg-render class="inlineIcon" name="readTweet/view"></nostr-svg-render>
-              Event detail
-            </li>
-          </ul>
-        </tw-popover>
-      </header>
-
-      <tw-tweet
-        class="tweetContent"
-        (imgOpen)="onImgOpen($event)"
-        [tweet]="twet"
-        [showImages]="twet !== tweet"
-        [isFull]="twet === tweet"
-      ></tw-tweet>
-
-      <tw-tweet-list
-        class="bordered retweetContent"
-        *ngIf="getRetweet(twet) && twet.content"
-        [loading]="false"
-        [retweeted]="getRetweet(twet)"
-      ></tw-tweet-list>
-
-      <tw-tweet-button-group *ngIf="!retweeted" [tweet]="twet"></tw-tweet-button-group>
-    </div>
-  </div>
-</article>
-<div *ngIf="loading && tweet" class="separator tl-loading">
+  </article>
+</ng-container>
+<div *ngIf="loading && feed" class="separator tl-loading">
   <nostr-loading></nostr-loading>
 </div>
 <tw-tweet-image-viewer

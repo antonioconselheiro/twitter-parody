@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
+import { NostrEvent, NostrGuard, ProfileService } from '@belomonte/nostr-ngx';
 import { ReactionViewModel } from '@view-model/reaction.view-model';
 import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
 import { Reaction } from 'nostr-tools/kinds';
@@ -13,6 +13,7 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record
 
   constructor(
     private tagHelper: TagHelper,
+    private profileService: ProfileService,
     private guard: NostrGuard
   ) { }
 
@@ -29,14 +30,15 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record
     return Promise.resolve(null);
   }
 
-  private toSingleViewModel(event: NostrEvent<Reaction>): Promise<ReactionViewModel> {
+  private async toSingleViewModel(event: NostrEvent<Reaction>): Promise<ReactionViewModel> {
     const reactedTo = this.tagHelper.listIdsFromTag('e', event);
+    const author = await this.profileService.loadAccount(event.pubkey);
 
     return Promise.resolve({
       id: event.id,
       content: event.content,
       reactedTo,
-      author: event.pubkey,
+      author,
       createdAt: event.created_at
     });
   }
