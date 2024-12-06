@@ -75,6 +75,7 @@ export class RepostMapper extends AbstractNoteMapper implements SingleViewModelM
     const reactions = await this.reactionMapper.toViewModel(events);
     const zaps = await this.zapMapper.toViewModel(events);
     const author = await this.profileService.loadAccount(event.pubkey);
+    const isSimpleRepost = this.isSimpleRepost(event);
 
     const note: RepostNoteViewModel = {
       id: event.id,
@@ -86,7 +87,8 @@ export class RepostMapper extends AbstractNoteMapper implements SingleViewModelM
       reactions,
       zaps,
       replyContext: this.getReplyContext(event, events),
-      repostedBy: this.getRepostedBy(event, events)
+      repostedBy: this.getRepostedBy(event, events),
+      isSimpleRepost
     };
 
     return note;
@@ -109,5 +111,14 @@ export class RepostMapper extends AbstractNoteMapper implements SingleViewModelM
     }
 
     return false;
+  }
+
+  private isSimpleRepost(event: NostrEvent): boolean {
+    const contentWithSimpleRepostMatcher = /^(nostr:event1[a-z0-9]+|#[0])$/;
+    if (contentWithSimpleRepostMatcher.test(event.content)) {
+      return true;
+    }
+
+    return this.guard.isSerializedNostrEvent(event.content);
   }
 }

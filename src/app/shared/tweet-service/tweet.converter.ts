@@ -57,7 +57,6 @@ export class TweetConverter {
           relationed.eager.push(retweet);
         }
 
-
         relationed.eager.push(retweeted);
         relationed.pubkeys = relationed.pubkeys.concat(npubs);
       } else if (isReaction) {
@@ -288,7 +287,7 @@ export class TweetConverter {
     let npubs: NPub[] = [author];
     let retweeted: Tweet | undefined = undefined;
     const tweet = this.instanceTweet(event, author);
-    
+
     if (retweeting) {
       tweet.retweeting = retweeting;
       retweeted = TweetCache.get(retweeting);
