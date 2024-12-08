@@ -46,8 +46,7 @@ export class TweetProxy {
   async loadFeedRelatedContent(feed: FeedAggregator): Promise<FeedAggregator> {
     const events = [...feed.feed].map(viewModel => viewModel.id);
     const interactions = await this.tweetNostr.loadRelatedContent(events);
-    return this.feedMapper
-      .toViewModel(feed, interactions);
+    return this.feedMapper.toViewModel(feed, interactions);
   }
 
   /**

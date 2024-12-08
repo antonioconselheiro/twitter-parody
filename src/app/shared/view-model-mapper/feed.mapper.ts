@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Account, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
-import { FeedAggregator } from '@view-model/feed-aggregator.interface';
+import { NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
+import { Feed } from '@view-model/feed.type';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { ReactionViewModel } from '@view-model/reaction.view-model';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
@@ -14,7 +14,7 @@ import { ViewModelMapper } from './view-model.mapper';
 @Injectable({
   providedIn: 'root'
 })
-export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedAggregator> {
+export class FeedMapper implements ViewModelMapper<NoteViewModel, Feed> {
 
   constructor(
     private guard: NostrGuard,
@@ -25,8 +25,8 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedAggregator
   toViewModel(event: NostrEvent<ShortTextNote>): Promise<NoteViewModel>;
   toViewModel(event: NostrEvent<Repost>): Promise<RepostNoteViewModel>;
   toViewModel(event: NostrEvent): Promise<NoteViewModel | null>;
-  toViewModel(event: Array<NostrEvent>): Promise<FeedAggregator>;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): Promise<NoteViewModel | FeedAggregator | null> {
+  toViewModel(event: Array<NostrEvent>): Promise<Feed>;
+  toViewModel(event: NostrEvent | Array<NostrEvent>): Promise<NoteViewModel | Feed | null> {
     if (event instanceof Array) {
       return this.toMultipleViewModel(event);
     } else if (this.guard.isKind(event, ShortTextNote)) {
@@ -38,45 +38,30 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedAggregator
     return Promise.resolve(null);
   }
 
-  private async toMultipleViewModel(events: Array<NostrEvent>): Promise<FeedAggregator> {
+  private async toMultipleViewModel(events: Array<NostrEvent>): Promise<Feed> {
     const reactions = new Map<string, Array<ReactionViewModel>>();
     const zaps = new Map<string, Array<ZapViewModel>>();
-    const aggregator: FeedAggregator = {
-      feed: new SortedNostrViewModelSet<NoteViewModel>(),
-      accounts: new Set<Account>(),
-      unloaded: {
-        idevent: [],
-        pubkey: []
-      }
-    };
+    const feed = new SortedNostrViewModelSet<NoteViewModel>();
 
     for await (const event of events) {
       if (this.guard.isKind(event, ShortTextNote)) {
-        await this.feedSimpleText(event, aggregator);
+        const viewModel = await this.simpleTextMapper.toViewModel(event);
+        feed.add(viewModel);
       } else if (this.guard.isKind(event, Repost)) {
-        await this.feedRepost(event, aggregator);
+        const viewModel = await this.repostMapper.toViewModel(event);
+        feed.add(viewModel);
       }
     }
 
-    return this.fetchFeed(aggregator, reactions, zaps);
-  }
-
-  private async feedSimpleText(event: NostrEvent<ShortTextNote>, aggregator: FeedAggregator): Promise<void> {
-    const viewModel = await this.simpleTextMapper.toViewModel(event);
-    aggregator.feed.add(viewModel);
-  }
-
-  private async feedRepost(event: NostrEvent<Repost>, aggregator: FeedAggregator): Promise<void> {
-    const viewModel = await this.repostMapper.toViewModel(event);
-    aggregator.feed.add(viewModel);
+    return this.fetchFeed(feed, reactions, zaps);
   }
 
   private fetchFeed(
-    aggregator: FeedAggregator,
+    feed: Feed,
     reactions: Map<string, Array<ReactionViewModel>>,
     zaps: Map<string, Array<ZapViewModel>>
-  ): FeedAggregator {
-    [...aggregator.feed].forEach(viewModel => {
+  ): Feed {
+    [...feed].forEach(viewModel => {
       const zapList = zaps.get(viewModel.id) || [];
       const reactionList = reactions.get(viewModel.id) || [];
 
@@ -96,6 +81,6 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedAggregator
       });
     });
 
-    return aggregator;
+    return feed;
   }
 }
