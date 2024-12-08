@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Account, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
 import { FeedAggregator } from '@view-model/feed-aggregator.interface';
+import { NoteViewModel } from '@view-model/note.view-model';
 import { ReactionViewModel } from '@view-model/reaction.view-model';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
-import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
 import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
 import { ZapViewModel } from '@view-model/zap.view-model';
 import { Repost, ShortTextNote } from 'nostr-tools/kinds';
@@ -14,7 +14,7 @@ import { ViewModelMapper } from './view-model.mapper';
 @Injectable({
   providedIn: 'root'
 })
-export class FeedMapper implements ViewModelMapper<SimpleTextNoteViewModel | RepostNoteViewModel, FeedAggregator> {
+export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedAggregator> {
 
   constructor(
     private guard: NostrGuard,
@@ -22,11 +22,11 @@ export class FeedMapper implements ViewModelMapper<SimpleTextNoteViewModel | Rep
     private simpleTextMapper: SimpleTextMapper
   ) { }
 
-  toViewModel(event: NostrEvent<ShortTextNote>): Promise<SimpleTextNoteViewModel | RepostNoteViewModel>;
+  toViewModel(event: NostrEvent<ShortTextNote>): Promise<NoteViewModel>;
   toViewModel(event: NostrEvent<Repost>): Promise<RepostNoteViewModel>;
-  toViewModel(event: NostrEvent): Promise<SimpleTextNoteViewModel | RepostNoteViewModel | null>;
+  toViewModel(event: NostrEvent): Promise<NoteViewModel | null>;
   toViewModel(event: Array<NostrEvent>): Promise<FeedAggregator>;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): Promise<SimpleTextNoteViewModel | RepostNoteViewModel | FeedAggregator | null> {
+  toViewModel(event: NostrEvent | Array<NostrEvent>): Promise<NoteViewModel | FeedAggregator | null> {
     if (event instanceof Array) {
       return this.toMultipleViewModel(event);
     } else if (this.guard.isKind(event, ShortTextNote)) {
@@ -42,7 +42,7 @@ export class FeedMapper implements ViewModelMapper<SimpleTextNoteViewModel | Rep
     const reactions = new Map<string, Array<ReactionViewModel>>();
     const zaps = new Map<string, Array<ZapViewModel>>();
     const aggregator: FeedAggregator = {
-      feed: new SortedNostrViewModelSet<SimpleTextNoteViewModel | RepostNoteViewModel>(),
+      feed: new SortedNostrViewModelSet<NoteViewModel>(),
       accounts: new Set<Account>(),
       unloaded: {
         idevent: [],

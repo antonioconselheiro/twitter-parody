@@ -8,6 +8,7 @@ import Geohash from 'latlon-geohash';
 import { NoteResourcesContext } from './context/note-resources-context.interface';
 import { RepostNoteViewModel } from './repost-note.view-model';
 import { HexString } from '@belomonte/nostr-ngx'
+import { NoteViewModel } from './note.view-model';
 
 /**
  * This interface represents the simple text note
@@ -23,7 +24,7 @@ export interface SimpleTextNoteViewModel extends NostrEventViewModel {
   /**
    * The reposted event
    */
-  reposting?: Array<SimpleTextNoteViewModel | RepostNoteViewModel>;
+  reposting?: Array<NoteViewModel>;
 
   /**
    * Record with all reacted reactions.

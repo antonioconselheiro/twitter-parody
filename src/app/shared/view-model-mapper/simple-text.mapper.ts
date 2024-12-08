@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { InMemoryNCache, LOCAL_CACHE_TOKEN, NostrEvent, NostrGuard, ProfileService } from '@belomonte/nostr-ngx';
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
-import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
+import { NoteViewModel } from '@view-model/note.view-model';
 import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
 import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
 import { AbstractNoteMapper } from './abstract-note.mapper';
@@ -14,7 +14,7 @@ import { ZapMapper } from './zap.mapper';
 @Injectable({
   providedIn: 'root'
 })
-export class SimpleTextMapper extends AbstractNoteMapper implements SingleViewModelMapper<SimpleTextNoteViewModel | RepostNoteViewModel> {
+export class SimpleTextMapper extends AbstractNoteMapper implements SingleViewModelMapper<NoteViewModel> {
 
   constructor(
     @Inject(HTML_PARSER_TOKEN) private htmlfier: NoteHtmlfier,
@@ -28,9 +28,9 @@ export class SimpleTextMapper extends AbstractNoteMapper implements SingleViewMo
     super();
   }
 
-  async toViewModel(event: NostrEvent<ShortTextNote>): Promise<SimpleTextNoteViewModel | RepostNoteViewModel>;
-  async toViewModel(event: NostrEvent): Promise<SimpleTextNoteViewModel | RepostNoteViewModel | null>;
-  async toViewModel(event: NostrEvent): Promise<SimpleTextNoteViewModel | RepostNoteViewModel | null> {
+  async toViewModel(event: NostrEvent<ShortTextNote>): Promise<NoteViewModel>;
+  async toViewModel(event: NostrEvent): Promise<NoteViewModel | null>;
+  async toViewModel(event: NostrEvent): Promise<NoteViewModel | null> {
     if (!this.guard.isKind(event, ShortTextNote)) {
       return null;
     }

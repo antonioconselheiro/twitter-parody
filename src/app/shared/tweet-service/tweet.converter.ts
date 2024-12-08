@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { NostrConverter, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
 import { DefaultHtmlfier } from '@shared/htmlfier/default.htmlfier';
-import { Event, kinds } from 'nostr-tools';
+import { Event } from 'nostr-tools';
 import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
 import { NPub } from 'nostr-tools/nip19';
-import { Reaction } from '../../deprecated-domain/reaction.interface';
 import { Retweet } from '../../deprecated-domain/retweet.interface';
 import { Tweet } from '../../deprecated-domain/tweet.interface';
-import { Zap } from '../../deprecated-domain/zap.interface';
 import { TweetRelationedInfoWrapper } from './tweet-relationed-info-wrapper.interface';
 import { TweetTagsConverter } from './tweet-tags.converter';
 import { TweetTypeGuard } from './tweet.type-guard';

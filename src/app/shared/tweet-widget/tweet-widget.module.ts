@@ -6,7 +6,7 @@ import { DatetimeWidgetModule } from '@shared/datetime-widget/datetime-widget.mo
 import { PopoverWidgetModule } from '@shared/popover-widget/popover-widget.module';
 import { SecurityWidgetModule } from '@shared/security-widget/security-widget.module';
 import { AmountModule } from '../amount/amount.module';
-import { TweetApi } from '../tweet-service/tweet.api';
+import { TweetNostr } from '../tweet-service/tweet.nostr';
 import { CompositeTweetPopoverComponent } from './composite-tweet-popover/composite-tweet-popover.component';
 import { TweetButtonGroupComponent } from './tweet-button-group/tweet-button-group.component';
 import { TweetImageViewerComponent } from './tweet-image-viewer/tweet-image-viewer.component';
@@ -46,7 +46,7 @@ import { SvgLoaderModule } from '@shared/svg-loader/svg-loader.module';
     CompositeTweetPopoverComponent
   ],
   providers: [
-    TweetApi
+    TweetNostr
   ]
 })
 export class TweetWidgetModule { }

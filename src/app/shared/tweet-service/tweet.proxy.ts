@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
-import { Account, NostrEvent, NostrPool, ProfileService } from "@belomonte/nostr-ngx";
-import { Retweet } from "../../deprecated-domain/retweet.interface";
-import { Tweet } from "../../deprecated-domain/tweet.interface";
-import { TweetTagsConverter } from "./tweet-tags.converter";
-import { TweetApi } from "./tweet.api";
-import { TweetTypeGuard } from "./tweet.type-guard";
+import { NostrEvent } from "@belomonte/nostr-ngx";
+import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
+import { FeedAggregator } from "@view-model/feed-aggregator.interface";
+import { NoteViewModel } from "@view-model/note.view-model";
+import { Observable, Subject } from "rxjs";
+import { TweetNostr } from "./tweet.nostr";
 
 @Injectable({
   providedIn: 'root'
@@ -12,104 +12,48 @@ import { TweetTypeGuard } from "./tweet.type-guard";
 export class TweetProxy {
 
   constructor(
-    private tweetApi: TweetApi,
-    private tweetTypeGuard: TweetTypeGuard,
-    private tweetTagsConverter: TweetTagsConverter,
-    private profileService: ProfileService,
-    private npool: NostrPool
+    private tweetNostr: TweetNostr,
+    private feedMapper: FeedMapper
   ) { }
 
-  async listTweetsFromPubkey(pubkey: string): Promise<
-    Array<Tweet | Retweet>
-  > {
-    const rawEvents = await this.tweetApi.listTweetsFromPubkeyList([pubkey]);
-    return this.loadRelatedEvents(rawEvents);
-  }
+  listTweetsFromPubkey(pubkey: string): Observable<FeedAggregator> {
+    const subject = new Subject<FeedAggregator>();
+    this.tweetNostr
+      .listUserNotes(pubkey)
+      .then(mainNotes => {
+        this.feedMapper
+          .toViewModel(mainNotes)
+          .then(feed => {
+            subject.next(feed);
 
-  async listReactionsFromNostrPublic(pubkey: string): Promise<
-    Array<Tweet | Retweet>
-  > {
-    const rawEvents = await this.tweetApi.listReactionsFromPubkey(pubkey);
-    return this.loadRelatedEvents(rawEvents);
-  }
+            this.loadFeedRelatedContent(mainNotes)
+              .then(feedWithRelatedContentLoaded => {
+                subject.next(feedWithRelatedContentLoaded);
+                subject.complete();
+              })
+              .catch(e => subject.error(e));
+          })
+          .catch(e => subject.error(e));
+      }).catch(e => subject.error(e));
 
-  private async loadRelatedEvents(rawEvents: NostrEvent[]): Promise<
-    Array<Tweet | Retweet>
-  > {
-    if (!rawEvents.length) {
-      return Promise.resolve([]);
-    }
-
-    const wrapperRoot = this.tweetCache.cache(rawEvents);
-    //  FIXME: trocar esta lógica para que sejam carregados todos os ids de eventos
-    //  encontrados nos dados disponíveis dos eventos carregados, tlvz fazendo isso
-    //  eu possa remover o carregamento do lazyEagerLoaded, que trás todos eventos
-    //  de lazy load para eager load, pois ele faz uma consulta muita grande e pode
-    //  afetar a experiência de uso do aplicativo
-    //  A alteração também ajuda no carregamento de eventos relacionados que não estão
-    //  sendo carregados, pois são citados apenas no content do event como nostr:note
-    //  e não são associados nas tags :s
-    //  https://github.com/users/antonioconselheiro/projects/1?pane=issue&itemId=41105788
-    const eventList = rawEvents.map(e => e.id);
-    const eventRelatedList = rawEvents.map(e => this.tweetTagsConverter
-      .getRelatedEvents(e)
-      .map(wrapper => wrapper[0])
-    ).flat(1);
-
-    const eventsToLoad = [...new Set(
-      eventList.concat(eventRelatedList)
-    )];
-
-    const relatedEvents = await this.tweetApi.loadEvents(eventsToLoad);
-    const wrapperRelated = this.tweetCache.cache(relatedEvents);
-
-    // const lazyEvents = wrapperRoot.lazy.map(lazy => lazy.id);
-    // const lazyEagerLoaded = await this.tweetApi.loadRelatedEvents(lazyEvents);
-    // const wrapperLazyEagerLoaded = this.tweetCache.cache(lazyEagerLoaded);
-
-    // const relatedEventList = [...new Set(
-    //   eventList
-    //     .concat(wrapperRelated.eager.map(e => e.id))
-    //     .concat(wrapperLazyEagerLoaded.eager.map(e => e.id))
-    // )];
-
-    // const reactions = await this.tweetApi.loadRelatedReactions(relatedEventList);
-    // const wrapperReactions = this.tweetCache.cache(reactions);
-
-    await this.profileService.loadProfiles(
-      wrapperRoot.npubs.concat(wrapperRelated.npubs) //, wrapperLazyEagerLoaded.npubs, wrapperReactions.npubs
-    );
-
-    return rawEvents
-      .map(event => this.tweetCache.get(event.id))
-      .sort((tweetA, tweetB) => {
-        if ('created' in tweetA && 'created' in tweetB) {
-          return tweetB.created - tweetA.created;
-        }
-
-        return 0;
-      }).filter(t => t);
+    return subject.asObservable();
   }
 
   /**
-   * if the current tweet is just a retweet with no comment
-   * the profile from the retweeted will be returned
+   * Load events related to events from list given as argument.
+   * This will load replies, repost, reactions and zaps.
    */
-  //  FIXME: dar um jeito do template não precisar chamar
-  //  diversas vezes um método com essa complexidade
-  // eslint-disable-next-line complexity
-  getTweetOrRetweetedAuthorProfile(tweet: Tweet): Promise<Account | null> {
-    if (this.tweetTypeGuard.isSimpleRetweet(tweet)) {
-      const retweeted = TweetCache.eagerTweets[tweet.retweeting] || TweetCache.lazyTweets[tweet.retweeting];
-      if (retweeted.author) {
-        return ProfileCache.profiles[retweeted.author];
-      }
-    }
+  async loadFeedRelatedContent(feed: FeedAggregator): Promise<FeedAggregator> {
+    const events = [...feed.feed].map(viewModel => viewModel.id);
+    const interactions = await this.tweetNostr.loadRelatedContent(events);
+    return this.feedMapper
+      .toViewModel(feed, interactions);
+  }
 
-    if (!tweet.author) {
-      return null;
-    }
+  /**
+   * Subscribe into an event to listen updates about reposts, reactions and zaps
+   */
+  listenNoteInteraction(note: NostrEvent): Observable<NoteViewModel> {
 
-    return ProfileCache.profiles[tweet.author] || null;
   }
 }

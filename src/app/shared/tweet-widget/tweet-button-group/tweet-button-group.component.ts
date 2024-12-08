@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Account, CurrentAccountObservable } from '@belomonte/nostr-ngx';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { TweetConverter } from '@shared/tweet-service/tweet.converter';
-import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
+import { NoteViewModel } from '@view-model/note.view-model';
 import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
 import { Subscription } from 'rxjs';
 
@@ -16,7 +16,7 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
 
   @Input()
-  tweet: SimpleTextNoteViewModel | RepostNoteViewModel | null = null;
+  tweet: NoteViewModel | null = null;
 
   @ViewChild('tweetShare', { read: PopoverComponent })
   share!: PopoverComponent;
@@ -42,15 +42,15 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
     }));
   }
 
-  isRetweetedByYou(tweet: SimpleTextNoteViewModel | RepostNoteViewModel): boolean {
+  isRetweetedByYou(tweet: NoteViewModel): boolean {
     return this.tweetTypeGuard.isRetweetedByProfile(tweet, this.profile);
   }
 
-  isLikedByYou(tweet: SimpleTextNoteViewModel | RepostNoteViewModel): boolean {
+  isLikedByYou(tweet: NoteViewModel): boolean {
     return this.tweetTypeGuard.isLikedByProfile(tweet, this.profile);
   }
 
-  getRetweetedLength(tweet: SimpleTextNoteViewModel | RepostNoteViewModel): number {
+  getRetweetedLength(tweet: NoteViewModel): number {
     return this.tweetConverter.getRetweetedLength(tweet);
   }
 

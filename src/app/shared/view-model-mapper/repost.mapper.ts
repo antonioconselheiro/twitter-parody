@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@angular/core';
 import { InMemoryNCache, LOCAL_CACHE_TOKEN, NostrEvent, NostrGuard, ProfileService } from '@belomonte/nostr-ngx';
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
+import { NoteViewModel } from '@view-model/note.view-model';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
-import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
 import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
 import { AbstractNoteMapper } from './abstract-note.mapper';
 import { ReactionMapper } from './reaction.mapper';
@@ -34,10 +34,10 @@ export class RepostMapper extends AbstractNoteMapper implements SingleViewModelM
   async toViewModel(event: NostrEvent): Promise<RepostNoteViewModel> {
     const content = event.content || '';
     const contentEvent = this.extractNostrEvent(content);
-    const reposting = new Array<SimpleTextNoteViewModel | RepostNoteViewModel>();
+    const reposting = new Array<NoteViewModel>();
 
     if (contentEvent) {
-      let retweeted: SimpleTextNoteViewModel | RepostNoteViewModel | null;
+      let retweeted: NoteViewModel | null;
       if (this.guard.isKind(contentEvent, ShortTextNote)) {
         retweeted = await this.simpleTextMapper.toViewModel(contentEvent);
         reposting.push(retweeted);
