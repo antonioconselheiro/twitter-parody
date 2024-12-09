@@ -1,5 +1,5 @@
 import { NostrEvent, NostrGuard } from "@belomonte/nostr-ngx";
-import { NoteReplyContext } from "@view-model/context/note-reply-context.interface";
+import { NoteReply } from "@view-model/context/note-reply.interface";
 import { Repost, ShortTextNote } from 'nostr-tools/kinds';
 import { TagHelper } from "./tag.helper";
 
@@ -8,7 +8,7 @@ export abstract class AbstractNoteMapper {
   protected abstract tagHelper: TagHelper;
   protected abstract guard: NostrGuard;
 
-  protected getReplyContext(event: NostrEvent, relationedEvents: Array<NostrEvent>): NoteReplyContext {
+  protected getReplyContext(event: NostrEvent, relationedEvents: Array<NostrEvent>): NoteReply {
     const [rootRepling = undefined] = this.tagHelper.getRelatedEventsByRelationType(event, 'root');
     const [replyTo = undefined] = this.tagHelper.getRelatedEventsByRelationType(event, 'reply');
     const replies = relationedEvents.filter(event => {
@@ -19,7 +19,7 @@ export abstract class AbstractNoteMapper {
     return {
       replyTo,
       rootRepling,
-      replies: replies.map(reply => reply.id),
+      replied: replies.map(reply => reply.id),
     };
   }
 

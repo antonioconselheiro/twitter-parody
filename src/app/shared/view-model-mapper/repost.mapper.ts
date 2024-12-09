@@ -121,4 +121,8 @@ export class RepostMapper extends AbstractNoteMapper implements SingleViewModelM
 
     return this.guard.isSerializedNostrEvent(event.content);
   }
+
+  patchViewModel(viewModel: NoteViewModel, events: Array<NostrEvent>): Promise<NoteViewModel> {
+
+  }
 }

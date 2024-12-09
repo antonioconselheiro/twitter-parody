@@ -1,14 +1,13 @@
-import { NostrEventViewModel } from './nostr-event.view-model';
+import { HexString } from '@belomonte/nostr-ngx';
+import Geohash from 'latlon-geohash';
+import { NoteReply } from './context/note-reply.interface';
+import { NoteResourcesContext } from './context/note-resources-context.interface';
 import { ParsedNostrContent } from './context/parsed-nostr-content.interface';
+import { NostrEventViewModel } from './nostr-event.view-model';
+import { NoteViewModel } from './note.view-model';
 import { ReactionViewModel } from './reaction.view-model';
-import { NoteReplyContext } from './context/note-reply-context.interface';
 import { SortedNostrViewModelSet } from './sorted-nostr-view-model.set';
 import { ZapViewModel } from './zap.view-model';
-import Geohash from 'latlon-geohash';
-import { NoteResourcesContext } from './context/note-resources-context.interface';
-import { RepostNoteViewModel } from './repost-note.view-model';
-import { HexString } from '@belomonte/nostr-ngx'
-import { NoteViewModel } from './note.view-model';
 
 /**
  * This interface represents the simple text note
@@ -45,7 +44,7 @@ export interface SimpleTextNoteViewModel extends NostrEventViewModel {
   /**
    * data about repling and be replied
    */
-  replyContext: NoteReplyContext;
+  replyContext: NoteReply;
 
   /**
    * hyperlinks and multimidia related to the note

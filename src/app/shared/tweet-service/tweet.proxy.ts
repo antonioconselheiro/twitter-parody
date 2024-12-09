@@ -1,9 +1,11 @@
 import { Injectable } from "@angular/core";
 import { NostrEvent } from "@belomonte/nostr-ngx";
 import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
-import { FeedAggregator } from "@view-model/feed-aggregator.interface";
+import { RepostMapper } from "@shared/view-model-mapper/repost.mapper";
+import { Feed } from "@view-model/feed.type";
 import { NoteViewModel } from "@view-model/note.view-model";
-import { Observable, Subject } from "rxjs";
+import { Repost, ShortTextNote } from 'nostr-tools/kinds';
+import { from, mergeMap, Observable, Subject } from "rxjs";
 import { TweetNostr } from "./tweet.nostr";
 
 @Injectable({
@@ -12,12 +14,13 @@ import { TweetNostr } from "./tweet.nostr";
 export class TweetProxy {
 
   constructor(
+    private repostMapper: RepostMapper,
     private tweetNostr: TweetNostr,
     private feedMapper: FeedMapper
   ) { }
 
-  listTweetsFromPubkey(pubkey: string): Observable<FeedAggregator> {
-    const subject = new Subject<FeedAggregator>();
+  listTweetsFromPubkey(pubkey: string): Observable<Feed> {
+    const subject = new Subject<Feed>();
     this.tweetNostr
       .listUserNotes(pubkey)
       .then(mainNotes => {
@@ -26,7 +29,7 @@ export class TweetProxy {
           .then(feed => {
             subject.next(feed);
 
-            this.loadFeedRelatedContent(mainNotes)
+            this.loadFeedRelatedContent(feed)
               .then(feedWithRelatedContentLoaded => {
                 subject.next(feedWithRelatedContentLoaded);
                 subject.complete();
@@ -43,16 +46,27 @@ export class TweetProxy {
    * Load events related to events from list given as argument.
    * This will load replies, repost, reactions and zaps.
    */
-  async loadFeedRelatedContent(feed: FeedAggregator): Promise<FeedAggregator> {
-    const events = [...feed.feed].map(viewModel => viewModel.id);
+  async loadFeedRelatedContent(feed: Feed): Promise<Feed> {
+    const events = [...feed].map(viewModel => viewModel.id);
     const interactions = await this.tweetNostr.loadRelatedContent(events);
-    return this.feedMapper.toViewModel(feed, interactions);
+    return this.feedMapper.patchViewModel(feed, interactions);
   }
 
   /**
    * Subscribe into an event to listen updates about reposts, reactions and zaps
    */
-  listenNoteInteraction(note: NostrEvent): Observable<NoteViewModel> {
-
+  listenNoteInteraction(note: NostrEvent<ShortTextNote | Repost>, mostRecentEvent?: NostrEvent): Observable<NoteViewModel> {
+    return from(this.repostMapper.toViewModel(note)).pipe(
+      mergeMap((noteView: NoteViewModel) =>
+        this.tweetNostr
+          .listenNoteInteractions(note, mostRecentEvent)
+          .pipe(mergeMap(event => from(
+            (async () => {
+              noteView = await this.repostMapper.patchViewModel(noteView, [event]);
+              return Promise.resolve(noteView);
+            })()
+          )))
+      )
+    );
   }
 }

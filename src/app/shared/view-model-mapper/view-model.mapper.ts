@@ -17,7 +17,16 @@ export interface ViewModelMapper<ViewModelData extends NostrEventViewModel, View
 
   /**
    * cast a list of nostr events into ready to render data
-   * @param events 
    */
   toViewModel(events: Array<NostrEvent>): Promise<ViewModelList>;
+
+  /**
+   * add new events to view model collection
+   */
+  patchViewModel?(viewModels: ViewModelList, events: Array<NostrEvent>): Promise<ViewModelList>;
+
+  /**
+   * add relationed data to view model
+   */
+  patchViewModel?(viewModel: ViewModelData, events: Array<NostrEvent>): Promise<ViewModelList>;
 }

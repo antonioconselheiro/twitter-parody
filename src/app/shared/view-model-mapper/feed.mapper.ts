@@ -38,10 +38,9 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, Feed> {
     return Promise.resolve(null);
   }
 
-  private async toMultipleViewModel(events: Array<NostrEvent>): Promise<Feed> {
+  private async toMultipleViewModel(events: Array<NostrEvent>, feed = new SortedNostrViewModelSet<NoteViewModel>()): Promise<Feed> {
     const reactions = new Map<string, Array<ReactionViewModel>>();
     const zaps = new Map<string, Array<ZapViewModel>>();
-    const feed = new SortedNostrViewModelSet<NoteViewModel>();
 
     for await (const event of events) {
       if (this.guard.isKind(event, ShortTextNote)) {
@@ -82,5 +81,9 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, Feed> {
     });
 
     return feed;
+  }
+
+  patchViewModel(viewModel: Feed, events: Array<NostrEvent>): Promise<Feed> {
+    return this.toMultipleViewModel(events, viewModel);
   }
 }

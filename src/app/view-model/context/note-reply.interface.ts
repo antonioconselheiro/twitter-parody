@@ -3,7 +3,7 @@ import { HexString } from "@belomonte/nostr-ngx";
 /**
  * data about repling and be replied
  */
-export interface NoteReplyContext {
+export interface NoteReply {
 
   /**
    * id hex of first message from thread
@@ -19,5 +19,5 @@ export interface NoteReplyContext {
   /**
    * List of ids of replies
    */
-  replies: Array<HexString>;
+  replied: Array<HexString>;
 }
