@@ -1,10 +1,8 @@
 import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
-import { FeedAggregator } from '@view-model/feed-aggregator.interface';
-import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
-import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
-import { TweetImageViewing } from '../tweet-img-viewing.interface';
 import { NoteViewModel } from '@view-model/note.view-model';
+import { TweetImageViewing } from '../tweet-img-viewing.interface';
+import { FeedViewModel } from '@view-model/feed.view-model';
 
 @Component({
   selector: 'tw-tweet-list',
@@ -18,7 +16,7 @@ export class TweetListComponent {
   loading = true;
 
   @Input()
-  feed: FeedAggregator | null = null;
+  feed: FeedViewModel | null = null;
 
   @ViewChild('tweetActions', { read: PopoverComponent })
   share!: PopoverComponent;

@@ -2,7 +2,7 @@
   <nostr-loading></nostr-loading>
 </div>
 
-<ng-container *ngFor="let tweet of feed?.feed; trackBy: trackByTweetId">
+<ng-container *ngFor="let tweet of feed; trackBy: trackByTweetId">
   <article [class.separator]="!tweet.reposting?.length" class="readTweet">
     <a *ngIf="!tweet.content && tweet.reposting?.length" href="javascript:void(0)" class="retweetOrigin">
       {{tweet.author.displayName}} has retweeted
@@ -65,24 +65,18 @@
           </tw-popover>
         </header>
   
-        <!--
         <tw-tweet
           class="tweetContent"
           (imgOpen)="onImgOpen($event)"
-          [tweet]="twet"
-          [showImages]="twet !== tweet"
-          [isFull]="twet === tweet"
+          [note]="tweet"
+          [showImages]="false"
+          [isFull]="false"
         ></tw-tweet>
-        -->
   
-        <!--
-          <tw-tweet-list
-            class="bordered retweetContent"
-            *ngIf="getRetweet(twet) && twet.content"
-            [loading]="false"
-            [retweeted]="getRetweet(twet)"
-          ></tw-tweet-list>
-        -->
+        <tw-tweet-list
+          class="bordered retweetContent"
+          [loading]="false"
+        ></tw-tweet-list>
   
         <tw-tweet-button-group *ngIf="!tweet.reposting?.length" [tweet]="tweet"></tw-tweet-button-group>
       </div>
@@ -94,7 +88,7 @@
 </div>
 <tw-tweet-image-viewer
   *ngIf="viewing"
-  [tweet]="viewing.tweet"
+  [root]="viewing.note"
   [activeImage]="viewing.img"
   (closeEvent)="viewing = null"
 ></tw-tweet-image-viewer>

@@ -23,5 +23,5 @@
   <img [src]="activeImage" />
 </div>
 <div [class.hide]="!showTweets" class="tweet-sidebar">
-  <tw-tweet-list [tweet]="tweet"></tw-tweet-list>
+  <tw-tweet-list [root]="tweet" [feed]="feed"></tw-tweet-list>
 </div>

@@ -2,12 +2,12 @@
   <header>
     <div class="profileMenu">
       <nostr-profile-picture [account]="account"></nostr-profile-picture>
-      <!-- <tw-accounts-list-mobile [account]="account"></tw-accounts-list-mobile> -->
+      <!-- FIXME: <tw-accounts-list-mobile [account]="account"></tw-accounts-list-mobile> -->
 
       <div class="userInfo">
         <span class="userName">
-          {{account.metadata.display_name || account.metadata.name}}
-          <span *ngIf="account.isNip05Valid" class="userVerified"></span>
+          {{account.displayName}}
+          <span *ngIf="account.nip05?.valid" class="userVerified"></span>
         </span>
         <span *ngIf="account.metadata.nip05" class="userNip5">{{account.metadata.nip05}}</span>
       </div>

@@ -15,10 +15,11 @@ export class TweetComponent {
   @Input()
   isFull = false;
 
+  @Input()
+  note: NoteViewModel | null = null;
+
   @Output()
   imgOpen = new EventEmitter<TweetImageViewing | null>();
-
-  note: NoteViewModel | null = null;
 
   showMoreTextButton(): boolean {
     const smallViewLength = String(this.note?.content?.smallView || '').length

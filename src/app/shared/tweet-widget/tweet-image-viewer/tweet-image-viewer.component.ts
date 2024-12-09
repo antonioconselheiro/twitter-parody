@@ -1,5 +1,6 @@
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
-import { Tweet } from '../../deprecated-domain/tweet.interface';
+import { FeedViewModel } from '@view-model/feed.view-model';
+import { NoteViewModel } from '@view-model/note.view-model';
 
 @Component({
   selector: 'tw-tweet-image-viewer',
@@ -9,7 +10,10 @@ import { Tweet } from '../../deprecated-domain/tweet.interface';
 export class TweetImageViewerComponent {
 
   @Input()
-  tweet: Tweet | null = null;
+  root: NoteViewModel | null = null;
+
+  @Input()
+  feed: FeedViewModel | null = null;
 
   @Input()
   activeImage = '';
@@ -29,13 +33,13 @@ export class TweetImageViewerComponent {
 
   hasPreviousImage(): boolean {
     const indexOf = this.getIndexFromImageList(this.activeImage);
-    return ![0, 0-1].includes(indexOf);
+    return ![0, 0 - 1].includes(indexOf);
   }
 
   hasNextImage(): boolean {
     const indexOf = this.getIndexFromImageList(this.activeImage);
     const lastItem = this.getImageList().length || 0;
-    return ![lastItem, lastItem-1, 0-1].includes(indexOf);
+    return ![lastItem, lastItem - 1, 0 - 1].includes(indexOf);
   }
 
   showPreviousImage(): void {
