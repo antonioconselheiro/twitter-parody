@@ -1,9 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Account, CurrentAccountObservable } from '@belomonte/nostr-ngx';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
-import { TweetConverter } from '@shared/tweet-service/tweet.converter';
 import { NoteViewModel } from '@view-model/note.view-model';
-import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -24,7 +22,6 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   profile: Account | null = null;
 
   constructor(
-    private tweetConverter: TweetConverter,
     private profile$: CurrentAccountObservable
   ) { }
 
@@ -43,18 +40,37 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   }
 
   isRetweetedByYou(tweet: NoteViewModel): boolean {
-    return this.tweetTypeGuard.isRetweetedByProfile(tweet, this.profile);
+    if ('isSimpleRepost' in tweet && tweet.isSimpleRepost) {
+      return !!tweet.repostedBy.find(note => note.pubkey === this.profile?.pubkey);
+    }
+
+    return tweet.author.pubkey === this.profile?.pubkey;
   }
 
   isLikedByYou(tweet: NoteViewModel): boolean {
-    return this.tweetTypeGuard.isLikedByProfile(tweet, this.profile);
+    const flatArraySize = 2;
+    let reactions = Object
+      .values(tweet.reactions);
+
+    if ('isSimpleRepost' in tweet && tweet.isSimpleRepost) {
+      reactions = Object
+        .values(tweet.reposting[0].reactions);
+    }
+
+    return !!reactions
+      .map(reactions => [...reactions])
+      .flat(flatArraySize)
+      .find(reaction => reaction.author.pubkey === this.profile?.pubkey);
   }
 
   getRetweetedLength(tweet: NoteViewModel): number {
-    return this.tweetConverter.getRetweetedLength(tweet);
+    return tweet.reposting?.length || 0;
   }
 
-  getTweetReactionsLength(tweet?: SimpleTextNoteViewModel | null): number {
-    return this.tweetConverter.getTweetReactionsLength(tweet);
+  getTweetReactionsLength(tweet?: NoteViewModel | null): number {
+    return Object
+      .values(tweet?.reactions || {})
+      .map(set => set.size)
+      .reduce((acc, curr) => acc + curr, 0);
   }
 }

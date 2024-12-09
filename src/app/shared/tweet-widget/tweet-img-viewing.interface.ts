@@ -1,6 +1,6 @@
-import { Tweet } from "../../deprecated-domain/tweet.interface";
+import { NoteViewModel } from "@view-model/note.view-model";
 
 export interface TweetImageViewing {
-  tweet: Tweet;
+  note: NoteViewModel;
   img: string;
 }

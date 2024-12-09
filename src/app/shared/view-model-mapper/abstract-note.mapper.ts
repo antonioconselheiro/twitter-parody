@@ -19,7 +19,7 @@ export abstract class AbstractNoteMapper {
     return {
       replyTo,
       rootRepling,
-      replied: replies.map(reply => reply.id),
+      replies: replies.map(reply => reply.id),
     };
   }
 

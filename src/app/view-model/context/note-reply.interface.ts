@@ -19,5 +19,5 @@ export interface NoteReply {
   /**
    * List of ids of replies
    */
-  replied: Array<HexString>;
+  replies: Array<HexString>;
 }

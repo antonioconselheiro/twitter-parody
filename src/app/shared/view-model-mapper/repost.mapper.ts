@@ -86,7 +86,7 @@ export class RepostMapper extends AbstractNoteMapper implements SingleViewModelM
       reposting,
       reactions,
       zaps,
-      replyContext: this.getReplyContext(event, events),
+      reply: this.getReplyContext(event, events),
       repostedBy: this.getRepostedBy(event, events),
       isSimpleRepost
     };

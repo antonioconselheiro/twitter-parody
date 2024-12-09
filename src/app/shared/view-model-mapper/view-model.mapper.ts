@@ -23,10 +23,10 @@ export interface ViewModelMapper<ViewModelData extends NostrEventViewModel, View
   /**
    * add new events to view model collection
    */
-  patchViewModel?(viewModels: ViewModelList, events: Array<NostrEvent>): Promise<ViewModelList>;
+  patchCollection?(viewModels: ViewModelList, events: Array<NostrEvent>): Promise<ViewModelList>;
 
   /**
    * add relationed data to view model
    */
-  patchViewModel?(viewModel: ViewModelData, events: Array<NostrEvent>): Promise<ViewModelList>;
+  patchViewModel?(viewModel: ViewModelData, events: Array<NostrEvent>): Promise<ViewModelData>;
 }

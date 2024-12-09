@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
-import { Feed } from '@view-model/feed.type';
+import { FeedViewModel } from '@view-model/feed.view-model';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { ReactionViewModel } from '@view-model/reaction.view-model';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
@@ -14,7 +14,7 @@ import { ViewModelMapper } from './view-model.mapper';
 @Injectable({
   providedIn: 'root'
 })
-export class FeedMapper implements ViewModelMapper<NoteViewModel, Feed> {
+export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel> {
 
   constructor(
     private guard: NostrGuard,
@@ -25,8 +25,8 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, Feed> {
   toViewModel(event: NostrEvent<ShortTextNote>): Promise<NoteViewModel>;
   toViewModel(event: NostrEvent<Repost>): Promise<RepostNoteViewModel>;
   toViewModel(event: NostrEvent): Promise<NoteViewModel | null>;
-  toViewModel(event: Array<NostrEvent>): Promise<Feed>;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): Promise<NoteViewModel | Feed | null> {
+  toViewModel(event: Array<NostrEvent>): Promise<FeedViewModel>;
+  toViewModel(event: NostrEvent | Array<NostrEvent>): Promise<NoteViewModel | FeedViewModel | null> {
     if (event instanceof Array) {
       return this.toMultipleViewModel(event);
     } else if (this.guard.isKind(event, ShortTextNote)) {
@@ -38,7 +38,7 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, Feed> {
     return Promise.resolve(null);
   }
 
-  private async toMultipleViewModel(events: Array<NostrEvent>, feed = new SortedNostrViewModelSet<NoteViewModel>()): Promise<Feed> {
+  private async toMultipleViewModel(events: Array<NostrEvent>, feed = new SortedNostrViewModelSet<NoteViewModel>()): Promise<FeedViewModel> {
     const reactions = new Map<string, Array<ReactionViewModel>>();
     const zaps = new Map<string, Array<ZapViewModel>>();
 
@@ -56,10 +56,10 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, Feed> {
   }
 
   private fetchFeed(
-    feed: Feed,
+    feed: FeedViewModel,
     reactions: Map<string, Array<ReactionViewModel>>,
     zaps: Map<string, Array<ZapViewModel>>
-  ): Feed {
+  ): FeedViewModel {
     [...feed].forEach(viewModel => {
       const zapList = zaps.get(viewModel.id) || [];
       const reactionList = reactions.get(viewModel.id) || [];
@@ -83,7 +83,7 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, Feed> {
     return feed;
   }
 
-  patchViewModel(viewModel: Feed, events: Array<NostrEvent>): Promise<Feed> {
-    return this.toMultipleViewModel(events, viewModel);
+  patchCollection(feed: FeedViewModel, events: Array<NostrEvent>): Promise<FeedViewModel> {
+    return this.toMultipleViewModel(events, feed);
   }
 }

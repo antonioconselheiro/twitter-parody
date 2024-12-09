@@ -1,8 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Retweet } from '../../deprecated-domain/retweet.interface';
-import { Tweet } from '../../deprecated-domain/tweet.interface';
-import { TweetTypeGuard } from '@shared/tweet-service/tweet.type-guard';
 import { TweetImageViewing } from '../tweet-img-viewing.interface';
+import { NoteViewModel } from '@view-model/note.view-model';
 
 @Component({
   selector: 'tw-tweet',
@@ -20,33 +18,31 @@ export class TweetComponent {
   @Output()
   imgOpen = new EventEmitter<TweetImageViewing | null>();
 
-  imgList: string[] = [];
-  imgs: [string, string?][] = [];
-
-  interceptedTweet: Tweet | Retweet | null = null;
-
-  constructor(
-    private tweetTypeGuard: TweetTypeGuard
-  ) { }
-
-  @Input()
-  set tweet(tweet: Tweet | Retweet | null) {
-    this.interceptedTweet = tweet;
-    this.showingTweet = this.tweetTypeGuard.getShowingTweet(this.tweet);
-  }
-
-  get tweet(): Tweet | Retweet | null {
-    return this.interceptedTweet;
-  }
-
-  showingTweet: Tweet | null = null;
+  note: NoteViewModel | null = null;
 
   showMoreTextButton(): boolean {
-    const smallViewLength = String(this.interceptedTweet?.htmlSmallView || '').length
-    const fullViewLength = String(this.interceptedTweet?.htmlFullView || '').length;
+    const smallViewLength = String(this.note?.content?.smallView || '').length
+    const fullViewLength = String(this.note?.content?.fullView || '').length;
 
     return smallViewLength !== fullViewLength;
+  }
 
-    return false;
+  getImages(): [string, string?][] {
+    const images: [string, string?][] = [];
+    let currentImage!: [string, string?];
+
+    new Array<string>()
+      .concat(this.note?.media?.imageList || [])
+      .forEach((image, index) => {
+        const pair = 2;
+        if (index % pair === 0) {
+          currentImage = [image];
+          images.push(currentImage);
+        } else {
+          currentImage.push(image);
+        }
+      });
+
+    return images;
   }
 }

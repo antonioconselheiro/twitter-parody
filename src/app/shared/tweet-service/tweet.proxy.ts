@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { NostrEvent } from "@belomonte/nostr-ngx";
 import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
 import { RepostMapper } from "@shared/view-model-mapper/repost.mapper";
-import { Feed } from "@view-model/feed.type";
+import { FeedViewModel } from "@view-model/feed.view-model";
 import { NoteViewModel } from "@view-model/note.view-model";
 import { Repost, ShortTextNote } from 'nostr-tools/kinds';
 import { from, mergeMap, Observable, Subject } from "rxjs";
@@ -19,8 +19,8 @@ export class TweetProxy {
     private feedMapper: FeedMapper
   ) { }
 
-  listTweetsFromPubkey(pubkey: string): Observable<Feed> {
-    const subject = new Subject<Feed>();
+  listTweetsFromPubkey(pubkey: string): Observable<FeedViewModel> {
+    const subject = new Subject<FeedViewModel>();
     this.tweetNostr
       .listUserNotes(pubkey)
       .then(mainNotes => {
@@ -46,10 +46,10 @@ export class TweetProxy {
    * Load events related to events from list given as argument.
    * This will load replies, repost, reactions and zaps.
    */
-  async loadFeedRelatedContent(feed: Feed): Promise<Feed> {
+  async loadFeedRelatedContent(feed: FeedViewModel): Promise<FeedViewModel> {
     const events = [...feed].map(viewModel => viewModel.id);
     const interactions = await this.tweetNostr.loadRelatedContent(events);
-    return this.feedMapper.patchViewModel(feed, interactions);
+    return this.feedMapper.patchCollection(feed, interactions);
   }
 
   /**
