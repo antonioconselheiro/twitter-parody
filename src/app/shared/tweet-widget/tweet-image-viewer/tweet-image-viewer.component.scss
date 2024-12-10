@@ -7,7 +7,7 @@
   z-index: 10000;
 }
 
-.tweet-sidebar {
+.tweetSidebar {
   position: fixed;
   width: 350px;
   top: 0;
@@ -22,7 +22,7 @@
   }
 }
 
-.main-image {
+.mainImage {
   background-color: var(--headerColor);
   display: flex;
   align-items: center;

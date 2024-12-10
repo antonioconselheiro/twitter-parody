@@ -1,5 +1,4 @@
 import { SafeHtml } from "@angular/platform-browser";
-import { NostrEvent } from "@belomonte/nostr-ngx";
 import { NoteResourcesContext } from "@view-model/context/note-resources-context.interface";
 import { ParsedNostrContent } from "@view-model/context/parsed-nostr-content.interface";
 
@@ -9,7 +8,7 @@ import { ParsedNostrContent } from "@view-model/context/parsed-nostr-content.int
  */
 export interface NoteHtmlfier {
 
-  parse(event: NostrEvent): ParsedNostrContent;
+  parse(content: string): ParsedNostrContent;
 
   /**
    * Convert content from event note into html
@@ -19,5 +18,5 @@ export interface NoteHtmlfier {
   /**
    * extract image url, video url and hyper links in the note content
    */
-  extractMedia(event: NostrEvent): NoteResourcesContext;
+  extractMedia(content: string): NoteResourcesContext;
 }

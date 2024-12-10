@@ -81,8 +81,8 @@ export class RepostMapper extends AbstractNoteMapper implements SingleViewModelM
       id: event.id,
       author,
       createdAt: event.created_at,
-      content: this.htmlfier.parse(event),
-      media: this.htmlfier.extractMedia(event),
+      content: this.htmlfier.parse(event.content),
+      media: this.htmlfier.extractMedia(event.content),
       reposting,
       reactions,
       zaps,
@@ -123,6 +123,8 @@ export class RepostMapper extends AbstractNoteMapper implements SingleViewModelM
   }
 
   patchViewModel(viewModel: NoteViewModel, events: Array<NostrEvent>): Promise<NoteViewModel> {
+    //  TODOING: TODO:
 
+    return Promise.resolve(viewModel);
   }
 }

@@ -24,7 +24,7 @@ export class TweetImageViewerComponent {
   showTweets = true;
 
   private getImageList(): string[] {
-    return this.tweet?.imageList || [];
+    return this.root?.media.imageList || [];
   }
 
   private getIndexFromImageList(activeImage: string): number {

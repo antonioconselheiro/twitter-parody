@@ -5,6 +5,7 @@ import { UrlUtil } from '@shared/util/url.service';
 import { NoteHtmlfier } from './note-htmlfier.interface';
 import { NoteResourcesContext } from '@view-model/context/note-resources-context.interface';
 import { NPub } from 'nostr-tools/nip19';
+import { ParsedNostrContent } from '@view-model/context/parsed-nostr-content.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -19,64 +20,90 @@ export class DefaultHtmlfier implements NoteHtmlfier {
 
   safify(content: string): SafeHtml {
     content = this.stripTags(content);
-    const { urls, imageList, videoUrl } = this.separateImageAndLinks(content);
-    content = this.htmlfyLink(content, urls);
+    const { hyperlinks, imageList, videoList } = this.extractMedia(content);
+    content = this.htmlfyLink(content, hyperlinks);
     content = this.htmlfyHashtag(content);
     content = this.htmlfyMention(content);
     content = this.htmlfyParagraph(content);
-    const midiaMetadata = [videoUrl].concat(imageList).filter((has): has is string => !!has);
+
+    const midiaMetadata = new Array<string>()
+      .concat(videoList)
+      .concat(imageList)
+      .filter((has): has is string => !!has);
     content = this.stripMetadata(content, midiaMetadata);
 
     return content;
   }
 
-    /**
-     * extract links, images and videos from content 
-     */
-    extractMedia(content: string): NoteResourcesContext {
-      const links = this.extractUrls(content);
-      const isImageRegex = /\.(png|jpg|jpeg|gif|svg|webp)$|^data:/;
-      const isVideoRegex = /\.(mp4)$/;
-  
-      const imageList = new Array<string>();
-      const videoList = new Array<string>();
-      const hyperlinks = new Array<string>();
-  
-      links.forEach(link => {
-        const isImage = isImageRegex.test(link);
-        const isVideo = isVideoRegex.test(link);
-        if (isImage) {
-          imageList.push(link);
-        } else if (isVideo) {
-          videoList.push(link);
-        } else {
-          hyperlinks.push(link);
-        }
-      });
-  
-      return {
-        hyperlinks,
-        imageList,
-        videoList
-      };
-    }
-  
-    private extractUrls(content: string): string[] {
-      const getUrlsRegex = /(\bhttps?:\/\/[^"\s]+\b)/g;
-      const matches = content.match(getUrlsRegex);
-      if (!matches || !matches.length) {
-        return [];
+  parse(content: string): ParsedNostrContent {
+    return {
+      raw: content,
+      //  FIXME: maybe this promise should be resolve only if .then is called
+      smallView: Promise.resolve(this.safify(this.getSmallView(content))),
+      //  FIXME: maybe this promise should be resolve only if .then is called
+      fullView: Promise.resolve(this.safify(content))
+    };
+  }
+
+  /**
+   * extract links, images and videos from content 
+   */
+  extractMedia(content: string): NoteResourcesContext {
+    const links = this.extractUrls(content);
+    const isImageRegex = /\.(png|jpg|jpeg|gif|svg|webp)$|^data:/;
+    const isVideoRegex = /\.(mp4)$/;
+
+    const imageList = new Array<string>();
+    const videoList = new Array<string>();
+    const hyperlinks = new Array<string>();
+
+    links.forEach(link => {
+      const isImage = isImageRegex.test(link);
+      const isVideo = isVideoRegex.test(link);
+      if (isImage) {
+        imageList.push(link);
+      } else if (isVideo) {
+        videoList.push(link);
+      } else {
+        hyperlinks.push(link);
       }
-  
-      return Array.from(matches);
+    });
+
+    return {
+      hyperlinks,
+      imageList,
+      videoList
+    };
+  }
+
+  private getSmallView(content: string): string {
+    const maxLength = 280;
+    if (content.replace(/nostr:[^\s]+/g, '').length > maxLength) {
+      content = content.substring(0, maxLength - 1);
+      //  substituí eventual link cortado pela metade
+      content = content.replace(/(http[^ ]+|nostr:[^ ]+)$/, '');
+      content += '…';
     }
 
-  //  FIXME: this code keeps in twitter parody and should be not include in core library
+    return content;
+  }
+
+  private extractUrls(content: string): string[] {
+    const getUrlsRegex = /(\bhttps?:\/\/[^"\s]+\b)/g;
+    const matches = content.match(getUrlsRegex);
+    if (!matches || !matches.length) {
+      return [];
+    }
+
+    return Array.from(matches);
+  }
+
+  //  FIXME: must validate if this logic will be not reusable for twitter legacy exibihition mode
   private imageListToMatriz(imgList: string[]): [string, string?][] {
     const pair = 2;
 
     if (imgList.length === pair) {
-      return [[imgList[0]],[imgList[1]]];
+      return [[imgList[0]], [imgList[1]]];
     }
 
     let matriz: [string, string?][] = [];
@@ -150,12 +177,12 @@ export class DefaultHtmlfier implements NoteHtmlfier {
 
   private stripMetadata(content: string, midiaMetadata: string[]): string {
     midiaMetadata.forEach(img => content = content.replace(this.urlUtil.regexFromLink(img), ''));
-    const nostrMetadataMatcher = /nostr:[^ ]+/g; 
+    const nostrMetadataMatcher = /nostr:[^ ]+/g;
     content = content.replace(nostrMetadataMatcher, '');
     return content;
   }
 
   private regexFromLink(link: string): RegExp {
-    return new RegExp(link.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')+'/?');
+    return new RegExp(link.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '/?');
   }
 }

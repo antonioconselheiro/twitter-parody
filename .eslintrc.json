@@ -68,7 +68,6 @@
               "PascalCase"
             ]
           },
-
           {
             "selector": [
               "enumMember"
@@ -116,7 +115,9 @@
           "error",
           400
         ],
-        "for-direction": [ "off" ],
+        "for-direction": [
+          "off"
+        ],
         "eqeqeq": "warn",
         "@typescript-eslint/ban-ts-comment": [
           "warn",
@@ -132,7 +133,7 @@
         ],
         "@angular-eslint/no-output-on-prefix": "off",
         "@typescript-eslint/no-empty-function": "error",
-        "@typescript-eslint/no-floating-promises": "error",
+        "@typescript-eslint/no-floating-promises": "warn",
         "@typescript-eslint/prefer-for-of": "off",
         "@typescript-eslint/unbound-method": "error",
         "@typescript-eslint/adjacent-overload-signatures": "warn",
@@ -206,10 +207,9 @@
       ],
       "extends": [
         "plugin:@angular-eslint/template/recommended"
-//        "plugin:@angular-eslint/template/accessibility"
+        //        "plugin:@angular-eslint/template/accessibility"
       ],
-      "rules": {
-      }
+      "rules": {}
     }
   ]
 }

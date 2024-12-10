@@ -8,7 +8,7 @@
     <div class="userInfo">
       <span class="userName">
         {{viewing.metadata?.display_name || viewing.metadata?.name}}
-        <span *ngIf="viewing.isNip05Valid" class="userVerified"></span>
+        <span *ngIf="viewing.nip05?.valid" class="userVerified"></span>
       </span>
       <span class="colorLowestContrast">13,5 mil tweets</span>
     </div>
@@ -24,11 +24,11 @@
     <div class="userInfo">
       <span class="userName">
         {{viewing.metadata?.display_name || viewing.metadata?.name}}
-        <span *ngIf="viewing.isNip05Valid" class="userVerified"></span>
+        <span *ngIf="viewing.nip05?.valid" class="userVerified"></span>
       </span>
       <span *ngIf="viewing.metadata?.nip05" class="userNip5">{{viewing.metadata?.nip05}}</span>
     </div>
-     <!-- <div class="bio" [innerHTML]="viewing.metadata?.htmlAbout"></div> -->
+     <!-- FIXME: <div class="bio" [innerHTML]="viewing.metadata?.htmlAbout"></div> -->
     <div class="additionalInformation">
       <span *ngIf="viewing.metadata?.['location']">
         <nostr-svg-render class="inlineIcon" name="location"></nostr-svg-render>
@@ -67,6 +67,6 @@
     </a>
   </nav>
   <section>
-    <tw-tweet-list [loading]="loading" [tweets]="tweets"></tw-tweet-list>
+    <tw-tweet-list [loading]="loading" [feed]="feed"></tw-tweet-list>
   </section>
 </ng-container>

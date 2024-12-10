@@ -13,13 +13,16 @@ import { FeedViewModel } from '@view-model/feed.view-model';
 export class TweetListComponent {
 
   @Input()
-  loading = true;
+  root: NoteViewModel | null = null;
 
   @Input()
   feed: FeedViewModel | null = null;
 
   @ViewChild('tweetActions', { read: PopoverComponent })
   share!: PopoverComponent;
+
+  @Input()
+  loading = true;
 
   viewing: TweetImageViewing | null = null;
 

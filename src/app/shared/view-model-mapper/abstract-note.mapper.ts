@@ -23,7 +23,7 @@ export abstract class AbstractNoteMapper {
     };
   }
 
-  protected getRepostedBy(event: NostrEvent, relationedEvents: Array<NostrEvent>): Array<string> {
+  protected getRepostedBy(event: NostrEvent, relationedEvents: Array<NostrEvent>): Array<NostrEvent> {
     return relationedEvents.filter(relatedEvent => {
       if (!this.guard.isKind(relatedEvent, [ShortTextNote, Repost])) {
         return false;
@@ -31,6 +31,6 @@ export abstract class AbstractNoteMapper {
 
       const replies = this.tagHelper.getRelatedEventsByRelationType(relatedEvent, 'mention');
       return replies.find(reply => reply === event.id);
-    }).map(event => event.id);
+    });
   }
 }

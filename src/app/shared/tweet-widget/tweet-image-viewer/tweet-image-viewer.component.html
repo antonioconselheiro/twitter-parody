@@ -1,4 +1,4 @@
-<div [class.full]="!showTweets" class="main-image">
+<div [class.full]="!showTweets" class="mainImage">
   <button (click)="close()" title="close" type="button" class="svgButton">
     <nostr-svg-render name="close"></nostr-svg-render>
   </button>
@@ -22,6 +22,6 @@
 
   <img [src]="activeImage" />
 </div>
-<div [class.hide]="!showTweets" class="tweet-sidebar">
-  <tw-tweet-list [root]="tweet" [feed]="feed"></tw-tweet-list>
+<div [class.hide]="!showTweets" class="tweetSidebar">
+  <tw-tweet-list [root]="root" [feed]="feed"></tw-tweet-list>
 </div>

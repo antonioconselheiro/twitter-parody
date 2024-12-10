@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Account, CurrentAccountObservable } from '@belomonte/nostr-ngx';
-import { Tweet } from '../../deprecated-domain/tweet.interface';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
+import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
+import { FeedViewModel } from '@view-model/feed.view-model';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -19,12 +20,13 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
   viewing: Account | null = null;
   authenticated: Account | null = null;
 
-  tweets: Array<Tweet> = [];
+  feed: FeedViewModel | null = null;
   subscriptions = new Subscription();
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private profile$: CurrentAccountObservable,
+    private tweetProxy: TweetProxy,
     private router: Router
   ) {
     super();
@@ -34,9 +36,7 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
     this.bindAuthenticatedProfileSubscription();
     this.getProfileFromActivatedRoute();
     this.bindViewingProfile();
-
-    this.loadProfileTweets(this.activatedRoute.snapshot.data['account'])
-      .finally(() => this.loading = false);
+    this.loadProfileFeed(this.activatedRoute.snapshot.data['account']);
 
     super.ngOnInit();
   }
@@ -62,28 +62,36 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
   private bindViewingProfile(): void {
     this.subscriptions.add(this.activatedRoute.data.subscribe({
       next: wrapper => {
-        this.viewing = wrapper['profile'];
-        this.tweets = [];
+        this.feed = null;
         document.body.scrollTo(0, 0);
-        this.loadProfileTweets(wrapper['profile']);
+        this.loadProfileFeed(wrapper['profile']);
       }
     }));
   }
-  
-  private async loadProfileTweets(account: Account): Promise<void> {
-    this.viewing = account;
-   //  FIXME: this.tweets = await this.tweetProxy.listTweetsFromPubkey(profile.npub);
 
+  private loadProfileFeed(account: Account | null): void {
+    this.viewing = account;
+    if (account) {
+      this.tweetProxy
+        .listTweetsFromPubkey(account.pubkey)
+        .subscribe(feed => {
+          this.loading = false
+          this.feed = feed;
+        });
+    } else {
+      this.feed = null;
+    }
+  }
+
+  private getProfileFromActivatedRoute(): void {
+    this.viewing = this.activatedRoute.snapshot.data['profile'];
     this.subscriptions.add(this.activatedRoute.data.subscribe({
       next: data => this.viewing = data['profile']
     }));
-  }
-  
-  private getProfileFromActivatedRoute(): void {
-    this.viewing = this.activatedRoute.snapshot.data['profile'];
+
     if (this.viewing) {
       this.title = this.viewing.metadata?.display_name || this.viewing.metadata?.name || 'Profile';
-      this.loadProfileTweets(this.viewing);
+      this.loadProfileFeed(this.viewing);
     }
   }
 
