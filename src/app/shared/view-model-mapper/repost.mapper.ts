@@ -10,12 +10,13 @@ import { ReactionMapper } from './reaction.mapper';
 import { SimpleTextMapper } from './simple-text.mapper';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { TagHelper } from './tag.helper';
+import { ViewModelPatch } from './view-model-patch-single.mapper';
 import { ZapMapper } from './zap.mapper';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RepostMapper extends AbstractNoteMapper implements SingleViewModelMapper<RepostNoteViewModel> {
+export class RepostMapper extends AbstractNoteMapper implements SingleViewModelMapper<RepostNoteViewModel>, ViewModelPatch<RepostNoteViewModel> {
 
   constructor(
     protected guard: NostrGuard,
@@ -86,12 +87,12 @@ export class RepostMapper extends AbstractNoteMapper implements SingleViewModelM
       reposting,
       reactions,
       zaps,
-      reply: this.getReplyContext(event, events),
-      repostedBy: this.getRepostedBy(event, events),
+      reply: this.getReply(event, events),
+      reposted: this.getRepostedBy(event, events),
       isSimpleRepost
     };
 
-    return note;
+    return this.patchViewModel(note, events);
   }
 
   private extractNostrEvent(content: object | string): NostrEvent | false {
@@ -114,15 +115,15 @@ export class RepostMapper extends AbstractNoteMapper implements SingleViewModelM
   }
 
   private isSimpleRepost(event: NostrEvent): boolean {
-    const contentWithSimpleRepostMatcher = /^(nostr:event1[a-z0-9]+|#[0])$/;
-    if (contentWithSimpleRepostMatcher.test(event.content)) {
+    const isSimpleRepostRegex = /^(nostr:event1[a-z0-9]+|#[0])$/;
+    if (isSimpleRepostRegex.test(event.content)) {
       return true;
     }
 
     return this.guard.isSerializedNostrEvent(event.content);
   }
 
-  patchViewModel(viewModel: NoteViewModel, events: Array<NostrEvent>): Promise<NoteViewModel> {
+  patchViewModel(viewModel: RepostNoteViewModel, events: Array<NostrEvent>): Promise<RepostNoteViewModel> {
     //  TODOING: TODO:
 
     return Promise.resolve(viewModel);

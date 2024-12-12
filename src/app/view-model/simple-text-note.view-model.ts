@@ -1,4 +1,3 @@
-import { NostrEvent } from '@belomonte/nostr-ngx';
 import Geohash from 'latlon-geohash';
 import { NoteReply } from './context/note-reply.interface';
 import { NoteResourcesContext } from './context/note-resources-context.interface';
@@ -39,7 +38,7 @@ export interface SimpleTextNoteViewModel extends NostrEventViewModel {
   /**
    * array with non parsed nostr event of each event that reposted this event
    */
-  repostedBy: Array<NostrEvent>;
+  reposted: SortedNostrViewModelSet<NoteViewModel>;
 
   /**
    * data about repling and be replied

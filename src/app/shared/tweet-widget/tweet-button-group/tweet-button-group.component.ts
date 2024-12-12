@@ -41,7 +41,7 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
 
   isRetweetedByYou(tweet: NoteViewModel): boolean {
     if ('isSimpleRepost' in tweet && tweet.isSimpleRepost) {
-      return !!tweet.repostedBy.find(note => note.pubkey === this.profile?.pubkey);
+      return !!tweet.reposted.find(note => note.pubkey === this.profile?.pubkey);
     }
 
     return tweet.author.pubkey === this.profile?.pubkey;

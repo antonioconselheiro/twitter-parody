@@ -1,4 +1,6 @@
 import { HexString } from "@belomonte/nostr-ngx";
+import { NoteViewModel } from "@view-model/note.view-model";
+import { SortedNostrViewModelSet } from "@view-model/sorted-nostr-view-model.set";
 
 /**
  * data about repling and be replied
@@ -19,5 +21,5 @@ export interface NoteReply {
   /**
    * List of ids of replies
    */
-  replies: Array<HexString>;
+  replies: SortedNostrViewModelSet<NoteViewModel>;
 }

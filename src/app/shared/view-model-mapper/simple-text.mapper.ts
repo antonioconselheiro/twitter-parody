@@ -60,8 +60,8 @@ export class SimpleTextMapper extends AbstractNoteMapper implements SingleViewMo
       media: this.htmlfier.extractMedia(event.content),
       reactions,
       zaps,
-      reply: this.getReplyContext(event, events),
-      repostedBy: this.getRepostedBy(event, events)
+      reply: this.getReply(event, events),
+      reposted: this.getRepostedBy(event, events)
     };
 
     return note;

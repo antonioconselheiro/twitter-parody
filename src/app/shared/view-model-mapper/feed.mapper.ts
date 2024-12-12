@@ -10,11 +10,12 @@ import { Repost, ShortTextNote } from 'nostr-tools/kinds';
 import { RepostMapper } from './repost.mapper';
 import { SimpleTextMapper } from './simple-text.mapper';
 import { ViewModelMapper } from './view-model.mapper';
+import { ViewModelPatch } from './view-model-patch-single.mapper';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel> {
+export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>, ViewModelPatch<FeedViewModel> {
 
   constructor(
     private guard: NostrGuard,
@@ -83,7 +84,7 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
     return feed;
   }
 
-  patchCollection(feed: FeedViewModel, events: Array<NostrEvent>): Promise<FeedViewModel> {
+  patchViewModel(feed: FeedViewModel, events: Array<NostrEvent>): Promise<FeedViewModel> {
     return this.toMultipleViewModel(events, feed);
   }
 }
