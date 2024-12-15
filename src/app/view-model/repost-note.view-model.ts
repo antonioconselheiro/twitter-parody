@@ -1,6 +1,7 @@
 import { ParsedNostrContent } from './context/parsed-nostr-content.interface';
 import { NoteViewModel } from './note.view-model';
 import { SimpleTextNoteViewModel } from './simple-text-note.view-model';
+import { SortedNostrViewModelSet } from './sorted-nostr-view-model.set';
 
 /**
  * This interface represents the repost note
@@ -17,7 +18,7 @@ export interface RepostNoteViewModel extends Omit<SimpleTextNoteViewModel, 'cont
   /**
    * The reposted event
    */
-  reposting: Array<NoteViewModel>;
+  reposting: SortedNostrViewModelSet<NoteViewModel>;
 
   /**
    * If event have only one reposting and the content comes empty

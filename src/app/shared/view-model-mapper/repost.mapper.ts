@@ -2,10 +2,11 @@ import { Inject, Injectable } from '@angular/core';
 import { InMemoryNCache, LOCAL_CACHE_TOKEN, NostrEvent, NostrGuard, ProfileService } from '@belomonte/nostr-ngx';
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
+import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
+import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
 import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
-import { AbstractNoteMapper } from './abstract-note.mapper';
 import { ReactionMapper } from './reaction.mapper';
 import { SimpleTextMapper } from './simple-text.mapper';
 import { SingleViewModelMapper } from './single-view-model.mapper';
@@ -16,36 +17,34 @@ import { ZapMapper } from './zap.mapper';
 @Injectable({
   providedIn: 'root'
 })
-export class RepostMapper extends AbstractNoteMapper implements SingleViewModelMapper<RepostNoteViewModel>, ViewModelPatch<RepostNoteViewModel> {
+export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel>, ViewModelPatch<RepostNoteViewModel> {
 
   constructor(
-    protected guard: NostrGuard,
-    protected tagHelper: TagHelper,
+    private guard: NostrGuard,
+    private tagHelper: TagHelper,
     private zapMapper: ZapMapper,
     private reactionMapper: ReactionMapper,
-    private simpleTextMapper: SimpleTextMapper,
     private profileService: ProfileService,
+    private simpleTextMapper: SimpleTextMapper,
     @Inject(HTML_PARSER_TOKEN) private htmlfier: NoteHtmlfier,
     @Inject(LOCAL_CACHE_TOKEN) private ncache: InMemoryNCache
-  ) {
-    super();
-  }
+  ) { }
 
   // eslint-disable-next-line complexity
   async toViewModel(event: NostrEvent): Promise<RepostNoteViewModel> {
     const content = event.content || '';
     const contentEvent = this.extractNostrEvent(content);
-    const reposting = new Array<NoteViewModel>();
+    const reposting = new SortedNostrViewModelSet<NoteViewModel>();
 
     if (contentEvent) {
       let retweeted: NoteViewModel | null;
       if (this.guard.isKind(contentEvent, ShortTextNote)) {
         retweeted = await this.simpleTextMapper.toViewModel(contentEvent);
-        reposting.push(retweeted);
+        reposting.add(retweeted);
       } else if (this.guard.isKind(contentEvent, Repost)) {
         //  there is no way to get infinity recursively, this was a stringified json
         retweeted = await this.toViewModel(event);
-        reposting.push(retweeted);
+        reposting.add(retweeted);
       }
 
     } else {
@@ -54,7 +53,7 @@ export class RepostMapper extends AbstractNoteMapper implements SingleViewModelM
         const retweeted = await this.ncache.get(idEvent);
         if (retweeted) {
           const viewModel = await this.toViewModel(retweeted);
-          reposting.push(viewModel);
+          reposting.add(viewModel);
         }
       }
     }
@@ -77,6 +76,7 @@ export class RepostMapper extends AbstractNoteMapper implements SingleViewModelM
     const zaps = await this.zapMapper.toViewModel(events);
     const author = await this.profileService.loadAccount(event.pubkey);
     const isSimpleRepost = this.isSimpleRepost(event);
+    const reply: NoteReplyContext = { replies: new SortedNostrViewModelSet<NoteViewModel>() };
 
     const note: RepostNoteViewModel = {
       id: event.id,
@@ -87,8 +87,9 @@ export class RepostMapper extends AbstractNoteMapper implements SingleViewModelM
       reposting,
       reactions,
       zaps,
-      reply: this.getReply(event, events),
-      reposted: this.getRepostedBy(event, events),
+      reply,
+      reposted: new SortedNostrViewModelSet<NoteViewModel>(),
+      origin: event,
       isSimpleRepost
     };
 

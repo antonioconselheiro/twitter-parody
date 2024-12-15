@@ -1,4 +1,4 @@
-import { Account, HexString } from "@belomonte/nostr-ngx";
+import { Account, HexString, NostrEvent } from "@belomonte/nostr-ngx";
 
 /**
  * properties that all ready to render nostr event will bring
@@ -8,7 +8,7 @@ export interface NostrEventViewModel {
   /**
    * hexadecimal event id
    */
-  id: HexString;
+  readonly id: HexString;
 
   /**
    * author pubkey
@@ -20,5 +20,7 @@ export interface NostrEventViewModel {
   /**
    * Event creation date in unix timestamp
    */
-  createdAt: number;
+  readonly createdAt: number;
+
+  readonly origin: NostrEvent;
 }

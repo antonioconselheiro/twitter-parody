@@ -1,5 +1,5 @@
 import Geohash from 'latlon-geohash';
-import { NoteReply } from './context/note-reply.interface';
+import { NoteReplyContext } from './context/note-reply-context.interface';
 import { NoteResourcesContext } from './context/note-resources-context.interface';
 import { ParsedNostrContent } from './context/parsed-nostr-content.interface';
 import { NostrEventViewModel } from './nostr-event.view-model';
@@ -43,7 +43,7 @@ export interface SimpleTextNoteViewModel extends NostrEventViewModel {
   /**
    * data about repling and be replied
    */
-  reply: NoteReply;
+  reply: NoteReplyContext;
 
   /**
    * hyperlinks and multimidia related to the note
