@@ -11,13 +11,12 @@ import { ReactionMapper } from './reaction.mapper';
 import { SimpleTextMapper } from './simple-text.mapper';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { TagHelper } from './tag.helper';
-import { ViewModelPatch } from './view-model-patch-single.mapper';
 import { ZapMapper } from './zap.mapper';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel>, ViewModelPatch<RepostNoteViewModel> {
+export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> {
 
   constructor(
     private guard: NostrGuard,
@@ -61,8 +60,6 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel>,
     const events = await this.ncache.query([
       {
         kinds: [
-          ShortTextNote,
-          Repost,
           Reaction,
           Zap
         ],
@@ -93,7 +90,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel>,
       isSimpleRepost
     };
 
-    return this.patchViewModel(note, events);
+    return note;
   }
 
   private extractNostrEvent(content: object | string): NostrEvent | false {
@@ -122,11 +119,5 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel>,
     }
 
     return this.guard.isSerializedNostrEvent(event.content);
-  }
-
-  patchViewModel(viewModel: RepostNoteViewModel, events: Array<NostrEvent>): Promise<RepostNoteViewModel> {
-    //  TODOING: TODO:
-
-    return Promise.resolve(viewModel);
   }
 }

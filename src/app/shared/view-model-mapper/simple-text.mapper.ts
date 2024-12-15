@@ -6,7 +6,7 @@ import { NoteReplyContext } from '@view-model/context/note-reply-context.interfa
 import { NoteViewModel } from '@view-model/note.view-model';
 import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
 import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
-import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
+import { Reaction, ShortTextNote, Zap } from 'nostr-tools/kinds';
 import { ReactionMapper } from './reaction.mapper';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { ZapMapper } from './zap.mapper';
@@ -35,8 +35,6 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
     const events = await this.ncache.query([
       {
         kinds: [
-          ShortTextNote,
-          Repost,
           Reaction,
           Zap
         ],
