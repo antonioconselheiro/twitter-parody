@@ -39,12 +39,12 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
     }));
   }
 
-  isRetweetedByYou(tweet: NoteViewModel): boolean {
-    if ('isSimpleRepost' in tweet && tweet.isSimpleRepost) {
-      return !!tweet.reposted.find(note => note.pubkey === this.profile?.pubkey);
+  isRetweetedByYou(note: NoteViewModel): boolean {
+    if ('isSimpleRepost' in note && note.isSimpleRepost) {
+      return !![...note.reposted].find(reposted => reposted.author.pubkey === this.profile?.pubkey);
     }
 
-    return tweet.author.pubkey === this.profile?.pubkey;
+    return note.author.pubkey === this.profile?.pubkey;
   }
 
   isLikedByYou(tweet: NoteViewModel): boolean {
@@ -54,7 +54,7 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
 
     if ('isSimpleRepost' in tweet && tweet.isSimpleRepost) {
       reactions = Object
-        .values(tweet.reposting[0].reactions);
+        .values([...tweet.reposting][0].reactions);
     }
 
     return !!reactions
@@ -64,7 +64,7 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   }
 
   getRetweetedLength(tweet: NoteViewModel): number {
-    return tweet.reposting?.length || 0;
+    return tweet.reposting?.size || 0;
   }
 
   getTweetReactionsLength(tweet?: NoteViewModel | null): number {

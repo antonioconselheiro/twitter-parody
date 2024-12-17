@@ -4,7 +4,7 @@ import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set
 import { ZapViewModel } from '@view-model/zap.view-model';
 import { Zap } from 'nostr-tools/kinds';
 import { TagHelper } from './tag.helper';
-import { SingleViewModelMapper } from './view-model.mapper';
+import { SingleViewModelMapper } from './single-view-model.mapper';
 
 @Injectable({
   providedIn: 'root'
