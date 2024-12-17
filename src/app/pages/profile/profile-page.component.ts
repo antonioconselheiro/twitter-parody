@@ -73,7 +73,7 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
     this.viewing = account;
     if (account) {
       this.tweetProxy
-        .listTweetsFromPubkey(account.pubkey)
+        .feedFromPubkey(account.pubkey)
         .subscribe(feed => {
           this.loading = false
           this.feed = feed;

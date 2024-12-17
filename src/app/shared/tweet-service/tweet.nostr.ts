@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HexString, NostrEvent, NostrPool } from '@belomonte/nostr-ngx';
 import { Filter } from 'nostr-tools';
 import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
-import { Observable } from 'rxjs';
+import { debounceTime, map, Observable, scan } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -47,27 +47,34 @@ export class TweetNostr {
   }
 
   /**
-   * @param event
-   * note to listen replies, reposts, zaps and reactions updates
+   * @param feed
+   * only the main event of the feed, as an array
    *
    * @param mostRecentEvent
-   * needed to avoid reload already loaded events 
+   * the newer event of the feed, it can be a short text note, a repost note, a reaction or a zap 
    */
-  listenNoteInteractions(event: NostrEvent<ShortTextNote | Repost>, mostRecentEvent?: NostrEvent): Observable<NostrEvent> {
+  listenFeedUpdates(feed: Array<NostrEvent>, mostRecentEvent?: NostrEvent): Observable<Array<NostrEvent>> {
+    const ids = feed.map(event => event.id);
     const filter: Filter = {
+      ids,
       kinds: [
         ShortTextNote,
         Repost,
         Reaction,
         Zap
       ],
-      '#e': [event.id]
+      '#e': ids
     };
 
     if (mostRecentEvent) {
       filter.since = mostRecentEvent.created_at;
     }
 
-    return this.npool.observe([filter]);
+    const groupingEventsTime = 300;
+    return this.npool.observe([filter]).pipe(
+      scan((acc: NostrEvent[], value: NostrEvent) => [...acc, value], new Array<NostrEvent>()),
+      debounceTime(groupingEventsTime),
+      map(items => items)
+    );
   }
 }

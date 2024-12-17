@@ -1,10 +1,7 @@
 import { Injectable } from "@angular/core";
 import { NostrEvent } from "@belomonte/nostr-ngx";
 import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
-import { RepostMapper } from "@shared/view-model-mapper/repost.mapper";
 import { FeedViewModel } from "@view-model/feed.view-model";
-import { NoteViewModel } from "@view-model/note.view-model";
-import { Repost, ShortTextNote } from 'nostr-tools/kinds';
 import { from, mergeMap, Observable, Subject } from "rxjs";
 import { TweetNostr } from "./tweet.nostr";
 
@@ -14,12 +11,11 @@ import { TweetNostr } from "./tweet.nostr";
 export class TweetProxy {
 
   constructor(
-    private repostMapper: RepostMapper,
     private tweetNostr: TweetNostr,
     private feedMapper: FeedMapper
   ) { }
 
-  listTweetsFromPubkey(pubkey: string): Observable<FeedViewModel> {
+  feedFromPubkey(pubkey: string): Observable<FeedViewModel> {
     const subject = new Subject<FeedViewModel>();
     this.tweetNostr
       .listUserNotes(pubkey)
@@ -52,20 +48,21 @@ export class TweetProxy {
     return this.feedMapper.patchViewModel(feed, interactions);
   }
 
-  //  FIXME: repensando agora, este método faz sentido? talvéz eu deva escutar sempre o feed e nunca um evento isolado
-  //  pode parecer útil, mas não tem valor prático
   /**
    * Subscribe into an event to listen updates about reposts, reactions and zaps
    */
-  listenNoteInteraction(note: NostrEvent<ShortTextNote | Repost>, mostRecentEvent?: NostrEvent): Observable<NoteViewModel> {
-    return from(this.repostMapper.toViewModel(note)).pipe(
-      mergeMap((noteView: NoteViewModel) =>
-        this.tweetNostr
-          .listenNoteInteractions(note, mostRecentEvent)
-          .pipe(mergeMap(event => from(
-            (async () => this.repostMapper.patchViewModel(noteView, [event]))()
-          )))
-      )
-    );
+  listenFeed(feed: FeedViewModel, mostRecentEvent?: NostrEvent): Observable<FeedViewModel> {
+    const eventList = [...feed].map(note => note.origin);
+    if (!mostRecentEvent) {
+      mostRecentEvent = this.getMostRecentEvent(eventList);
+    }
+
+    return this.tweetNostr
+      .listenFeedUpdates(eventList, mostRecentEvent)
+      .pipe(mergeMap(events => from(this.feedMapper.patchViewModel(feed, events))));
+  }
+
+  private getMostRecentEvent(eventList: Array<NostrEvent>): NostrEvent {
+    return eventList.reduce((maisRecente, atual) => atual.created_at > maisRecente.created_at ? atual : maisRecente);
   }
 }
