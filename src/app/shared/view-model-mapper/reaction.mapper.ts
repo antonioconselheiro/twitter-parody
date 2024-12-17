@@ -4,12 +4,12 @@ import { ReactionViewModel } from '@view-model/reaction.view-model';
 import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
 import { Reaction } from 'nostr-tools/kinds';
 import { TagHelper } from './tag.helper';
-import { ViewModelMapper } from './view-model.mapper';
+import { SingleViewModelMapper } from './view-model.mapper';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record<string, SortedNostrViewModelSet<ReactionViewModel>>> {
+export class ReactionMapper implements SingleViewModelMapper<ReactionViewModel, Record<string, SortedNostrViewModelSet<ReactionViewModel>>> {
 
   constructor(
     private tagHelper: TagHelper,
@@ -38,6 +38,7 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record
       id: event.id,
       content: event.content,
       reactedTo,
+      origin: event,
       author,
       createdAt: event.created_at
     });

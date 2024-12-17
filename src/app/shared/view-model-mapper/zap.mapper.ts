@@ -4,12 +4,12 @@ import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set
 import { ZapViewModel } from '@view-model/zap.view-model';
 import { Zap } from 'nostr-tools/kinds';
 import { TagHelper } from './tag.helper';
-import { ViewModelMapper } from './view-model.mapper';
+import { SingleViewModelMapper } from './view-model.mapper';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ZapMapper implements ViewModelMapper<ZapViewModel> {
+export class ZapMapper implements SingleViewModelMapper<ZapViewModel> {
 
   constructor(
     private tagHelper: TagHelper,
@@ -40,6 +40,7 @@ export class ZapMapper implements ViewModelMapper<ZapViewModel> {
 
     return Promise.resolve({
       id: event.id,
+      origin: event,
       content: event.content,
       reactedTo,
       author,

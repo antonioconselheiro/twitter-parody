@@ -6,11 +6,13 @@ import { ReactionViewModel } from '@view-model/reaction.view-model';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
 import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
 import { ZapViewModel } from '@view-model/zap.view-model';
-import { Repost, ShortTextNote } from 'nostr-tools/kinds';
+import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
+import { ReactionMapper } from './reaction.mapper';
 import { RepostMapper } from './repost.mapper';
 import { SimpleTextMapper } from './simple-text.mapper';
+import { ViewModelPatch } from './view-model-patch.mapper';
 import { ViewModelMapper } from './view-model.mapper';
-import { ViewModelPatch } from './view-model-patch-single.mapper';
+import { ZapMapper } from './zap.mapper';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +22,9 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
   constructor(
     private guard: NostrGuard,
     private repostMapper: RepostMapper,
-    private simpleTextMapper: SimpleTextMapper
+    private simpleTextMapper: SimpleTextMapper,
+    private reactionMapper: ReactionMapper,
+    private zapMapper: ZapMapper
   ) { }
 
   toViewModel(event: NostrEvent<ShortTextNote>): Promise<NoteViewModel>;
@@ -39,6 +43,7 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
     return Promise.resolve(null);
   }
 
+  // eslint-disable-next-line complexity
   private async toMultipleViewModel(events: Array<NostrEvent>, feed = new SortedNostrViewModelSet<NoteViewModel>()): Promise<FeedViewModel> {
     const reactions = new Map<string, Array<ReactionViewModel>>();
     const zaps = new Map<string, Array<ZapViewModel>>();
@@ -50,6 +55,22 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
       } else if (this.guard.isKind(event, Repost)) {
         const viewModel = await this.repostMapper.toViewModel(event);
         feed.add(viewModel);
+      } else if (this.guard.isKind(event, Reaction)) {
+        const viewModel = await this.reactionMapper.toViewModel(event);
+        if (viewModel) {
+          viewModel.reactedTo.forEach(idHex => {
+            const reactionList = reactions.get(idHex) || new Array<ReactionViewModel>();
+            reactionList.push(viewModel);
+          });
+        }
+      } else if (this.guard.isKind(event, Zap)) {
+        const viewModel = await this.zapMapper.toViewModel(event);
+        if (viewModel) {
+          viewModel.reactedTo.forEach(idHex => {
+            const reactionList = reactions.get(idHex) || new Array<ZapViewModel>();
+            reactionList.push(viewModel);
+          });
+        }
       }
     }
 

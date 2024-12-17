@@ -22,7 +22,7 @@ export interface SimpleTextNoteViewModel extends NostrEventViewModel {
   /**
    * The reposted event
    */
-  reposting?: Array<NoteViewModel>;
+  reposting?: SortedNostrViewModelSet<NoteViewModel>;
 
   /**
    * Record with all reacted reactions.

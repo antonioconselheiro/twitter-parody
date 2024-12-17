@@ -49,9 +49,11 @@ export class TweetProxy {
   async loadFeedRelatedContent(feed: FeedViewModel): Promise<FeedViewModel> {
     const events = [...feed].map(viewModel => viewModel.id);
     const interactions = await this.tweetNostr.loadRelatedContent(events);
-    return this.feedMapper.patchCollection(feed, interactions);
+    return this.feedMapper.patchViewModel(feed, interactions);
   }
 
+  //  FIXME: repensando agora, este método faz sentido? talvéz eu deva escutar sempre o feed e nunca um evento isolado
+  //  pode parecer útil, mas não tem valor prático
   /**
    * Subscribe into an event to listen updates about reposts, reactions and zaps
    */
@@ -61,10 +63,7 @@ export class TweetProxy {
         this.tweetNostr
           .listenNoteInteractions(note, mostRecentEvent)
           .pipe(mergeMap(event => from(
-            (async () => {
-              noteView = await this.repostMapper.patchViewModel(noteView, [event]);
-              return Promise.resolve(noteView);
-            })()
+            (async () => this.repostMapper.patchViewModel(noteView, [event]))()
           )))
       )
     );

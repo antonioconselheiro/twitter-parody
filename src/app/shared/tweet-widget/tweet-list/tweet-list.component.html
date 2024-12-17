@@ -3,8 +3,8 @@
 </div>
 
 <ng-container *ngFor="let tweet of feed; trackBy: trackByTweetId">
-  <article [class.separator]="!tweet.reposting?.length" class="readTweet">
-    <a *ngIf="!tweet.content && tweet.reposting?.length" href="javascript:void(0)" class="retweetOrigin">
+  <article [class.separator]="!tweet.reposting?.size" class="readTweet">
+    <a *ngIf="!tweet.content && tweet.reposting?.size" href="javascript:void(0)" class="retweetOrigin">
       {{tweet.author.displayName}} has retweeted
     </a>
   
@@ -78,7 +78,7 @@
           [loading]="false"
         ></tw-tweet-list>
   
-        <tw-tweet-button-group *ngIf="!tweet.reposting?.length" [tweet]="tweet"></tw-tweet-button-group>
+        <tw-tweet-button-group *ngIf="!tweet.reposting?.size" [tweet]="tweet"></tw-tweet-button-group>
       </div>
     </div>
   </article>
