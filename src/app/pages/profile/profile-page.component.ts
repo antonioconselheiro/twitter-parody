@@ -55,7 +55,7 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
 
   private bindAuthenticatedProfileSubscription(): void {
     this.subscriptions.add(this.profile$.subscribe({
-      next: account => this.viewing = account
+      next: account => this.authenticated = account
     }));
   }
 

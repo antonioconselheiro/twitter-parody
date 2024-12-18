@@ -19,10 +19,10 @@ import { SvgLoaderModule } from '@shared/svg-loader/svg-loader.module';
 
 @NgModule({
   declarations: [
-    TweetListComponent,
-    TweetButtonGroupComponent,
     TweetComponent,
     TweetWriteComponent,
+    TweetListComponent,
+    TweetButtonGroupComponent,
     TweetWriteButtonGroupComponent,
     CompositeTweetPopoverComponent,
     TweetImageViewerComponent
