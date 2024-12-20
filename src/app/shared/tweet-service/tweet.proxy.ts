@@ -20,11 +20,19 @@ export class TweetProxy {
     this.tweetNostr
       .listUserNotes(pubkey)
       .then(mainNotes => {
+
+        /**
+         * TODO: TODOING:
+         * 1. view model do feed mapper não pode carregar informações, como o nip05,
+         * isso deve vir antes, o view model deve pressupor que todas as informações
+         * necessárias já estão carregadas e disponíveis no cache;
+         * 
+         * 
+         */
         this.feedMapper
-          .toViewModel(mainNotes)
+          .toViewModel(mainNotes.splice(0, 3))
           .then(feed => {
             subject.next(feed);
-
             this.loadFeedRelatedContent(feed)
               .then(feedWithRelatedContentLoaded => {
                 subject.next(feedWithRelatedContentLoaded);

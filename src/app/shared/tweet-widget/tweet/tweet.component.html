@@ -1,10 +1,10 @@
 <ng-container *ngIf="note">
 
   <ng-container *ngIf="isFull">
-    <span [innerHTML]="note.content?.fullView"></span>
+    <span [innerHTML]="note.content?.fullView | async"></span>
   </ng-container>
   <ng-container *ngIf="!isFull">
-    <span [innerHTML]="note.content?.smallView"></span>
+    <span [innerHTML]="note.content?.smallView | async"></span>
     <a role="button" class="raw-link" *ngIf="showMoreTextButton()">Show more</a>
   </ng-container>
 

@@ -33,10 +33,10 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
   }
 
   override ngOnInit(): void {
+    this.loadProfileFeed(this.activatedRoute.snapshot.data['profile']);
     this.bindAuthenticatedProfileSubscription();
     this.getProfileFromActivatedRoute();
     this.bindViewingProfile();
-    this.loadProfileFeed(this.activatedRoute.snapshot.data['account']);
 
     super.ngOnInit();
   }

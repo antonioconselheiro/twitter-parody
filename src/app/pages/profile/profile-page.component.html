@@ -1,4 +1,3 @@
-({{viewing|json}})
 <ng-container *ngIf="viewing">
   <header class="headerBackable">
     <div>
@@ -29,7 +28,9 @@
       </span>
       <span *ngIf="viewing.metadata?.nip05" class="userNip5">{{viewing.metadata?.nip05}}</span>
     </div>
-     <!-- FIXME: <div class="bio" [innerHTML]="viewing.metadata?.htmlAbout"></div> -->
+     <!-- FIXME: preciso tratar essa renderização de html para evitar script injection
+      <div class="bio" [innerHTML]="viewing.metadata?.htmlAbout"></div>
+      -->
     <div class="additionalInformation">
       <span *ngIf="viewing.metadata?.['location']">
         <nostr-svg-render class="inlineIcon" name="location"></nostr-svg-render>
