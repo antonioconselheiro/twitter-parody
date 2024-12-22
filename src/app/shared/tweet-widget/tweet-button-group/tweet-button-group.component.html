@@ -1,15 +1,15 @@
 <ng-container *ngIf="tweet">
 
   <button type="button" class="svgButton">
-    <nostr-svg-render name="reply"></nostr-svg-render>
+    <nostr-svg-render name="readTweet/reply"></nostr-svg-render>
     <span class="amount">{{tweet.reply.replies.size || 0 | amount}}</span>
   </button>
   <button [class.active]="isRetweetedByYou(tweet)" type="button" class="svgButton">
-    <nostr-svg-render name="retweet"></nostr-svg-render>
+    <nostr-svg-render name="readTweet/retweet"></nostr-svg-render>
     <span class="amount">{{getRetweetedLength(tweet) | amount}}</span>
   </button>
   <button [class.active]="isLikedByYou(tweet)" type="button" class="svgButton">
-    <nostr-svg-render name="like"></nostr-svg-render>
+    <nostr-svg-render name="readTweet/like"></nostr-svg-render>
     <span class="amount">{{getTweetReactionsLength(tweet) | amount}}</span>
   </button>
   <!-- <button *ngIf="tweet && tweet.view" type="button" class="svgButton">
@@ -17,7 +17,7 @@
     <span class="amount">{{tweet.view | amount}}</span>
   </button> -->
   <button (click)="share.show()" type="button" class="svgButton">
-    <nostr-svg-render name="share"></nostr-svg-render>
+    <nostr-svg-render name="readTweet/share"></nostr-svg-render>
   </button>
   
   <tw-popover #tweetShare>
@@ -31,7 +31,7 @@
         Send by Private Message
       </li>
       <li role="button">
-        <nostr-svg-render class="inlineIcon" name="readTweet/addBookmark"></nostr-svg-render>
+        <nostr-svg-render class="inlineIcon" name="readTweet/options/addBookmark"></nostr-svg-render>
         Bookmark Tweet
       </li>
     </ul>
