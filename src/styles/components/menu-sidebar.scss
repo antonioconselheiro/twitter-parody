@@ -55,74 +55,74 @@ nav.menuBottombar {
 
   li {
     .iconHome {
-      mask-image: url('/assets/menu-sidebar/home.svg');
+      mask-image: url('/assets/menuSidebar/home.svg');
     }
 
     .iconExplore {
-      mask-image: url('/assets/menu-sidebar/explore.svg');
+      mask-image: url('/assets/menuSidebar/explore.svg');
     }
 
     .iconNotifications {
-      mask-image: url('/assets/menu-sidebar/notifications.svg');
+      mask-image: url('/assets/menuSidebar/notifications.svg');
     }
 
     .iconMessages {
-      mask-image: url('/assets/menu-sidebar/messages.svg');
+      mask-image: url('/assets/menuSidebar/messages.svg');
     }
 
     .iconLists {
-      mask-image: url('/assets/menu-sidebar/lists.svg');
+      mask-image: url('/assets/menuSidebar/lists.svg');
     }
 
     .iconBookmark {
-      mask-image: url('/assets/menu-sidebar/bookmark.svg');
+      mask-image: url('/assets/menuSidebar/bookmark.svg');
     }
 
     .iconCommunities {
-      mask-image: url('/assets/menu-sidebar/communities.svg');
+      mask-image: url('/assets/menuSidebar/communities.svg');
     }
 
     .iconProfile {
-      mask-image: url('/assets/menu-sidebar/profile.svg');
+      mask-image: url('/assets/menuSidebar/profile.svg');
     }
 
     .iconMore {
-      mask-image: url('/assets/menu-sidebar/more.svg');
+      mask-image: url('/assets/menuSidebar/more.svg');
     }
 
     &.active {
       font-weight: bolder;
 
       .iconHome {
-        mask-image: url('/assets/menu-sidebar/homeActive.svg');
+        mask-image: url('/assets/menuSidebar/homeActive.svg');
       }
 
       .iconExplore {
-        mask-image: url('/assets/menu-sidebar/exploreActive.svg');
+        mask-image: url('/assets/menuSidebar/exploreActive.svg');
       }
 
       .iconNotifications {
-        mask-image: url('/assets/menu-sidebar/notificationsActive.svg');
+        mask-image: url('/assets/menuSidebar/notificationsActive.svg');
       }
 
       .iconMessages {
-        mask-image: url('/assets/menu-sidebar/messagesActive.svg');
+        mask-image: url('/assets/menuSidebar/messagesActive.svg');
       }
 
       .iconLists {
-        mask-image: url('/assets/menu-sidebar/listsActive.svg');
+        mask-image: url('/assets/menuSidebar/listsActive.svg');
       }
 
       .iconBookmark {
-        mask-image: url('/assets/menu-sidebar/bookmarkActive.svg');
+        mask-image: url('/assets/menuSidebar/bookmarkActive.svg');
       }
 
       .iconCommunities {
-        mask-image: url('/assets/menu-sidebar/communitiesActive.svg');
+        mask-image: url('/assets/menuSidebar/communitiesActive.svg');
       }
 
       .iconProfile {
-        mask-image: url('/assets/menu-sidebar/profileActive.svg');
+        mask-image: url('/assets/menuSidebar/profileActive.svg');
       }
     }
   }
@@ -152,7 +152,7 @@ nav.menuSidebar {
   cursor: pointer;
   user-select: none;
   margin: .5rem;
-  min-width: var(--menu-sidebarProfileMinWidth);
+  min-width: var(--menuSidebarProfileMinWidth);
   transition: background-color .3s;
 
   &:hover,

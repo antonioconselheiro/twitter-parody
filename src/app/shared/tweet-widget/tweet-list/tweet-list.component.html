@@ -23,7 +23,7 @@
             <time *ngIf="tweet.createdAt" [attr.datetime]="tweet.createdAt | datetimeIso">{{tweet.createdAt | datetimeText}}</time>
           </address>
   
-          <button (click)="tweetActions.show()" class="svgButton">
+          <button (click)="tweetActions.show()" class="svgButton borderless">
             <nostr-svg-render name="ellipsis"></nostr-svg-render>
           </button>
   

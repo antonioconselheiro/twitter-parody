@@ -1,9 +1,9 @@
 <header>
-  <button (click)="back.emit()" title="back" type="button" class="backButton svgButton">
+  <button (click)="back.emit()" title="back" type="button" class="backButton svgButton borderless">
     <nostr-svg-render name="left"></nostr-svg-render>
   </button>
   <div class="userInfo">
-    <span class="userName">{{contact?.metadata?.display_name || contact?.metadata?.name}}</span>
+    <span class="userName">{{contact?.displayName}}</span>
     <span class="userNip5">{{contact?.metadata?.nip05}}</span>
   </div>
   <button type="button" title="collapse" (click)="collapse.next(!collapsed)" class="svgButton">

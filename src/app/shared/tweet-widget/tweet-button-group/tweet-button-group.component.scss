@@ -11,45 +11,24 @@
       margin-left: .5rem;
     }
 
-    &.iconReply {
-      svg {
-        mask-image: url('/assets/read-tweet/reply.svg');
-      }
-    }
-
     &.iconRetweet {
-      svg {
-        mask-image: url('/assets/read-tweet/retweet.svg');
-      }
-
       &.active {
-        .amount {
+        .amount, svg {
           color: var(--imgButtonRetweet);
         }
-
-        svg {
-          mask-image: url('/assets/read-tweet/retweet-active.svg');
-          background-color: var(--imgButtonRetweet);
-        }
       }
 
-      &:hover,
-      &:active {
-        svg {
-          background-color: var(--imgButtonRetweet) !important;
-        }
+      &:hover > svg,
+      &:active > svg {
+        color: var(--imgButtonRetweet) !important;
       }
 
       &:hover {
-        nostr-svg-render {
-          background-color: var(--imgButtonRetweetHover);
-        }
+        background-color: var(--imgButtonRetweetHover);
       }
 
       &:active {
-        nostr-svg-render {
-          background-color: var(--imgButtonRetweetActive);
-        }
+        background-color: var(--imgButtonRetweetActive);
       }
     }
 
@@ -65,27 +44,23 @@
 
         svg {
           mask-image: url('/assets/read-tweet/like-active.svg');
-          background-color: var(--imgButtonLike);
+          color: var(--imgButtonLike);
         }
       }
 
       &:hover,
       &:active {
-        svg {
-          background-color: var(--imgButtonLike) !important;
+        nostr-svg-render svg {
+          color: var(--imgButtonLike) !important;
         }
       }
 
       &:hover {
-        nostr-svg-render {
-          background-color: var(--imgButtonLikeHover);
-        }
+        background-color: var(--imgButtonLikeHover);
       }
 
       &:active {
-        nostr-svg-render {
-          background-color: var(--imgButtonLikeActive);
-        }
+        background-color: var(--imgButtonLikeActive);
       }
     }
   }
