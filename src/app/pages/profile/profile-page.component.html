@@ -7,7 +7,7 @@
     </div>
     <div class="userInfo">
       <span class="userName">
-        {{viewing.metadata?.display_name || viewing.metadata?.name}}
+        {{viewing.displayName}}
         <span *ngIf="viewing.nip05?.valid" class="userVerified"></span>
       </span>
       <span class="colorLowestContrast">13,5 mil tweets</span>
@@ -23,7 +23,7 @@
     </div>
     <div class="userInfo">
       <span class="userName">
-        {{viewing.metadata?.display_name || viewing.metadata?.name}}
+        {{viewing.displayName}}
         <span *ngIf="viewing.nip05?.valid" class="userVerified"></span>
       </span>
       <span *ngIf="viewing.metadata?.nip05" class="userNip5">{{viewing.metadata?.nip05}}</span>

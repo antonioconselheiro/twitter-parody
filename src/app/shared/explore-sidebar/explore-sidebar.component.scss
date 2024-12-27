@@ -6,11 +6,11 @@
   width: 320px;
 }
 
-.search-input-height {
+.searchInputHeight {
   height: 45px;
 }
 
-.search-input {
+.searchInput {
   width: 350px;
   height: 45px;
   display: flex;
@@ -18,7 +18,7 @@
   border-radius: 50px;
   background-color: var(--lowBase);
 
-  .search-svg {
+  .searchSvg {
     mask-image: url('/assets/search/search.svg');
     width: 20px;
     background-color: var(--lowContrast);

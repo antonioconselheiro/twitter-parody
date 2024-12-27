@@ -3,72 +3,62 @@
   position: relative;
   justify-content: space-between;
 
-  button.svgButton {
-    >.amount {
-      white-space: nowrap;
-      color: var(--lowContrast);
-      font-size: 12px;
-      margin-left: .5rem;
-    }
-
-    &.iconRetweet {
-      &.active {
-        .amount, svg {
-          color: var(--imgButtonRetweet);
-        }
-      }
-
-      &:hover > svg,
-      &:active > svg {
-        color: var(--imgButtonRetweet) !important;
-      }
-
-      &:hover {
-        background-color: var(--imgButtonRetweetHover);
-      }
-
-      &:active {
-        background-color: var(--imgButtonRetweetActive);
-      }
-    }
-
-    &.iconLike {
-      svg {
-        mask-image: url('/assets/read-tweet/like.svg');
-      }
-
-      &.active {
-        .amount {
-          color: var(--imgButtonLike);
-        }
-
-        svg {
-          mask-image: url('/assets/read-tweet/like-active.svg');
-          color: var(--imgButtonLike);
-        }
-      }
-
-      &:hover,
-      &:active {
-        nostr-svg-render svg {
-          color: var(--imgButtonLike) !important;
-        }
-      }
-
-      &:hover {
-        background-color: var(--imgButtonLikeHover);
-      }
-
-      &:active {
-        background-color: var(--imgButtonLikeActive);
-      }
-    }
-  }
 
   tw-popover {
     position: absolute;
     bottom: 5px;
     right: 5px;
+  }
+}
+
+button.svgButton::ng-deep {
+  > .amount {
+    white-space: nowrap;
+    color: var(--lowContrast);
+    font-size: 12px;
+    margin-left: .5rem;
+  }
+
+  &.iconRetweet {
+    &.active {
+      .amount, svg {
+        color: var(--imgButtonRetweet);
+      }
+    }
+
+    &:hover > svg,
+    &:active > svg {
+      color: var(--imgButtonRetweet) !important;
+    }
+
+    &:hover {
+      background-color: var(--imgButtonRetweetHover);
+    }
+
+    &:active {
+      background-color: var(--imgButtonRetweetActive);
+    }
+  }
+
+  &.iconLike {
+    &.active {
+      .amount, svg {
+        color: var(--imgButtonLike);
+      }
+    }
+
+    &:hover > svg,
+    &:active > svg {
+      color: var(--imgButtonLike) !important;
+    }
+
+    &:hover {
+      background-color: var(--imgButtonLikeHover);
+    }
+
+    &:active {
+      background-color: var(--imgButtonLikeActive);
+    }
   }
 }
 

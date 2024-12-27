@@ -5,7 +5,7 @@
   </ng-container>
   <ng-container *ngIf="!isFull">
     <span [innerHTML]="note.content?.smallView | async"></span>
-    <a role="button" class="raw-link" *ngIf="showMoreTextButton()">Show more</a>
+    <a role="button" class="rawLink" *ngIf="showMoreTextButton()">Show more</a>
   </ng-container>
 
   <video class="bordered" *ngIf="note.media.videoList.length" controls>

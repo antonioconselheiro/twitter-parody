@@ -123,7 +123,7 @@ export class DefaultHtmlfier implements NoteHtmlfier {
   private htmlfyLink(content: string, links: string[]): string {
     links.forEach(link => {
       const linkRegex = this.regexFromLink(link);
-      content = content.replace(linkRegex, `<a class="raw-link" target="_BLANK" title="${link}" href="${link}">${link}</a>`);
+      content = content.replace(linkRegex, `<a class="rawLink" target="_BLANK" title="${link}" href="${link}">${link}</a>`);
     });
 
     return content;
