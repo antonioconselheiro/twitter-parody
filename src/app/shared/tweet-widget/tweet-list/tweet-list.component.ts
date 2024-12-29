@@ -1,14 +1,13 @@
-import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
-import { PopoverComponent } from '@shared/popover-widget/popover.component';
+import { Component, Input } from '@angular/core';
+import { TweetPopoverHandler } from '@shared/tweet-service/tweet-popover.handler';
+import { FeedViewModel } from '@view-model/feed.view-model';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { TweetImageViewing } from '../tweet-img-viewing.interface';
-import { FeedViewModel } from '@view-model/feed.view-model';
 
 @Component({
   selector: 'tw-tweet-list',
   templateUrl: './tweet-list.component.html',
-  styleUrls: ['./tweet-list.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./tweet-list.component.scss']
 })
 export class TweetListComponent {
 
@@ -18,13 +17,18 @@ export class TweetListComponent {
   @Input()
   feed: FeedViewModel | null = null;
 
-  @ViewChild('tweetActions', { read: PopoverComponent })
-  share!: PopoverComponent;
-
   @Input()
   loading = true;
 
   viewing: TweetImageViewing | null = null;
+
+  constructor(
+    private tweetPopoverHandler: TweetPopoverHandler
+  ) { }
+
+  openTweetPopover(note: NoteViewModel, trigger: HTMLElement): void {
+    this.tweetPopoverHandler.handle({ note, trigger });
+  }
 
   trackByTweetId(i: number, tweet: NoteViewModel): string {
     return tweet.id;

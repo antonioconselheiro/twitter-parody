@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ProfileWidgetModule, SvgRenderModule } from '@belomonte/nostr-gui-ngx';
 import { ProfilePageComponent } from './profile-page.component';
 import { TweetWidgetModule } from '@shared/tweet-widget/tweet-widget.module';
+import { PopoverWidgetModule } from '@shared/popover-widget/popover-widget.module';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { TweetWidgetModule } from '@shared/tweet-widget/tweet-widget.module';
     CommonModule,
     SvgRenderModule,
     ProfileWidgetModule,
-    TweetWidgetModule
+    TweetWidgetModule,
+    PopoverWidgetModule
   ],
   exports: [
     ProfilePageComponent

@@ -11,8 +11,8 @@
   margin: 0 0 .5rem 10px;
 
   button.svgButton {
-    div[role=img] {
-      background-color: var(--primary);
+    &::ng-deep svg {
+      color: var(--primary);
       width: 20.2px;
       min-height: 19px;
     }

@@ -1,4 +1,4 @@
-<div *ngIf="loading && !feed" class="separator tl-loading">
+<div *ngIf="loading && !feed" class="separator timelineLoading">
   <nostr-loading></nostr-loading>
 </div>
 
@@ -23,46 +23,9 @@
             <time *ngIf="tweet.createdAt" [attr.datetime]="tweet.createdAt | datetimeIso">{{tweet.createdAt | datetimeText}}</time>
           </address>
   
-          <button (click)="tweetActions.show()" class="svgButton borderless">
+          <button #popoverTrigger (click)="openTweetPopover(tweet, popoverTrigger)" class="svgButton borderless">
             <nostr-svg-render name="ellipsis"></nostr-svg-render>
           </button>
-  
-          <tw-popover #tweetActions>
-            <ul class="popoverList">
-              <li role="button">
-                <nostr-svg-render class="inlineIcon" name="readTweet/options/unfollow"></nostr-svg-render>
-                Delete
-              </li>
-              <li role="button">
-                <nostr-svg-render class="inlineIcon" name="readTweet/options/pinTweet"></nostr-svg-render>
-                Pin to your Profile
-              </li>
-              <li role="button">
-                <nostr-svg-render class="inlineIcon" name="readTweet/options/unfollow"></nostr-svg-render>
-                Unfollow &#64;name
-              </li>
-              <li role="button">
-                <nostr-svg-render class="inlineIcon" name="readTweet/options/addList"></nostr-svg-render>
-                Add/Remove &#64;name from Lists
-              </li>
-              <li role="button">
-                <nostr-svg-render class="inlineIcon" name="readTweet/options/silence"></nostr-svg-render>
-                Silence &#64;name
-              </li>
-              <li role="button">
-                <nostr-svg-render class="inlineIcon" name="readTweet/options/block"></nostr-svg-render>
-                Block &#64;name
-              </li>
-              <li role="button">
-                <nostr-svg-render class="inlineIcon" name="readTweet/options/report"></nostr-svg-render>
-                Report &#64;name
-              </li>
-              <li role="button">
-                <nostr-svg-render class="inlineIcon" name="readTweet/view"></nostr-svg-render>
-                Event detail
-              </li>
-            </ul>
-          </tw-popover>
         </header>
   
         <tw-tweet
@@ -74,6 +37,8 @@
         ></tw-tweet>
   
         <tw-tweet-list
+          *ngIf="tweet.reply.replies.size"
+          [feed]="tweet.reply.replies"
           class="bordered retweetContent"
           [loading]="false"
         ></tw-tweet-list>

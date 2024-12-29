@@ -21,6 +21,7 @@ import { TimelineModule } from './pages/timeline/timeline.module';
 import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.module';
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
 import { SvgLoaderModule } from './shared/svg-loader/svg-loader.module';
+import { PopoverWidgetModule } from '@shared/popover-widget/popover-widget.module';
 
 @NgModule({
   declarations: [
@@ -68,9 +69,10 @@ import { SvgLoaderModule } from './shared/svg-loader/svg-loader.module';
     //  widgets
     MenuSidebarModule,
     ExploreSidebarModule,
+    PopoverWidgetModule,
     LoadingWidgetModule,
-    ThemeModule,
     FloatingChatModule,
+    ThemeModule,
     ModalModule
   ],
   bootstrap: [
