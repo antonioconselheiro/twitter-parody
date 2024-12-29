@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { CredentialManagerWidgetModule, LoadingWidgetModule, CameraModule } from '@belomonte/nostr-gui-ngx';
+import { CameraModule, CredentialManagerWidgetModule, LoadingWidgetModule } from '@belomonte/nostr-gui-ngx';
 import { IdbNCacheModule, NostrModule, ProfileModule } from '@belomonte/nostr-ngx';
 import { FloatingChatModule } from '@shared/floating-chat/floating-chat.module';
 import { NoteHtmlfierModule } from '@shared/htmlfier/note-htmlfier.module';
 import { ModalModule } from '@shared/modal/modal.module';
 import { ThemeModule } from '@shared/theme/theme.module';
+import { TweetContextmenuModule } from '@shared/tweet-contextmenu/tweet-contextmenu.module';
 import { UtilModule } from '@shared/util/util.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,8 +21,6 @@ import { ProfilePageModule } from './pages/profile/profile-page.module';
 import { TimelineModule } from './pages/timeline/timeline.module';
 import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.module';
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
-import { SvgLoaderModule } from './shared/svg-loader/svg-loader.module';
-import { PopoverWidgetModule } from '@shared/popover-widget/popover-widget.module';
 
 @NgModule({
   declarations: [
@@ -47,7 +46,6 @@ import { PopoverWidgetModule } from '@shared/popover-widget/popover-widget.modul
         }
       }
     }),
-    SvgLoaderModule,
     CredentialManagerWidgetModule,
 
     // pages eager loaded module
@@ -69,7 +67,7 @@ import { PopoverWidgetModule } from '@shared/popover-widget/popover-widget.modul
     //  widgets
     MenuSidebarModule,
     ExploreSidebarModule,
-    PopoverWidgetModule,
+    TweetContextmenuModule,
     LoadingWidgetModule,
     FloatingChatModule,
     ThemeModule,

@@ -15,6 +15,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private subscriptions = new Subscription();
   isModalOpen = false;
+  contextMenuPosition: DOMRect | null = null;
 
   @ViewChild('tweetActions', { read: PopoverComponent })
   tweetActions?: PopoverComponent;
@@ -50,7 +51,9 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     if (aggregator) {
-      this.tweetActions.show(aggregator.trigger);
+      this.contextMenuPosition = aggregator.trigger.getBoundingClientRect();
+      this.tweetActions.show();
+
     } else {
       this.tweetActions.hide();
     }

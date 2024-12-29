@@ -1,5 +1,4 @@
 import { Component, ElementRef, HostBinding, HostListener } from '@angular/core';
-import { NoteViewModel } from '@view-model/note.view-model';
 
 @Component({
   selector: 'tw-popover',
@@ -20,7 +19,7 @@ export class PopoverComponent {
     private el: ElementRef
   ) { }
 
-  show(trigger?: HTMLElement): void {
+  show(): void {
     this.disablePopover = false;
 
     //  without the tick the animation transiction does not
