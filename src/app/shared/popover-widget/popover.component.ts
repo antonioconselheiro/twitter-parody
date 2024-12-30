@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostBinding, HostListener } from '@angular/core';
+import { Component, ElementRef, HostBinding, HostListener, Input } from '@angular/core';
 
 @Component({
   selector: 'tw-popover',
@@ -14,6 +14,9 @@ export class PopoverComponent {
 
   @HostBinding('class.removed')
   disablePopover = true;
+
+  @Input()
+  selfCloseOnOutClick = false;
 
   constructor(
     private el: ElementRef
@@ -39,16 +42,20 @@ export class PopoverComponent {
     }
   }
 
-  //@HostListener('document:click', ['$event'])
+  @HostListener('document:click', ['$event'])
   onClickOutsidePopover(event: MouseEvent): void {
+    if (!this.selfCloseOnOutClick) {
+      return;
+    }
 
-    const el = this.el?.nativeElement
+    const el: HTMLElement | null = this.el?.nativeElement
+    const target: HTMLElement | null = event.target as HTMLElement | null;
     if (!el) {
       this.showPopoverAnimating = false;
       return;
     }
 
-    const clickInside = el.contains(event.target as HTMLElement);
+    const clickInside = el.contains(target);
     if (!clickInside) {
       this.showPopoverAnimating = false;
     }

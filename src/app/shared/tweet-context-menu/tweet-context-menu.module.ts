@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TweetContextmenuComponent } from './tweet-contextmenu.component';
+import { TweetContextMenuComponent } from './tweet-context-menu.component';
 import { PopoverWidgetModule } from '@shared/popover-widget/popover-widget.module';
 import { SvgLoaderModule } from '@shared/svg-loader/svg-loader.module';
 
 @NgModule({
   declarations: [
-    TweetContextmenuComponent
+    TweetContextMenuComponent
   ],
   imports: [
     CommonModule,
@@ -14,7 +14,7 @@ import { SvgLoaderModule } from '@shared/svg-loader/svg-loader.module';
     SvgLoaderModule
   ],
   exports: [
-    TweetContextmenuComponent
+    TweetContextMenuComponent
   ]
 })
 export class TweetContextmenuModule { }

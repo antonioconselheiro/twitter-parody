@@ -4,7 +4,7 @@ import { TweetNostr } from './tweet.nostr';
 import { TweetProxy } from './tweet.proxy';
 import { TweetThreadfyConverter } from './tweet-threadfy.converter';
 import { TweetTagsConverter } from './tweet-tags.converter';
-import { TweetPopoverHandler } from './tweet-popover.handler';
+import { TweetContextmenuHandler } from './tweet-contextmenu.handler';
 
 @NgModule({
   imports: [
@@ -13,7 +13,7 @@ import { TweetPopoverHandler } from './tweet-popover.handler';
   providers: [
     TweetProxy,
     TweetNostr,
-    TweetPopoverHandler,
+    TweetContextmenuHandler,
     TweetTagsConverter,
     TweetThreadfyConverter
   ]

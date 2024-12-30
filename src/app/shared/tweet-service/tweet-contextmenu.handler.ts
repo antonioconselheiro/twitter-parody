@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class TweetPopoverHandler {
+export class TweetContextmenuHandler {
 
   readonly popover$ = new BehaviorSubject<{ note: NoteViewModel, trigger: HTMLElement } | null>(null);
 

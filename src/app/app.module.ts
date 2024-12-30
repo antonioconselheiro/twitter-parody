@@ -6,7 +6,7 @@ import { FloatingChatModule } from '@shared/floating-chat/floating-chat.module';
 import { NoteHtmlfierModule } from '@shared/htmlfier/note-htmlfier.module';
 import { ModalModule } from '@shared/modal/modal.module';
 import { ThemeModule } from '@shared/theme/theme.module';
-import { TweetContextmenuModule } from '@shared/tweet-contextmenu/tweet-contextmenu.module';
+import { TweetContextmenuModule } from '@shared/tweet-context-menu/tweet-context-menu.module';
 import { UtilModule } from '@shared/util/util.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
