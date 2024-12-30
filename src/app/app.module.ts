@@ -6,7 +6,7 @@ import { FloatingChatModule } from '@shared/floating-chat/floating-chat.module';
 import { NoteHtmlfierModule } from '@shared/htmlfier/note-htmlfier.module';
 import { ModalModule } from '@shared/modal/modal.module';
 import { ThemeModule } from '@shared/theme/theme.module';
-import { TweetContextmenuModule } from '@shared/tweet-context-menu/tweet-context-menu.module';
+import { TweetContextMenuModule } from '@shared/tweet-context-menu/tweet-context-menu.module';
 import { UtilModule } from '@shared/util/util.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,6 +21,7 @@ import { ProfilePageModule } from './pages/profile/profile-page.module';
 import { TimelineModule } from './pages/timeline/timeline.module';
 import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.module';
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
+import { TweetShareModule } from '@shared/tweet-share/tweet-share.module';
 
 @NgModule({
   declarations: [
@@ -64,10 +65,13 @@ import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
     ProfileModule,
     NoteHtmlfierModule,
 
-    //  widgets
+    //  context menu widgets
+    TweetShareModule,
+    TweetContextMenuModule,
+
+    //  other widgets
     MenuSidebarModule,
     ExploreSidebarModule,
-    TweetContextmenuModule,
     LoadingWidgetModule,
     FloatingChatModule,
     ThemeModule,

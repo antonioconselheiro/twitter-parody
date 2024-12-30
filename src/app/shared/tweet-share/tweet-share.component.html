@@ -1,0 +1,16 @@
+<tw-popover class="tweetShare" [selfCloseOnOutClick]="true" #tweetShare [style.top.px]="contextMenuPosition">
+  <ul class="popoverList">
+    <li role="button">
+      <nostr-svg-render class="inlineIcon" name="link"></nostr-svg-render>
+      Copy link
+    </li>
+    <li role="button">
+      <nostr-svg-render class="inlineIcon" name="chat/newMessage"></nostr-svg-render>
+      Send by Private Message
+    </li>
+    <li role="button">
+      <nostr-svg-render class="inlineIcon" name="readTweet/options/addBookmark"></nostr-svg-render>
+      Bookmark Tweet
+    </li>
+  </ul>
+</tw-popover>

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { TweetContextmenuHandler } from '@shared/tweet-service/tweet-contextmenu.handler';
+import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
 import { FeedViewModel } from '@view-model/feed.view-model';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { TweetImageViewing } from '../tweet-img-viewing.interface';
@@ -23,11 +23,11 @@ export class TweetListComponent {
   viewing: TweetImageViewing | null = null;
 
   constructor(
-    private tweetPopoverHandler: TweetContextmenuHandler
+    private tweetPopoverHandler: TweetContextMenuHandler
   ) { }
 
-  openTweetPopover(note: NoteViewModel, trigger: HTMLElement): void {
-    this.tweetPopoverHandler.handle({ note, trigger });
+  openTweetContextMenu(note: NoteViewModel, trigger: HTMLElement): void {
+    this.tweetPopoverHandler.handleContextMenu({ note, trigger });
   }
 
   trackByTweetId(i: number, tweet: NoteViewModel): string {

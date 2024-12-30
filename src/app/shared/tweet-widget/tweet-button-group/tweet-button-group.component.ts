@@ -1,6 +1,6 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Account, CurrentAccountObservable } from '@belomonte/nostr-ngx';
-import { PopoverComponent } from '@shared/popover-widget/popover.component';
+import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { Subscription } from 'rxjs';
 
@@ -16,13 +16,11 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   @Input()
   tweet: NoteViewModel | null = null;
 
-  @ViewChild('tweetShare', { read: PopoverComponent })
-  share!: PopoverComponent;
-
   profile: Account | null = null;
 
   constructor(
-    private profile$: CurrentAccountObservable
+    private profile$: CurrentAccountObservable,
+    private tweetPopoverHandler: TweetContextMenuHandler
   ) { }
 
   ngOnInit(): void {
@@ -37,6 +35,10 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.profile$.subscribe({
       next: profile => this.profile = profile
     }));
+  }
+
+  openTweetShareOptions(note: NoteViewModel, trigger: HTMLElement): void {
+    this.tweetPopoverHandler.handleShareOptions({ note, trigger });
   }
 
   isRetweetedByYou(note: NoteViewModel): boolean {

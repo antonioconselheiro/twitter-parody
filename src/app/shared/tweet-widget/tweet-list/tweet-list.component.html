@@ -23,7 +23,7 @@
             <time *ngIf="tweet.createdAt" [attr.datetime]="tweet.createdAt | datetimeIso">{{tweet.createdAt | datetimeText}}</time>
           </address>
   
-          <button #popoverTrigger (click)="openTweetPopover(tweet, popoverTrigger)" class="svgButton borderless">
+          <button #popoverTrigger (click)="openTweetContextMenu(tweet, popoverTrigger)" class="svgButton borderless">
             <nostr-svg-render name="ellipsis"></nostr-svg-render>
           </button>
         </header>

@@ -1,5 +1,4 @@
 <ng-container *ngIf="tweet">
-
   <button type="button" class="svgButton borderless">
     <nostr-svg-render name="readTweet/reply"></nostr-svg-render>
     <span class="amount">{{tweet.reply.replies.size || 0 | amount}}</span>
@@ -12,28 +11,7 @@
     <nostr-svg-render class="iconLike" name="readTweet/like"></nostr-svg-render>
     <span class="amount">{{getTweetReactionsLength(tweet) | amount}}</span>
   </button>
-  <!-- <button *ngIf="tweet && tweet.view" type="button" class="svgButton">
-    <nostr-svg-render name="view"></nostr-svg-render>
-    <span class="amount">{{tweet.view | amount}}</span>
-  </button> -->
-  <button (click)="share.show()" type="button" class="svgButton borderless">
+  <button #shareButton (click)="openTweetShareOptions(tweet, shareButton)" type="button" class="svgButton borderless">
     <nostr-svg-render name="readTweet/share"></nostr-svg-render>
   </button>
-  
-  <tw-popover #tweetShare>
-    <ul class="popoverList">
-      <li role="button">
-        <nostr-svg-render class="inlineIcon" name="link"></nostr-svg-render>
-        Copy link
-      </li>
-      <li role="button">
-        <nostr-svg-render class="inlineIcon" name="chat/newMessage"></nostr-svg-render>
-        Send by Private Message
-      </li>
-      <li role="button">
-        <nostr-svg-render class="inlineIcon" name="readTweet/options/addBookmark"></nostr-svg-render>
-        Bookmark Tweet
-      </li>
-    </ul>
-  </tw-popover>
 </ng-container>
