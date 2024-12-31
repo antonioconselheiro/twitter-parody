@@ -41,7 +41,7 @@ export class NoteMapper {
           Repost
         ],
         '#e': [
-          note.origin.id
+          note.event.id
         ]
       }
     ]);
@@ -54,11 +54,11 @@ export class NoteMapper {
 
   // eslint-disable-next-line complexity
   private async getReply(note: NoteViewModel, relationedEvents: Array<NostrEvent>): Promise<NoteReplyContext> {
-    const [rootReplingId = undefined] = this.tagHelper.getRelatedEventsByRelationType(note.origin, 'root');
-    const [replyToId = undefined] = this.tagHelper.getRelatedEventsByRelationType(note.origin, 'reply');
+    const [rootReplingId = undefined] = this.tagHelper.getRelatedEventsByRelationType(note.event, 'root');
+    const [replyToId = undefined] = this.tagHelper.getRelatedEventsByRelationType(note.event, 'reply');
     const repliesEvents = relationedEvents.filter(event => {
       const replies = this.tagHelper.getRelatedEventsByRelationType(event, 'reply');
-      return replies.find(reply => reply === note.origin.id);
+      return replies.find(reply => reply === note.event.id);
     });
 
     const replies = note.reply.replies;
@@ -119,7 +119,7 @@ export class NoteMapper {
       }
 
       const mentions = this.tagHelper.getRelatedEventsByRelationType(event, 'mention');
-      const contains = mentions.find(mention => mention === note.origin.id);
+      const contains = mentions.find(mention => mention === note.event.id);
       if (contains) {
         const mentioner = await this.toViewModel(event);
         note.reposted.add(mentioner);

@@ -3,6 +3,9 @@ import { NostrEventViewModel } from './nostr-event.view-model';
 /**
  * Set of ready to render nostr data.
  * Data is added in correct position, sorted by event created timestamp.
+ * 
+ * TODO: FIXME: está invertida a ordem, precisa ser do mais recente para o mais antigo
+ * FIXME: não tenho certeza se este delete está funcionando, seria bom pesquisar o evento pelo id
  */
 export class SortedNostrViewModelSet<T extends NostrEventViewModel> extends Set<T> {
 
@@ -10,12 +13,13 @@ export class SortedNostrViewModelSet<T extends NostrEventViewModel> extends Set<
 
   constructor(values?: readonly T[] | null) {
     super();
+
     if (values) {
       values.forEach(value => this.add(value));
     }
   }
 
-  override [Symbol.iterator](): IterableIterator<T> {
+  override[Symbol.iterator](): IterableIterator<T> {
     return this.#items[Symbol.iterator]();
   }
 

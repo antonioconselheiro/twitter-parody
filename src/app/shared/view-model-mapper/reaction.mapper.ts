@@ -38,8 +38,10 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record
       id: event.id,
       content: event.content,
       reactedTo,
-      origin: event,
+      event,
       author,
+      //  TODO: ideally I should pass relay address from where this event come
+      origin: [],
       createdAt: event.created_at
     });
   }

@@ -4,6 +4,8 @@ import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
 import { FeedViewModel } from "@view-model/feed.view-model";
 import { from, mergeMap, Observable, Subject } from "rxjs";
 import { TweetNostr } from "./tweet.nostr";
+import { SortedNostrViewModelSet } from "@view-model/sorted-nostr-view-model.set";
+import { NoteViewModel } from "@view-model/note.view-model";
 
 @Injectable({
   providedIn: 'root'
@@ -51,16 +53,18 @@ export class TweetProxy {
    * This will load replies, repost, reactions and zaps.
    */
   async loadFeedRelatedContent(feed: FeedViewModel): Promise<FeedViewModel> {
-    const events = [...feed].map(viewModel => viewModel.id);
+    const eventList = [...feed];
+    const events = eventList.map(viewModel => viewModel.id);
     const interactions = await this.tweetNostr.loadRelatedContent(events);
-    return this.feedMapper.patchViewModel(feed, interactions);
+
+    return this.feedMapper.patchViewModel(new SortedNostrViewModelSet<NoteViewModel>(eventList), interactions);
   }
 
   /**
    * Subscribe into an event to listen updates about reposts, reactions and zaps
    */
   listenFeed(feed: FeedViewModel, mostRecentEvent?: NostrEvent): Observable<FeedViewModel> {
-    const eventList = [...feed].map(note => note.origin);
+    const eventList = [...feed].map(note => note.event);
     if (!mostRecentEvent) {
       mostRecentEvent = this.getMostRecentEvent(eventList);
     }

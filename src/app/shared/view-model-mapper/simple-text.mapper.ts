@@ -51,13 +51,15 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
     const note: SimpleTextNoteViewModel = {
       id: event.id,
       author,
-      origin: event,
+      event: event,
       createdAt: event.created_at,
       content: this.htmlfier.parse(event.content),
       media: this.htmlfier.extractMedia(event.content),
       reactions,
       zaps,
       reply,
+      //  TODO: ideally I should pass relay address from where this event come
+      origin: [],
       reposted: new SortedNostrViewModelSet<NoteViewModel>()
     };
 

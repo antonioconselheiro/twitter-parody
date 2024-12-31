@@ -40,10 +40,12 @@ export class ZapMapper implements SingleViewModelMapper<ZapViewModel> {
 
     return Promise.resolve({
       id: event.id,
-      origin: event,
+      event,
       content: event.content,
       reactedTo,
       author,
+      //  TODO: ideally I should pass relay address from where this event come
+      origin: [],
       amount: amountZapped ? Number(amountZapped) : null,
       createdAt: event.created_at
     });

@@ -1,6 +1,9 @@
-[X] identify how manys replies the event has
-[X] identify how manys retweet the event has
-[X] identify if the user has retweeted it
+[ ] Carregar e emitir os primeiros eventos que serão exibidos do feed (quantos eventos no primeiro carregamento?);
+[ ] Carregar e emitir os likes, reactions e replies dos eventos que serão exibidos no feed (carregar somente eventos que serão exibidos, resposta de respostas não devem ser inclusas);
+[ ] Carregar e emitir os dados dos autores em paralelo aos eventos relacionados ao feed, as imagens não devem ser carregadas nesse primeiro momento;
+[ ] Carregar somente as imagens de perfil de autor que serão exibidas no feed apresentados neste feed, um pequeno grupo de imagens deve ser registrada em um lrucache para que não haja necessidade de recarregar imagens de perfilf frequentemente acessadas;
+
+[ ] BUG: Fazer com que o evento kind 0 mais recente seja carregado
 
 [ ] treat mention in cases: nostr:note17gh3... and #[0]
 [ ] compose tweet data with the mentioned tweet event id
@@ -9,4 +12,12 @@
 [ ] create thread data structure
 [ ] write scss for chained tweets
 [ ] set active bookmark as blue
-[ ] the number of retweets is not right
+
+[ ] Fazer com que popovers do tweet fechem com ESC
+
+Seguimentar o carregamento das contas em estados:
+not loaded: quando a pubkey está disponível e seus cálculos derivados, mas nenhuma outra informação foi encontrada
+essential loaded: quando a pubkey e o evento metadata foram carregados
+viewing loaded: quando apenas a imagem de perfil e metadados estão carregados, esta conta é possível ser renderizada em tela
+full loaded: quando a imagem de perfil, metadados e nip05 estão carregados, este estado deve ser consolidado se o client interpretar que o usuário pode estar com a intenção de clique, carregando previamente o nip05 ao observar um hover, por exemplo
+deep loded: quando o perfil está completamente carregado, incluindo banner, isso deve ocorrer somente para contas que tiveram o perfil aberto, um limite de 7 perfis nesta profundidade de cache devem ser armazenados, impedindo que imagens de banner sejam recorrentemente recarregadas 
