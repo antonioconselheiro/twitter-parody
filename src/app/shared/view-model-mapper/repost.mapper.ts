@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { InMemoryNCache, LOCAL_CACHE_TOKEN, NostrEvent, NostrGuard, ProfileService } from '@belomonte/nostr-ngx';
+import { InMemoryNCache, LOCAL_CACHE_TOKEN, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
@@ -22,8 +22,8 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
     private guard: NostrGuard,
     private tagHelper: TagHelper,
     private zapMapper: ZapMapper,
+    private profileProxy: ProfileProxy,
     private reactionMapper: ReactionMapper,
-    private profileService: ProfileService,
     private simpleTextMapper: SimpleTextMapper,
     @Inject(HTML_PARSER_TOKEN) private htmlfier: NoteHtmlfier,
     @Inject(LOCAL_CACHE_TOKEN) private ncache: InMemoryNCache
@@ -71,8 +71,8 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
 
     const reactions = await this.reactionMapper.toViewModel(events);
     const zaps = await this.zapMapper.toViewModel(events);
-    const author = await this.profileService.loadAccount(event.pubkey);
     const isSimpleRepost = this.isSimpleRepost(event);
+    const author = await this.profileProxy.loadAccount(event.pubkey, isSimpleRepost ? 'essential' : 'complete');
     const reply: NoteReplyContext = { replies: new SortedNostrViewModelSet<NoteViewModel>() };
 
     const note: RepostNoteViewModel = {

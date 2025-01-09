@@ -2,10 +2,10 @@ import { Injectable } from "@angular/core";
 import { NostrEvent } from "@belomonte/nostr-ngx";
 import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
 import { FeedViewModel } from "@view-model/feed.view-model";
+import { NoteViewModel } from "@view-model/note.view-model";
+import { SortedNostrViewModelSet } from "@view-model/sorted-nostr-view-model.set";
 import { from, mergeMap, Observable, Subject } from "rxjs";
 import { TweetNostr } from "./tweet.nostr";
-import { SortedNostrViewModelSet } from "@view-model/sorted-nostr-view-model.set";
-import { NoteViewModel } from "@view-model/note.view-model";
 
 @Injectable({
   providedIn: 'root'

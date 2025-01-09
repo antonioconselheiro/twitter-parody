@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalService } from '@belomonte/async-modal-ngx';
 import { CredentialHandlerService } from '@belomonte/nostr-gui-ngx';
-import { Account, CurrentAccountObservable } from '@belomonte/nostr-ngx';
+import { Account, AccountSession, CurrentAccountObservable } from '@belomonte/nostr-ngx';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { CompositeTweetPopoverComponent } from '@shared/tweet-widget/composite-tweet-popover/composite-tweet-popover.component';
 import { Subscription } from 'rxjs';
@@ -27,9 +27,9 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
   readonly menuTypeCommunities = MenuType.COMMUNITIES;
   readonly menuTypeProfile = MenuType.PROFILE;
 
-  account: Account | null = null;
+  account: AccountSession | null = null;
   menuActive: MenuType | null = null;
-  
+
   @ViewChild('authPopover', { read: PopoverComponent })
   popover!: PopoverComponent;
 

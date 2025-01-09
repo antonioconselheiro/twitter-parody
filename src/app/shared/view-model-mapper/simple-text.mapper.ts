@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { InMemoryNCache, LOCAL_CACHE_TOKEN, NostrEvent, NostrGuard, ProfileService } from '@belomonte/nostr-ngx';
+import { InMemoryNCache, LOCAL_CACHE_TOKEN, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
@@ -19,8 +19,8 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
   constructor(
     @Inject(HTML_PARSER_TOKEN) private htmlfier: NoteHtmlfier,
     @Inject(LOCAL_CACHE_TOKEN) private ncache: InMemoryNCache,
-    private profileService: ProfileService,
     private reactionMapper: ReactionMapper,
+    private profileProxy: ProfileProxy,
     private zapMapper: ZapMapper,
     private guard: NostrGuard
   ) { }
@@ -46,7 +46,9 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
 
     const reactions = await this.reactionMapper.toViewModel(events);
     const zaps = await this.zapMapper.toViewModel(events);
-    const author = await this.profileService.loadAccount(event.pubkey);
+    //  FIXME: o mapper não deve fazer requisições websocket, devo bolar uma maneira de fazer o carregamento o account
+    //  utilizando somente as informações disponíveis em cache
+    const author = await this.profileProxy.loadAccount(event.pubkey, 'viewable');
     const reply: NoteReplyContext = { replies: new SortedNostrViewModelSet<NoteViewModel>() };
     const note: SimpleTextNoteViewModel = {
       id: event.id,

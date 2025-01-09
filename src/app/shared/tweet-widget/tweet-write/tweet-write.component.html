@@ -1,6 +1,6 @@
-<div class="writeTweet separator">
+<div *ngIf="account" class="writeTweet separator">
   <div class="hbar">
-    <nostr-profile-picture [profile]="profile"></nostr-profile-picture>
+    <nostr-profile-picture [account]="account"></nostr-profile-picture>
   </div>
   <div>
     <textarea #textArea [(ngModel)]="tweet" placeholder="What's on your mind?" autocomplete="off" autocorrect="off"></textarea>

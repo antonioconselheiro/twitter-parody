@@ -11,7 +11,7 @@
 <aside *ngIf="!collapsed && contacteds.length">
   <ul>
     <li (click)="choose.emit(message.author)" role="link" *ngFor="let message of contacteds">
-      <nostr-profile-picture [profile]="message.author"></nostr-profile-picture>
+      <nostr-profile-picture [account]="message.author"></nostr-profile-picture>
       <article>
         <header>
           <span class="userName">

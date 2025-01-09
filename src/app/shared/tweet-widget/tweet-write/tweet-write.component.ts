@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Account, CurrentAccountObservable } from '@belomonte/nostr-ngx';
+import { AccountSession, CurrentAccountObservable } from '@belomonte/nostr-ngx';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -12,15 +12,15 @@ export class TweetWriteComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   tweet = '';
-  profile: Account | null = null;
-  
+  account: AccountSession | null = null;
+
   constructor(
     private profile$: CurrentAccountObservable
   ) { }
 
   ngOnInit(): void {
     this.subscriptions.add(this.profile$.subscribe({
-      next: account => this.profile = account
+      next: account => this.account = account
     }));
   }
 

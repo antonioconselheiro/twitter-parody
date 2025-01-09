@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { NostrEvent, NostrGuard, ProfileService } from '@belomonte/nostr-ngx';
+import { NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
 import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
 import { ZapViewModel } from '@view-model/zap.view-model';
 import { Zap } from 'nostr-tools/kinds';
-import { TagHelper } from './tag.helper';
 import { SingleViewModelMapper } from './single-view-model.mapper';
+import { TagHelper } from './tag.helper';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class ZapMapper implements SingleViewModelMapper<ZapViewModel> {
 
   constructor(
     private tagHelper: TagHelper,
-    private profileService: ProfileService,
+    private profileProxy: ProfileProxy,
     private guard: NostrGuard
   ) { }
 
@@ -36,7 +36,7 @@ export class ZapMapper implements SingleViewModelMapper<ZapViewModel> {
 
     // TODO: validate zap data with zod
     const amountZapped = this.tagHelper.getTagValueByType('amount', event);
-    const author = await this.profileService.loadAccount(event.pubkey);
+    const author = await this.profileProxy.loadAccount(event.pubkey, 'notloaded');
 
     return Promise.resolve({
       id: event.id,

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Account, CurrentAccountObservable } from '@belomonte/nostr-ngx';
+import { AccountComplete, AccountSession, AccountViewable, CurrentAccountObservable } from '@belomonte/nostr-ngx';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
 import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
 import { FeedViewModel } from '@view-model/feed.view-model';
@@ -17,8 +17,8 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
 
   loading = true;
 
-  viewing: Account | null = null;
-  authenticated: Account | null = null;
+  viewing: AccountViewable | AccountComplete | null = null;
+  authenticated: AccountSession | null = null;
 
   feed: FeedViewModel | null = null;
   subscriptions = new Subscription();
@@ -61,15 +61,15 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
 
   private bindViewingProfile(): void {
     this.subscriptions.add(this.activatedRoute.data.subscribe({
-      next: wrapper => {
+      next: ({ profile }) => {
         this.feed = null;
         document.body.scrollTo(0, 0);
-        this.loadProfileFeed(wrapper['profile']);
+        this.loadProfileFeed(profile);
       }
     }));
   }
 
-  private loadProfileFeed(account: Account | null): void {
+  private loadProfileFeed(account: AccountViewable | AccountComplete | null): void {
     this.viewing = account;
     if (account) {
       this.tweetProxy
@@ -90,7 +90,7 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
     }));
 
     if (this.viewing) {
-      this.title = this.viewing.metadata?.display_name || this.viewing.metadata?.name || 'Profile';
+      this.title = this.viewing.displayName || 'Profile';
       this.loadProfileFeed(this.viewing);
     }
   }

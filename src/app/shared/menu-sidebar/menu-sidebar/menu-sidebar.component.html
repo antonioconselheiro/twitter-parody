@@ -60,7 +60,7 @@
     <nostr-profile-picture [account]="account"></nostr-profile-picture>
     <div class="userInfo">
       <span class="userName">
-        {{account.metadata?.display_name || account.metadata?.name}}
+        {{account.displayName}}
         <span *ngIf="account" class="userVerified"></span>
       </span>
       <span *ngIf="account.metadata?.nip05" class="userNip5">{{account.metadata?.nip05}}</span>
