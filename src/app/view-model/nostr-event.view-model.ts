@@ -3,7 +3,7 @@ import { Account, HexString, NostrEvent } from "@belomonte/nostr-ngx";
 /**
  * properties that all ready to render nostr event will bring
  */
-export interface NostrEventViewModel {
+export interface NostrEventViewModel<AccountViewModel extends Account> {
 
   /**
    * hexadecimal event id
@@ -13,7 +13,7 @@ export interface NostrEventViewModel {
   /**
    * author pubkey
    */
-  author: Account;
+  author: AccountViewModel;
 
   //  TODO: study how render it using angular date pipe and internacionalization
   //  TODO: in long term, include time2blocks alternative

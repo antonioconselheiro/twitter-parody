@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CurrentAccountObservable } from '@belomonte/nostr-ngx';
+import { AccountRenderable, CurrentAccountObservable } from '@belomonte/nostr-ngx';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
 import { MenuSidebarMobileObservable } from '@shared/menu-sidebar/menu-sidebar-mobile/menu-sidebar-mobile.observable';
-import { Account } from 'node_modules/@belomonte/nostr-ngx/lib/domain/account.interface';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -15,7 +14,7 @@ export class TimelineComponent extends AbstractEntitledComponent implements OnIn
   override title = 'Home';
   private subscriptions = new Subscription();
 
-  account: Account | null = null;
+  account: AccountRenderable | null = null;
 
   constructor(
     private menuSidebarMobile$: MenuSidebarMobileObservable,
@@ -28,7 +27,7 @@ export class TimelineComponent extends AbstractEntitledComponent implements OnIn
     super.ngOnInit();
     this.bindProfileSubscription();
   }
-  
+
   private bindProfileSubscription(): void {
     this.subscriptions.add(this.profile$.subscribe({
       next: account => this.account = account

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { InMemoryNCache, LOCAL_CACHE_TOKEN, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
+import { Account, InMemoryNCache, LOCAL_CACHE_TOKEN, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
@@ -16,7 +16,7 @@ import { ZapMapper } from './zap.mapper';
 @Injectable({
   providedIn: 'root'
 })
-export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> {
+export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel<Account>> {
 
   constructor(
     private guard: NostrGuard,
@@ -30,13 +30,13 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
   ) { }
 
   // eslint-disable-next-line complexity
-  async toViewModel(event: NostrEvent): Promise<RepostNoteViewModel> {
+  async toViewModel(event: NostrEvent): Promise<RepostNoteViewModel<Account>> {
     const content = event.content || '';
     const contentEvent = this.extractNostrEvent(content);
     const reposting = new SortedNostrViewModelSet<NoteViewModel>();
 
     if (contentEvent) {
-      let retweeted: NoteViewModel | null;
+      let retweeted: NoteViewModel<Account> | null;
       if (this.guard.isKind(contentEvent, ShortTextNote)) {
         retweeted = await this.simpleTextMapper.toViewModel(contentEvent);
         reposting.add(retweeted);
@@ -72,10 +72,10 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
     const reactions = await this.reactionMapper.toViewModel(events);
     const zaps = await this.zapMapper.toViewModel(events);
     const isSimpleRepost = this.isSimpleRepost(event);
-    const author = await this.profileProxy.loadAccount(event.pubkey, isSimpleRepost ? 'essential' : 'complete');
-    const reply: NoteReplyContext = { replies: new SortedNostrViewModelSet<NoteViewModel>() };
+    const author = await this.profileProxy.loadAccount(event.pubkey, 'calculated');
+    const reply: NoteReplyContext<Account> = { replies: new SortedNostrViewModelSet<NoteViewModel>() };
 
-    const note: RepostNoteViewModel = {
+    const note: RepostNoteViewModel<Account> = {
       id: event.id,
       author,
       createdAt: event.created_at,

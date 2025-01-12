@@ -1,8 +1,6 @@
-/* eslint-disable max-lines */
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AccountRenderable } from '@belomonte/nostr-ngx';
 import { DirectMessage } from '../message.interface';
-import { NostrMetadata } from '@nostrify/nostrify';
-import { Account } from '@belomonte/nostr-ngx';
 
 @Component({
   selector: 'tw-floating-chat-contacts',
@@ -12,7 +10,7 @@ import { Account } from '@belomonte/nostr-ngx';
 export class FloatingChatContactsComponent {
 
   @Output()
-  choose = new EventEmitter<Account>();
+  choose = new EventEmitter<AccountRenderable>();
 
   @Output()
   collapse = new EventEmitter<boolean>();

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Account } from '@belomonte/nostr-ngx';
+import { AccountRenderable } from '@belomonte/nostr-ngx';
 
 @Component({
   selector: 'tw-floating-chat-messages',
@@ -18,5 +18,5 @@ export class FloatingChatMessagesComponent {
   collapsed = true;
 
   @Input()
-  contact: Account | null = null;
+  contact: AccountRenderable | null = null;
 }

@@ -1,17 +1,20 @@
+import { Account } from '@belomonte/nostr-ngx';
 import { NostrEventViewModel } from './nostr-event.view-model';
 
+// TODO: FIXME: está invertida a ordem, precisa ser do mais recente para o mais antigo
+// FIXME: não tenho certeza se este delete está funcionando, seria bom pesquisar o evento pelo id
 /**
  * Set of ready to render nostr data.
  * Data is added in correct position, sorted by event created timestamp.
- * 
- * TODO: FIXME: está invertida a ordem, precisa ser do mais recente para o mais antigo
- * FIXME: não tenho certeza se este delete está funcionando, seria bom pesquisar o evento pelo id
  */
-export class SortedNostrViewModelSet<T extends NostrEventViewModel> extends Set<T> {
+export class SortedNostrViewModelSet<
+  GenericViewModel extends NostrEventViewModel<AccountViewModel>,
+  AccountViewModel extends Account = Account
+> extends Set<GenericViewModel> {
 
-  #items: T[] = [];
+  #items: GenericViewModel[] = [];
 
-  constructor(values?: readonly T[] | null) {
+  constructor(values?: readonly GenericViewModel[] | null) {
     super();
 
     if (values) {
@@ -19,11 +22,11 @@ export class SortedNostrViewModelSet<T extends NostrEventViewModel> extends Set<
     }
   }
 
-  override[Symbol.iterator](): IterableIterator<T> {
+  override[Symbol.iterator](): IterableIterator<GenericViewModel> {
     return this.#items[Symbol.iterator]();
   }
 
-  override add(value: T): this {
+  override add(value: GenericViewModel): this {
     if (!this.has(value)) {
       const indexNotFound = -1;
       const index = this.#items.findIndex(item => item.createdAt > value.createdAt);
@@ -38,7 +41,7 @@ export class SortedNostrViewModelSet<T extends NostrEventViewModel> extends Set<
     return this;
   }
 
-  override delete(value: T): boolean {
+  override delete(value: GenericViewModel): boolean {
     const indexNotFound = -1;
     const index = this.#items.indexOf(value);
     if (index !== indexNotFound) {
@@ -53,11 +56,11 @@ export class SortedNostrViewModelSet<T extends NostrEventViewModel> extends Set<
     super.clear();
   }
 
-  override values(): IterableIterator<T> {
+  override values(): IterableIterator<GenericViewModel> {
     return this.#items.values();
   }
 
-  override forEach(callbackfn: (value: T, value2: T, set: Set<T>) => void, thisArg?: unknown): void {
+  override forEach(callbackfn: (value: GenericViewModel, value2: GenericViewModel, set: Set<GenericViewModel>) => void, thisArg?: unknown): void {
     this.#items.forEach((value) => {
       callbackfn.call(thisArg, value, value, this);
     });

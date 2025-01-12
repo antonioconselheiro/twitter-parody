@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TweetImageViewing } from '../tweet-img-viewing.interface';
 import { NoteViewModel } from '@view-model/note.view-model';
+import { AccountRenderable } from '@belomonte/nostr-ngx';
 
 @Component({
   selector: 'tw-tweet',
@@ -16,7 +17,7 @@ export class TweetComponent {
   isFull = false;
 
   @Input()
-  note: NoteViewModel | null = null;
+  note: NoteViewModel<AccountRenderable> | null = null;
 
   @Output()
   imgOpen = new EventEmitter<TweetImageViewing | null>();

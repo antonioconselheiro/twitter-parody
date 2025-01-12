@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
+import { Account, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
 import { ReactionViewModel } from '@view-model/reaction.view-model';
 import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
 import { Reaction } from 'nostr-tools/kinds';
@@ -9,7 +9,7 @@ import { ViewModelMapper } from './view-model.mapper';
 @Injectable({
   providedIn: 'root'
 })
-export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record<string, SortedNostrViewModelSet<ReactionViewModel>>> {
+export class ReactionMapper implements ViewModelMapper<ReactionViewModel<Account>, Record<string, SortedNostrViewModelSet<ReactionViewModel<Account>>>> {
 
   constructor(
     private tagHelper: TagHelper,
@@ -17,10 +17,10 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record
     private guard: NostrGuard
   ) { }
 
-  toViewModel(event: NostrEvent): Promise<ReactionViewModel | null>;
-  toViewModel(event: NostrEvent<Reaction>): Promise<ReactionViewModel>;
-  toViewModel(events: Array<NostrEvent>): Promise<Record<string, SortedNostrViewModelSet<ReactionViewModel>>>;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): Promise<ReactionViewModel | Record<string, SortedNostrViewModelSet<ReactionViewModel>> | null> {
+  toViewModel(event: NostrEvent): Promise<ReactionViewModel<Account> | null>;
+  toViewModel(event: NostrEvent<Reaction>): Promise<ReactionViewModel<Account>>;
+  toViewModel(events: Array<NostrEvent>): Promise<Record<string, SortedNostrViewModelSet<ReactionViewModel<Account>>>>;
+  toViewModel(event: NostrEvent | Array<NostrEvent>): Promise<ReactionViewModel<Account> | Record<string, SortedNostrViewModelSet<ReactionViewModel<Account>>> | null> {
     if (event instanceof Array) {
       return this.toMultipleViewModel(event);
     } else if (this.guard.isKind(event, Reaction)) {
@@ -30,9 +30,9 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record
     return Promise.resolve(null);
   }
 
-  private async toSingleViewModel(event: NostrEvent<Reaction>): Promise<ReactionViewModel> {
+  private async toSingleViewModel(event: NostrEvent<Reaction>): Promise<ReactionViewModel<Account>> {
     const reactedTo = this.tagHelper.listIdsFromTag('e', event);
-    const author = await this.profileProxy.loadAccount(event.pubkey, 'notloaded');
+    const author = await this.profileProxy.loadAccount(event.pubkey, 'calculated');
 
     return Promise.resolve({
       id: event.id,
@@ -46,12 +46,12 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record
     });
   }
 
-  private async toMultipleViewModel(events: Array<NostrEvent>): Promise<Record<string, SortedNostrViewModelSet<ReactionViewModel>>> {
-    const reactionRecord: Record<string, SortedNostrViewModelSet<ReactionViewModel>> = {};
+  private async toMultipleViewModel(events: Array<NostrEvent>): Promise<Record<string, SortedNostrViewModelSet<ReactionViewModel<Account>>>> {
+    const reactionRecord: Record<string, SortedNostrViewModelSet<ReactionViewModel<Account>>> = {};
 
     for await (const event of events) {
       if (this.guard.isKind(event, Reaction)) {
-        const sortedSet = reactionRecord[event.content] || new SortedNostrViewModelSet<ReactionViewModel>();
+        const sortedSet = reactionRecord[event.content] || new SortedNostrViewModelSet<ReactionViewModel<Account>>();
         const viewModel = await this.toSingleViewModel(event);
         sortedSet.add(viewModel);
       }

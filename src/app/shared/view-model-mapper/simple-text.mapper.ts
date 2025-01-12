@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { InMemoryNCache, LOCAL_CACHE_TOKEN, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
+import { Account, InMemoryNCache, LOCAL_CACHE_TOKEN, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
@@ -14,7 +14,7 @@ import { ZapMapper } from './zap.mapper';
 @Injectable({
   providedIn: 'root'
 })
-export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
+export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel<Account>> {
 
   constructor(
     @Inject(HTML_PARSER_TOKEN) private htmlfier: NoteHtmlfier,
@@ -25,9 +25,9 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
     private guard: NostrGuard
   ) { }
 
-  async toViewModel(event: NostrEvent<ShortTextNote>): Promise<NoteViewModel>;
-  async toViewModel(event: NostrEvent): Promise<NoteViewModel | null>;
-  async toViewModel(event: NostrEvent): Promise<NoteViewModel | null> {
+  async toViewModel(event: NostrEvent<ShortTextNote>): Promise<NoteViewModel<Account>>;
+  async toViewModel(event: NostrEvent): Promise<NoteViewModel<Account> | null>;
+  async toViewModel(event: NostrEvent): Promise<NoteViewModel<Account> | null> {
     if (!this.guard.isKind(event, ShortTextNote)) {
       return null;
     }
@@ -48,9 +48,9 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
     const zaps = await this.zapMapper.toViewModel(events);
     //  FIXME: o mapper não deve fazer requisições websocket, devo bolar uma maneira de fazer o carregamento o account
     //  utilizando somente as informações disponíveis em cache
-    const author = await this.profileProxy.loadAccount(event.pubkey, 'viewable');
-    const reply: NoteReplyContext = { replies: new SortedNostrViewModelSet<NoteViewModel>() };
-    const note: SimpleTextNoteViewModel = {
+    const author = await this.profileProxy.loadAccount(event.pubkey, 'calculated');
+    const reply: NoteReplyContext<Account> = { replies: new SortedNostrViewModelSet<NoteViewModel<Account>>() };
+    const note: SimpleTextNoteViewModel<Account> = {
       id: event.id,
       author,
       event: event,
@@ -62,7 +62,7 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
       reply,
       //  TODO: ideally I should pass relay address from where this event come
       origin: [],
-      reposted: new SortedNostrViewModelSet<NoteViewModel>()
+      reposted: new SortedNostrViewModelSet<NoteViewModel<Account>>()
     };
 
     return note;

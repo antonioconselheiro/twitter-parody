@@ -3,6 +3,7 @@ import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.han
 import { FeedViewModel } from '@view-model/feed.view-model';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { TweetImageViewing } from '../tweet-img-viewing.interface';
+import { AccountRenderable } from '@belomonte/nostr-ngx';
 
 @Component({
   selector: 'tw-tweet-list',
@@ -12,10 +13,10 @@ import { TweetImageViewing } from '../tweet-img-viewing.interface';
 export class TweetListComponent {
 
   @Input()
-  root: NoteViewModel | null = null;
+  root: NoteViewModel<AccountRenderable> | null = null;
 
   @Input()
-  feed: FeedViewModel | null = null;
+  feed: FeedViewModel<AccountRenderable> | null = null;
 
   @Input()
   loading = true;
@@ -26,11 +27,11 @@ export class TweetListComponent {
     private tweetPopoverHandler: TweetContextMenuHandler
   ) { }
 
-  openTweetContextMenu(note: NoteViewModel, trigger: HTMLElement): void {
+  openTweetContextMenu(note: NoteViewModel<AccountRenderable>, trigger: HTMLElement): void {
     this.tweetPopoverHandler.handleContextMenu({ note, trigger });
   }
 
-  trackByTweetId(i: number, tweet: NoteViewModel): string {
+  trackByTweetId(i: number, tweet: NoteViewModel<AccountRenderable>): string {
     return tweet.id;
   }
 

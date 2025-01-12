@@ -9,7 +9,7 @@
     </a>
   
     <div class="tweetStructure">
-      <nostr-profile-picture [profile]="tweet.author"></nostr-profile-picture>
+      <nostr-profile-picture [account]="tweet.author"></nostr-profile-picture>
       <div class="tweetMetadata">
         <header>
           <address *ngIf="tweet.author" class="author userInfo">

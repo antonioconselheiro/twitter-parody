@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Account } from '@belomonte/nostr-ngx';
+import { AccountRenderable } from '@belomonte/nostr-ngx';
 import { DirectMessage } from './message.interface';
 
 @Component({
@@ -11,7 +11,7 @@ export class FloatingChatComponent {
   //  TODO: persistir essa informação no localstorage ou no armazemanto do app
   collapsed = true;
 
-  talkingContact: Account | null = null;
+  talkingContact: AccountRenderable | null = null;
 
   @Input()
   lastMessageFromEachContactedProfile: DirectMessage[] = [];

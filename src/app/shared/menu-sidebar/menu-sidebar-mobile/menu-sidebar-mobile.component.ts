@@ -1,5 +1,5 @@
 import { Component, HostBinding, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { Account, CurrentAccountObservable } from '@belomonte/nostr-ngx';
+import { AccountRenderable, CurrentAccountObservable } from '@belomonte/nostr-ngx';
 import { Subscription } from 'rxjs';
 import { MenuActiveObservable } from '../menu-active.observable';
 import { MenuType } from '../menu-type.enum';
@@ -22,7 +22,7 @@ export class MenuSidebarMobileComponent implements OnInit, OnDestroy {
   @HostBinding('class.active')
   showing = false;
 
-  account: Account | null = null;
+  account: AccountRenderable | null = null;
   menuActive: MenuType | null = null;
 
   touchStart = 0;
@@ -38,7 +38,7 @@ export class MenuSidebarMobileComponent implements OnInit, OnDestroy {
     this.bindMenuShowingSubscription();
     this.bindMenuActiveSubscription();
   }
-  
+
   private bindMenuShowingSubscription(): void {
     this.subscriptions.add(this.menuSidebarMobile$.subscribe({
       next: show => this.showing = show
@@ -61,7 +61,7 @@ export class MenuSidebarMobileComponent implements OnInit, OnDestroy {
   onTouchStart(e: TouchEvent): void {
     this.touchStart = e.touches[0].clientX;
   }
-  
+
   @HostListener('document:touchend', ['$event'])
   onTouchEnd(e: TouchEvent): void {
     const touches = e.touches[0] || e.changedTouches[0];
