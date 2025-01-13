@@ -71,14 +71,16 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
 
   private loadProfileFeed(account: AccountViewable | AccountComplete | null): void {
     this.viewing = account;
+    this.loading = true;
     if (account) {
       this.tweetProxy
         .feedFromPubkey(account.pubkey)
         .subscribe(feed => {
-          this.loading = false
+          this.loading = false;
           this.feed = feed;
         });
     } else {
+      this.loading = false;
       this.feed = null;
     }
   }

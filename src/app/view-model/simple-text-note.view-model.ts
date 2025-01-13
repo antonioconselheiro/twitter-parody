@@ -29,7 +29,7 @@ export interface SimpleTextNoteViewModel<AccountViewModel extends Account> exten
    * Record with all reacted reactions.
    * The record index is the used char/emoji to react.
    */
-  reactions: Record<string, SortedNostrViewModelSet<ReactionViewModel<Account>>>;
+  reactions: { [emoji: string]: SortedNostrViewModelSet<ReactionViewModel<Account>> };
 
   /**
    * Parsed data of each zap to this event

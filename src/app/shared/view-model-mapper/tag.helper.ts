@@ -53,8 +53,12 @@ export class TagHelper {
     return null;
   }
 
+  /** 
+   * @returns return a list of touple compose of event hex
+   * and a string with the event relation kind 
+   */
   getRelatedEvents(event: NostrEvent): [
-    string, EventRelationType
+    HexString, EventRelationType
   ][] {
     const idIndex = 1;
     const typeIndex = 3;
@@ -79,7 +83,10 @@ export class TagHelper {
       .map(([idEvent]) => idEvent);
   }
 
-  getFirstRelatedEvent(event: NostrEvent): string | null {
+  /**
+   * @returns get the id of the first related event 
+   */
+  getFirstRelatedEvent(event: NostrEvent): HexString | null {
     const matrix = this.getRelatedEvents(event);
     return matrix.at(0)?.at(0) || null;
   }
@@ -109,13 +116,16 @@ export class TagHelper {
     return [];
   }
 
+  /**
+   * @returns hex of replied event and the root event from the thread, if included
+   */
   getRepliedEvent(event: NostrEvent): {
-    replied: string | null,
-    root: string | null
+    replied: HexString | null,
+    root: HexString | null
   } {
     const replyData: {
-      replied: string | null,
-      root: string | null
+      replied: HexString | null,
+      root: HexString | null
     } = {
       replied: null,
       root: null
@@ -134,17 +144,26 @@ export class TagHelper {
     return replyData;
   }
 
+  /**
+   * @returns return p tag
+   */
   getPubkeyTags(event: NostrEvent): Array<TagPointerRelated<'p'>> {
     return event.tags
       .filter((tag): tag is TagPointerRelated<'p'> => tag[0] === 'p');
   }
 
+  /**
+   * @returns all pubkeys from p tags 
+   */
   getPubkeys(event: NostrEvent): HexString[] {
     return event.tags
       .filter(([type]) => type === 'p')
       .map(([, pubkey]) => pubkey);
   }
 
+  /**
+   * @returns get first p tag 
+   */
   getFirstProfile(event: NostrEvent): string | null {
     return this.getPubkeys(event).at(0) || null;
   }
