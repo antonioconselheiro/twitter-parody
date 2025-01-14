@@ -1,11 +1,21 @@
 import { Injectable } from "@angular/core";
-import { NostrEvent } from "@belomonte/nostr-ngx";
+import { HexString, NostrEvent } from "@belomonte/nostr-ngx";
 import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
 import { FeedViewModel } from "@view-model/feed.view-model";
 import { NoteViewModel } from "@view-model/note.view-model";
 import { SortedNostrViewModelSet } from "@view-model/sorted-nostr-view-model.set";
 import { from, mergeMap, Observable, Subject } from "rxjs";
 import { TweetNostr } from "./tweet.nostr";
+serviço que carrega cada view model destinado para cada tela com todas as informações necessárias,
+  deve ser o proxy que deve assumir essa responsabilidade ? sim, mas talvéz essa lógica deve ser agrupada
+em um outro serviço independnete somente para carregamento de contas de acordo com a necessidade.
+
+Tipos de carregamento da conta:
+-> nenhuma conta é carregada, dados são somente carregados do cache;
+ -> somente um pequeno conjunto de contas é carregado, geralmente por que serão as primeiras a serem exibidas em tela;
+-> todas as contas são carregadas até o nível definido por parâmetro.
+
+Vou precisar incluir um flyweight para que controle o carregamento das imagens associadas as contas afim de evitar replicação dos dados convertidos para base64
 
 @Injectable({
   providedIn: 'root'
@@ -17,35 +27,28 @@ export class TweetProxy {
     private feedMapper: FeedMapper
   ) { }
 
-  feedFromPubkey(pubkey: string): Observable<FeedViewModel> {
+  feedFromPubkey(pubkey: HexString): Observable<FeedViewModel> {
     const subject = new Subject<FeedViewModel>();
-    this.tweetNostr
-      .listUserNotes(pubkey)
-      .then(mainNotes => {
-
-        /**
-         * TODO: TODOING:
-         * 1. view model do feed mapper não pode carregar informações, como o nip05,
-         * isso deve vir antes, o view model deve pressupor que todas as informações
-         * necessárias já estão carregadas e disponíveis no cache;
-         * 
-         * 
-         */
-        this.feedMapper
-          .toViewModel(mainNotes.splice(0, 3))
-          .then(feed => {
-            subject.next(feed);
-            this.loadFeedRelatedContent(feed)
-              .then(feedWithRelatedContentLoaded => {
-                subject.next(feedWithRelatedContentLoaded);
-                subject.complete();
-              })
-              .catch(e => subject.error(e));
-          })
-          .catch(e => subject.error(e));
-      }).catch(e => subject.error(e));
+    this.asyncFeedFromPubkey(pubkey, subject)
+      .then(() => subject.complete());
 
     return subject.asObservable();
+  }
+
+  private async asyncFeedFromPubkey(pubkey: HexString, subject: Subject<FeedViewModel>): Promise<void> {
+    const mainNotes = await this.tweetNostr.listUserNotes(pubkey);
+    await this.tweetNostr.loadAccountsForInitialViewport(mainNotes, {
+      amountToLoad: 7
+    });
+    let feed = await this.feedMapper.toViewModel(mainNotes);
+    subject.next(feed);
+
+    feed = await this.loadFeedRelatedContent(feed);
+    subject.next(feed);
+
+    await this.tweetNostr.loadViewModelAccounts(feed);
+    feed = await this.feedMapper.toViewModel(mainNotes);
+    subject.next(feed);
   }
 
   /**
