@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Account, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
 import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
 import { ZapViewModel } from '@view-model/zap.view-model';
-import { Zap } from 'nostr-tools/kinds';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { TagHelper } from './tag.helper';
+import { Zap } from 'nostr-tools/kinds';
 
 @Injectable({
   providedIn: 'root'
@@ -17,28 +17,28 @@ export class ZapMapper implements SingleViewModelMapper<ZapViewModel<Account>> {
     private guard: NostrGuard
   ) { }
 
-  toViewModel(event: NostrEvent): Promise<ZapViewModel<Account> | null>;
-  toViewModel(event: NostrEvent<Zap>): Promise<ZapViewModel<Account>>;
-  toViewModel(event: Array<NostrEvent>): Promise<SortedNostrViewModelSet<ZapViewModel<Account>>>;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): Promise<ZapViewModel<Account> | SortedNostrViewModelSet<ZapViewModel<Account>> | null>;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): Promise<ZapViewModel<Account> | SortedNostrViewModelSet<ZapViewModel<Account>> | null> {
+  toViewModel(event: NostrEvent): ZapViewModel<Account> | null;
+  toViewModel(event: NostrEvent<Zap>): ZapViewModel<Account>;
+  toViewModel(event: Array<NostrEvent>): SortedNostrViewModelSet<ZapViewModel<Account>>;
+  toViewModel(event: NostrEvent | Array<NostrEvent>): ZapViewModel<Account> | SortedNostrViewModelSet<ZapViewModel<Account>> | null;
+  toViewModel(event: NostrEvent | Array<NostrEvent>): ZapViewModel<Account> | SortedNostrViewModelSet<ZapViewModel<Account>> | null {
     if (event instanceof Array) {
       return this.toMultipleViewModel(event);
     } else if (this.guard.isKind(event, Zap)) {
       return this.toSingleViewModel(event);
     }
 
-    return Promise.resolve(null);
+    return null;
   }
 
-  private async toSingleViewModel(event: NostrEvent<Zap>): Promise<ZapViewModel<Account>> {
+  private toSingleViewModel(event: NostrEvent<Zap>): ZapViewModel<Account> {
     const reactedTo = this.tagHelper.listIdsFromTag('e', event);
 
     // TODO: validate zap data with zod
     const amountZapped = this.tagHelper.getTagValueByType('amount', event);
-    const author = await this.profileProxy.loadAccount(event.pubkey, 'calculated');
+    const author = this.profileProxy.getAccount(event.pubkey);
 
-    return Promise.resolve({
+    return {
       id: event.id,
       event,
       content: event.content,
@@ -48,19 +48,19 @@ export class ZapMapper implements SingleViewModelMapper<ZapViewModel<Account>> {
       origin: [],
       amount: amountZapped ? Number(amountZapped) : null,
       createdAt: event.created_at
-    });
+    };
   }
 
-  private async toMultipleViewModel(events: Array<NostrEvent>): Promise<SortedNostrViewModelSet<ZapViewModel<Account>>> {
+  private toMultipleViewModel(events: Array<NostrEvent>): SortedNostrViewModelSet<ZapViewModel<Account>> {
     const zapSet = new SortedNostrViewModelSet<ZapViewModel<Account>>();
 
-    for await (const event of events) {
+    for (const event of events) {
       if (this.guard.isKind(event, Zap)) {
-        const viewModel = await this.toSingleViewModel(event);
+        const viewModel = this.toSingleViewModel(event);
         zapSet.add(viewModel);
       }
     }
 
-    return Promise.resolve(zapSet);
+    return zapSet;
   }
 }

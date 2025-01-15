@@ -19,22 +19,22 @@ export class NoteMapper {
     private guard: NostrGuard
   ) { }
 
-  async toViewModel(event: NostrEvent<Repost>): Promise<NoteViewModel>;
-  async toViewModel(event: NostrEvent<ShortTextNote>): Promise<NoteViewModel>;
-  async toViewModel(event: NostrEvent<ShortTextNote | Repost>): Promise<NoteViewModel>;
-  async toViewModel(event: NostrEvent<ShortTextNote | Repost>): Promise<NoteViewModel> {
+  toViewModel(event: NostrEvent<Repost>): NoteViewModel;
+  toViewModel(event: NostrEvent<ShortTextNote>): NoteViewModel;
+  toViewModel(event: NostrEvent<ShortTextNote | Repost>): NoteViewModel;
+  toViewModel(event: NostrEvent<ShortTextNote | Repost>): NoteViewModel {
     let note: NoteViewModel;
     if (this.guard.isKind(event, ShortTextNote)) {
-      note = await this.simpleTextMapper.toViewModel(event);
+      note = this.simpleTextMapper.toViewModel(event);
     } else {
-      note = await this.repostMapper.toViewModel(event);
+      note = this.repostMapper.toViewModel(event);
     }
 
     return this.patchReplies(note);
   }
 
-  private async patchReplies(note: NoteViewModel): Promise<NoteViewModel> {
-    const events = await this.ncache.query([
+  private patchReplies(note: NoteViewModel): NoteViewModel {
+    const events = this.ncache.syncQuery([
       {
         kinds: [
           ShortTextNote,
@@ -46,14 +46,13 @@ export class NoteMapper {
       }
     ]);
 
-    await this.getReply(note, events);
-    await this.getRepostedBy(note, events);
+    this.getReply(note, events);
+    this.getRepostedBy(note, events);
 
     return note;
   }
 
-  // eslint-disable-next-line complexity
-  private async getReply(note: NoteViewModel, relationedEvents: Array<NostrEvent>): Promise<NoteReplyContext> {
+  private getReply(note: NoteViewModel, relationedEvents: Array<NostrEvent>): NoteReplyContext {
     const [rootReplingId = undefined] = this.tagHelper.getRelatedEventsByRelationType(note.event, 'root');
     const [replyToId = undefined] = this.tagHelper.getRelatedEventsByRelationType(note.event, 'reply');
     const repliesEvents = relationedEvents.filter(event => {
@@ -62,9 +61,9 @@ export class NoteMapper {
     });
 
     const replies = note.reply.replies;
-    const rootRepling = await this.fillRootRepling(rootReplingId);
-    const replyTo = await this.fillReplyTo(replyToId);
-    await this.fillReplies(replies, repliesEvents);
+    const rootRepling = this.fillRootRepling(rootReplingId);
+    const replyTo = this.fillReplyTo(replyToId);
+    this.fillReplies(replies, repliesEvents);
 
     return {
       replyTo,
@@ -73,9 +72,9 @@ export class NoteMapper {
     };
   }
 
-  private async fillRootRepling(rootReplingId: string | undefined): Promise<NoteViewModel | undefined> {
+  private fillRootRepling(rootReplingId: string | undefined): NoteViewModel | undefined {
     if (rootReplingId) {
-      const rootReplingEvent = await this.ncache.get(rootReplingId);
+      const rootReplingEvent = this.ncache.get(rootReplingId);
       if (rootReplingEvent) {
         if (this.guard.isKind(rootReplingEvent, [ShortTextNote, Repost])) {
           return this.toViewModel(rootReplingEvent);
@@ -85,12 +84,12 @@ export class NoteMapper {
       }
     }
 
-    return Promise.resolve(undefined);
+    return undefined;
   }
 
-  private async fillReplyTo(replyToId: string | undefined): Promise<NoteViewModel | undefined> {
+  private fillReplyTo(replyToId: string | undefined): NoteViewModel | undefined {
     if (replyToId) {
-      const replyEvent = await this.ncache.get(replyToId);
+      const replyEvent = this.ncache.get(replyToId);
       if (replyEvent) {
         if (this.guard.isKind(replyEvent, [ShortTextNote, Repost])) {
           return this.toViewModel(replyEvent);
@@ -100,20 +99,20 @@ export class NoteMapper {
       }
     }
 
-    return Promise.resolve(undefined);
+    return undefined;
   }
 
-  private async fillReplies(replies: SortedNostrViewModelSet<NoteViewModel>, repliesEvents: Array<NostrEvent>): Promise<void> {
-    for await (const event of repliesEvents) {
+  private fillReplies(replies: SortedNostrViewModelSet<NoteViewModel>, repliesEvents: Array<NostrEvent>): void {
+    for (const event of repliesEvents) {
       if (this.guard.isKind(event, [ShortTextNote, Repost])) {
-        const note = await this.toViewModel(event);
+        const note = this.toViewModel(event);
         replies.add(note);
       }
     }
   }
 
-  private async getRepostedBy(note: NoteViewModel, relationedEvents: Array<NostrEvent>): Promise<SortedNostrViewModelSet<NoteViewModel>> {
-    for await (const event of relationedEvents) {
+  private getRepostedBy(note: NoteViewModel, relationedEvents: Array<NostrEvent>): SortedNostrViewModelSet<NoteViewModel> {
+    for (const event of relationedEvents) {
       if (!this.guard.isKind(event, [ShortTextNote, Repost])) {
         continue;
       }
@@ -121,11 +120,11 @@ export class NoteMapper {
       const mentions = this.tagHelper.getRelatedEventsByRelationType(event, 'mention');
       const contains = mentions.find(mention => mention === note.event.id);
       if (contains) {
-        const mentioner = await this.toViewModel(event);
+        const mentioner = this.toViewModel(event);
         note.reposted.add(mentioner);
       }
     }
 
-    return Promise.resolve(note.reposted);
+    return note.reposted;
   }
 }

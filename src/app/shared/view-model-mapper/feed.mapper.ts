@@ -27,11 +27,11 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
     private zapMapper: ZapMapper
   ) { }
 
-  toViewModel(event: NostrEvent<ShortTextNote>): Promise<NoteViewModel<Account>>;
-  toViewModel(event: NostrEvent<Repost>): Promise<RepostNoteViewModel<Account>>;
-  toViewModel(event: NostrEvent): Promise<NoteViewModel<Account> | null>;
-  toViewModel(event: Array<NostrEvent>): Promise<FeedViewModel<Account>>;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): Promise<NoteViewModel<Account> | FeedViewModel<Account> | null> {
+  toViewModel(event: NostrEvent<ShortTextNote>): NoteViewModel<Account>;
+  toViewModel(event: NostrEvent<Repost>): RepostNoteViewModel<Account>;
+  toViewModel(event: NostrEvent): NoteViewModel<Account> | null;
+  toViewModel(event: Array<NostrEvent>): FeedViewModel<Account>;
+  toViewModel(event: NostrEvent | Array<NostrEvent>): NoteViewModel<Account> | FeedViewModel<Account> | null {
     if (event instanceof Array) {
       return this.toMultipleViewModel(event);
     } else if (this.guard.isKind(event, ShortTextNote)) {
@@ -40,23 +40,24 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
       return this.repostMapper.toViewModel(event);
     }
 
-    return Promise.resolve(null);
+    return null;
   }
 
+  //  FIXME: split into minor methods
   // eslint-disable-next-line complexity
-  private async toMultipleViewModel(events: Array<NostrEvent>, feed = new SortedNostrViewModelSet<NoteViewModel>()): Promise<FeedViewModel> {
+  private toMultipleViewModel(events: Array<NostrEvent>, feed = new SortedNostrViewModelSet<NoteViewModel>()): FeedViewModel {
     const reactions = new Map<string, Array<ReactionViewModel>>();
     const zaps = new Map<string, Array<ZapViewModel>>();
 
-    for await (const event of events) {
+    for (const event of events) {
       if (this.guard.isKind(event, ShortTextNote)) {
-        const viewModel = await this.simpleTextMapper.toViewModel(event);
+        const viewModel = this.simpleTextMapper.toViewModel(event);
         feed.add(viewModel);
       } else if (this.guard.isKind(event, Repost)) {
-        const viewModel = await this.repostMapper.toViewModel(event);
+        const viewModel = this.repostMapper.toViewModel(event);
         feed.add(viewModel);
       } else if (this.guard.isKind(event, Reaction)) {
-        const viewModel = await this.reactionMapper.toViewModel(event);
+        const viewModel = this.reactionMapper.toViewModel(event);
         if (viewModel) {
           viewModel.reactedTo.forEach(idHex => {
             const reactionList = reactions.get(idHex) || new Array<ReactionViewModel>();
@@ -64,7 +65,7 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
           });
         }
       } else if (this.guard.isKind(event, Zap)) {
-        const viewModel = await this.zapMapper.toViewModel(event);
+        const viewModel = this.zapMapper.toViewModel(event);
         if (viewModel) {
           viewModel.reactedTo.forEach(idHex => {
             const reactionList = reactions.get(idHex) || new Array<ZapViewModel>();
@@ -105,7 +106,7 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
     return feed;
   }
 
-  patchViewModel(feed: FeedViewModel<Account>, events: Array<NostrEvent>): Promise<FeedViewModel<Account>> {
+  patchViewModel(feed: FeedViewModel<Account>, events: Array<NostrEvent>): FeedViewModel<Account> {
     return this.toMultipleViewModel(events, feed);
   }
 }

@@ -6,5 +6,5 @@ export interface SingleViewModelMapper<ViewModelData extends NostrEventViewModel
   /**
    * cast a nostr event into ready to render data
    */
-  toViewModel(event: NostrEvent): Promise<ViewModelData>;
+  toViewModel(event: NostrEvent): ViewModelData;
 }

@@ -16,11 +16,11 @@ export interface ViewModelMapper<
   /**
    * cast a nostr event into ready to render data
    */
-  toViewModel(event: NostrEvent): Promise<ViewModelData>;
+  toViewModel(event: NostrEvent): ViewModelData;
 
   /**
    * cast a list of nostr events into ready to render data
    */
-  toViewModel(events: Array<NostrEvent>): Promise<ViewModelList>;
+  toViewModel(events: Array<NostrEvent>): ViewModelList;
 
 }

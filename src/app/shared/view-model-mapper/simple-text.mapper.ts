@@ -14,7 +14,7 @@ import { ZapMapper } from './zap.mapper';
 @Injectable({
   providedIn: 'root'
 })
-export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel<Account>> {
+export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
 
   constructor(
     @Inject(HTML_PARSER_TOKEN) private htmlfier: NoteHtmlfier,
@@ -25,14 +25,14 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel<Acc
     private guard: NostrGuard
   ) { }
 
-  async toViewModel(event: NostrEvent<ShortTextNote>): Promise<NoteViewModel<Account>>;
-  async toViewModel(event: NostrEvent): Promise<NoteViewModel<Account> | null>;
-  async toViewModel(event: NostrEvent): Promise<NoteViewModel<Account> | null> {
+  toViewModel(event: NostrEvent<ShortTextNote>): NoteViewModel;
+  toViewModel(event: NostrEvent): NoteViewModel | null;
+  toViewModel(event: NostrEvent): NoteViewModel | null {
     if (!this.guard.isKind(event, ShortTextNote)) {
       return null;
     }
 
-    const events = await this.ncache.query([
+    const events = this.ncache.syncQuery([
       {
         kinds: [
           Reaction,
@@ -44,11 +44,11 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel<Acc
       }
     ]);
 
-    const reactions = await this.reactionMapper.toViewModel(events);
-    const zaps = await this.zapMapper.toViewModel(events);
+    const reactions = this.reactionMapper.toViewModel(events);
+    const zaps = this.zapMapper.toViewModel(events);
     //  FIXME: o mapper não deve fazer requisições websocket, devo bolar uma maneira de fazer o carregamento o account
     //  utilizando somente as informações disponíveis em cache
-    const author = await this.profileProxy.loadAccount(event.pubkey, 'calculated');
+    const author = this.profileProxy.getAccount(event.pubkey);
     const reply: NoteReplyContext<Account> = { replies: new SortedNostrViewModelSet<NoteViewModel<Account>>() };
     const note: SimpleTextNoteViewModel<Account> = {
       id: event.id,

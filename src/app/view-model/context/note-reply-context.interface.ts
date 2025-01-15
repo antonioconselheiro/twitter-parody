@@ -5,7 +5,7 @@ import { SortedNostrViewModelSet } from "@view-model/sorted-nostr-view-model.set
 /**
  * data about repling and be replied
  */
-export interface NoteReplyContext<AccountViewModel extends Account> {
+export interface NoteReplyContext<AccountViewModel extends Account = Account> {
 
   /**
    * first message from thread

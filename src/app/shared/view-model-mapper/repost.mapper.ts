@@ -29,8 +29,9 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel<A
     @Inject(LOCAL_CACHE_TOKEN) private ncache: InMemoryNCache
   ) { }
 
+  //  FIXME: refactor this into minor methods
   // eslint-disable-next-line complexity
-  async toViewModel(event: NostrEvent): Promise<RepostNoteViewModel<Account>> {
+  toViewModel(event: NostrEvent): RepostNoteViewModel {
     const content = event.content || '';
     const contentEvent = this.extractNostrEvent(content);
     const reposting = new SortedNostrViewModelSet<NoteViewModel>();
@@ -38,26 +39,26 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel<A
     if (contentEvent) {
       let retweeted: NoteViewModel<Account> | null;
       if (this.guard.isKind(contentEvent, ShortTextNote)) {
-        retweeted = await this.simpleTextMapper.toViewModel(contentEvent);
+        retweeted = this.simpleTextMapper.toViewModel(contentEvent);
         reposting.add(retweeted);
       } else if (this.guard.isKind(contentEvent, Repost)) {
         //  there is no way to get infinity recursively, this was a stringified json
-        retweeted = await this.toViewModel(event);
+        retweeted = this.toViewModel(event);
         reposting.add(retweeted);
       }
 
     } else {
       const mentions = this.tagHelper.getMentionedEvent(event);
-      for await (const idEvent of mentions) {
-        const retweeted = await this.ncache.get(idEvent);
+      for (const idEvent of mentions) {
+        const retweeted = this.ncache.get(idEvent);
         if (retweeted) {
-          const viewModel = await this.toViewModel(retweeted);
+          const viewModel = this.toViewModel(retweeted);
           reposting.add(viewModel);
         }
       }
     }
 
-    const events = await this.ncache.query([
+    const events = this.ncache.syncQuery([
       {
         kinds: [
           Reaction,
@@ -69,13 +70,13 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel<A
       }
     ]);
 
-    const reactions = await this.reactionMapper.toViewModel(events);
-    const zaps = await this.zapMapper.toViewModel(events);
+    const reactions = this.reactionMapper.toViewModel(events);
+    const zaps = this.zapMapper.toViewModel(events);
     const isSimpleRepost = this.isSimpleRepost(event);
-    const author = await this.profileProxy.loadAccount(event.pubkey, 'calculated');
-    const reply: NoteReplyContext<Account> = { replies: new SortedNostrViewModelSet<NoteViewModel>() };
+    const author = this.profileProxy.getAccount(event.pubkey);
+    const reply: NoteReplyContext = { replies: new SortedNostrViewModelSet<NoteViewModel>() };
 
-    const note: RepostNoteViewModel<Account> = {
+    const note: RepostNoteViewModel = {
       id: event.id,
       author,
       createdAt: event.created_at,

@@ -17,24 +17,24 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel<Account
     private guard: NostrGuard
   ) { }
 
-  toViewModel(event: NostrEvent): Promise<ReactionViewModel<Account> | null>;
-  toViewModel(event: NostrEvent<Reaction>): Promise<ReactionViewModel<Account>>;
-  toViewModel(events: Array<NostrEvent>): Promise<Record<string, SortedNostrViewModelSet<ReactionViewModel<Account>>>>;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): Promise<ReactionViewModel<Account> | Record<string, SortedNostrViewModelSet<ReactionViewModel<Account>>> | null> {
+  toViewModel(event: NostrEvent): ReactionViewModel<Account> | null;
+  toViewModel(event: NostrEvent<Reaction>): ReactionViewModel<Account>;
+  toViewModel(events: Array<NostrEvent>): Record<string, SortedNostrViewModelSet<ReactionViewModel<Account>>>;
+  toViewModel(event: NostrEvent | Array<NostrEvent>): ReactionViewModel<Account> | Record<string, SortedNostrViewModelSet<ReactionViewModel<Account>>> | null {
     if (event instanceof Array) {
       return this.toMultipleViewModel(event);
     } else if (this.guard.isKind(event, Reaction)) {
       return this.toSingleViewModel(event);
     }
 
-    return Promise.resolve(null);
+    return null;
   }
 
-  private async toSingleViewModel(event: NostrEvent<Reaction>): Promise<ReactionViewModel<Account>> {
+  private toSingleViewModel(event: NostrEvent<Reaction>): ReactionViewModel {
     const reactedTo = this.tagHelper.listIdsFromTag('e', event);
-    const author = await this.profileProxy.loadAccount(event.pubkey, 'calculated');
+    const author = this.profileProxy.getAccount(event.pubkey);
 
-    return Promise.resolve({
+    return {
       id: event.id,
       content: event.content,
       reactedTo,
@@ -43,20 +43,20 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel<Account
       //  TODO: ideally I should pass relay address from where this event come
       origin: [],
       createdAt: event.created_at
-    });
+    };
   }
 
-  private async toMultipleViewModel(events: Array<NostrEvent>): Promise<Record<string, SortedNostrViewModelSet<ReactionViewModel<Account>>>> {
-    const reactionRecord: Record<string, SortedNostrViewModelSet<ReactionViewModel<Account>>> = {};
+  private toMultipleViewModel(events: Array<NostrEvent>): Record<string, SortedNostrViewModelSet<ReactionViewModel>> {
+    const reactionRecord: Record<string, SortedNostrViewModelSet<ReactionViewModel>> = {};
 
-    for await (const event of events) {
+    for (const event of events) {
       if (this.guard.isKind(event, Reaction)) {
         const sortedSet = reactionRecord[event.content] || new SortedNostrViewModelSet<ReactionViewModel<Account>>();
-        const viewModel = await this.toSingleViewModel(event);
+        const viewModel = this.toSingleViewModel(event);
         sortedSet.add(viewModel);
       }
     }
 
-    return Promise.resolve(reactionRecord);
+    return reactionRecord;
   }
 }
