@@ -6,16 +6,7 @@ import { NoteViewModel } from "@view-model/note.view-model";
 import { SortedNostrViewModelSet } from "@view-model/sorted-nostr-view-model.set";
 import { from, mergeMap, Observable, Subject } from "rxjs";
 import { TweetNostr } from "./tweet.nostr";
-serviço que carrega cada view model destinado para cada tela com todas as informações necessárias,
-  deve ser o proxy que deve assumir essa responsabilidade ? sim, mas talvéz essa lógica deve ser agrupada
-em um outro serviço independnete somente para carregamento de contas de acordo com a necessidade.
-
-Tipos de carregamento da conta:
--> nenhuma conta é carregada, dados são somente carregados do cache;
- -> somente um pequeno conjunto de contas é carregado, geralmente por que serão as primeiras a serem exibidas em tela;
--> todas as contas são carregadas até o nível definido por parâmetro.
-
-Vou precisar incluir um flyweight para que controle o carregamento das imagens associadas as contas afim de evitar replicação dos dados convertidos para base64
+import { AccountViewModelProxy } from "@shared/view-model-mapper/account-view-model.proxy";
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +14,7 @@ Vou precisar incluir um flyweight para que controle o carregamento das imagens a
 export class TweetProxy {
 
   constructor(
+    private accountViewModelProxy: AccountViewModelProxy,
     private tweetNostr: TweetNostr,
     private feedMapper: FeedMapper
   ) { }
@@ -37,16 +29,16 @@ export class TweetProxy {
 
   private async asyncFeedFromPubkey(pubkey: HexString, subject: Subject<FeedViewModel>): Promise<void> {
     const mainNotes = await this.tweetNostr.listUserNotes(pubkey);
-    await this.tweetNostr.loadAccountsForInitialViewport(mainNotes, {
+    let feed = await this.feedMapper.toViewModel(mainNotes);
+    await this.accountViewModelProxy.loadAccountsForInitialViewport(feed, {
       amountToLoad: 7
     });
-    let feed = await this.feedMapper.toViewModel(mainNotes);
     subject.next(feed);
 
     feed = await this.loadFeedRelatedContent(feed);
     subject.next(feed);
 
-    await this.tweetNostr.loadViewModelAccounts(feed);
+    await this.accountViewModelProxy.loadViewModelAccounts(feed);
     feed = await this.feedMapper.toViewModel(mainNotes);
     subject.next(feed);
   }
