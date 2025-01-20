@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AccountComplete, AccountRenderable, AccountSession, AccountViewable, CurrentAccountObservable } from '@belomonte/nostr-ngx';
+import { AccountComplete, AccountRenderable, AccountSession, CurrentAccountObservable } from '@belomonte/nostr-ngx';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
 import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
 import { FeedViewModel } from '@view-model/feed.view-model';
@@ -17,7 +17,7 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
 
   loading = true;
 
-  viewing: AccountViewable | AccountComplete | null = null;
+  viewing: AccountComplete | null = null;
   authenticated: AccountSession | null = null;
 
   feed: FeedViewModel<AccountRenderable> | null = null;
@@ -69,7 +69,7 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
     }));
   }
 
-  private loadProfileFeed(account: AccountViewable | AccountComplete | null): void {
+  private loadProfileFeed(account: AccountComplete | null): void {
     this.viewing = account;
     this.loading = true;
     if (account) {
