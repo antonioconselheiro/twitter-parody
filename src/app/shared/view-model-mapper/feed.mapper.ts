@@ -27,10 +27,10 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
     private zapMapper: ZapMapper
   ) { }
 
+  toViewModel(event: Array<NostrEvent>): FeedViewModel<Account>;
   toViewModel(event: NostrEvent<ShortTextNote>): NoteViewModel<Account>;
   toViewModel(event: NostrEvent<Repost>): RepostNoteViewModel<Account>;
   toViewModel(event: NostrEvent): NoteViewModel<Account> | null;
-  toViewModel(event: Array<NostrEvent>): FeedViewModel<Account>;
   toViewModel(event: NostrEvent | Array<NostrEvent>): NoteViewModel<Account> | FeedViewModel<Account> | null {
     if (event instanceof Array) {
       return this.toMultipleViewModel(event);
