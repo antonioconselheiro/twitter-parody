@@ -1,5 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
-import { AccountRenderable } from '@belomonte/nostr-ngx';
+import { Account } from '@belomonte/nostr-ngx';
 import { FeedViewModel } from '@view-model/feed.view-model';
 import { NoteViewModel } from '@view-model/note.view-model';
 
@@ -11,10 +11,10 @@ import { NoteViewModel } from '@view-model/note.view-model';
 export class TweetImageViewerComponent {
 
   @Input()
-  root: NoteViewModel<AccountRenderable> | null = null;
+  root: NoteViewModel<Account> | null = null;
 
   @Input()
-  feed: FeedViewModel<AccountRenderable> | null = null;
+  feed: FeedViewModel<Account> | null = null;
 
   @Input()
   activeImage = '';

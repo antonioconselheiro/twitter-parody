@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
+import { Account } from '@belomonte/nostr-ngx';
 import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
 import { FeedViewModel } from '@view-model/feed.view-model';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { TweetImageViewing } from '../tweet-img-viewing.interface';
-import { AccountRenderable } from '@belomonte/nostr-ngx';
 
 @Component({
   selector: 'tw-tweet-list',
@@ -13,10 +13,10 @@ import { AccountRenderable } from '@belomonte/nostr-ngx';
 export class TweetListComponent {
 
   @Input()
-  root: NoteViewModel<AccountRenderable> | null = null;
+  root: NoteViewModel<Account> | null = null;
 
   @Input()
-  feed: FeedViewModel<AccountRenderable> | null = null;
+  feed: FeedViewModel<Account> | null = null;
 
   @Input()
   loading = true;
@@ -27,11 +27,11 @@ export class TweetListComponent {
     private tweetPopoverHandler: TweetContextMenuHandler
   ) { }
 
-  openTweetContextMenu(note: NoteViewModel<AccountRenderable>, trigger: HTMLElement): void {
+  openTweetContextMenu(note: NoteViewModel<Account>, trigger: HTMLElement): void {
     this.tweetPopoverHandler.handleContextMenu({ note, trigger });
   }
 
-  trackByTweetId(i: number, tweet: NoteViewModel<AccountRenderable>): string {
+  trackByTweetId(i: number, tweet: NoteViewModel<Account>): string {
     return tweet.id;
   }
 

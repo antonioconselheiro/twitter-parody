@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { AccountRenderable, HexString, NostrEvent } from "@belomonte/nostr-ngx";
+import { Account, HexString, NostrEvent } from "@belomonte/nostr-ngx";
 import { AccountViewModelProxy } from "@shared/view-model-mapper/account-view-model.proxy";
 import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
 import { FeedViewModel } from "@view-model/feed.view-model";
@@ -19,15 +19,15 @@ export class TweetProxy {
     private feedMapper: FeedMapper
   ) { }
 
-  feedFromPubkey(pubkey: HexString): Observable<FeedViewModel<AccountRenderable>> {
-    const subject = new Subject<FeedViewModel<AccountRenderable>>();
+  feedFromPubkey(pubkey: HexString): Observable<FeedViewModel<Account>> {
+    const subject = new Subject<FeedViewModel<Account>>();
     void this.asyncFeedFromPubkey(pubkey, subject)
       .then(() => subject.complete());
 
     return subject.asObservable();
   }
 
-  private async asyncFeedFromPubkey(pubkey: HexString, subject: Subject<FeedViewModel<AccountRenderable>>): Promise<void> {
+  private async asyncFeedFromPubkey(pubkey: HexString, subject: Subject<FeedViewModel<Account>>): Promise<void> {
     const mainNotes = await this.tweetNostr.listUserNotes(pubkey);
     let feed = await this.feedMapper.toViewModel(mainNotes);
     await this.accountViewModelProxy.loadViewModelAccounts(feed);
