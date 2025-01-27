@@ -33,9 +33,9 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
   }
 
   override ngOnInit(): void {
-    this.loadProfileFeed(this.activatedRoute.snapshot.data['profile']);
+    this.loadAccountFeed(this.activatedRoute.snapshot.data['profile']);
     this.bindAuthenticatedProfileSubscription();
-    this.getProfileFromActivatedRoute();
+    this.getAccountFromActivatedRoute();
     this.bindViewingProfile();
 
     super.ngOnInit();
@@ -61,20 +61,20 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
 
   private bindViewingProfile(): void {
     this.subscriptions.add(this.activatedRoute.data.subscribe({
-      next: ({ profile }) => {
+      next: ({ account }) => {
         this.feed = null;
         document.body.scrollTo(0, 0);
-        this.loadProfileFeed(profile);
+        this.loadAccountFeed(account);
       }
     }));
   }
 
-  private loadProfileFeed(account: AccountComplete | null): void {
+  private loadAccountFeed(account: AccountComplete | null): void {
     this.viewing = account;
     this.loading = true;
     if (account) {
       this.tweetProxy
-        .feedFromPubkey(account.pubkey)
+        .loadFullFeedFromPubkey(account.pubkey)
         .subscribe(feed => {
           this.loading = false;
           this.feed = feed;
@@ -85,15 +85,15 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
     }
   }
 
-  private getProfileFromActivatedRoute(): void {
-    this.viewing = this.activatedRoute.snapshot.data['profile'];
+  private getAccountFromActivatedRoute(): void {
+    this.viewing = this.activatedRoute.snapshot.data['account'];
     this.subscriptions.add(this.activatedRoute.data.subscribe({
-      next: data => this.viewing = data['profile']
+      next: data => this.viewing = data['account']
     }));
 
     if (this.viewing) {
       this.title = this.viewing.displayName || 'Profile';
-      this.loadProfileFeed(this.viewing);
+      this.loadAccountFeed(this.viewing);
     }
   }
 

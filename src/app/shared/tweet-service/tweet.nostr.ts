@@ -16,17 +16,23 @@ export class TweetNostr {
   /**
    * List nostr events published by a pubkey
    */
-  listUserNotes(pubkey: HexString): Promise<Array<NostrEvent>> {
-    //  TODO: include pagination
-    return this.npool.query([
-      {
-        kinds: [
-          ShortTextNote,
-          Repost
-        ],
-        authors: [pubkey]
-      }
-    ]);
+  listUserNotes(pubkey: HexString, pageSize = 10, olderEventCreatedAt?: number): Promise<Array<NostrEvent>> {
+    const filter: Filter = {
+      kinds: [
+        ShortTextNote,
+        Repost
+      ],
+      authors: [
+        pubkey
+      ],
+      limit: pageSize
+    };
+
+    if (olderEventCreatedAt) {
+      filter.until = olderEventCreatedAt;
+    }
+
+    return this.npool.query([filter]);
   }
 
   /**
@@ -50,10 +56,10 @@ export class TweetNostr {
    * @param feed
    * only the main event of the feed, as an array
    *
-   * @param mostRecentEvent
+   * @param latestEvent
    * the newer event of the feed, it can be a short text note, a repost note, a reaction or a zap 
    */
-  listenFeedUpdates(feed: Array<NostrEvent>, mostRecentEvent?: NostrEvent): Observable<Array<NostrEvent>> {
+  listenFeedUpdates(feed: Array<NostrEvent>, latestEvent?: NostrEvent): Observable<Array<NostrEvent>> {
     const ids = feed.map(event => event.id);
     const filter: Filter = {
       ids,
@@ -66,8 +72,8 @@ export class TweetNostr {
       '#e': ids
     };
 
-    if (mostRecentEvent) {
-      filter.since = mostRecentEvent.created_at;
+    if (latestEvent) {
+      filter.since = latestEvent.created_at;
     }
 
     const groupingEventsTime = 300;

@@ -7,7 +7,7 @@ import { MessagesComponent } from './pages/messages/messages.component';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
 import { ProfilePageComponent } from './pages/profile/profile-page.component';
 import { TimelineComponent } from './pages/timeline/timeline.component';
-import { profileResolverFn } from './pages/profile/profile.resolve-fn';
+import { accountResolverFn } from './pages/profile/profile.resolve-fn';
 import { menuActiveResolverFn } from '@shared/menu-sidebar/menu-active.resolve-fn';
 import { MenuType } from '@shared/menu-sidebar/menu-type.enum';
 import { CommunitiesComponent } from './pages/communities/communities.component';
@@ -62,7 +62,7 @@ const routes: Routes = [
     component: ProfilePageComponent,
     runGuardsAndResolvers: 'pathParamsChange',
     resolve: {
-      profile: profileResolverFn,
+      account: accountResolverFn,
       menu: menuActiveResolverFn
     },
     data: {

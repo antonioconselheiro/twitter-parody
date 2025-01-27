@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Account, HexString, NostrEvent } from "@belomonte/nostr-ngx";
+import { HexString, NostrEvent } from "@belomonte/nostr-ngx";
 import { AccountViewModelProxy } from "@shared/view-model-mapper/account-view-model.proxy";
 import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
 import { FeedViewModel } from "@view-model/feed.view-model";
@@ -19,16 +19,16 @@ export class TweetProxy {
     private feedMapper: FeedMapper
   ) { }
 
-  feedFromPubkey(pubkey: HexString): Observable<FeedViewModel<Account>> {
-    const subject = new Subject<FeedViewModel<Account>>();
-    void this.asyncFeedFromPubkey(pubkey, subject)
+  loadFullFeedFromPubkey(pubkey: HexString, pageSize = 10): Observable<FeedViewModel> {
+    const subject = new Subject<FeedViewModel>();
+    void this.asyncLoadFeedPageFromPubkey(pubkey, subject, pageSize)
       .then(() => subject.complete());
 
     return subject.asObservable();
   }
 
-  private async asyncFeedFromPubkey(pubkey: HexString, subject: Subject<FeedViewModel<Account>>): Promise<void> {
-    const mainNotes = await this.tweetNostr.listUserNotes(pubkey);
+  private async asyncLoadFeedPageFromPubkey(pubkey: HexString, subject: Subject<FeedViewModel>, pageSize = 10, olderEventCreatedAt?: number): Promise<void> {
+    const mainNotes = await this.tweetNostr.listUserNotes(pubkey, pageSize, olderEventCreatedAt);
     let feed = await this.feedMapper.toViewModel(mainNotes);
     await this.accountViewModelProxy.loadViewModelAccounts(feed);
 
@@ -45,8 +45,8 @@ export class TweetProxy {
    */
   async loadFeedRelatedContent(feed: FeedViewModel): Promise<FeedViewModel> {
     const eventList = [...feed];
-    const events = eventList.map(viewModel => viewModel.id);
-    const interactions = await this.tweetNostr.loadRelatedContent(events);
+    const eventIdList = eventList.map(viewModel => viewModel.id);
+    const interactions = await this.tweetNostr.loadRelatedContent(eventIdList);
 
     return this.feedMapper.patchViewModel(new SortedNostrViewModelSet<NoteViewModel>(eventList), interactions);
   }
@@ -54,18 +54,32 @@ export class TweetProxy {
   /**
    * Subscribe into an event to listen updates about reposts, reactions and zaps
    */
-  listenFeed(feed: FeedViewModel, mostRecentEvent?: NostrEvent): Observable<FeedViewModel> {
+  listenFeedUpdates(feed: FeedViewModel, latestEvent?: NostrEvent): Observable<FeedViewModel> {
     const eventList = [...feed].map(note => note.event);
-    if (!mostRecentEvent) {
-      mostRecentEvent = this.getMostRecentEvent(eventList);
+    if (!latestEvent) {
+      latestEvent = this.getLatestEvent(eventList);
     }
 
     return this.tweetNostr
-      .listenFeedUpdates(eventList, mostRecentEvent)
+      .listenFeedUpdates(eventList, latestEvent)
       .pipe(map(events => this.feedMapper.patchViewModel(feed, events)));
   }
 
-  private getMostRecentEvent(eventList: Array<NostrEvent>): NostrEvent {
-    return eventList.reduce((maisRecente, atual) => atual.created_at > maisRecente.created_at ? atual : maisRecente);
+  /**
+   * return the newer event into a given list
+   * @returns the newer event in the list or undefined if the list has no items
+   */
+  private getLatestEvent(eventList: Array<NostrEvent>): NostrEvent | undefined {
+    return eventList.reduce((event1, event2) => event2.created_at > event1.created_at ? event2 : event1);
+  }
+
+  /**
+   * return the older event into a given list
+   * @returns the older event in the list or undefined if the list has no items
+   */
+  private getOlderEvent(feed: FeedViewModel): NostrEvent | undefined {
+    return [...feed]
+      .map(view => view.event)
+      .reduce((event1, event2) => event2.created_at > event1.created_at ? event1 : event2);
   }
 }
