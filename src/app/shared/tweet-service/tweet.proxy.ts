@@ -43,11 +43,27 @@ export class TweetProxy {
    * Loads the next page relative to a user's timeline or a user's event, the event
    * will be considered the oldest event and the next page will be load after it
    * @param pubkey, chosen user's pubkey
-   * @param olderNoteOrTimeline, the older nostr event from the timeline or the whole feed to the method extract the older nostr event
+   * @param olderNote, the older nostr event from the timeline
    * @param pageSize, notes per page, default to 10
    */
   loadTimelineNextPage(pubkey: HexString, olderNote: NostrEvent, pageSize?: number): Promise<FeedViewModel>;
+
+  /**
+   * Loads the next page relative to a user's timeline or a user's event, the event
+   * will be considered the oldest event and the next page will be load after it
+   * @param pubkey, chosen user's pubkey
+   * @param timeline, the whole timeline to extract the older nostr event
+   * @param pageSize, notes per page, default to 10
+   */
   loadTimelineNextPage(pubkey: HexString, timeline: FeedViewModel, pageSize?: number): Promise<FeedViewModel>;
+
+  /**
+   * Loads the next page relative to a user's timeline or a user's event, the event
+   * will be considered the oldest event and the next page will be load after it
+   * @param pubkey, chosen user's pubkey
+   * @param olderNoteOrTimeline, the older nostr event from the timeline or the whole timeline to extract the older nostr event
+   * @param pageSize, notes per page, default to 10
+   */
   loadTimelineNextPage(pubkey: HexString, olderNoteOrTimeline: FeedViewModel | NostrEvent, pageSize?: number): Promise<FeedViewModel>;
   loadTimelineNextPage(pubkey: HexString, olderNoteOrTimeline: FeedViewModel | NostrEvent, pageSize = 10): Promise<FeedViewModel> {
     let olderNote: NostrEvent | undefined;
