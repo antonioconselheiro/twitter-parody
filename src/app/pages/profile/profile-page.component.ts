@@ -74,7 +74,7 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
     this.loading = true;
     if (account) {
       this.tweetProxy
-        .loadFullFeedFromPubkey(account.pubkey)
+        .loadTimeline(account.pubkey)
         .subscribe(feed => {
           this.loading = false;
           this.feed = feed;

@@ -29,7 +29,8 @@ export class TweetNostr {
     };
 
     if (olderEventCreatedAt) {
-      filter.until = olderEventCreatedAt;
+      //  FIXME: revisar se devo usar since ou until aqui
+      filter.since = olderEventCreatedAt;
     }
 
     return this.npool.query([filter]);
@@ -59,7 +60,7 @@ export class TweetNostr {
    * @param latestEvent
    * the newer event of the feed, it can be a short text note, a repost note, a reaction or a zap 
    */
-  listenFeedUpdates(feed: Array<NostrEvent>, latestEvent?: NostrEvent): Observable<Array<NostrEvent>> {
+  listenTimelineUpdates(feed: Array<NostrEvent>, latestEvent?: NostrEvent): Observable<Array<NostrEvent>> {
     const ids = feed.map(event => event.id);
     const filter: Filter = {
       ids,

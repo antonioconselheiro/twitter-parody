@@ -66,6 +66,10 @@ export class SortedNostrViewModelSet<
     });
   }
 
+  concat(combine: SortedNostrViewModelSet<GenericViewModel, AccountViewModel>): SortedNostrViewModelSet<GenericViewModel, AccountViewModel> {
+    return new SortedNostrViewModelSet<GenericViewModel, AccountViewModel>([...combine, ...this]);
+  }
+
   override get size(): number {
     return this.#items.length;
   }

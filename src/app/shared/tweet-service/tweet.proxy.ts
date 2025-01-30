@@ -19,24 +19,121 @@ export class TweetProxy {
     private feedMapper: FeedMapper
   ) { }
 
-  loadFullFeedFromPubkey(pubkey: HexString, pageSize = 10): Observable<FeedViewModel> {
+  /**
+   * loads a page of notes written by a chosen user.
+   * emits the data three times, each time with more updates if available.
+   * 
+   * First emits all notes from request with accounts data included.
+   * Second emits 
+   *
+   * @param pubkey, chosen user's pubkey
+   * @param pageSize, notes per page, default to 10
+   *
+   * @returns list of notes cast into view model
+   */
+  loadTimeline(pubkey: HexString, pageSize = 10): Observable<FeedViewModel> {
     const subject = new Subject<FeedViewModel>();
-    void this.asyncLoadFeedPageFromPubkey(pubkey, subject, pageSize)
+    void this.loadTimelinePageFromPubkey(pubkey, pageSize, subject)
       .then(() => subject.complete());
 
     return subject.asObservable();
   }
 
-  private async asyncLoadFeedPageFromPubkey(pubkey: HexString, subject: Subject<FeedViewModel>, pageSize = 10, olderEventCreatedAt?: number): Promise<void> {
+  /**
+   * Loads the next page relative to a user's timeline or a user's event, the event
+   * will be considered the oldest event and the next page will be load after it
+   * @param pubkey, chosen user's pubkey
+   * @param olderNoteOrTimeline, the older nostr event from the timeline or the whole feed to the method extract the older nostr event
+   * @param pageSize, notes per page, default to 10
+   */
+  loadTimelineNextPage(pubkey: HexString, olderNote: NostrEvent, pageSize?: number): Promise<FeedViewModel>;
+  loadTimelineNextPage(pubkey: HexString, timeline: FeedViewModel, pageSize?: number): Promise<FeedViewModel>;
+  loadTimelineNextPage(pubkey: HexString, olderNoteOrTimeline: FeedViewModel | NostrEvent, pageSize?: number): Promise<FeedViewModel>;
+  loadTimelineNextPage(pubkey: HexString, olderNoteOrTimeline: FeedViewModel | NostrEvent, pageSize = 10): Promise<FeedViewModel> {
+    let olderNote: NostrEvent | undefined;
+    if (olderNoteOrTimeline instanceof SortedNostrViewModelSet) {
+      olderNote = this.getOlderEvent(olderNoteOrTimeline);
+    } else {
+      olderNote = olderNoteOrTimeline;
+    }
+
+    if (!olderNote) {
+      return this.loadTimelinePageFromPubkey(pubkey, pageSize);
+    }
+
+    return this.loadTimelinePageFromPubkey(pubkey, pageSize, olderNote.created_at);
+  }
+
+  /**
+   * load a specific page from pubkey publications
+   *
+   * @param pubkey, chosen user's pubkey
+   * @param pageSize, notes per page, default to 10
+   * @param olderEventCreatedAt, optional created_at property from the older event from the feed, the events will be loaded since this time
+   * @returns the requested page
+   */
+  async loadTimelinePageFromPubkey(
+    pubkey: HexString,
+    pageSize?: number,
+    olderEventCreatedAt?: number
+  ): Promise<FeedViewModel>;
+
+  /**
+   * load a specific page from pubkey publications
+   *
+   * @param pubkey, chosen user's pubkey
+   * @param pageSize, notes per page, default to 10
+   * @param subject, optional Subject to emit events while they are loading () 
+   * @returns the requested page
+   */
+  async loadTimelinePageFromPubkey(
+    pubkey: HexString,
+    pageSize?: number,
+    subject?: Subject<FeedViewModel>
+  ): Promise<FeedViewModel>;
+
+  /**
+   * load a specific page from pubkey publications
+   *
+   * @param pubkey, chosen user's pubkey
+   * @param pageSize, notes per page, default to 10
+   * @param subject, optional Subject to emit events while they are loading () 
+   * @param olderEventCreatedAt, optional created_at property from the older event from the feed, the events will be loaded since this time
+   * @returns the requested page
+   */
+  async loadTimelinePageFromPubkey(
+    pubkey: HexString,
+    pageSize?: number,
+    subject?: Subject<FeedViewModel>,
+    olderEventCreatedAt?: number
+  ): Promise<FeedViewModel>;
+
+  async loadTimelinePageFromPubkey(
+    pubkey: HexString,
+    pageSize?: number,
+    subject?: Subject<FeedViewModel> | number,
+    olderEventCreatedAt?: number
+  ): Promise<FeedViewModel> {
     const mainNotes = await this.tweetNostr.listUserNotes(pubkey, pageSize, olderEventCreatedAt);
     let feed = await this.feedMapper.toViewModel(mainNotes);
     await this.accountViewModelProxy.loadViewModelAccounts(feed);
 
+    if (typeof subject === 'number') {
+      olderEventCreatedAt = subject;
+      subject = undefined;
+    }
+
     feed = await this.feedMapper.toViewModel(mainNotes);
-    subject.next(feed);
+    if (subject) {
+      subject.next(feed);
+    }
 
     feed = await this.loadFeedRelatedContent(feed);
-    subject.next(feed);
+    if (subject) {
+      subject.next(feed);
+    }
+
+    return Promise.resolve(feed);
   }
 
   /**
@@ -52,16 +149,15 @@ export class TweetProxy {
   }
 
   /**
-   * Subscribe into an event to listen updates about reposts, reactions and zaps
+   * Subscribe to listen updates about reposts, reactions and zaps of a feed (group of notes)
+   * @param feed, listen updates from events on this feed
    */
-  listenFeedUpdates(feed: FeedViewModel, latestEvent?: NostrEvent): Observable<FeedViewModel> {
+  listenTimelineUpdates(feed: FeedViewModel): Observable<FeedViewModel> {
     const eventList = [...feed].map(note => note.event);
-    if (!latestEvent) {
-      latestEvent = this.getLatestEvent(eventList);
-    }
+    const latestEvent = this.getLatestEvent(eventList);
 
     return this.tweetNostr
-      .listenFeedUpdates(eventList, latestEvent)
+      .listenTimelineUpdates(eventList, latestEvent)
       .pipe(map(events => this.feedMapper.patchViewModel(feed, events)));
   }
 
@@ -69,7 +165,7 @@ export class TweetProxy {
    * return the newer event into a given list
    * @returns the newer event in the list or undefined if the list has no items
    */
-  private getLatestEvent(eventList: Array<NostrEvent>): NostrEvent | undefined {
+  getLatestEvent(eventList: Array<NostrEvent>): NostrEvent | undefined {
     return eventList.reduce((event1, event2) => event2.created_at > event1.created_at ? event2 : event1);
   }
 
@@ -77,7 +173,7 @@ export class TweetProxy {
    * return the older event into a given list
    * @returns the older event in the list or undefined if the list has no items
    */
-  private getOlderEvent(feed: FeedViewModel): NostrEvent | undefined {
+  getOlderEvent(feed: FeedViewModel): NostrEvent | undefined {
     return [...feed]
       .map(view => view.event)
       .reduce((event1, event2) => event2.created_at > event1.created_at ? event1 : event2);
