@@ -13,10 +13,10 @@ import { TweetImageViewing } from '../tweet-img-viewing.interface';
 export class TweetListComponent {
 
   @Input()
-  root: NoteViewModel<Account> | null = null;
+  root: NoteViewModel | null = null;
 
   @Input()
-  feed: FeedViewModel<Account> | null = null;
+  feed: FeedViewModel | null = null;
 
   @Input()
   loading = true;
@@ -27,11 +27,11 @@ export class TweetListComponent {
     private tweetPopoverHandler: TweetContextMenuHandler
   ) { }
 
-  openTweetContextMenu(note: NoteViewModel<Account>, trigger: HTMLElement): void {
+  openTweetContextMenu(note: NoteViewModel, trigger: HTMLElement): void {
     this.tweetPopoverHandler.handleContextMenu({ note, trigger });
   }
 
-  trackByTweetId(i: number, tweet: NoteViewModel<Account>): string {
+  trackByTweetId(i: number, tweet: NoteViewModel): string {
     return tweet.id;
   }
 

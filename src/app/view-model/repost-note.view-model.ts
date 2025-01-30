@@ -8,7 +8,7 @@ import { SortedNostrViewModelSet } from './sorted-nostr-view-model.set';
  * This interface represents the repost note
  * with all data ready to render into document
  */
-export interface RepostNoteViewModel<AccountViewModel extends Account = Account> extends Omit<SimpleTextNoteViewModel<AccountViewModel>, 'content' | 'reposting'> {
+export interface RepostNoteViewModel<AccountViewModel extends Account = Account> extends Omit<SimpleTextNoteViewModel<AccountViewModel>, 'content' | 'reposting' | 'isSimpleRepost'> {
 
   /**
    * @optional

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TweetImageViewing } from '../tweet-img-viewing.interface';
+import { Account } from '@belomonte/nostr-ngx';
 import { NoteViewModel } from '@view-model/note.view-model';
-import { Account, AccountRenderable } from '@belomonte/nostr-ngx';
+import { TweetImageViewing } from '../tweet-img-viewing.interface';
 
 @Component({
   selector: 'tw-tweet',

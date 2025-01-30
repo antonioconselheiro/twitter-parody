@@ -55,4 +55,9 @@ export interface SimpleTextNoteViewModel<AccountViewModel extends Account> exten
    * Note attached location if g tag is included
    */
   location?: Geohash.Point;
+
+  /**
+   * Simple text is never a simple repost, but it can be into a list together with simple repost, so we start that with a default value
+   */
+  isSimpleRepost: false;
 }

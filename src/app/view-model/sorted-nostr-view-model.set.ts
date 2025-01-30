@@ -29,7 +29,7 @@ export class SortedNostrViewModelSet<
   override add(value: GenericViewModel): this {
     if (!this.has(value)) {
       const indexNotFound = -1;
-      const index = this.#items.findIndex(item => item.createdAt > value.createdAt);
+      const index = this.#items.findIndex(item => item.createdAt < value.createdAt);
       if (index === indexNotFound) {
         this.#items.push(value);
       } else {

@@ -62,7 +62,8 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
       reply,
       //  TODO: ideally I should pass relay address from where this event come
       origin: [],
-      reposted: new SortedNostrViewModelSet<NoteViewModel<Account>>()
+      reposted: new SortedNostrViewModelSet<NoteViewModel<Account>>(),
+      isSimpleRepost: false
     };
 
     return note;
