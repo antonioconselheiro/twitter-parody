@@ -46,8 +46,6 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
 
     const reactions = this.reactionMapper.toViewModel(events);
     const zaps = this.zapMapper.toViewModel(events);
-    //  FIXME: o mapper não deve fazer requisições websocket, devo bolar uma maneira de fazer o carregamento o account
-    //  utilizando somente as informações disponíveis em cache
     const author = this.profileProxy.getAccount(event.pubkey);
     const reply: NoteReplyContext<Account> = { replies: new SortedNostrViewModelSet<NoteViewModel<Account>>() };
     const note: SimpleTextNoteViewModel<Account> = {

@@ -38,12 +38,12 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel<A
 
     if (contentEvent) {
       let retweeted: NoteViewModel<Account> | null;
-      if (this.guard.isKind(contentEvent, ShortTextNote)) {
-        retweeted = this.simpleTextMapper.toViewModel(contentEvent);
-        reposting.add(retweeted);
-      } else if (this.guard.isKind(contentEvent, Repost)) {
+      if (this.guard.isKind(contentEvent, Repost) || this.guard.isSerializedNostrEvent(event.content)) {
         //  there is no way to get infinity recursively, this was a stringified json
         retweeted = this.toViewModel(event);
+        reposting.add(retweeted);
+      } else if (this.guard.isKind(contentEvent, ShortTextNote)) {
+        retweeted = this.simpleTextMapper.toViewModel(contentEvent);
         reposting.add(retweeted);
       }
 

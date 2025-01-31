@@ -50,11 +50,11 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
     const zaps = new Map<string, Array<ZapViewModel>>();
 
     for (const event of events) {
-      if (this.guard.isKind(event, ShortTextNote)) {
-        const viewModel = this.simpleTextMapper.toViewModel(event);
-        feed.add(viewModel);
-      } else if (this.guard.isKind(event, Repost)) {
+      if (this.guard.isKind(event, Repost) || this.guard.isSerializedNostrEvent(event.content)) {
         const viewModel = this.repostMapper.toViewModel(event);
+        feed.add(viewModel);
+      } else if (this.guard.isKind(event, ShortTextNote)) {
+        const viewModel = this.simpleTextMapper.toViewModel(event);
         feed.add(viewModel);
       } else if (this.guard.isKind(event, Reaction)) {
         const viewModel = this.reactionMapper.toViewModel(event);
