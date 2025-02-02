@@ -1,6 +1,6 @@
 import { Account } from "@belomonte/nostr-ngx";
+import { NostrViewModelSet } from "@view-model/nostr-view-model.set";
 import { NoteViewModel } from "@view-model/note.view-model";
-import { SortedNostrViewModelSet } from "@view-model/sorted-nostr-view-model.set";
 
 /**
  * data about repling and be replied
@@ -21,5 +21,5 @@ export interface NoteReplyContext<AccountViewModel extends Account = Account> {
   /**
    * List of ids of replies to this event
    */
-  replies: SortedNostrViewModelSet<NoteViewModel<AccountViewModel>, AccountViewModel>;
+  replies: NostrViewModelSet<NoteViewModel<AccountViewModel>, AccountViewModel>;
 }

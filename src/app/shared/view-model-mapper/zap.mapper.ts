@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Account, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
-import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
 import { ZapViewModel } from '@view-model/zap.view-model';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { TagHelper } from './tag.helper';
 import { Zap } from 'nostr-tools/kinds';
+import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +19,9 @@ export class ZapMapper implements SingleViewModelMapper<ZapViewModel<Account>> {
 
   toViewModel(event: NostrEvent): ZapViewModel<Account> | null;
   toViewModel(event: NostrEvent<Zap>): ZapViewModel<Account>;
-  toViewModel(event: Array<NostrEvent>): SortedNostrViewModelSet<ZapViewModel<Account>>;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): ZapViewModel<Account> | SortedNostrViewModelSet<ZapViewModel<Account>> | null;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): ZapViewModel<Account> | SortedNostrViewModelSet<ZapViewModel<Account>> | null {
+  toViewModel(event: Array<NostrEvent>): NostrViewModelSet<ZapViewModel<Account>>;
+  toViewModel(event: NostrEvent | Array<NostrEvent>): ZapViewModel<Account> | NostrViewModelSet<ZapViewModel<Account>> | null;
+  toViewModel(event: NostrEvent | Array<NostrEvent>): ZapViewModel<Account> | NostrViewModelSet<ZapViewModel<Account>> | null {
     if (event instanceof Array) {
       return this.toMultipleViewModel(event);
     } else if (this.guard.isKind(event, Zap)) {
@@ -51,8 +51,8 @@ export class ZapMapper implements SingleViewModelMapper<ZapViewModel<Account>> {
     };
   }
 
-  private toMultipleViewModel(events: Array<NostrEvent>): SortedNostrViewModelSet<ZapViewModel<Account>> {
-    const zapSet = new SortedNostrViewModelSet<ZapViewModel<Account>>();
+  private toMultipleViewModel(events: Array<NostrEvent>): NostrViewModelSet<ZapViewModel<Account>> {
+    const zapSet = new NostrViewModelSet<ZapViewModel<Account>>();
 
     for (const event of events) {
       if (this.guard.isKind(event, Zap)) {

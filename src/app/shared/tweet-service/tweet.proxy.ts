@@ -4,7 +4,7 @@ import { AccountViewModelProxy } from "@shared/view-model-mapper/account-view-mo
 import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
 import { FeedViewModel } from "@view-model/feed.view-model";
 import { NoteViewModel } from "@view-model/note.view-model";
-import { SortedNostrViewModelSet } from "@view-model/sorted-nostr-view-model.set";
+import { NostrViewModelSet } from "@view-model/sorted-nostr-view-model.set";
 import { map, Observable, Subject } from "rxjs";
 import { TweetNostr } from "./tweet.nostr";
 
@@ -67,7 +67,7 @@ export class TweetProxy {
   loadTimelineNextPage(pubkey: HexString, olderNoteOrTimeline: FeedViewModel | NostrEvent, pageSize?: number): Promise<FeedViewModel>;
   loadTimelineNextPage(pubkey: HexString, olderNoteOrTimeline: FeedViewModel | NostrEvent, pageSize = 10): Promise<FeedViewModel> {
     let olderNote: NostrEvent | undefined;
-    if (olderNoteOrTimeline instanceof SortedNostrViewModelSet) {
+    if (olderNoteOrTimeline instanceof NostrViewModelSet) {
       olderNote = this.getOlderEvent(olderNoteOrTimeline);
     } else {
       olderNote = olderNoteOrTimeline;
@@ -161,7 +161,7 @@ export class TweetProxy {
     const eventIdList = eventList.map(viewModel => viewModel.id);
     const interactions = await this.tweetNostr.loadRelatedContent(eventIdList);
 
-    return this.feedMapper.patchViewModel(new SortedNostrViewModelSet<NoteViewModel>(eventList), interactions);
+    return this.feedMapper.patchViewModel(new NostrViewModelSet<NoteViewModel>(eventList), interactions);
   }
 
   /**

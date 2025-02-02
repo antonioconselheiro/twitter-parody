@@ -5,11 +5,11 @@ import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
-import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
 import { Reaction, ShortTextNote, Zap } from 'nostr-tools/kinds';
 import { ReactionMapper } from './reaction.mapper';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { ZapMapper } from './zap.mapper';
+import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +47,7 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
     const reactions = this.reactionMapper.toViewModel(events);
     const zaps = this.zapMapper.toViewModel(events);
     const author = this.profileProxy.getAccount(event.pubkey);
-    const reply: NoteReplyContext<Account> = { replies: new SortedNostrViewModelSet<NoteViewModel<Account>>() };
+    const reply: NoteReplyContext<Account> = { replies: new NostrViewModelSet<NoteViewModel<Account>>() };
     const note: SimpleTextNoteViewModel<Account> = {
       id: event.id,
       author,
@@ -60,8 +60,7 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
       reply,
       //  TODO: ideally I should pass relay address from where this event come
       origin: [],
-      reposted: new SortedNostrViewModelSet<NoteViewModel<Account>>(),
-      isSimpleRepost: false
+      reposted: new NostrViewModelSet<NoteViewModel<Account>>()
     };
 
     return note;

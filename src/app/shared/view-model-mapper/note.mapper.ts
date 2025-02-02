@@ -1,8 +1,8 @@
 import { Inject, Injectable } from "@angular/core";
-import { InMemoryNCache, LOCAL_CACHE_TOKEN, NostrEvent, NostrGuard } from "@belomonte/nostr-ngx";
+import { NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGuard } from "@belomonte/nostr-ngx";
 import { NoteReplyContext } from "@view-model/context/note-reply-context.interface";
+import { NostrViewModelSet } from "@view-model/nostr-view-model.set";
 import { NoteViewModel } from "@view-model/note.view-model";
-import { SortedNostrViewModelSet } from "@view-model/sorted-nostr-view-model.set";
 import { Repost, ShortTextNote } from 'nostr-tools/kinds';
 import { RepostMapper } from "./repost.mapper";
 import { SimpleTextMapper } from "./simple-text.mapper";
@@ -12,7 +12,7 @@ import { TagHelper } from "./tag.helper";
 export class NoteMapper {
 
   constructor(
-    @Inject(LOCAL_CACHE_TOKEN) private ncache: InMemoryNCache,
+    @Inject(NOSTR_CACHE_TOKEN) private ncache: NostrCache,
     private simpleTextMapper: SimpleTextMapper,
     private repostMapper: RepostMapper,
     private tagHelper: TagHelper,
@@ -102,7 +102,7 @@ export class NoteMapper {
     return undefined;
   }
 
-  private fillReplies(replies: SortedNostrViewModelSet<NoteViewModel>, repliesEvents: Array<NostrEvent>): void {
+  private fillReplies(replies: NostrViewModelSet<NoteViewModel>, repliesEvents: Array<NostrEvent>): void {
     for (const event of repliesEvents) {
       if (this.guard.isKind(event, [ShortTextNote, Repost])) {
         const note = this.toViewModel(event);
@@ -111,7 +111,7 @@ export class NoteMapper {
     }
   }
 
-  private getRepostedBy(note: NoteViewModel, relationedEvents: Array<NostrEvent>): SortedNostrViewModelSet<NoteViewModel> {
+  private getRepostedBy(note: NoteViewModel, relationedEvents: Array<NostrEvent>): NostrViewModelSet<NoteViewModel> {
     for (const event of relationedEvents) {
       if (!this.guard.isKind(event, [ShortTextNote, Repost])) {
         continue;

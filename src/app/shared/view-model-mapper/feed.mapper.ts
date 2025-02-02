@@ -4,7 +4,6 @@ import { FeedViewModel } from '@view-model/feed.view-model';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { ReactionViewModel } from '@view-model/reaction.view-model';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
-import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
 import { ZapViewModel } from '@view-model/zap.view-model';
 import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
 import { ReactionMapper } from './reaction.mapper';
@@ -13,6 +12,7 @@ import { SimpleTextMapper } from './simple-text.mapper';
 import { ViewModelPatch } from './view-model-patch.mapper';
 import { ViewModelMapper } from './view-model.mapper';
 import { ZapMapper } from './zap.mapper';
+import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +45,7 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
 
   //  FIXME: split into minor methods
   // eslint-disable-next-line complexity
-  private toMultipleViewModel(events: Array<NostrEvent>, feed = new SortedNostrViewModelSet<NoteViewModel>()): FeedViewModel {
+  private toMultipleViewModel(events: Array<NostrEvent>, feed = new NostrViewModelSet<NoteViewModel>()): FeedViewModel {
     const reactions = new Map<string, Array<ReactionViewModel>>();
     const zaps = new Map<string, Array<ZapViewModel>>();
 
@@ -87,19 +87,19 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
       const zapList = zaps.get(viewModel.id) || [];
       const reactionList = reactions.get(viewModel.id) || [];
 
-      viewModel.zaps = new SortedNostrViewModelSet<ZapViewModel>();
+      viewModel.zaps = new NostrViewModelSet<ZapViewModel>();
       viewModel.reactions = {};
 
       zapList.forEach(zap => viewModel.zaps.add(zap));
       reactionList.forEach(reaction => {
-        let sorted: SortedNostrViewModelSet<ReactionViewModel>;
+        let list: NostrViewModelSet<ReactionViewModel>;
         if (!viewModel.reactions[reaction.content]) {
-          sorted = viewModel.reactions[reaction.content] = new SortedNostrViewModelSet<ReactionViewModel>();
+          list = viewModel.reactions[reaction.content] = new NostrViewModelSet<ReactionViewModel>();
         } else {
-          sorted = viewModel.reactions[reaction.content];
+          list = viewModel.reactions[reaction.content];
         }
 
-        sorted.add(reaction);
+        list.add(reaction);
       });
     });
 

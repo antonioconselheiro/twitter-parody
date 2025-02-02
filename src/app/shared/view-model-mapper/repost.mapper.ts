@@ -5,13 +5,13 @@ import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
-import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
 import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
 import { ReactionMapper } from './reaction.mapper';
 import { SimpleTextMapper } from './simple-text.mapper';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { TagHelper } from './tag.helper';
 import { ZapMapper } from './zap.mapper';
+import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 
 @Injectable({
   providedIn: 'root'
@@ -34,18 +34,20 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel<A
   toViewModel(event: NostrEvent): RepostNoteViewModel {
     const content = event.content || '';
     const contentEvent = this.extractNostrEvent(content);
-    const reposting = new SortedNostrViewModelSet<NoteViewModel>();
+    const reposting = new NostrViewModelSet<NoteViewModel>();
 
     if (contentEvent) {
       let retweeted: NoteViewModel<Account> | null;
-      if (this.guard.isKind(contentEvent, Repost) || this.guard.isSerializedNostrEvent(event.content)) {
+      if (this.guard.isKind(contentEvent, Repost)) {
         //  there is no way to get infinity recursively, this was a stringified json
-        retweeted = this.toViewModel(event);
+        retweeted = this.toViewModel(contentEvent);
         reposting.add(retweeted);
       } else if (this.guard.isKind(contentEvent, ShortTextNote)) {
         retweeted = this.simpleTextMapper.toViewModel(contentEvent);
         reposting.add(retweeted);
       }
+
+      retweeted?.reposted
 
     } else {
       const mentions = this.tagHelper.getMentionedEvent(event);
@@ -72,9 +74,8 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel<A
 
     const reactions = this.reactionMapper.toViewModel(events);
     const zaps = this.zapMapper.toViewModel(events);
-    const isSimpleRepost = this.isSimpleRepost(event);
     const author = this.profileProxy.getAccount(event.pubkey);
-    const reply: NoteReplyContext = { replies: new SortedNostrViewModelSet<NoteViewModel>() };
+    const reply: NoteReplyContext = { replies: new NostrViewModelSet<NoteViewModel>() };
 
     const note: RepostNoteViewModel = {
       id: event.id,
@@ -88,9 +89,9 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel<A
       reply,
       //  TODO: ideally I should pass relay address from where this event come
       origin: [],
-      reposted: new SortedNostrViewModelSet<NoteViewModel>(),
+      reposted: new NostrViewModelSet<NoteViewModel>(),
       event,
-      isSimpleRepost
+      isSimpleRepost: false
     };
 
     return note;
@@ -113,14 +114,5 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel<A
     }
 
     return false;
-  }
-
-  private isSimpleRepost(event: NostrEvent): boolean {
-    const isSimpleRepostRegex = /^(nostr:event1[a-z0-9]+|#[0])$/;
-    if (isSimpleRepostRegex.test(event.content)) {
-      return true;
-    }
-
-    return this.guard.isSerializedNostrEvent(event.content);
   }
 }

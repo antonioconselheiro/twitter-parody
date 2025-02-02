@@ -1,7 +1,7 @@
 import { NostrEventViewModel } from '@view-model/nostr-event.view-model';
-import { SortedNostrViewModelSet } from '@view-model/sorted-nostr-view-model.set';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { Account, NostrEvent } from '@belomonte/nostr-ngx';
+import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 
 /**
  * NostrEvent Mapper to ViewModel.
@@ -10,7 +10,7 @@ import { Account, NostrEvent } from '@belomonte/nostr-ngx';
  */
 export interface ViewModelMapper<
   ViewModelData extends NostrEventViewModel<Account>,
-  ViewModelList = SortedNostrViewModelSet<ViewModelData, Account>
+  ViewModelList = NostrViewModelSet<ViewModelData, Account>
 > extends SingleViewModelMapper<ViewModelData> {
 
   /**

@@ -6,8 +6,8 @@ import { ParsedNostrContent } from './context/parsed-nostr-content.interface';
 import { NostrEventViewModel } from './nostr-event.view-model';
 import { NoteViewModel } from './note.view-model';
 import { ReactionViewModel } from './reaction.view-model';
-import { SortedNostrViewModelSet } from './sorted-nostr-view-model.set';
 import { ZapViewModel } from './zap.view-model';
+import { NostrViewModelSet } from './nostr-view-model.set';
 
 /**
  * This interface represents the simple text note
@@ -23,23 +23,23 @@ export interface SimpleTextNoteViewModel<AccountViewModel extends Account> exten
   /**
    * The reposted event
    */
-  reposting?: SortedNostrViewModelSet<NoteViewModel<AccountViewModel>, AccountViewModel>;
+  reposting?: NostrViewModelSet<NoteViewModel<AccountViewModel>, AccountViewModel>;
 
   /**
    * Record with all reacted reactions.
    * The record index is the used char/emoji to react.
    */
-  reactions: { [emoji: string]: SortedNostrViewModelSet<ReactionViewModel<Account>> };
+  reactions: { [emoji: string]: NostrViewModelSet<ReactionViewModel> };
 
   /**
    * Parsed data of each zap to this event
    */
-  zaps: SortedNostrViewModelSet<ZapViewModel<Account>>;
+  zaps: NostrViewModelSet<ZapViewModel>;
 
   /**
-   * array with non parsed nostr event of each event that reposted this event
+   * set of each view model that reposted this event
    */
-  reposted: SortedNostrViewModelSet<NoteViewModel<AccountViewModel>, AccountViewModel>;
+  reposted: NostrViewModelSet<NoteViewModel<AccountViewModel>>;
 
   /**
    * data about repling and be replied
@@ -55,9 +55,4 @@ export interface SimpleTextNoteViewModel<AccountViewModel extends Account> exten
    * Note attached location if g tag is included
    */
   location?: Geohash.Point;
-
-  /**
-   * Simple text is never a simple repost, but it can be into a list together with simple repost, so we start that with a default value
-   */
-  isSimpleRepost: false;
 }
