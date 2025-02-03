@@ -1,12 +1,12 @@
-import { Inject, Injectable } from "@angular/core";
-import { NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGuard } from "@belomonte/nostr-ngx";
-import { NoteReplyContext } from "@view-model/context/note-reply-context.interface";
-import { NostrViewModelSet } from "@view-model/nostr-view-model.set";
-import { NoteViewModel } from "@view-model/note.view-model";
+import { Inject, Injectable } from '@angular/core';
+import { NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
+import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
+import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
+import { NoteViewModel } from '@view-model/note.view-model';
 import { Repost, ShortTextNote } from 'nostr-tools/kinds';
-import { RepostMapper } from "./repost.mapper";
-import { SimpleTextMapper } from "./simple-text.mapper";
-import { TagHelper } from "./tag.helper";
+import { RepostMapper } from './repost.mapper';
+import { SimpleTextMapper } from './simple-text.mapper';
+import { TagHelper } from './tag.helper';
 
 @Injectable()
 export class NoteMapper {
@@ -47,7 +47,7 @@ export class NoteMapper {
     ]);
 
     this.getReply(note, events);
-    this.getRepostedBy(note, events);
+    this.getMentionedBy(note, events);
 
     return note;
   }
@@ -111,20 +111,22 @@ export class NoteMapper {
     }
   }
 
-  private getRepostedBy(note: NoteViewModel, relationedEvents: Array<NostrEvent>): NostrViewModelSet<NoteViewModel> {
+  private getMentionedBy(note: NoteViewModel, relationedEvents: Array<NostrEvent>): NostrViewModelSet<NoteViewModel> {
     for (const event of relationedEvents) {
       if (!this.guard.isKind(event, [ShortTextNote, Repost])) {
         continue;
       }
 
+      //  FIXME: se houver somente um mention e o content do evento representar um nostr uri integralmente, então
+      //  o mention deve ser considerado um repost simples
       const mentions = this.tagHelper.getRelatedEventsByRelationType(event, 'mention');
       const contains = mentions.find(mention => mention === note.event.id);
       if (contains) {
         const mentioner = this.toViewModel(event);
-        note.reposted.add(mentioner);
+        note.mentioned.add(mentioner);
       }
     }
 
-    return note.reposted;
+    return note.mentioned;
   }
 }

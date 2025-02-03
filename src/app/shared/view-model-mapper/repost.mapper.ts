@@ -88,6 +88,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
       //  TODO: ideally I should pass relay address from where this event come
       origin: [],
       reposted: new NostrViewModelSet<NoteViewModel>(),
+      mentioned: new NostrViewModelSet<NoteViewModel>(),
       event
     };
 

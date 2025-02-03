@@ -1,9 +1,11 @@
 {
   "name": "Twitter Parody Dev",
-  "dockerComposeFile": ["docker-compose.yml"],
+  "dockerComposeFile": [
+    "docker-compose.yml"
+  ],
   "service": "twitter-parody-dev",
   "workspaceFolder": "/twitter-parody",
-  "postCreateCommand": "./auth.sh",
+  "postCreateCommand": "./.devcontainer/auth.sh",
   "customizations": {
     "vscode": {
       "extensions": [
