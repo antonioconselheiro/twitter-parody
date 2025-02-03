@@ -21,8 +21,4 @@ export interface RepostNoteViewModel<AccountViewModel extends Account = Account>
    */
   reposting: NostrViewModelSet<NoteViewModel<AccountViewModel>, AccountViewModel>;
 
-  /**
-   * If event have only one reposting and the content comes empty
-   */
-  isSimpleRepost: boolean;
 }

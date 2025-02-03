@@ -3,6 +3,7 @@ import { Account, InMemoryEventCache, NOSTR_CACHE_TOKEN, NostrEvent, NostrGuard,
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
+import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
 import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
@@ -11,12 +12,11 @@ import { SimpleTextMapper } from './simple-text.mapper';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { TagHelper } from './tag.helper';
 import { ZapMapper } from './zap.mapper';
-import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel<Account>> {
+export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> {
 
   constructor(
     private guard: NostrGuard,
@@ -46,8 +46,6 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel<A
         retweeted = this.simpleTextMapper.toViewModel(contentEvent);
         reposting.add(retweeted);
       }
-
-      retweeted?.reposted
 
     } else {
       const mentions = this.tagHelper.getMentionedEvent(event);
@@ -90,8 +88,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel<A
       //  TODO: ideally I should pass relay address from where this event come
       origin: [],
       reposted: new NostrViewModelSet<NoteViewModel>(),
-      event,
-      isSimpleRepost: false
+      event
     };
 
     return note;

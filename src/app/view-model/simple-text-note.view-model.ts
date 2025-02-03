@@ -32,27 +32,34 @@ export interface SimpleTextNoteViewModel<AccountViewModel extends Account> exten
   reactions: { [emoji: string]: NostrViewModelSet<ReactionViewModel> };
 
   /**
-   * Parsed data of each zap to this event
+   * Parsed data of each zap to this event.
    */
   zaps: NostrViewModelSet<ZapViewModel>;
 
   /**
-   * set of each view model that reposted this event
+   * Set of each view model that reposted this event.
+   * It is considered a repost only if it does not include additional text from the user who shared it.
    */
   reposted: NostrViewModelSet<NoteViewModel<AccountViewModel>>;
 
   /**
-   * data about repling and be replied
+   * Set of each view model that mentioned this event.
+   * It is considered a mention if it include an additional commentary from the user who shared it.
+   */
+  mentioned: NostrViewModelSet<NoteViewModel<AccountViewModel>>;
+
+  /**
+   * Data about repling and be replied.
    */
   reply: NoteReplyContext<AccountViewModel>;
 
   /**
-   * hyperlinks and multimidia related to the note
+   * Hyperlinks and multimidia related to the note.
    */
   media: NoteResourcesContext;
 
   /**
-   * Note attached location if g tag is included
+   * Note attached location if g tag is included.
    */
   location?: Geohash.Point;
 }
