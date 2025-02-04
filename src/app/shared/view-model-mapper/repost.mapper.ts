@@ -13,6 +13,28 @@ import { SingleViewModelMapper } from './single-view-model.mapper';
 import { TagHelper } from './tag.helper';
 import { ZapMapper } from './zap.mapper';
 
+/**
+ * 1. A consulta de timeline do usuário representará uma consulta de todos os eventos assinados por ele dentro do limite de uma página, segundo a configuração de página da aplicação/usuário;
+ * 
+ * 2. Havendo-se recebido um resultset de consulta, um feed, podendo represetar a timeline de um usuário ou um outro tipo de filtro de eventos, um método identificar nestes dados quais são os eventos que serão efetivamente exibidos em tela, neste ponto algumas regras deve ser consideradas:
+ *  - o repost, isto é, um evento que recompartilha apenas um outro evento, sem adição de comentário do autor, terá o evento que compartilha como principal a ser consultados dados complementares, como o evento que será exibido em tela;
+ *  - 
+ * 
+ * 3. Observando as regras de 2, podemos pensar em algumas soluções para organizar as lógicas que serão necessárias:
+ *  - Deve-se identificar os eventos principais de feed antes deles serem repassados individualmente para o mapper de view model?
+ *  - O evento que representa o compartilhamento de outro evento que será exibido em tela deve ser tratado como evento que agrega informações ao feed, identificado quem recompartilhou aquela nota principal que será exibida no feed;
+ *  - No retorno do método deverá retornar uma lista contendo eventos carregados ou uma string hexadecimal representado o id dos eventos não carregados.
+ * 
+ * 4. Será necessário criar uma representação de um evento que não foi carregado.
+ * 
+ * Pergunta:
+ * Deve-se considerar os seguintes cenários: ocorre dentro de uma timeline um evento que foi compartilhado e o mesmo evento mencionado com comentário, como evitar que a lógica de conversão em view model seja reexecutada?
+ * 
+ * Se ocorre o carregamento de um evento que já foi carregado anteriormente, como evitar que a lógica de conversão em view model seja reexecutada? Pergunto isso pois atualmente eu converto duas vezes e depois mergeio os dois view models com uma lógica grotesca.
+ * 
+ * Resposta para as duas perguntas: um cache em memória para os viewmodels que já foram carregados, um novo lru, e a aventura continua...
+ */
+
 @Injectable({
   providedIn: 'root'
 })
@@ -76,8 +98,8 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
     const reply: NoteReplyContext = { replies: new NostrViewModelSet<NoteViewModel>() };
 
     const note: RepostNoteViewModel = {
-      id: event.id,
       author,
+      id: event.id,
       createdAt: event.created_at,
       content: this.htmlfier.parse(event.content),
       media: this.htmlfier.extractMedia(event.content),
