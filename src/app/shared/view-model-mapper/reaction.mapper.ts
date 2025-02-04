@@ -22,7 +22,7 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel<Account
   toViewModel(events: Array<NostrEvent>): Record<string, NostrViewModelSet<ReactionViewModel<Account>>>;
   toViewModel(event: NostrEvent | Array<NostrEvent>): ReactionViewModel<Account> | Record<string, NostrViewModelSet<ReactionViewModel<Account>>> | null {
     if (event instanceof Array) {
-      return this.toMultipleViewModel(event);
+      return this.toViewModelCollection(event);
     } else if (this.guard.isKind(event, Reaction)) {
       return this.toSingleViewModel(event);
     }
@@ -46,7 +46,7 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel<Account
     };
   }
 
-  private toMultipleViewModel(events: Array<NostrEvent>): Record<string, NostrViewModelSet<ReactionViewModel>> {
+  private toViewModelCollection(events: Array<NostrEvent>): Record<string, NostrViewModelSet<ReactionViewModel>> {
     const reactionRecord: Record<string, NostrViewModelSet<ReactionViewModel>> = {};
 
     for (const event of events) {

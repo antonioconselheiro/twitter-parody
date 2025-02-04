@@ -33,7 +33,7 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
   toViewModel(event: NostrEvent): NoteViewModel<Account> | null;
   toViewModel(event: NostrEvent | Array<NostrEvent>): NoteViewModel<Account> | FeedViewModel<Account> | null {
     if (event instanceof Array) {
-      return this.toMultipleViewModel(event);
+      return this.toViewModelCollection(event);
     } else if (this.guard.isKind(event, ShortTextNote)) {
       return this.simpleTextMapper.toViewModel(event);
     } else if (this.guard.isKind(event, Repost)) {
@@ -45,7 +45,7 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
 
   //  FIXME: split into minor methods
   // eslint-disable-next-line complexity
-  private toMultipleViewModel(events: Array<NostrEvent>, feed = new NostrViewModelSet<NoteViewModel>()): FeedViewModel {
+  private toViewModelCollection(events: Array<NostrEvent>, feed = new NostrViewModelSet<NoteViewModel>()): FeedViewModel {
     const reactions = new Map<string, Array<ReactionViewModel>>();
     const zaps = new Map<string, Array<ZapViewModel>>();
 
@@ -107,6 +107,6 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
   }
 
   patchViewModel(feed: FeedViewModel<Account>, events: Array<NostrEvent>): FeedViewModel<Account> {
-    return this.toMultipleViewModel(events, feed);
+    return this.toViewModelCollection(events, feed);
   }
 }

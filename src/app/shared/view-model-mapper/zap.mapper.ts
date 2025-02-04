@@ -23,7 +23,7 @@ export class ZapMapper implements SingleViewModelMapper<ZapViewModel<Account>> {
   toViewModel(event: NostrEvent | Array<NostrEvent>): ZapViewModel<Account> | NostrViewModelSet<ZapViewModel<Account>> | null;
   toViewModel(event: NostrEvent | Array<NostrEvent>): ZapViewModel<Account> | NostrViewModelSet<ZapViewModel<Account>> | null {
     if (event instanceof Array) {
-      return this.toMultipleViewModel(event);
+      return this.toViewModelCollection(event);
     } else if (this.guard.isKind(event, Zap)) {
       return this.toSingleViewModel(event);
     }
@@ -51,7 +51,7 @@ export class ZapMapper implements SingleViewModelMapper<ZapViewModel<Account>> {
     };
   }
 
-  private toMultipleViewModel(events: Array<NostrEvent>): NostrViewModelSet<ZapViewModel<Account>> {
+  private toViewModelCollection(events: Array<NostrEvent>): NostrViewModelSet<ZapViewModel<Account>> {
     const zapSet = new NostrViewModelSet<ZapViewModel<Account>>();
 
     for (const event of events) {
