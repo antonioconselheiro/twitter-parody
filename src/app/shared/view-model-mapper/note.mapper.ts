@@ -12,7 +12,7 @@ import { TagHelper } from './tag.helper';
 export class NoteMapper {
 
   constructor(
-    @Inject(NOSTR_CACHE_TOKEN) private ncache: NostrCache,
+    @Inject(NOSTR_CACHE_TOKEN) private nostrCache: NostrCache,
     private simpleTextMapper: SimpleTextMapper,
     private repostMapper: RepostMapper,
     private tagHelper: TagHelper,
@@ -34,7 +34,7 @@ export class NoteMapper {
   }
 
   private patchReplies(note: NoteViewModel): NoteViewModel {
-    const events = this.ncache.syncQuery([
+    const events = this.nostrCache.syncQuery([
       {
         kinds: [
           ShortTextNote,
@@ -74,7 +74,7 @@ export class NoteMapper {
 
   private fillRootRepling(rootReplingId: string | undefined): NoteViewModel | undefined {
     if (rootReplingId) {
-      const rootReplingEvent = this.ncache.get(rootReplingId);
+      const rootReplingEvent = this.nostrCache.get(rootReplingId);
       if (rootReplingEvent) {
         if (this.guard.isKind(rootReplingEvent, [ShortTextNote, Repost])) {
           return this.toViewModel(rootReplingEvent);
@@ -89,7 +89,7 @@ export class NoteMapper {
 
   private fillReplyTo(replyToId: string | undefined): NoteViewModel | undefined {
     if (replyToId) {
-      const replyEvent = this.ncache.get(replyToId);
+      const replyEvent = this.nostrCache.get(replyToId);
       if (replyEvent) {
         if (this.guard.isKind(replyEvent, [ShortTextNote, Repost])) {
           return this.toViewModel(replyEvent);

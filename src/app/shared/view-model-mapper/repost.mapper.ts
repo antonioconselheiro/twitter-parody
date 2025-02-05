@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { Account, InMemoryEventCache, NOSTR_CACHE_TOKEN, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
+import { Account, NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
@@ -68,7 +68,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
     private reactionMapper: ReactionMapper,
     private simpleTextMapper: SimpleTextMapper,
     @Inject(HTML_PARSER_TOKEN) private htmlfier: NoteHtmlfier,
-    @Inject(NOSTR_CACHE_TOKEN) private ncache: InMemoryEventCache
+    @Inject(NOSTR_CACHE_TOKEN) private nostrCache: NostrCache
   ) { }
 
   //  FIXME: refactor this into minor methods
@@ -92,7 +92,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
     } else {
       const mentions = this.tagHelper.getMentionedEvent(event);
       for (const idEvent of mentions) {
-        const retweeted = this.ncache.get(idEvent);
+        const retweeted = this.nostrCache.get(idEvent);
         if (retweeted) {
           const viewModel = this.toViewModel(retweeted);
           reposting.add(viewModel);
@@ -100,7 +100,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
       }
     }
 
-    const events = this.ncache.syncQuery([
+    const events = this.nostrCache.syncQuery([
       {
         kinds: [
           Reaction,

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { Account, InMemoryEventCache, NOSTR_CACHE_TOKEN, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
+import { Account, NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
@@ -18,7 +18,7 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
 
   constructor(
     @Inject(HTML_PARSER_TOKEN) private htmlfier: NoteHtmlfier,
-    @Inject(NOSTR_CACHE_TOKEN) private ncache: InMemoryEventCache,
+    @Inject(NOSTR_CACHE_TOKEN) private nostrCache: NostrCache,
     private reactionMapper: ReactionMapper,
     private profileProxy: ProfileProxy,
     private zapMapper: ZapMapper,
@@ -32,7 +32,7 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
       return null;
     }
 
-    const events = this.ncache.syncQuery([
+    const events = this.nostrCache.syncQuery([
       {
         kinds: [
           Reaction,
