@@ -51,7 +51,7 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
     const note: SimpleTextNoteViewModel<Account> = {
       id: event.id,
       author,
-      event: event,
+      event,
       createdAt: event.created_at,
       content: this.htmlfier.parse(event.content),
       media: this.htmlfier.extractMedia(event.content),
