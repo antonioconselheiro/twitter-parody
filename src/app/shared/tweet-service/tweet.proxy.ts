@@ -1,12 +1,13 @@
 import { Injectable } from "@angular/core";
-import { HexString, NostrEvent } from "@belomonte/nostr-ngx";
+import { Account, HexString, NostrEvent } from "@belomonte/nostr-ngx";
 import { AccountViewModelProxy } from "@shared/view-model-mapper/account-view-model.proxy";
 import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
 import { FeedViewModel } from "@view-model/feed.view-model";
 import { NoteViewModel } from "@view-model/note.view-model";
-import { NostrViewModelSet } from "@view-model/sorted-nostr-view-model.set";
+import { NostrViewModelSet } from "@view-model/nostr-view-model.set";
 import { map, Observable, Subject } from "rxjs";
 import { TweetNostr } from "./tweet.nostr";
+import { NostrEventViewModel } from "@view-model/nostr-event.view-model";
 
 @Injectable({
   providedIn: 'root'
@@ -189,7 +190,7 @@ export class TweetProxy {
    * return the older event into a given list
    * @returns the older event in the list or undefined if the list has no items
    */
-  getOlderEvent(feed: FeedViewModel): NostrEvent | undefined {
+  getOlderEvent(feed: NostrViewModelSet<NostrEventViewModel<Account>>): NostrEvent | undefined {
     return [...feed]
       .map(view => view.event)
       .reduce((event1, event2) => event2.created_at > event1.created_at ? event1 : event2);

@@ -1,4 +1,4 @@
-import { Account } from '@belomonte/nostr-ngx';
+import { Account, AccountRaw } from '@belomonte/nostr-ngx';
 import Geohash from 'latlon-geohash';
 import { NoteReplyContext } from './context/note-reply-context.interface';
 import { NoteResourcesContext } from './context/note-resources-context.interface';
@@ -29,12 +29,12 @@ export interface SimpleTextNoteViewModel<AccountViewModel extends Account> exten
    * Record with all reacted reactions.
    * The record index is the used char/emoji to react.
    */
-  reactions: { [emoji: string]: NostrViewModelSet<ReactionViewModel> };
+  reactions: { [emoji: string]: NostrViewModelSet<ReactionViewModel, AccountRaw> };
 
   /**
    * Parsed data of each zap to this event.
    */
-  zaps: NostrViewModelSet<ZapViewModel>;
+  zaps: NostrViewModelSet<ZapViewModel, AccountRaw>;
 
   /**
    * Set of each view model that reposted this event.

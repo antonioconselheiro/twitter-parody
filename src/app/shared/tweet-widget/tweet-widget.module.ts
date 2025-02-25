@@ -16,6 +16,7 @@ import { TweetComponent } from './tweet/tweet.component';
 import { TweetListComponent } from './tweet-list/tweet-list.component';
 import { LoadingWidgetModule, ProfileWidgetModule } from '@belomonte/nostr-gui-ngx';
 import { SvgLoaderModule } from '@shared/svg-loader/svg-loader.module';
+import { NoteRepostedDescriptionPipe } from './tweet-list/note-reposted-description.pipe';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { SvgLoaderModule } from '@shared/svg-loader/svg-loader.module';
     TweetButtonGroupComponent,
     TweetWriteButtonGroupComponent,
     CompositeTweetPopoverComponent,
-    TweetImageViewerComponent
+    TweetImageViewerComponent,
+    NoteRepostedDescriptionPipe
   ],
   imports: [
     CommonModule,

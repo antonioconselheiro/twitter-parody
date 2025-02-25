@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Account, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
+import { Account, AccountRaw, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
 import { ZapViewModel } from '@view-model/zap.view-model';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { TagHelper } from './tag.helper';
@@ -9,7 +9,7 @@ import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 @Injectable({
   providedIn: 'root'
 })
-export class ZapMapper implements SingleViewModelMapper<ZapViewModel<Account>> {
+export class ZapMapper implements SingleViewModelMapper<ZapViewModel<AccountRaw>> {
 
   constructor(
     private tagHelper: TagHelper,
@@ -17,11 +17,11 @@ export class ZapMapper implements SingleViewModelMapper<ZapViewModel<Account>> {
     private guard: NostrGuard
   ) { }
 
-  toViewModel(event: NostrEvent): ZapViewModel<Account> | null;
-  toViewModel(event: NostrEvent<Zap>): ZapViewModel<Account>;
-  toViewModel(event: Array<NostrEvent>): NostrViewModelSet<ZapViewModel<Account>>;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): ZapViewModel<Account> | NostrViewModelSet<ZapViewModel<Account>> | null;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): ZapViewModel<Account> | NostrViewModelSet<ZapViewModel<Account>> | null {
+  toViewModel(event: NostrEvent): ZapViewModel<AccountRaw> | null;
+  toViewModel(event: NostrEvent<Zap>): ZapViewModel<AccountRaw>;
+  toViewModel(event: Array<NostrEvent>): NostrViewModelSet<ZapViewModel<AccountRaw>>;
+  toViewModel(event: NostrEvent | Array<NostrEvent>): ZapViewModel<AccountRaw> | NostrViewModelSet<ZapViewModel<AccountRaw>> | null;
+  toViewModel(event: NostrEvent | Array<NostrEvent>): ZapViewModel<AccountRaw> | NostrViewModelSet<ZapViewModel<AccountRaw>> | null {
     if (event instanceof Array) {
       return this.toViewModelCollection(event);
     } else if (this.guard.isKind(event, Zap)) {
@@ -31,12 +31,12 @@ export class ZapMapper implements SingleViewModelMapper<ZapViewModel<Account>> {
     return null;
   }
 
-  private toSingleViewModel(event: NostrEvent<Zap>): ZapViewModel<Account> {
+  private toSingleViewModel(event: NostrEvent<Zap>): ZapViewModel<AccountRaw> {
     const reactedTo = this.tagHelper.listIdsFromTag('e', event);
 
     // TODO: validate zap data with zod
     const amountZapped = this.tagHelper.getTagValueByType('amount', event);
-    const author = this.profileProxy.getAccount(event.pubkey);
+    const author = this.profileProxy.getRawAccount(event.pubkey);
 
     return {
       id: event.id,
@@ -51,8 +51,8 @@ export class ZapMapper implements SingleViewModelMapper<ZapViewModel<Account>> {
     };
   }
 
-  private toViewModelCollection(events: Array<NostrEvent>): NostrViewModelSet<ZapViewModel<Account>> {
-    const zapSet = new NostrViewModelSet<ZapViewModel<Account>>();
+  private toViewModelCollection(events: Array<NostrEvent>): NostrViewModelSet<ZapViewModel<AccountRaw>> {
+    const zapSet = new NostrViewModelSet<ZapViewModel<AccountRaw>>();
 
     for (const event of events) {
       if (this.guard.isKind(event, Zap)) {

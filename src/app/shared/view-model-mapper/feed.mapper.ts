@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Account, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
+import { Account, AccountRaw, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
 import { FeedViewModel } from '@view-model/feed.view-model';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { ReactionViewModel } from '@view-model/reaction.view-model';
@@ -87,14 +87,14 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
       const zapList = zaps.get(viewModel.id) || [];
       const reactionList = reactions.get(viewModel.id) || [];
 
-      viewModel.zaps = new NostrViewModelSet<ZapViewModel>();
+      viewModel.zaps = new NostrViewModelSet<ZapViewModel, AccountRaw>();
       viewModel.reactions = {};
 
       zapList.forEach(zap => viewModel.zaps.add(zap));
       reactionList.forEach(reaction => {
-        let list: NostrViewModelSet<ReactionViewModel>;
+        let list: NostrViewModelSet<ReactionViewModel, AccountRaw>;
         if (!viewModel.reactions[reaction.content]) {
-          list = viewModel.reactions[reaction.content] = new NostrViewModelSet<ReactionViewModel>();
+          list = viewModel.reactions[reaction.content] = new NostrViewModelSet<ReactionViewModel, AccountRaw>();
         } else {
           list = viewModel.reactions[reaction.content];
         }

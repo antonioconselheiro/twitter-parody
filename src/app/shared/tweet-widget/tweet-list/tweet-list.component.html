@@ -4,7 +4,7 @@
 
 <ng-container *ngFor="let tweet of feed; trackBy: trackByTweetId">
   <article [class.separator]="!tweet.reposting?.size" class="readTweet">
-    <a *ngIf="tweet.isSimpleRepost" href="javascript:void(0)" class="retweetOrigin">
+    <a *ngIf="tweet.reposted?.size" href="javascript:void(0)" class="retweetOrigin">
       {{tweet.author.displayName}} has retweeted
     </a>
   

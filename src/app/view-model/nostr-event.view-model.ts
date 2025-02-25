@@ -1,9 +1,9 @@
-import { Account, HexString, NostrEvent } from "@belomonte/nostr-ngx";
+import { Account, AccountRaw, HexString, NostrEvent } from "@belomonte/nostr-ngx";
 
 /**
  * properties that all ready to render nostr event will bring
  */
-export interface NostrEventViewModel<AccountViewModel extends Account> {
+export interface NostrEventViewModel<AccountViewModel extends Account | AccountRaw> {
 
   /**
    * hexadecimal event id
@@ -11,7 +11,7 @@ export interface NostrEventViewModel<AccountViewModel extends Account> {
   readonly id: HexString;
 
   /**
-   * author pubkey
+   * author account
    */
   author: AccountViewModel;
 

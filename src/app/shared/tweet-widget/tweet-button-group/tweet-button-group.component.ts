@@ -54,9 +54,9 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
     let reactions = Object
       .values(tweet.reactions);
 
-    if ('isSimpleRepost' in tweet && tweet.isSimpleRepost) {
+    if (tweet.reposted) {
       reactions = Object
-        .values([...tweet.reposting][0].reactions);
+        .values([...tweet.reposted || []][0].reactions);
     }
 
     return !!reactions
@@ -66,7 +66,7 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   }
 
   getRetweetedLength(tweet: NoteViewModel): number {
-    return tweet.reposting?.size || 0;
+    return tweet.reposted?.size || 0;
   }
 
   getTweetReactionsLength(tweet?: NoteViewModel | null): number {

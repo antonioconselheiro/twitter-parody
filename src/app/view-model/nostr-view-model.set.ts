@@ -1,4 +1,4 @@
-import { Account, HexString } from '@belomonte/nostr-ngx';
+import { Account, AccountRaw, HexString } from '@belomonte/nostr-ngx';
 import { NostrEventViewModel } from './nostr-event.view-model';
 
 /**
@@ -7,7 +7,7 @@ import { NostrEventViewModel } from './nostr-event.view-model';
  */
 export class NostrViewModelSet<
   GenericViewModel extends NostrEventViewModel<AccountViewModel>,
-  AccountViewModel extends Account = Account
+  AccountViewModel extends Account | AccountRaw = Account
 > extends Set<GenericViewModel> {
 
   #sorted = new Array<HexString>();
