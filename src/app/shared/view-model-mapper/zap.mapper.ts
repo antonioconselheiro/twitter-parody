@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Account, AccountRaw, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
+import { AccountRaw, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
+import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 import { ZapViewModel } from '@view-model/zap.view-model';
+import { Zap } from 'nostr-tools/kinds';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { TagHelper } from './tag.helper';
-import { Zap } from 'nostr-tools/kinds';
-import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +19,9 @@ export class ZapMapper implements SingleViewModelMapper<ZapViewModel<AccountRaw>
 
   toViewModel(event: NostrEvent): ZapViewModel<AccountRaw> | null;
   toViewModel(event: NostrEvent<Zap>): ZapViewModel<AccountRaw>;
-  toViewModel(event: Array<NostrEvent>): NostrViewModelSet<ZapViewModel<AccountRaw>>;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): ZapViewModel<AccountRaw> | NostrViewModelSet<ZapViewModel<AccountRaw>> | null;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): ZapViewModel<AccountRaw> | NostrViewModelSet<ZapViewModel<AccountRaw>> | null {
+  toViewModel(event: Array<NostrEvent>): NostrViewModelSet<ZapViewModel<AccountRaw>, AccountRaw>;
+  toViewModel(event: NostrEvent | Array<NostrEvent>): ZapViewModel<AccountRaw> | NostrViewModelSet<ZapViewModel<AccountRaw>, AccountRaw> | null;
+  toViewModel(event: NostrEvent | Array<NostrEvent>): ZapViewModel<AccountRaw> | NostrViewModelSet<ZapViewModel<AccountRaw>, AccountRaw> | null {
     if (event instanceof Array) {
       return this.toViewModelCollection(event);
     } else if (this.guard.isKind(event, Zap)) {
@@ -51,8 +51,8 @@ export class ZapMapper implements SingleViewModelMapper<ZapViewModel<AccountRaw>
     };
   }
 
-  private toViewModelCollection(events: Array<NostrEvent>): NostrViewModelSet<ZapViewModel<AccountRaw>> {
-    const zapSet = new NostrViewModelSet<ZapViewModel<AccountRaw>>();
+  private toViewModelCollection(events: Array<NostrEvent>): NostrViewModelSet<ZapViewModel<AccountRaw>, AccountRaw> {
+    const zapSet = new NostrViewModelSet<ZapViewModel<AccountRaw>, AccountRaw>();
 
     for (const event of events) {
       if (this.guard.isKind(event, Zap)) {

@@ -32,7 +32,7 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel<Account
 
   private toSingleViewModel(event: NostrEvent<Reaction>): ReactionViewModel {
     const reactedTo = this.tagHelper.listIdsFromTag('e', event);
-    const author = this.profileProxy.getAccount(event.pubkey);
+    const author = this.profileProxy.getRawAccount(event.pubkey);
 
     return {
       id: event.id,

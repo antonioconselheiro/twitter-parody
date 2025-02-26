@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Account } from '@belomonte/nostr-ngx';
+import { HexString } from '@belomonte/nostr-ngx';
+import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 import { NoteViewModel } from '@view-model/note.view-model';
 
 @Pipe({
@@ -16,7 +17,7 @@ export class NoteRepostedDescriptionPipe implements PipeTransform {
   //  outro nome? E como esse nome deve ser selecionado entre outros? Deve haver
   //  um algoritmo inteligente para selecionar: um algoritmo de aleatoriedade?
   //  (dentro das contas repostadoras que tem informações essenciais carregadas)
-  transform(note: NoteViewModel<Account>): string {
+  transform(accountSet: NostrViewModelSet<NoteViewModel>, mainAccount: HexString | undefined): string {
     console.info('note respoted description');
     const
 
