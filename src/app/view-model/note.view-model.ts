@@ -1,5 +1,6 @@
-import { Account } from '@belomonte/nostr-ngx';
+import { Account, AccountRaw } from '@belomonte/nostr-ngx';
 import { RepostNoteViewModel } from './repost-note.view-model';
 import { SimpleTextNoteViewModel } from './simple-text-note.view-model';
+import { LazyNoteViewModel } from './lazy-note.view-model';
 
-export type NoteViewModel<AccountViewModel extends Account = Account> = SimpleTextNoteViewModel<AccountViewModel> | RepostNoteViewModel<AccountViewModel>;
+export type NoteViewModel<AccountViewModel extends Account | AccountRaw = Account> = LazyNoteViewModel | SimpleTextNoteViewModel<AccountViewModel> | RepostNoteViewModel<AccountViewModel>;

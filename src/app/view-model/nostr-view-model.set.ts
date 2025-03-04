@@ -7,7 +7,7 @@ import { NostrEventViewModel } from './nostr-event.view-model';
  */
 export class NostrViewModelSet<
   GenericViewModel extends NostrEventViewModel<AccountViewModel>,
-  AccountViewModel extends Account | AccountRaw = Account
+  AccountViewModel extends Account | AccountRaw = Account | AccountRaw
 > extends Set<GenericViewModel> {
 
   #sorted = new Array<HexString>();

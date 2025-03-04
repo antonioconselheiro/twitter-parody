@@ -23,7 +23,7 @@ export interface SimpleTextNoteViewModel<AccountViewModel extends Account> exten
   /**
    * The reposted event
    */
-  reposting?: NostrViewModelSet<NoteViewModel<AccountViewModel>, AccountViewModel>;
+  reposting?: NostrViewModelSet<NoteViewModel<Account | AccountRaw>, Account | AccountRaw>;
 
   /**
    * Record with all reacted reactions.
