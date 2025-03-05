@@ -8,7 +8,7 @@
     <a role="button" class="rawLink" *ngIf="showMoreTextButton()">Show more</a>
   </ng-container>
 
-  <video class="bordered" *ngIf="note.media.videoList.length" controls>
+  <video class="bordered" *ngIf="note.media?.videoList?.length" controls>
     <source [src]="note.media.videoList[0]" type="video/mp4" />
   </video>
 

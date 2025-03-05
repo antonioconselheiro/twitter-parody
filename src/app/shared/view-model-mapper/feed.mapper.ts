@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Account, AccountRaw, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
+import { EagerNoteViewModel } from '@view-model/eager-note.view-model';
 import { FeedViewModel } from '@view-model/feed.view-model';
+import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { ReactionViewModel } from '@view-model/reaction.view-model';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
@@ -12,7 +14,6 @@ import { SimpleTextMapper } from './simple-text.mapper';
 import { ViewModelPatch } from './view-model-patch.mapper';
 import { ViewModelMapper } from './view-model.mapper';
 import { ZapMapper } from './zap.mapper';
-import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +46,7 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
 
   //  FIXME: split into minor methods
   // eslint-disable-next-line complexity
-  private toViewModelCollection(events: Array<NostrEvent>, feed = new NostrViewModelSet<NoteViewModel>()): FeedViewModel {
+  private toViewModelCollection(events: Array<NostrEvent>, feed = new NostrViewModelSet<EagerNoteViewModel>()): FeedViewModel {
     const reactions = new Map<string, Array<ReactionViewModel>>();
     const zaps = new Map<string, Array<ZapViewModel>>();
 
@@ -87,16 +88,16 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
       const zapList = zaps.get(viewModel.id) || [];
       const reactionList = reactions.get(viewModel.id) || [];
 
-      viewModel.zaps = new NostrViewModelSet<ZapViewModel, AccountRaw>();
-      viewModel.reactions = {};
+      viewModel.zaps = new NostrViewModelSet<ZapViewModel<AccountRaw>, AccountRaw>();
+      const reactionsRecord: Record<string, NostrViewModelSet<ReactionViewModel, Account>> = viewModel.reactions = {};
 
       zapList.forEach(zap => viewModel.zaps.add(zap));
       reactionList.forEach(reaction => {
-        let list: NostrViewModelSet<ReactionViewModel, AccountRaw>;
-        if (!viewModel.reactions[reaction.content]) {
-          list = viewModel.reactions[reaction.content] = new NostrViewModelSet<ReactionViewModel, AccountRaw>();
+        let list: NostrViewModelSet<ReactionViewModel, Account>;
+        if (!reactionsRecord[reaction.content]) {
+          list = reactionsRecord[reaction.content] = new NostrViewModelSet<ReactionViewModel, Account>();
         } else {
-          list = viewModel.reactions[reaction.content];
+          list = reactionsRecord[reaction.content];
         }
 
         list.add(reaction);

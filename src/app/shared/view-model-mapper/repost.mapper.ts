@@ -6,7 +6,6 @@ import { NoteReplyContext } from '@view-model/context/note-reply-context.interfa
 import { EagerNoteViewModel } from '@view-model/eager-note.view-model';
 import { LazyNoteViewModel } from '@view-model/lazy-note.view-model';
 import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
-import { NoteViewModel } from '@view-model/note.view-model';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
 import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
 import { ReactionMapper } from './reaction.mapper';
@@ -81,7 +80,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
     const reposting = new NostrViewModelSet<EagerNoteViewModel>();
 
     if (contentEvent) {
-      let retweeted: NoteViewModel<Account> | null;
+      let retweeted: EagerNoteViewModel<Account> | null;
       if (this.guard.isKind(contentEvent, Repost)) {
         //  there is no way to get infinity recursively, this was a stringified json
         retweeted = this.toViewModel(contentEvent);

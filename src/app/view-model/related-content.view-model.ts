@@ -7,7 +7,7 @@ import { ZapViewModel } from "./zap.view-model";
 import { EagerNoteViewModel } from "./eager-note.view-model";
 import { LazyNoteViewModel } from "./lazy-note.view-model";
 
-export interface RelatedContentViewModel<AccountViewModel extends Account = AccountRaw> {
+export interface RelatedContentViewModel<AccountViewModel extends Account = Account> {
 
   /**
    * The reposted event

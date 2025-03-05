@@ -9,7 +9,10 @@ import { RelatedContentViewModel } from './related-content.view-model';
  * This interface represents the simple text note
  * with all data ready to render into document
  */
-export interface SimpleTextNoteViewModel<AccountViewModel extends Account> extends NostrEventViewModel<AccountViewModel>, RelatedContentViewModel {
+export interface SimpleTextNoteViewModel<
+  AccountViewModel extends Account,
+  RelatedAccountViewModel extends Account = Account
+> extends NostrEventViewModel<AccountViewModel>, RelatedContentViewModel<RelatedAccountViewModel> {
 
   /**
    * Event content, with the raw value and the html parsed value

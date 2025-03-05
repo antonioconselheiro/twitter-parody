@@ -3,9 +3,9 @@ import { Account, AccountRaw, NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGu
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
+import { EagerNoteViewModel } from '@view-model/eager-note.view-model';
 import { LazyNoteViewModel } from '@view-model/lazy-note.view-model';
 import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
-import { NoteViewModel } from '@view-model/note.view-model';
 import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
 import { Reaction, ShortTextNote, Zap } from 'nostr-tools/kinds';
 import { ReactionMapper } from './reaction.mapper';
@@ -15,7 +15,7 @@ import { ZapMapper } from './zap.mapper';
 @Injectable({
   providedIn: 'root'
 })
-export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
+export class SimpleTextMapper implements SingleViewModelMapper<EagerNoteViewModel> {
 
   constructor(
     @Inject(HTML_PARSER_TOKEN) private htmlfier: NoteHtmlfier,
@@ -26,9 +26,9 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
     private guard: NostrGuard
   ) { }
 
-  toViewModel(event: NostrEvent<ShortTextNote>): NoteViewModel;
-  toViewModel(event: NostrEvent): NoteViewModel | null;
-  toViewModel(event: NostrEvent): NoteViewModel | null {
+  toViewModel(event: NostrEvent<ShortTextNote>): EagerNoteViewModel;
+  toViewModel(event: NostrEvent): EagerNoteViewModel | null;
+  toViewModel(event: NostrEvent): EagerNoteViewModel | null {
     if (!this.guard.isKind(event, ShortTextNote)) {
       return null;
     }
