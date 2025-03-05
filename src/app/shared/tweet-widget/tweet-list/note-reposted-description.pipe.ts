@@ -1,78 +1,97 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { AccountGuard, AccountRenderable, HexString } from '@belomonte/nostr-ngx';
+import { AccountGuard, AccountRenderable, CurrentAccountObservable, HexString } from '@belomonte/nostr-ngx';
 import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 import { NoteViewModel } from '@view-model/note.view-model';
 
+/**
+ * FIXME: Aqui me parece um local que talvez eu deva cobrir com teste unitários, são objetos sendo transformados em string,
+ *        os tipos estritos do typescript não me ajudam a diminuir a ocorrência de erros lógicos.
+ *        Os testes unitários devem observar que há um aspecto de aleatoriedade na escolha dos nomes e há também uma dependência
+ *        o mecanismo de autenticação (muda o resultado de acordo com quem estiver "autenticado")
+ * FIXME: trocar as strings em inglês para o parâmetro de internacionaliação, quando uma biblioteca de internacionalização for escolhida
+ */
 @Pipe({
   name: 'noteRepostedDescription'
 })
 export class NoteRepostedDescriptionPipe implements PipeTransform {
 
   constructor(
-    private accountGuard: AccountGuard
+    private accountGuard: AccountGuard,
+    private currentAccount$: CurrentAccountObservable
   ) { }
 
-
-  //  Possibilidades:
-  //  Você retweetou:
-  //  Você e Seguidor 1 retweetaram:
-  //  Seguidor 1 e Seguidor 2 retweetaram:
-  //  Seguidor 1, Seguidor 2 e Seguidor 3 retweetaram:
-
-  //  Seguidor 1, Seguidor 2 e mais 33 seguem
-
-  //  FIXME: TODO: TODOING: tem algumas questões quando vamos formar os nomes
-  //  que mostram quem repostou um note: no twitter, se estou vendo meu próprio
-  //  feed, é mostrado a mim "Você retweetou", entretanto, se estou vendo o feed
-  //  de outro e eu repostei, "Você retweetou e mais 6 pessoas" seria a forma
-  //  correta? E somente no caso de você não ter retweetado que é exibido um
-  //  outro nome? E como esse nome deve ser selecionado entre outros? Deve haver
-  //  um algoritmo inteligente para selecionar: um algoritmo de aleatoriedade?
-  //  (dentro das contas repostadoras que tem informações essenciais carregadas)
-  // eslint-disable-next-line complexity
-  transform(noteSet: NostrViewModelSet<NoteViewModel>, feedPublisherAccount: HexString | undefined, howManyShow = 1): string {
+  transform(noteSet: NostrViewModelSet<NoteViewModel>, feedPublisherAccount: HexString | undefined, howManyShow = 1, showAmount = false): string {
     if (!noteSet.size) {
       return '';
     }
 
+    const names = this.getDescriptionDisplayNames(noteSet, feedPublisherAccount, howManyShow);
+    if (showAmount) {
+      const otherAmount = noteSet.size - names.length;
+      if (names.length) {
+        names.push(`other ${otherAmount}`);
+      } else {
+        names.push(String(otherAmount));
+      }
+    }
+
+    const lastUserDisplayName = names.pop();
+    const description = [names.join(', '), lastUserDisplayName].filter(has => has && has.trim()).join(' and ')
+    return description;
+  }
+
+  private getDescriptionDisplayNames(noteSet: NostrViewModelSet<NoteViewModel>, feedPublisherAccount: HexString | undefined, howManyShow: number): Array<string> {
+    const accounts = this.getAccounts(noteSet, feedPublisherAccount, howManyShow);
+    const authenticated = this.currentAccount$.getValue();
+    const names = accounts.map(account => {
+      if (authenticated && feedPublisherAccount && authenticated.pubkey === feedPublisherAccount && account.pubkey === feedPublisherAccount) {
+        return `You`;
+      } else {
+        return account.displayName;
+      }
+    });
+
+    return names;
+  }
+
+  private getAccounts(noteSet: NostrViewModelSet<NoteViewModel>, feedPublisherAccount: HexString | undefined, howManyShow: number): Array<AccountRenderable> {
     const accounts: Array<AccountRenderable> = [];
     const noteList = [...noteSet].filter(note => note.author);
-    let feedPublisherReposted = false;
+
+    if (feedPublisherAccount) {
+      const feedPublisherReposted = this.findAuthor(noteList, feedPublisherAccount);
+      if (feedPublisherReposted) {
+        accounts.push(feedPublisherReposted);
+      }
+    }
 
     while (accounts.length < howManyShow && noteList.length) {
       const randomIndex = Math.floor(Math.random() * noteList.length);
       const [note] = noteList.splice(randomIndex, 1);
-
-      if (feedPublisherAccount && feedPublisherAccount === note.author.pubkey) {
-        feedPublisherReposted = true;
-      }
 
       if (this.accountGuard.isEssential(note.author)) {
         accounts.push(note.author);
       }
     }
 
-    if (!feedPublisherReposted && feedPublisherAccount) {
-      feedPublisherReposted = this.findAuthor(noteList, feedPublisherAccount);
-    }
-
-    //  Se existe um feed publisher account, então ele deve ter o nome exibido primeiro se estiver incluso na listagem de repostadores
-    //  Se há seguidos na lista de seguidores que estejam presentes na lista de quem compartilhou, então o nome deles deve ser exibido em ordem aleatória
-    //  Deve-se exibir no máximo três nomes, mas deve-se haver espaço para configurar a quantidade máxima de nomes exibidos
-
-    return null;
+    return accounts;
   }
 
-  private findAuthor(noteList: Array<NoteViewModel>, feedPublisherAccount: HexString): boolean {
+  private findAuthor(noteList: Array<NoteViewModel>, feedPublisherAccount: HexString): AccountRenderable | null {
     if (feedPublisherAccount) {
       for (let index = 0; index < noteList.length; index++) {
         if (feedPublisherAccount === noteList[index].author.pubkey) {
-          return true;
+          const author = noteList[index].author;
+          if (this.accountGuard.isRenderableGroup(author)) {
+            return author;
+          } else {
+            return null;
+          }
         }
       }
     }
 
-    return false;
+    return null;
   }
 
 }
