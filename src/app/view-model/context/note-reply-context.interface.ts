@@ -1,4 +1,6 @@
-import { Account } from "@belomonte/nostr-ngx";
+import { Account, AccountRaw } from "@belomonte/nostr-ngx";
+import { EagerNoteViewModel } from "@view-model/eager-note.view-model";
+import { LazyNoteViewModel } from "@view-model/lazy-note.view-model";
 import { NostrViewModelSet } from "@view-model/nostr-view-model.set";
 import { NoteViewModel } from "@view-model/note.view-model";
 
@@ -21,5 +23,5 @@ export interface NoteReplyContext<AccountViewModel extends Account = Account> {
   /**
    * List of ids of replies to this event
    */
-  replies: NostrViewModelSet<NoteViewModel<AccountViewModel>, AccountViewModel>;
+  replies: NostrViewModelSet<EagerNoteViewModel<AccountViewModel>, AccountViewModel> | NostrViewModelSet<LazyNoteViewModel, AccountRaw>;
 }

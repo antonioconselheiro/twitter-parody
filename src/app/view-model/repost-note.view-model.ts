@@ -4,6 +4,7 @@ import { NoteViewModel } from './note.view-model';
 import { SimpleTextNoteViewModel } from './simple-text-note.view-model';
 import { NostrViewModelSet } from './nostr-view-model.set';
 import { LazyNoteViewModel } from './lazy-note.view-model';
+import { EagerNoteViewModel } from './eager-note.view-model';
 
 /**
  * This interface represents the repost note
@@ -20,6 +21,6 @@ export interface RepostNoteViewModel<AccountViewModel extends Account = Account>
   /**
    * The reposted event
    */
-  reposting: NostrViewModelSet<NoteViewModel<AccountViewModel>, AccountViewModel>;
+  reposting: NostrViewModelSet<EagerNoteViewModel<AccountViewModel>, AccountViewModel> | NostrViewModelSet<LazyNoteViewModel, AccountRaw>;
 
 }

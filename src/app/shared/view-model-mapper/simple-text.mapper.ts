@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
-import { Account, NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
+import { Account, AccountRaw, NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
+import { LazyNoteViewModel } from '@view-model/lazy-note.view-model';
 import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
@@ -47,7 +48,7 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
     const reactions = this.reactionMapper.toViewModel(events);
     const zaps = this.zapMapper.toViewModel(events);
     const author = this.profileProxy.getAccount(event.pubkey);
-    const reply: NoteReplyContext = { replies: new NostrViewModelSet<NoteViewModel>() };
+    const reply: NoteReplyContext<AccountRaw> = { replies: new NostrViewModelSet<LazyNoteViewModel>() };
     const note: SimpleTextNoteViewModel<Account> = {
       id: event.id,
       author,
@@ -60,8 +61,8 @@ export class SimpleTextMapper implements SingleViewModelMapper<NoteViewModel> {
       reply,
       //  TODO: ideally I should pass relay address from where this event come
       origin: [],
-      reposted: new NostrViewModelSet<NoteViewModel>(),
-      mentioned: new NostrViewModelSet<NoteViewModel>()
+      reposted: new NostrViewModelSet<LazyNoteViewModel>(),
+      mentioned: new NostrViewModelSet<LazyNoteViewModel>()
     };
 
     return note;

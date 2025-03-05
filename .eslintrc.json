@@ -141,6 +141,7 @@
           "error",
           {
             "ignoreEnums": true,
+            "ignoreDefaultValues": true,
             "ignoreReadonlyClassProperties": true,
             "ignoreNumericLiteralTypes": true,
             "ignore": [

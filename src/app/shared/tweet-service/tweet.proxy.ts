@@ -2,12 +2,12 @@ import { Injectable } from "@angular/core";
 import { Account, HexString, NostrEvent } from "@belomonte/nostr-ngx";
 import { AccountViewModelProxy } from "@shared/view-model-mapper/account-view-model.proxy";
 import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
+import { EagerNoteViewModel } from "@view-model/eager-note.view-model";
 import { FeedViewModel } from "@view-model/feed.view-model";
-import { NoteViewModel } from "@view-model/note.view-model";
+import { NostrEventViewModel } from "@view-model/nostr-event.view-model";
 import { NostrViewModelSet } from "@view-model/nostr-view-model.set";
 import { map, Observable, Subject } from "rxjs";
 import { TweetNostr } from "./tweet.nostr";
-import { NostrEventViewModel } from "@view-model/nostr-event.view-model";
 
 @Injectable({
   providedIn: 'root'
@@ -162,7 +162,7 @@ export class TweetProxy {
     const eventIdList = eventList.map(viewModel => viewModel.id);
     const interactions = await this.tweetNostr.loadRelatedContent(eventIdList);
 
-    return this.feedMapper.patchViewModel(new NostrViewModelSet<NoteViewModel>(eventList), interactions);
+    return this.feedMapper.patchViewModel(new NostrViewModelSet<EagerNoteViewModel>(eventList), interactions);
   }
 
   /**

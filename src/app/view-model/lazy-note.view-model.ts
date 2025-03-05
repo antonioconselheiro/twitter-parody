@@ -7,4 +7,19 @@ export interface LazyNoteViewModel extends NostrEventViewModel<AccountRaw>, Rela
    * author account
    */
   author: AccountRaw;
+
+  /**
+   * Event content, with the raw value and the html parsed value
+   */
+  content: undefined;
+
+  /**
+   * Hyperlinks and multimidia related to the note.
+   */
+  media: undefined;
+
+  /**
+   * Note attached location if g tag is included.
+   */
+  location: undefined;
 }
