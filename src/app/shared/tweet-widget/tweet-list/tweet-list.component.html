@@ -36,12 +36,12 @@
           [isFull]="false"
         ></tw-tweet>
   
-        <tw-tweet-list
+        <!-- <tw-tweet-list
           *ngIf="tweet.reply.replies.size"
           [feed]="tweet.reply.replies"
           class="bordered retweetContent"
           [loading]="false"
-        ></tw-tweet-list>
+        ></tw-tweet-list> -->
   
         <tw-tweet-button-group *ngIf="!tweet.reposting?.size" [tweet]="tweet"></tw-tweet-button-group>
       </div>

@@ -9,7 +9,7 @@
   </ng-container>
 
   <video class="bordered" *ngIf="note.media?.videoList?.length" controls>
-    <source [src]="note.media.videoList[0]" type="video/mp4" />
+    <source [src]="getVideoUrl(note)" type="video/mp4" />
   </video>
 
   <figure *ngIf="getImages().length && showImages">

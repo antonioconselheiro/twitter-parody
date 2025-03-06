@@ -73,7 +73,8 @@
               "buildTarget": "twitter-parody:build:production"
             },
             "development": {
-              "buildTarget": "twitter-parody:build:development"
+              "buildTarget": "twitter-parody:build:development",
+              "port": 4208
             }
           },
           "defaultConfiguration": "development"

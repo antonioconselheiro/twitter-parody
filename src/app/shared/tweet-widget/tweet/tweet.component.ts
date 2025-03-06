@@ -47,4 +47,8 @@ export class TweetComponent {
 
     return images;
   }
+
+  getVideoUrl(note: NoteViewModel<Account>): string {
+    return 'media' in note && note.media && note.media.videoList[0] || '';
+  }
 }

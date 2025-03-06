@@ -56,7 +56,7 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
 
     if (tweet.reposted) {
       reactions = Object
-        .values([...tweet.reposted || []][0].reactions);
+        .values([...tweet.reposted || []][0]?.reactions || {});
     }
 
     return !!reactions

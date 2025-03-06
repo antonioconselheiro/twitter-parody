@@ -7,7 +7,7 @@ services:
       dockerfile: ./.devcontainer/Dockerfile
     working_dir: /twitter-parody
     ports:
-      - "4208:4200"
+      - "4208:4208"
     volumes:
       - ..:/twitter-parody:cached
       - /var/run/docker.sock:/var/run/docker.sock

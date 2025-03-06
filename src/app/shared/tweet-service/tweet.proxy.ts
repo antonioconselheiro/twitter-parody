@@ -132,20 +132,27 @@ export class TweetProxy {
     olderEventCreatedAt?: number
   ): Promise<FeedViewModel> {
     const mainNotes = await this.tweetNostr.listUserNotes(pubkey, pageSize, olderEventCreatedAt);
+    console.info(':: FEED FIRST LOADING');
     let feed = await this.feedMapper.toViewModel(mainNotes);
+    console.info('-> notes: ', [...feed]);
     await this.accountViewModelProxy.loadViewModelAccounts(feed);
 
+    //  fix 'subject' variable name to 'olderEventCreatedAt' to help method signature overiding
     if (typeof subject === 'number') {
       olderEventCreatedAt = subject;
       subject = undefined;
     }
 
+    console.info(':: FEED SECOND LOADING');
     feed = await this.feedMapper.toViewModel(mainNotes);
+    console.info('-> notes: ', [...feed]);
     if (subject) {
       subject.next(feed);
     }
 
+    console.info(':: LOAD RELATED CONTENT');
     feed = await this.loadFeedRelatedContent(feed);
+    console.info('-> notes: ', [...feed]);
     if (subject) {
       subject.next(feed);
     }

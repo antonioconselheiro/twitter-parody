@@ -12,8 +12,7 @@ ENV TZ=America/Sao_Paulo
 ENV DEBUG_COLORS=true
 ENV FORCE_COLOR=true
 
-EXPOSE 9229
-EXPOSE 4200
+EXPOSE 4208
 
 # The run the start script
 CMD [ "/bin/bash" ]
