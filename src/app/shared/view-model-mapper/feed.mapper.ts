@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Account, AccountRaw, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
+import { Account, AccountRaw, HexString, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
 import { EagerNoteViewModel } from '@view-model/eager-note.view-model';
 import { FeedViewModel } from '@view-model/feed.view-model';
 import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
@@ -47,8 +47,8 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
   //  FIXME: split into minor methods
   // eslint-disable-next-line complexity
   private toViewModelCollection(events: Array<NostrEvent>, feed = new NostrViewModelSet<EagerNoteViewModel>()): FeedViewModel {
-    const reactions = new Map<string, Array<ReactionViewModel>>();
-    const zaps = new Map<string, Array<ZapViewModel>>();
+    const reactions = new Map<HexString, Array<ReactionViewModel>>();
+    const zaps = new Map<HexString, Array<ZapViewModel>>();
 
     for (const event of events) {
       if (this.guard.isKind(event, Repost) || this.guard.isSerializedNostrEvent(event.content)) {
@@ -63,14 +63,16 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
           viewModel.reactedTo.forEach(idHex => {
             const reactionList = reactions.get(idHex) || new Array<ReactionViewModel>();
             reactionList.push(viewModel);
+            reactions.set(idHex, reactionList);
           });
         }
       } else if (this.guard.isKind(event, Zap)) {
         const viewModel = this.zapMapper.toViewModel(event);
         if (viewModel) {
           viewModel.reactedTo.forEach(idHex => {
-            const reactionList = reactions.get(idHex) || new Array<ZapViewModel>();
-            reactionList.push(viewModel);
+            const zapList = zaps.get(idHex) || new Array<ZapViewModel>();
+            zapList.push(viewModel);
+            zaps.set(idHex, zapList);
           });
         }
       }

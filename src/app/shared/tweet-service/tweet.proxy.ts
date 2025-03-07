@@ -131,6 +131,8 @@ export class TweetProxy {
     subject?: Subject<FeedViewModel> | number,
     olderEventCreatedAt?: number
   ): Promise<FeedViewModel> {
+    console.info('loadTimelinePageFromPubkey Arguments', { pubkey, pageSize, subject, olderEventCreatedAt });
+
     const mainNotes = await this.tweetNostr.listUserNotes(pubkey, pageSize, olderEventCreatedAt);
     console.info(':: FEED FIRST LOADING');
     let feed = await this.feedMapper.toViewModel(mainNotes);
@@ -168,6 +170,8 @@ export class TweetProxy {
     const eventList = [...feed];
     const eventIdList = eventList.map(viewModel => viewModel.id);
     const interactions = await this.tweetNostr.loadRelatedContent(eventIdList);
+    console.info('interactions', interactions);
+    console.info('eventIdList', eventIdList);
 
     return this.feedMapper.patchViewModel(new NostrViewModelSet<EagerNoteViewModel>(eventList), interactions);
   }
