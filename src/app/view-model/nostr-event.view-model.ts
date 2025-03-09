@@ -1,4 +1,4 @@
-import { Account, AccountRaw, HexString, NostrEvent } from "@belomonte/nostr-ngx";
+import { Account, HexString, NostrEvent } from "@belomonte/nostr-ngx";
 
 /**
  * properties that all ready to render nostr event will bring

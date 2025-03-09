@@ -8,6 +8,7 @@ import { RepostMapper } from './repost.mapper';
 import { SimpleTextMapper } from './simple-text.mapper';
 import { TagHelper } from './tag.helper';
 import { ZapMapper } from './zap.mapper';
+import { ViewModelGuard } from './view-model.guard';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { ZapMapper } from './zap.mapper';
     RepostMapper,
     ReactionMapper,
     ZapMapper,
-    TagHelper
+    TagHelper,
+    ViewModelGuard
   ]
 })
 export class ViewModelMapperModule { }

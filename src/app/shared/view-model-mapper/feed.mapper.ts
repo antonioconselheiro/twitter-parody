@@ -49,6 +49,7 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
   private toViewModelCollection(events: Array<NostrEvent>, feed = new NostrViewModelSet<EagerNoteViewModel>()): FeedViewModel {
     const reactions = new Map<HexString, Array<ReactionViewModel>>();
     const zaps = new Map<HexString, Array<ZapViewModel>>();
+    const replies = new Map<HexString, Array<EagerNoteViewModel>>();
 
     for (const event of events) {
       if (this.guard.isKind(event, Repost) || this.guard.isSerializedNostrEvent(event.content)) {
@@ -56,7 +57,14 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
         feed.add(viewModel);
       } else if (this.guard.isKind(event, ShortTextNote)) {
         const viewModel = this.simpleTextMapper.toViewModel(event);
-        feed.add(viewModel);
+        if (viewModel.reply.replyTo) {
+          const replyNote = viewModel.reply.replyTo;
+          const replyList = replies.get(replyNote.id) || new Array<EagerNoteViewModel>();
+          replyList.push(viewModel);
+          replies.set(replyNote.id, replyList);
+        } else {
+          feed.add(viewModel);
+        }
       } else if (this.guard.isKind(event, Reaction)) {
         const viewModel = this.reactionMapper.toViewModel(event);
         if (viewModel) {
@@ -78,22 +86,25 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
       }
     }
 
-    return this.fetchFeed(feed, reactions, zaps);
+    return this.fetchFeed(feed, replies, reactions, zaps);
   }
 
   private fetchFeed(
     feed: FeedViewModel,
+    replies: Map<HexString, Array<EagerNoteViewModel>>,
     reactions: Map<string, Array<ReactionViewModel>>,
     zaps: Map<string, Array<ZapViewModel>>
   ): FeedViewModel {
     [...feed].forEach(viewModel => {
       const zapList = zaps.get(viewModel.id) || [];
       const reactionList = reactions.get(viewModel.id) || [];
+      const replyList = replies.get(viewModel.id) || [];
 
       viewModel.zaps = new NostrViewModelSet<ZapViewModel<AccountRaw>, AccountRaw>();
       const reactionsRecord: Record<string, NostrViewModelSet<ReactionViewModel, Account>> = viewModel.reactions = {};
 
       zapList.forEach(zap => viewModel.zaps.add(zap));
+      replyList.forEach(reply => viewModel.reply.replies.add(reply as any)); //FIXME: preciso resolver este problema de tipagem, preciso unificar os tipos do replies em um único tipo de lista, que suporte objetos lazy e eager
       reactionList.forEach(reaction => {
         let list: NostrViewModelSet<ReactionViewModel, Account>;
         if (!reactionsRecord[reaction.content]) {

@@ -10,8 +10,16 @@ export class NostrViewModelSet<
   AccountViewModel extends Account = Account
 > extends Set<GenericViewModel> {
 
-  #sorted = new Array<HexString>();
-  #indexed: { [id: HexString]: GenericViewModel } = {};
+  /**
+   * here are available only the events that must be rendered with
+   * the ids arranged in order from newest event to oldest
+   */
+  protected sorted = new Array<HexString>();
+
+  /**
+   * Here is added every event related to the collection
+   */
+  protected indexed: { [id: HexString]: GenericViewModel } = {};
 
   constructor(values?: readonly GenericViewModel[] | null) {
     super();
@@ -22,13 +30,14 @@ export class NostrViewModelSet<
   }
 
   override[Symbol.iterator](): IterableIterator<GenericViewModel> {
-    return this.#sorted.map(id => this.#indexed[id])[Symbol.iterator]();
+    return this.sorted.map(id => this.indexed[id])[Symbol.iterator]();
   }
 
   override add(value: GenericViewModel): this {
-    //  FIXME: check this again later
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const reflection: { [properties: string]: unknown } | null = this.get(value.id) as any;
-    const valueReflection: { [properties: string]: unknown } = {};
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const valueReflection: { [properties: string]: unknown } = value as any;
 
     //  if the register exists it is merged into a single view model,
     //  if don't exists, it is included in the right order
@@ -38,31 +47,31 @@ export class NostrViewModelSet<
           valueReflection[attr] = valueReflection[attr].concat(reflection[attr]);
         }
       });
+    }
+
+    this.indexed[value.id] = value;
+    const indexNotFound = -1;
+    const index = this.sorted.findIndex(id => this.indexed[id].createdAt < value.createdAt);
+    if (index === indexNotFound) {
+      this.sorted.push(value.id);
     } else {
-      this.#indexed[value.id] = value;
-      const indexNotFound = -1;
-      const index = this.#sorted.findIndex(id => this.#indexed[id].createdAt < value.createdAt);
-      if (index === indexNotFound) {
-        this.#sorted.push(value.id);
-      } else {
-        this.#sorted.splice(index, 0, value.id);
-      }
+      this.sorted.splice(index, 0, value.id);
     }
 
     return this;
   }
 
   get(eventId: HexString): GenericViewModel {
-    return this.#indexed[eventId];
+    return this.indexed[eventId];
   }
 
   override delete(value: GenericViewModel): boolean {
     const indexNotFound = -1;
-    const index = this.#sorted.indexOf(value.id);
+    const index = this.sorted.indexOf(value.id);
 
     if (index !== indexNotFound) {
-      this.#sorted.splice(index, 1);
-      delete this.#indexed[value.id];
+      this.sorted.splice(index, 1);
+      delete this.indexed[value.id];
       return true;
     }
 
@@ -70,13 +79,13 @@ export class NostrViewModelSet<
   }
 
   override clear(): void {
-    this.#sorted = [];
-    this.#indexed = {};
+    this.sorted = [];
+    this.indexed = {};
     super.clear();
   }
 
   override values(): IterableIterator<GenericViewModel> {
-    return this.#sorted.map(id => this.#indexed[id]).values();
+    return this.sorted.map(id => this.indexed[id]).values();
   }
 
   override forEach(callbackfn: (value: GenericViewModel, value2: GenericViewModel, set: Set<GenericViewModel>) => void, thisArg?: unknown): void {
@@ -92,6 +101,6 @@ export class NostrViewModelSet<
   }
 
   override get size(): number {
-    return this.#sorted.length;
+    return this.sorted.length;
   }
 }
