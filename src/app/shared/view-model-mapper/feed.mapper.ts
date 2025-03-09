@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Account, AccountRaw, HexString, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
+import { Account, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
 import { EagerNoteViewModel } from '@view-model/eager-note.view-model';
 import { FeedViewModel } from '@view-model/feed.view-model';
-import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { ReactionViewModel } from '@view-model/reaction.view-model';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
-import { ZapViewModel } from '@view-model/zap.view-model';
 import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
 import { ReactionMapper } from './reaction.mapper';
 import { RepostMapper } from './repost.mapper';
@@ -47,75 +45,22 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
   //  FIXME: split into minor methods
   // eslint-disable-next-line complexity
   private toViewModelCollection(events: Array<NostrEvent>, feed = new FeedViewModel()): FeedViewModel {
-    const reactions = new Map<HexString, Array<ReactionViewModel>>();
-    const zaps = new Map<HexString, Array<ZapViewModel>>();
-    const replies = new Map<HexString, Array<EagerNoteViewModel>>();
-
     for (const event of events) {
+      let viewModel: EagerNoteViewModel<Account> | ReactionViewModel | null = null;
       if (this.guard.isKind(event, Repost) || this.guard.isSerializedNostrEvent(event.content)) {
-        const viewModel = this.repostMapper.toViewModel(event);
-        feed.add(viewModel);
+        viewModel = this.repostMapper.toViewModel(event);
       } else if (this.guard.isKind(event, ShortTextNote)) {
-        const viewModel = this.simpleTextMapper.toViewModel(event);
-        if (viewModel.reply.replyTo) {
-          const replyNote = viewModel.reply.replyTo;
-          const replyList = replies.get(replyNote.id) || new Array<EagerNoteViewModel>();
-          replyList.push(viewModel);
-          replies.set(replyNote.id, replyList);
-        } else {
-          feed.add(viewModel);
-        }
+        viewModel = this.simpleTextMapper.toViewModel(event);
       } else if (this.guard.isKind(event, Reaction)) {
-        const viewModel = this.reactionMapper.toViewModel(event);
-        if (viewModel) {
-          viewModel.reactedTo.forEach(idHex => {
-            const reactionList = reactions.get(idHex) || new Array<ReactionViewModel>();
-            reactionList.push(viewModel);
-            reactions.set(idHex, reactionList);
-          });
-        }
+        viewModel = this.reactionMapper.toViewModel(event);
       } else if (this.guard.isKind(event, Zap)) {
-        const viewModel = this.zapMapper.toViewModel(event);
-        if (viewModel) {
-          viewModel.reactedTo.forEach(idHex => {
-            const zapList = zaps.get(idHex) || new Array<ZapViewModel>();
-            zapList.push(viewModel);
-            zaps.set(idHex, zapList);
-          });
-        }
+        viewModel = this.zapMapper.toViewModel(event);
+      }
+
+      if (viewModel) {
+        feed.add(viewModel);
       }
     }
-
-    return this.fetchFeed(feed, replies, reactions, zaps);
-  }
-
-  private fetchFeed(
-    feed: FeedViewModel,
-    replies: Map<HexString, Array<EagerNoteViewModel>>,
-    reactions: Map<string, Array<ReactionViewModel>>,
-    zaps: Map<string, Array<ZapViewModel>>
-  ): FeedViewModel {
-    [...feed].forEach(viewModel => {
-      const zapList = zaps.get(viewModel.id) || [];
-      const reactionList = reactions.get(viewModel.id) || [];
-      const replyList = replies.get(viewModel.id) || [];
-
-      viewModel.zaps = new NostrViewModelSet<ZapViewModel<AccountRaw>, AccountRaw>();
-      const reactionsRecord: Record<string, NostrViewModelSet<ReactionViewModel, Account>> = viewModel.reactions = {};
-
-      zapList.forEach(zap => viewModel.zaps.add(zap));
-      replyList.forEach(reply => viewModel.reply.replies.add(reply));
-      reactionList.forEach(reaction => {
-        let list: NostrViewModelSet<ReactionViewModel, Account>;
-        if (!reactionsRecord[reaction.content]) {
-          list = reactionsRecord[reaction.content] = new NostrViewModelSet<ReactionViewModel, Account>();
-        } else {
-          list = reactionsRecord[reaction.content];
-        }
-
-        list.add(reaction);
-      });
-    });
 
     return feed;
   }
