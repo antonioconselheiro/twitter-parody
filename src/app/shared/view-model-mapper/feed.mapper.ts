@@ -46,7 +46,7 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
 
   //  FIXME: split into minor methods
   // eslint-disable-next-line complexity
-  private toViewModelCollection(events: Array<NostrEvent>, feed = new NostrViewModelSet<EagerNoteViewModel>()): FeedViewModel {
+  private toViewModelCollection(events: Array<NostrEvent>, feed = new FeedViewModel()): FeedViewModel {
     const reactions = new Map<HexString, Array<ReactionViewModel>>();
     const zaps = new Map<HexString, Array<ZapViewModel>>();
     const replies = new Map<HexString, Array<EagerNoteViewModel>>();
@@ -104,7 +104,7 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
       const reactionsRecord: Record<string, NostrViewModelSet<ReactionViewModel, Account>> = viewModel.reactions = {};
 
       zapList.forEach(zap => viewModel.zaps.add(zap));
-      replyList.forEach(reply => viewModel.reply.replies.add(reply as any)); //FIXME: preciso resolver este problema de tipagem, preciso unificar os tipos do replies em um único tipo de lista, que suporte objetos lazy e eager
+      replyList.forEach(reply => viewModel.reply.replies.add(reply));
       reactionList.forEach(reaction => {
         let list: NostrViewModelSet<ReactionViewModel, Account>;
         if (!reactionsRecord[reaction.content]) {

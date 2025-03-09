@@ -6,7 +6,7 @@ import { NostrViewModelSet } from './nostr-view-model.set';
 import { ReactionViewModel } from './reaction.view-model';
 import { ZapViewModel } from './zap.view-model';
 
-export class FeedViewModel<AccountViewModel extends Account = Account> extends NostrViewModelSet<EagerNoteViewModel<AccountViewModel>, AccountViewModel> {
+export class FeedViewModel<AccountViewModel extends Account = Account> extends NostrViewModelSet<EagerNoteViewModel<AccountViewModel> | LazyNoteViewModel, AccountViewModel> {
 
   // eslint-disable-next-line complexity
   override add(viewModel: EagerNoteViewModel<AccountViewModel> | LazyNoteViewModel | ReactionViewModel | ZapViewModel): this {

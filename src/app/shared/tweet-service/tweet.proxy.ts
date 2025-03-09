@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { Account, HexString, NostrEvent } from "@belomonte/nostr-ngx";
 import { AccountViewModelProxy } from "@shared/view-model-mapper/account-view-model.proxy";
 import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
-import { EagerNoteViewModel } from "@view-model/eager-note.view-model";
 import { FeedViewModel } from "@view-model/feed.view-model";
 import { NostrEventViewModel } from "@view-model/nostr-event.view-model";
 import { NostrViewModelSet } from "@view-model/nostr-view-model.set";
@@ -173,7 +172,7 @@ export class TweetProxy {
     console.info('interactions', interactions);
     console.info('eventIdList', eventIdList);
 
-    return this.feedMapper.patchViewModel(new NostrViewModelSet<EagerNoteViewModel>(eventList), interactions);
+    return this.feedMapper.patchViewModel(new FeedViewModel(eventList), interactions);
   }
 
   /**

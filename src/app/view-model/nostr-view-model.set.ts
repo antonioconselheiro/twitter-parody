@@ -1,12 +1,13 @@
 import { Account, HexString } from '@belomonte/nostr-ngx';
 import { NostrEventViewModel } from './nostr-event.view-model';
+import { LazyNoteViewModel } from './lazy-note.view-model';
 
 /**
  * Set of ready to render nostr data.
  * Data is added in correct position, sorted by event created timestamp.
  */
 export class NostrViewModelSet<
-  GenericViewModel extends NostrEventViewModel<AccountViewModel>,
+  GenericViewModel extends NostrEventViewModel<AccountViewModel> | LazyNoteViewModel,
   AccountViewModel extends Account = Account
 > extends Set<GenericViewModel> {
 
