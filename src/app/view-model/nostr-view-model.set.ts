@@ -35,6 +35,23 @@ export class NostrViewModelSet<
   }
 
   override add(value: GenericViewModel): this {
+    this.indexEvent(value);
+    const indexNotFound = -1;
+    const index = this.sorted.findIndex(id => this.indexed[id].createdAt < value.createdAt);
+    if (index === indexNotFound) {
+      this.sorted.push(value.id);
+    } else {
+      this.sorted.splice(index, 0, value.id);
+    }
+
+    return this;
+  }
+
+  /**
+   * the only difference between two equal events is the events that are related
+   * to them, in this method the relations of the equal events are merged
+   */
+  protected indexEvent(value: GenericViewModel): void {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const reflection: { [properties: string]: unknown } | null = this.get(value.id) as any;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,15 +68,6 @@ export class NostrViewModelSet<
     }
 
     this.indexed[value.id] = value;
-    const indexNotFound = -1;
-    const index = this.sorted.findIndex(id => this.indexed[id].createdAt < value.createdAt);
-    if (index === indexNotFound) {
-      this.sorted.push(value.id);
-    } else {
-      this.sorted.splice(index, 0, value.id);
-    }
-
-    return this;
   }
 
   get(eventId: HexString): GenericViewModel {

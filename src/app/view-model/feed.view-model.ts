@@ -14,6 +14,7 @@ export class FeedViewModel<AccountViewModel extends Account = Account> extends N
       if (viewModel.reply.replyTo) {
         const replyNote = this.get(viewModel.reply.replyTo.id);
         replyNote.reply.replies.add(viewModel);
+        this.indexEvent(replyNote);
       } else {
         super.add(viewModel);
       }

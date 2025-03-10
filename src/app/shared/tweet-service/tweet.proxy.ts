@@ -146,7 +146,7 @@ export class TweetProxy {
 
     console.info(':: FEED SECOND LOADING');
     feed = await this.feedMapper.toViewModel(mainNotes);
-    console.info('-> notes: ', [...feed]);
+    console.info('-> notes: ', [...feed], 'mainNotes:', mainNotes);
     if (subject) {
       subject.next(feed);
     }
