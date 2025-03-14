@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Account } from '@belomonte/nostr-ngx';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { TweetImageViewing } from '../tweet-img-viewing.interface';
 
@@ -17,7 +16,7 @@ export class TweetComponent {
   isFull = false;
 
   @Input()
-  note: NoteViewModel<Account> | null = null;
+  note: NoteViewModel | null = null;
 
   @Output()
   imgOpen = new EventEmitter<TweetImageViewing | null>();
@@ -48,7 +47,7 @@ export class TweetComponent {
     return images;
   }
 
-  getVideoUrl(note: NoteViewModel<Account>): string {
+  getVideoUrl(note: NoteViewModel): string {
     return 'media' in note && note.media && note.media.videoList[0] || '';
   }
 }

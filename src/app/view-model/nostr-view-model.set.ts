@@ -1,14 +1,12 @@
-import { Account, HexString } from '@belomonte/nostr-ngx';
+import { HexString } from '@belomonte/nostr-ngx';
 import { NostrEventViewModel } from './nostr-event.view-model';
-import { LazyNoteViewModel } from './lazy-note.view-model';
 
 /**
  * Set of ready to render nostr data.
  * Data is added in correct position, sorted by event created timestamp.
  */
 export class NostrViewModelSet<
-  GenericViewModel extends NostrEventViewModel<AccountViewModel> | LazyNoteViewModel,
-  AccountViewModel extends Account = Account
+  GenericViewModel extends NostrEventViewModel
 > extends Set<GenericViewModel> {
 
   /**
@@ -103,8 +101,8 @@ export class NostrViewModelSet<
     });
   }
 
-  concat(combine: NostrViewModelSet<GenericViewModel, AccountViewModel>): NostrViewModelSet<GenericViewModel, AccountViewModel> {
-    const merge = new NostrViewModelSet<GenericViewModel, AccountViewModel>([...combine]);
+  concat(combine: NostrViewModelSet<GenericViewModel>): NostrViewModelSet<GenericViewModel> {
+    const merge = new NostrViewModelSet<GenericViewModel>([...combine]);
     [...this].forEach(item => merge.add(item));
     return merge;
   }

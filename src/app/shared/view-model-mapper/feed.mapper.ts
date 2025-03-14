@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Account, NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
+import { NostrEvent, NostrGuard } from '@belomonte/nostr-ngx';
 import { EagerNoteViewModel } from '@view-model/eager-note.view-model';
 import { FeedViewModel } from '@view-model/feed.view-model';
 import { NoteViewModel } from '@view-model/note.view-model';
@@ -26,11 +26,11 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
     private zapMapper: ZapMapper
   ) { }
 
-  toViewModel(event: Array<NostrEvent>): FeedViewModel<Account>;
-  toViewModel(event: NostrEvent<ShortTextNote>): NoteViewModel<Account>;
-  toViewModel(event: NostrEvent<Repost>): RepostNoteViewModel<Account>;
-  toViewModel(event: NostrEvent): NoteViewModel<Account> | null;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): NoteViewModel<Account> | FeedViewModel<Account> | null {
+  toViewModel(event: Array<NostrEvent>): FeedViewModel;
+  toViewModel(event: NostrEvent<ShortTextNote>): NoteViewModel;
+  toViewModel(event: NostrEvent<Repost>): RepostNoteViewModel;
+  toViewModel(event: NostrEvent): NoteViewModel | null;
+  toViewModel(event: NostrEvent | Array<NostrEvent>): NoteViewModel | FeedViewModel | null {
     if (event instanceof Array) {
       return this.toViewModelCollection(event);
     } else if (this.guard.isKind(event, ShortTextNote)) {
@@ -46,7 +46,7 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
   // eslint-disable-next-line complexity
   private toViewModelCollection(events: Array<NostrEvent>, feed = new FeedViewModel()): FeedViewModel {
     for (const event of events) {
-      let viewModel: EagerNoteViewModel<Account> | ReactionViewModel | null = null;
+      let viewModel: EagerNoteViewModel | ReactionViewModel | null = null;
       if (this.guard.isKind(event, Repost) || this.guard.isSerializedNostrEvent(event.content)) {
         viewModel = this.repostMapper.toViewModel(event);
       } else if (this.guard.isKind(event, ShortTextNote)) {
@@ -65,7 +65,7 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
     return feed;
   }
 
-  patchViewModel(feed: FeedViewModel<Account>, events: Array<NostrEvent>): FeedViewModel<Account> {
+  patchViewModel(feed: FeedViewModel, events: Array<NostrEvent>): FeedViewModel {
     return this.toViewModelCollection(events, feed);
   }
 }

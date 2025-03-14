@@ -1,9 +1,8 @@
-import { Account } from "@belomonte/nostr-ngx";
 import { ReactionViewModel } from "./reaction.view-model";
 
 /**
  * Ready to render zap data
  */
-export interface ZapViewModel<AccountViewModel extends Account = Account> extends ReactionViewModel<AccountViewModel> {
+export interface ZapViewModel extends ReactionViewModel {
   amount: number | null;
 }

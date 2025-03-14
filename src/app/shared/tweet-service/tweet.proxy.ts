@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Account, HexString, NostrEvent } from "@belomonte/nostr-ngx";
+import { HexString, NostrEvent } from "@belomonte/nostr-ngx";
 import { AccountViewModelProxy } from "@shared/view-model-mapper/account-view-model.proxy";
 import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
 import { FeedViewModel } from "@view-model/feed.view-model";
@@ -200,7 +200,7 @@ export class TweetProxy {
    * return the older event into a given list
    * @returns the older event in the list or undefined if the list has no items
    */
-  getOlderEvent(feed: NostrViewModelSet<NostrEventViewModel<Account>>): NostrEvent | undefined {
+  getOlderEvent(feed: NostrViewModelSet<NostrEventViewModel>): NostrEvent | undefined {
     return [...feed]
       .map(view => view.event)
       .reduce((event1, event2) => event2.created_at > event1.created_at ? event1 : event2);

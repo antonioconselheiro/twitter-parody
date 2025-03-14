@@ -1,4 +1,3 @@
-import { Account } from '@belomonte/nostr-ngx';
 import Geohash from 'latlon-geohash';
 import { NoteResourcesContext } from './context/note-resources-context.interface';
 import { ParsedNostrContent } from './context/parsed-nostr-content.interface';
@@ -9,10 +8,7 @@ import { RelatedContentViewModel } from './related-content.view-model';
  * This interface represents the simple text note
  * with all data ready to render into document
  */
-export interface SimpleTextNoteViewModel<
-  AccountViewModel extends Account,
-  RelatedAccountViewModel extends Account = Account
-> extends NostrEventViewModel<AccountViewModel>, RelatedContentViewModel<RelatedAccountViewModel> {
+export interface SimpleTextNoteViewModel extends NostrEventViewModel, RelatedContentViewModel {
 
   /**
    * Event content, with the raw value and the html parsed value

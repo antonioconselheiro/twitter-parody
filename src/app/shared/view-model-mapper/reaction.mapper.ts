@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { AccountRaw, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
+import { NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
 import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 import { ReactionViewModel } from '@view-model/reaction.view-model';
-import { ViewModelMapper } from './view-model.mapper';
 import { Reaction } from 'nostr-tools/kinds';
 import { TagHelper } from './tag.helper';
+import { ViewModelMapper } from './view-model.mapper';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ReactionMapper implements ViewModelMapper<ReactionViewModel<AccountRaw>, Record<string, NostrViewModelSet<ReactionViewModel<AccountRaw>, AccountRaw>>> {
+export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record<string, NostrViewModelSet<ReactionViewModel>>> {
 
   constructor(
     private tagHelper: TagHelper,
@@ -17,10 +17,10 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel<Account
     private guard: NostrGuard
   ) { }
 
-  toViewModel(event: NostrEvent): ReactionViewModel<AccountRaw> | null;
-  toViewModel(event: NostrEvent<Reaction>): ReactionViewModel<AccountRaw>;
-  toViewModel(events: Array<NostrEvent>): Record<string, NostrViewModelSet<ReactionViewModel<AccountRaw>, AccountRaw>>;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): ReactionViewModel<AccountRaw> | Record<string, NostrViewModelSet<ReactionViewModel<AccountRaw>, AccountRaw>> | null {
+  toViewModel(event: NostrEvent): ReactionViewModel | null;
+  toViewModel(event: NostrEvent<Reaction>): ReactionViewModel;
+  toViewModel(events: Array<NostrEvent>): Record<string, NostrViewModelSet<ReactionViewModel>>;
+  toViewModel(event: NostrEvent | Array<NostrEvent>): ReactionViewModel | Record<string, NostrViewModelSet<ReactionViewModel>> | null {
     if (event instanceof Array) {
       return this.toViewModelCollection(event);
     } else if (this.guard.isKind(event, Reaction)) {
@@ -46,12 +46,12 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel<Account
     };
   }
 
-  private toViewModelCollection(events: Array<NostrEvent>): Record<string, NostrViewModelSet<ReactionViewModel<AccountRaw>, AccountRaw>> {
-    const reactionRecord: Record<string, NostrViewModelSet<ReactionViewModel<AccountRaw>, AccountRaw>> = {};
+  private toViewModelCollection(events: Array<NostrEvent>): Record<string, NostrViewModelSet<ReactionViewModel>> {
+    const reactionRecord: Record<string, NostrViewModelSet<ReactionViewModel>> = {};
 
     for (const event of events) {
       if (this.guard.isKind(event, Reaction)) {
-        const sortedSet = reactionRecord[event.content] || new NostrViewModelSet<ReactionViewModel<AccountRaw>, AccountRaw>();
+        const sortedSet = reactionRecord[event.content] || new NostrViewModelSet<ReactionViewModel>();
         const viewModel = this.toSingleViewModel(event);
         sortedSet.add(viewModel);
       }

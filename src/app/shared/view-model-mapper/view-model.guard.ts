@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { Account } from "@belomonte/nostr-ngx";
 import { EagerNoteViewModel } from "@view-model/eager-note.view-model";
 import { LazyNoteViewModel } from "@view-model/lazy-note.view-model";
 import { NostrEventViewModel } from "@view-model/nostr-event.view-model";
@@ -16,55 +15,51 @@ import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
   providedIn: 'root'
 })
 export class ViewModelGuard {
-  static isReactionViewModel<AccountViewModel extends Account>(viewModel: NostrEventViewModel<AccountViewModel>): viewModel is ReactionViewModel<AccountViewModel> {
+  static isReactionViewModel(viewModel: NostrEventViewModel): viewModel is ReactionViewModel {
     return viewModel.event.kind === Reaction;
   }
 
-  static isZapViewModel<AccountViewModel extends Account>(viewModel: NostrEventViewModel<AccountViewModel>): viewModel is ZapViewModel<AccountViewModel> {
+  static isZapViewModel(viewModel: NostrEventViewModel): viewModel is ZapViewModel {
     return viewModel.event.kind === Zap;
   }
 
-  static isRepostNoteViewModel<AccountViewModel extends Account>(viewModel: NostrEventViewModel<AccountViewModel>): viewModel is RepostNoteViewModel<AccountViewModel> {
+  static isRepostNoteViewModel(viewModel: NostrEventViewModel): viewModel is RepostNoteViewModel {
     return viewModel.event.kind === Repost;
   }
 
-  static isEagerNoteViewModel<AccountViewModel extends Account>(viewModel: NostrEventViewModel<AccountViewModel>): viewModel is EagerNoteViewModel<AccountViewModel> {
+  static isEagerNoteViewModel(viewModel: NostrEventViewModel): viewModel is EagerNoteViewModel {
     return this.isNoteViewModel(viewModel) && viewModel.author.state !== 'raw';
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static isNoteViewModel(viewModel: NostrEventViewModel<any>): viewModel is NoteViewModel<any> {
+  static isNoteViewModel(viewModel: NostrEventViewModel): viewModel is NoteViewModel {
     return [Repost, ShortTextNote].includes(viewModel.event.kind);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static isLazyNoteViewModel(viewModel: NostrEventViewModel<any>): viewModel is LazyNoteViewModel {
+  static isLazyNoteViewModel(viewModel: NostrEventViewModel): viewModel is LazyNoteViewModel {
     return this.isNoteViewModel(viewModel) && viewModel.author.state === 'raw';
   }
 
-  isReactionViewModel<AccountViewModel extends Account>(viewModel: NostrEventViewModel<AccountViewModel>): viewModel is ReactionViewModel<AccountViewModel> {
+  isReactionViewModel(viewModel: NostrEventViewModel): viewModel is ReactionViewModel {
     return ViewModelGuard.isReactionViewModel(viewModel);
   }
 
-  isZapViewModel<AccountViewModel extends Account>(viewModel: NostrEventViewModel<AccountViewModel>): viewModel is ZapViewModel<AccountViewModel> {
+  isZapViewModel(viewModel: NostrEventViewModel): viewModel is ZapViewModel {
     return ViewModelGuard.isZapViewModel(viewModel);
   }
 
-  isRepostNoteViewModel<AccountViewModel extends Account>(viewModel: NostrEventViewModel<AccountViewModel>): viewModel is RepostNoteViewModel<AccountViewModel> {
+  isRepostNoteViewModel(viewModel: NostrEventViewModel): viewModel is RepostNoteViewModel {
     return ViewModelGuard.isRepostNoteViewModel(viewModel);
   }
 
-  isEagerNoteViewModel<AccountViewModel extends Account>(viewModel: NostrEventViewModel<AccountViewModel>): viewModel is EagerNoteViewModel<AccountViewModel> {
+  isEagerNoteViewModel(viewModel: NostrEventViewModel): viewModel is EagerNoteViewModel {
     return ViewModelGuard.isEagerNoteViewModel(viewModel);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  isNoteViewModel(viewModel: NostrEventViewModel<any>): viewModel is NoteViewModel<any> {
+  isNoteViewModel(viewModel: NostrEventViewModel): viewModel is NoteViewModel {
     return ViewModelGuard.isNoteViewModel(viewModel);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  isLazyNoteViewModel(viewModel: NostrEventViewModel<any>): viewModel is LazyNoteViewModel {
+  isLazyNoteViewModel(viewModel: NostrEventViewModel): viewModel is LazyNoteViewModel {
     return ViewModelGuard.isLazyNoteViewModel(viewModel);
   }
 }

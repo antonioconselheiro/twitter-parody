@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { Account, AccountRaw, NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
+import { NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
@@ -47,9 +47,9 @@ export class SimpleTextMapper implements SingleViewModelMapper<EagerNoteViewMode
 
     const reactions = this.reactionMapper.toViewModel(events);
     const zaps = this.zapMapper.toViewModel(events);
-    const author = this.profileProxy.getAccount(event.pubkey);
-    const reply: NoteReplyContext<AccountRaw> = { replies: new NostrViewModelSet<LazyNoteViewModel>() };
-    const note: SimpleTextNoteViewModel<Account> = {
+    const author = this.profileProxy.getRawAccount(event.pubkey);
+    const reply: NoteReplyContext = { replies: new NostrViewModelSet<LazyNoteViewModel>() };
+    const note: SimpleTextNoteViewModel = {
       id: event.id,
       author,
       event,
