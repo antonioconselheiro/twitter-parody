@@ -80,7 +80,7 @@ export class NoteRepostedDescriptionPipe implements PipeTransform {
   private findAuthor(noteList: Array<NoteViewModel>, feedPublisherAccount: HexString): AccountRenderable | null {
     if (feedPublisherAccount) {
       for (let index = 0; index < noteList.length; index++) {
-        if (feedPublisherAccount === noteList[index].author.pubkey) {
+        if (feedPublisherAccount === noteList[index]?.author?.pubkey) {
           const author = noteList[index].author;
           if (this.accountGuard.isRenderableGroup(author)) {
             return author;

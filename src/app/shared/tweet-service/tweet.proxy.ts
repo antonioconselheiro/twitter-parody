@@ -135,20 +135,14 @@ export class TweetProxy {
     const mainNotes = await this.tweetNostr.listUserNotes(pubkey, pageSize, olderEventCreatedAt);
     console.info(':: FEED FIRST LOADING');
     let feed = await this.feedMapper.toViewModel(mainNotes);
-    console.info('-> notes: ', [...feed]);
     await this.accountViewModelProxy.loadViewModelAccounts(feed);
+    console.info('-> events: ', JSON.stringify(mainNotes));
+    console.info('-> notes: ', [...feed]);
 
     //  fix 'subject' variable name to 'olderEventCreatedAt' to help method signature overiding
     if (typeof subject === 'number') {
       olderEventCreatedAt = subject;
       subject = undefined;
-    }
-
-    console.info(':: FEED SECOND LOADING');
-    feed = await this.feedMapper.toViewModel(mainNotes);
-    console.info('-> notes: ', [...feed], 'mainNotes:', mainNotes);
-    if (subject) {
-      subject.next(feed);
     }
 
     console.info(':: LOAD RELATED CONTENT');
@@ -169,7 +163,7 @@ export class TweetProxy {
     const eventList = [...feed];
     const eventIdList = eventList.map(viewModel => viewModel.id);
     const interactions = await this.tweetNostr.loadRelatedContent(eventIdList);
-    console.info('interactions', interactions);
+    console.info('interactions', JSON.stringify(interactions));
     console.info('eventIdList', eventIdList);
 
     return this.feedMapper.patchViewModel(new FeedViewModel(eventList), interactions);

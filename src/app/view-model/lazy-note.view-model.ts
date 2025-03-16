@@ -1,7 +1,14 @@
-import { NostrEventViewModel } from './nostr-event.view-model';
+import { NostrEventIdViewModel } from './nostr-event-id.view-model';
 import { RelatedContentViewModel } from './related-content.view-model';
 
-export interface LazyNoteViewModel extends NostrEventViewModel, RelatedContentViewModel {
+/**
+ * Represents an event that was referenced but not loaded
+ */
+export interface LazyNoteViewModel extends NostrEventIdViewModel, RelatedContentViewModel {
+
+  author: null;
+  event: null;
+  origin: Array<WebSocket['url']>;
 
   /**
    * Event content, with the raw value and the html parsed value

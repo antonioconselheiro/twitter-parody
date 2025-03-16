@@ -3,50 +3,52 @@
 </div>
 
 <ng-container *ngFor="let tweet of feed; trackBy: trackByTweetId">
+  <ng-container *ngIf="getAccount(tweet.author?.pubkey) as account">
   <article [class.separator]="!tweet.reposting?.size" class="readTweet">
     <a *ngIf="tweet.reposted?.size" href="javascript:void(0)" class="retweetOrigin">
-      {{tweet.author.displayName}} has retweeted
+      {{account.displayName}} has retweeted
     </a>
   
     <div class="tweetStructure">
-      <nostr-profile-picture [account]="tweet.author" [verticalConnected]="!!tweet.reposting?.size"></nostr-profile-picture>
-      <div class="tweetMetadata">
-        <header>
-          <address *ngIf="tweet.author" class="author userInfo">
-            <span class="userName">
-              {{tweet.author.displayName}}
-              <span *ngIf="tweet.author.nip05?.valid" class="userVerified"></span>
-            </span>
-            <span *ngIf="tweet.author.nip05?.address" class="userNip5">
-              {{tweet.author.nip05?.address}}
-            </span>
-            <time *ngIf="tweet.createdAt" [attr.datetime]="tweet.createdAt | datetimeIso">{{tweet.createdAt | datetimeText}}</time>
-          </address>
-  
-          <button #popoverTrigger (click)="openTweetContextMenu(tweet, popoverTrigger)" class="svgButton borderless">
-            <nostr-svg-render name="ellipsis"></nostr-svg-render>
-          </button>
-        </header>
-  
-        <tw-tweet
-          class="tweetContent"
-          (imgOpen)="onImgOpen($event)"
-          [note]="tweet"
-          [showImages]="false"
-          [isFull]="false"
-        ></tw-tweet>
-  
-        <!-- <tw-tweet-list
-          *ngIf="tweet.reply.replies.size"
-          [feed]="tweet.reply.replies"
-          class="bordered retweetContent"
-          [loading]="false"
-        ></tw-tweet-list> -->
-  
-        <tw-tweet-button-group *ngIf="!tweet.reposting?.size" [tweet]="tweet"></tw-tweet-button-group>
+        <nostr-profile-picture [account]="account" [verticalConnected]="!!tweet.reposting?.size"></nostr-profile-picture>
+        <div class="tweetMetadata">
+          <header>
+            <address *ngIf="account" class="author userInfo">
+              <span class="userName">
+                {{account.displayName}}
+                <span *ngIf="account.nip05?.valid" class="userVerified"></span>
+              </span>
+              <span *ngIf="account.nip05?.address" class="userNip5">
+                {{account.nip05?.address}}
+              </span>
+              <time *ngIf="tweet.createdAt" [attr.datetime]="tweet.createdAt | datetimeIso">{{tweet.createdAt | datetimeText}}</time>
+            </address>
+    
+            <button #popoverTrigger (click)="openTweetContextMenu(tweet, popoverTrigger)" class="svgButton borderless">
+              <nostr-svg-render name="ellipsis"></nostr-svg-render>
+            </button>
+          </header>
+    
+          <tw-tweet
+            class="tweetContent"
+            (imgOpen)="onImgOpen($event)"
+            [note]="tweet"
+            [showImages]="false"
+            [isFull]="false"
+          ></tw-tweet>
+    
+          <!-- TODO: <tw-tweet-list
+            *ngIf="tweet.reply.replies.size"
+            [feed]="tweet.reply.replies"
+            class="bordered retweetContent"
+            [loading]="false"
+          ></tw-tweet-list> -->
+    
+          <tw-tweet-button-group *ngIf="!tweet.reposting?.size" [tweet]="tweet"></tw-tweet-button-group>
+        </div>
       </div>
-    </div>
-  </article>
+    </article>
+  </ng-container>
 </ng-container>
 <div *ngIf="loading && feed" class="separator timelineLoading">
   <nostr-loading></nostr-loading>

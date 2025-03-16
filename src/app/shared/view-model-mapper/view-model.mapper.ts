@@ -1,5 +1,5 @@
 import { NostrEvent } from '@belomonte/nostr-ngx';
-import { NostrEventViewModel } from '@view-model/nostr-event.view-model';
+import { NostrEventIdViewModel } from '@view-model/nostr-event-id.view-model';
 import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 
@@ -9,7 +9,7 @@ import { SingleViewModelMapper } from './single-view-model.mapper';
  * This methods return a promise because it reads the local cache, but this does not connect to pools or relays.
  */
 export interface ViewModelMapper<
-  ViewModelData extends NostrEventViewModel,
+  ViewModelData extends NostrEventIdViewModel,
   ViewModelList = NostrViewModelSet<ViewModelData>
 > extends SingleViewModelMapper<ViewModelData> {
 

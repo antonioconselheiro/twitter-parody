@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Account, HexString, ProfileProxy } from '@belomonte/nostr-ngx';
 import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
 import { FeedViewModel } from '@view-model/feed.view-model';
 import { NoteViewModel } from '@view-model/note.view-model';
@@ -23,8 +24,17 @@ export class TweetListComponent {
   viewing: TweetImageViewing | null = null;
 
   constructor(
+    private profileProxy: ProfileProxy,
     private tweetPopoverHandler: TweetContextMenuHandler
   ) { }
+
+  getAccount(pubkey: HexString | undefined): Account | null {
+    if (!pubkey) {
+      return null;
+    }
+
+    return this.profileProxy.getAccount(pubkey);
+  }
 
   openTweetContextMenu(note: NoteViewModel, trigger: HTMLElement): void {
     this.tweetPopoverHandler.handleContextMenu({ note, trigger });
