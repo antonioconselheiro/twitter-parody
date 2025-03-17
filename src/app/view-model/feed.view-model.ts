@@ -6,7 +6,11 @@ import { ZapViewModel } from './zap.view-model';
 
 export class FeedViewModel extends NostrViewModelSet<NoteViewModel> {
 
-  // eslint-disable-next-line complexity
+  /**
+   * add view model to the feed, if view model is a short text event or a repost, it will be set
+   * as a main event of the feed, if your view model is a reply that relates to some main events
+   * in the feed, but is not a main event, you should add it using indexEvent method
+   */
   override add(viewModel: NoteViewModel | ReactionViewModel | ZapViewModel): this {
     if (ViewModelGuard.isNoteViewModel(viewModel)) {
       if (viewModel.reply.replyTo) {
@@ -31,5 +35,10 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel> {
     }
 
     return this;
+  }
+
+  override indexEvent(value: NoteViewModel): void {
+    // TODO: TODING: devo incluir aqui a lógica que irá associar os objetos de evento um com os outros, como respostas e talvez também reações
+    super.indexEvent(value);
   }
 }

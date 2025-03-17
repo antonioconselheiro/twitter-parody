@@ -1,6 +1,7 @@
 import { HexString, NostrEvent } from '@belomonte/nostr-ngx';
 import { NostrEventIdViewModel } from './nostr-event-id.view-model';
 import { NostrEventViewModel } from './nostr-event.view-model';
+import { NoteReflectionViewModel } from './note-reflection.view-model';
 
 /**
  * Set of ready to render nostr data.
@@ -63,21 +64,36 @@ export class NostrViewModelSet<
    */
   indexEvent(value: GenericViewModel): void {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const reflection: { [properties: string]: unknown } | null = this.get(value.id) as any;
+    let reflection: NoteReflectionViewModel = this.get(value.id) as any;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const valueReflection: { [properties: string]: unknown } = value as any;
+    let valueReflection: NoteReflectionViewModel = value as any;
 
     //  if the register exists it is merged into a single view model,
     //  if don't exists, it is included in the right order
     if (reflection) {
-      Object.keys(value).forEach(attr => {
+
+      //  If reflection is lazy load view model (it has -Infinity set as createdAt),
+      //  then it changes of position for the view model, expecting it is a eager
+      //  load view model, but if it isn't eager, but lazy, will have no problem
+      if (!Number.isFinite(valueReflection.createdAt)) {
+        valueReflection = reflection;
+        reflection = value as any as NoteReflectionViewModel;
+      }
+
+      Object.keys(valueReflection).forEach(attr => {
         if (valueReflection[attr] instanceof NostrViewModelSet && reflection[attr] instanceof NostrViewModelSet) {
-          valueReflection[attr] = valueReflection[attr].concat(reflection[attr]);
+          reflection[attr] = valueReflection[attr] = valueReflection[attr].concat(reflection[attr]);
         }
       });
+
+      valueReflection.createdAt = reflection.createdAt;
     }
 
     this.indexed[value.id] = value;
+  }
+
+  indexEvents(list: Array<GenericViewModel>): void {
+    list.forEach(value => this.indexEvent(value));
   }
 
   get(eventId: HexString): GenericViewModel {
