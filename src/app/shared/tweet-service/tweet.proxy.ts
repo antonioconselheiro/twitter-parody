@@ -3,8 +3,6 @@ import { HexString, NostrEvent } from "@belomonte/nostr-ngx";
 import { AccountViewModelProxy } from "@shared/view-model-mapper/account-view-model.proxy";
 import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
 import { FeedViewModel } from "@view-model/feed.view-model";
-import { NostrEventViewModel } from "@view-model/nostr-event.view-model";
-import { NostrViewModelSet } from "@view-model/nostr-view-model.set";
 import { map, Observable, Subject } from "rxjs";
 import { TweetNostr } from "./tweet.nostr";
 
@@ -67,7 +65,7 @@ export class TweetProxy {
   loadTimelineNextPage(pubkey: HexString, olderNoteOrTimeline: FeedViewModel | NostrEvent, pageSize?: number): Promise<FeedViewModel>;
   loadTimelineNextPage(pubkey: HexString, olderNoteOrTimeline: FeedViewModel | NostrEvent, pageSize = 10): Promise<FeedViewModel> {
     let olderNote: NostrEvent | undefined;
-    if (olderNoteOrTimeline instanceof NostrViewModelSet) {
+    if (olderNoteOrTimeline instanceof FeedViewModel) {
       olderNote = this.getOlderEvent(olderNoteOrTimeline);
     } else {
       olderNote = olderNoteOrTimeline;
@@ -174,7 +172,7 @@ export class TweetProxy {
    * @param feed, listen updates from events on this feed
    */
   listenTimelineUpdates(feed: FeedViewModel): Observable<FeedViewModel> {
-    const eventList = [...feed].map(note => note.event);
+    const eventList = feed.toEventList();
     const latestEvent = this.getLatestEvent(eventList);
 
     return this.tweetNostr
@@ -194,9 +192,22 @@ export class TweetProxy {
    * return the older event into a given list
    * @returns the older event in the list or undefined if the list has no items
    */
-  getOlderEvent(feed: NostrViewModelSet<NostrEventViewModel>): NostrEvent | undefined {
-    return [...feed]
+  getOlderEvent(feed: FeedViewModel): NostrEvent | undefined {
+    const olderEvent = feed
+      .toArray()
       .map(view => view.event)
-      .reduce((event1, event2) => event2.created_at > event1.created_at ? event1 : event2);
+      .reduce((event1, event2) => {
+        if (!event2 && !event1) {
+          return null;
+        } else if (!event1) {
+          return event2;
+        } else if (!event2) {
+          return event1;
+        }
+
+        return event2.created_at > event1.created_at ? event1 : event2;
+      });
+
+    return olderEvent || undefined;
   }
 }

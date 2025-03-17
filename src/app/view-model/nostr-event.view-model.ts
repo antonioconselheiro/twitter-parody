@@ -23,5 +23,5 @@ export interface NostrEventViewModel extends NostrEventIdViewModel {
   /**
    * relays where this event was found
    */
-  readonly origin: Array<WebSocket['url']>
+  readonly origin: Array<WebSocket['url']>;
 }

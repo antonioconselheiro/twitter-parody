@@ -1,12 +1,13 @@
-import { HexString } from '@belomonte/nostr-ngx';
+import { HexString, NostrEvent } from '@belomonte/nostr-ngx';
 import { NostrEventIdViewModel } from './nostr-event-id.view-model';
+import { NostrEventViewModel } from './nostr-event.view-model';
 
 /**
  * Set of ready to render nostr data.
  * Data is added in correct position, sorted by event created timestamp.
  */
 export class NostrViewModelSet<
-  GenericViewModel extends NostrEventIdViewModel
+  GenericViewModel extends NostrEventIdViewModel | NostrEventViewModel
 > extends Set<GenericViewModel> {
 
   /**
@@ -26,6 +27,14 @@ export class NostrViewModelSet<
     if (values) {
       values.forEach(value => this.add(value));
     }
+  }
+
+  toEventList(): Array<NostrEvent> {
+    return [...this].map(note => 'event' in note ? note.event : null).filter((e: NostrEvent | null): e is NostrEvent => !!e);
+  }
+
+  toArray(): Array<GenericViewModel> {
+    return [...this];
   }
 
   override[Symbol.iterator](): IterableIterator<GenericViewModel> {
