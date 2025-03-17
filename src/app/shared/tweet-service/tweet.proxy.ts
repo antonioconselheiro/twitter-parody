@@ -158,13 +158,13 @@ export class TweetProxy {
    * This will load replies, repost, reactions and zaps.
    */
   async loadFeedRelatedContent(feed: FeedViewModel): Promise<FeedViewModel> {
-    const eventList = [...feed];
-    const eventIdList = eventList.map(viewModel => viewModel.id);
+    const noteList = feed.toArray();
+    const eventIdList = noteList.map(viewModel => viewModel.id);
     const interactions = await this.tweetNostr.loadRelatedContent(eventIdList);
     console.info('interactions', JSON.stringify(interactions));
     console.info('eventIdList', eventIdList);
 
-    return this.feedMapper.patchViewModel(new FeedViewModel(eventList), interactions);
+    return this.feedMapper.patchViewModel(new FeedViewModel(noteList), interactions);
   }
 
   /**

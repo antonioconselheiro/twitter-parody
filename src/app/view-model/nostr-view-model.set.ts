@@ -30,7 +30,10 @@ export class NostrViewModelSet<
   }
 
   toEventList(): Array<NostrEvent> {
-    return [...this].map(note => 'event' in note ? note.event : null).filter((e: NostrEvent | null): e is NostrEvent => !!e);
+    return this
+      .toArray()
+      .map(note => 'event' in note ? note.event : null)
+      .filter((e: NostrEvent | null): e is NostrEvent => !!e);
   }
 
   toArray(): Array<GenericViewModel> {
@@ -55,10 +58,10 @@ export class NostrViewModelSet<
   }
 
   /**
-   * the only difference between two equal events is the events that are related
-   * to them, in this method the relations of the equal events are merged
+   * this method will index the event, or merge if it already
+   * exists, and relate to other events in the feed
    */
-  protected indexEvent(value: GenericViewModel): void {
+  indexEvent(value: GenericViewModel): void {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const reflection: { [properties: string]: unknown } | null = this.get(value.id) as any;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -105,14 +108,14 @@ export class NostrViewModelSet<
   }
 
   override forEach(callbackfn: (value: GenericViewModel, value2: GenericViewModel, set: Set<GenericViewModel>) => void, thisArg?: unknown): void {
-    [...this].forEach((value) => {
+    this.toArray().forEach((value) => {
       callbackfn.call(thisArg, value, value, this);
     });
   }
 
   concat(combine: NostrViewModelSet<GenericViewModel>): NostrViewModelSet<GenericViewModel> {
     const merge = new NostrViewModelSet<GenericViewModel>([...combine]);
-    [...this].forEach(item => merge.add(item));
+    this.toArray().forEach(item => merge.add(item));
     return merge;
   }
 

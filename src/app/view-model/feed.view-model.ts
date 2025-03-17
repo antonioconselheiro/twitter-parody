@@ -23,6 +23,7 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel> {
         if (note) {
           const reactions = note.reactions[viewModel.content] || new NostrViewModelSet<ReactionViewModel>();
           reactions.add(viewModel);
+          note.reactions[viewModel.content] = reactions;
         } else {
           console.warn(`note ${note} não encontrado no feed, reaction não pôde ser associada `, viewModel);
         }
