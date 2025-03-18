@@ -3,6 +3,8 @@ import { NostrViewModelSet } from './nostr-view-model.set';
 import { NoteViewModel } from './note.view-model';
 import { ReactionViewModel } from './reaction.view-model';
 import { ZapViewModel } from './zap.view-model';
+import { LazyNoteViewModel } from './lazy-note.view-model';
+import { HexString } from '@belomonte/nostr-ngx';
 
 export class FeedViewModel extends NostrViewModelSet<NoteViewModel> {
 
@@ -12,15 +14,7 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel> {
    * in the feed, but is not a main event, you should add it using indexEvent method
    */
   override add(viewModel: NoteViewModel | ReactionViewModel | ZapViewModel): this {
-    if (ViewModelGuard.isNoteViewModel(viewModel)) {
-      if (viewModel.reply.replyTo) {
-        const replyNote = this.get(viewModel.reply.replyTo.id);
-        replyNote.reply.replies.add(viewModel);
-        this.indexEvent(replyNote);
-      } else {
-        super.add(viewModel);
-      }
-    } else if (ViewModelGuard.isReactionViewModel(viewModel) || ViewModelGuard.isZapViewModel(viewModel)) {
+    if (ViewModelGuard.isReactionViewModel(viewModel) || ViewModelGuard.isZapViewModel(viewModel)) {
       viewModel.reactedTo.forEach(noteHex => {
         const note = this.get(noteHex);
 
@@ -29,16 +23,46 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel> {
           reactions.add(viewModel);
           note.reactions[viewModel.content] = reactions;
         } else {
-          console.warn(`note ${note} não encontrado no feed, reaction não pôde ser associada `, viewModel);
+          console.warn(`note ${note} not found in feed, reaction could not be associated `, viewModel);
         }
       });
+    } else if (ViewModelGuard.isNoteViewModel(viewModel)) {
+      super.add(viewModel);
     }
 
     return this;
   }
 
-  override indexEvent(value: NoteViewModel): void {
+  override indexEvent(viewModel: NoteViewModel): void {
+    if (viewModel.reply.replyTo) {
+      const replyNote = this.get(viewModel.reply.replyTo.id);
+      replyNote.reply.replies.add(viewModel);
+      this.indexEvent(replyNote);
+    }
+
     // TODO: TODING: devo incluir aqui a lógica que irá associar os objetos de evento um com os outros, como respostas e talvez também reações
-    super.indexEvent(value);
+    super.indexEvent(viewModel);
+  }
+
+  protected factoryLazyNote(idEvent: HexString): LazyNoteViewModel {
+    return {
+      id: idEvent,
+      author: null,
+      event: null,
+      origin: [],
+      content: undefined,
+      media: undefined,
+      location: undefined,
+
+      reactions: {},
+      zaps: new NostrViewModelSet<ZapViewModel>(),
+      reposted: new NostrViewModelSet<NoteViewModel>(),
+      mentioned: new NostrViewModelSet<NoteViewModel>(),
+      reply: {
+        replies: new NostrViewModelSet<NoteViewModel>()
+      },
+
+      createdAt: -Infinity
+    };
   }
 }

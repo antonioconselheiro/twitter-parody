@@ -96,7 +96,7 @@ export class NostrViewModelSet<
     list.forEach(value => this.indexEvent(value));
   }
 
-  get(eventId: HexString): GenericViewModel {
+  get(eventId: HexString): GenericViewModel | undefined {
     return this.indexed[eventId];
   }
 

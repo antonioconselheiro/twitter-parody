@@ -1,6 +1,4 @@
 import { NoteReplyContext } from "./context/note-reply-context.interface";
-import { EagerNoteViewModel } from "./eager-note.view-model";
-import { LazyNoteViewModel } from "./lazy-note.view-model";
 import { NostrViewModelSet } from "./nostr-view-model.set";
 import { NoteViewModel } from "./note.view-model";
 import { ReactionViewModel } from "./reaction.view-model";
@@ -28,13 +26,13 @@ export interface RelatedContentViewModel {
    * Set of each view model that reposted this event.
    * It is considered a repost only if it does not include additional text from the user who shared it.
    */
-  reposted: NostrViewModelSet<EagerNoteViewModel> | NostrViewModelSet<LazyNoteViewModel>;
+  reposted: NostrViewModelSet<NoteViewModel>;
 
   /**
    * Set of each view model that mentioned this event.
    * It is considered a mention if it include an additional commentary from the user who shared it.
    */
-  mentioned: NostrViewModelSet<EagerNoteViewModel> | NostrViewModelSet<LazyNoteViewModel>;
+  mentioned: NostrViewModelSet<NoteViewModel>;
 
   /**
    * Data about repling and be replied.
