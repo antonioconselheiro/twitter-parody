@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
+import { HexString, NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
@@ -11,6 +11,7 @@ import { Reaction, ShortTextNote, Zap } from 'nostr-tools/kinds';
 import { ReactionMapper } from './reaction.mapper';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { ZapMapper } from './zap.mapper';
+import { TagHelper } from './tag.helper';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,7 @@ export class SimpleTextMapper implements SingleViewModelMapper<EagerNoteViewMode
     @Inject(NOSTR_CACHE_TOKEN) private nostrCache: NostrCache,
     private reactionMapper: ReactionMapper,
     private profileProxy: ProfileProxy,
+    private tagHelper: TagHelper,
     private zapMapper: ZapMapper,
     private guard: NostrGuard
   ) { }
@@ -49,6 +51,9 @@ export class SimpleTextMapper implements SingleViewModelMapper<EagerNoteViewMode
     const zaps = this.zapMapper.toViewModel(events);
     const author = this.profileProxy.getRawAccount(event.pubkey);
     const reply: NoteReplyContext = { replies: new NostrViewModelSet<LazyNoteViewModel>() };
+    const relates: Array<HexString> = [];
+
+    this.tagHelper.getRelatedEvents(event).forEach(([related]) => relates.push(related));
     const note: SimpleTextNoteViewModel = {
       id: event.id,
       author,
@@ -62,7 +67,8 @@ export class SimpleTextMapper implements SingleViewModelMapper<EagerNoteViewMode
       //  TODO: ideally I should pass relay address from where this event come
       origin: [],
       reposted: new NostrViewModelSet<LazyNoteViewModel>(),
-      mentioned: new NostrViewModelSet<LazyNoteViewModel>()
+      mentioned: new NostrViewModelSet<LazyNoteViewModel>(),
+      relates
     };
 
     return note;

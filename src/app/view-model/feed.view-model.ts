@@ -40,7 +40,7 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel> {
       this.indexEvent(replyNote);
     }
 
-    // TODO: TODING: devo incluir aqui a lógica que irá associar os objetos de evento um com os outros, como respostas e talvez também reações
+    // TODO: TODOING: devo incluir aqui a lógica que irá associar os objetos de evento um com os outros, como respostas e talvez também reações
     super.indexEvent(viewModel);
   }
 
@@ -61,7 +61,7 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel> {
       reply: {
         replies: new NostrViewModelSet<NoteViewModel>()
       },
-
+      relates: [],
       createdAt: -Infinity
     };
   }

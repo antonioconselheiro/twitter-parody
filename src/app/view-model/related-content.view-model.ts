@@ -1,3 +1,4 @@
+import { HexString } from "@belomonte/nostr-ngx";
 import { NoteReplyContext } from "./context/note-reply-context.interface";
 import { NostrViewModelSet } from "./nostr-view-model.set";
 import { NoteViewModel } from "./note.view-model";
@@ -38,4 +39,9 @@ export interface RelatedContentViewModel {
    * Data about repling and be replied.
    */
   reply: NoteReplyContext;
+
+  /**
+   * Events can be related in many ways, this list should contain all event ids mentioned by this event.
+   */
+  readonly relates: Array<HexString>;
 }

@@ -22,6 +22,13 @@ export class NostrViewModelSet<
    */
   protected indexed: { [id: HexString]: GenericViewModel } = {};
 
+  /**
+   * To avoid a loop to each iteration, indexed content is sorted in
+   * this list each time a new view model is added, allowing iterator
+   * look to this property in the set when a iteration is running
+   */
+  protected iterable: Array<GenericViewModel> = [];
+
   constructor(values?: readonly GenericViewModel[] | null) {
     super();
 
@@ -42,7 +49,7 @@ export class NostrViewModelSet<
   }
 
   override[Symbol.iterator](): IterableIterator<GenericViewModel> {
-    return this.sorted.map(id => this.indexed[id])[Symbol.iterator]();
+    return this.iterable[Symbol.iterator]();
   }
 
   override add(value: GenericViewModel): this {
@@ -54,6 +61,8 @@ export class NostrViewModelSet<
     } else {
       this.sorted.splice(index, 0, value.id);
     }
+
+    this.iterable = this.sorted.map(id => this.indexed[id]);
 
     return this;
   }

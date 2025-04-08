@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
+import { HexString, NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
@@ -76,11 +76,13 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
   // eslint-disable-next-line complexity
   toViewModel(event: NostrEvent): RepostNoteViewModel {
     const content = event.content || '';
+    const relates: Array<HexString> = [];
     const contentEvent = this.extractNostrEvent(content);
     const reposting = new NostrViewModelSet<EagerNoteViewModel>();
 
     if (contentEvent) {
       let retweeted: EagerNoteViewModel | null;
+      relates.push(contentEvent.id);
       if (this.guard.isKind(contentEvent, Repost)) {
         //  there is no way to get infinity recursively, this was a stringified json
         retweeted = this.toViewModel(contentEvent);
@@ -100,6 +102,8 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
         }
       }
     }
+
+    this.tagHelper.getRelatedEvents(event).forEach(([related]) => relates.push(related));
 
     const events = this.nostrCache.syncQuery([
       {
@@ -132,7 +136,8 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
       origin: [],
       reposted: new NostrViewModelSet<LazyNoteViewModel>(),
       mentioned: new NostrViewModelSet<LazyNoteViewModel>(),
-      event
+      event,
+      relates
     };
 
     return note;
