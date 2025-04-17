@@ -1,4 +1,4 @@
-import { AccountRaw, NostrEvent } from "@belomonte/nostr-ngx";
+import { AccountRaw, HexString, NostrEvent } from "@belomonte/nostr-ngx";
 import { NostrEventIdViewModel } from "./nostr-event-id.view-model";
 
 /**
@@ -24,4 +24,9 @@ export interface NostrEventViewModel extends NostrEventIdViewModel {
    * relays where this event was found
    */
   readonly origin: Array<WebSocket['url']>;
+
+  /**
+   * Events can be related in many ways, this list should contain all event ids mentioned by this event.
+   */
+  readonly relates: Array<HexString>;
 }

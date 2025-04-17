@@ -33,14 +33,74 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel> {
     return this;
   }
 
+  /**
+   * Index the event and associate each related event id in an eager note in
+   * the object and, if no eager event is found a lazy event is created using
+   * only the id and the relations will be registred on it
+   */
+  // eslint-disable-next-line complexity
   override indexEvent(viewModel: NoteViewModel): void {
+    //  1. procura se a associação é relativa a um evento eager, se sim, associa
+    //  2. se não, cria um evento lazy e associa
+    //  3. se meu evento novo sendo indexado tem um lazy precedendo ele, ele deve substitui-lo e se associar aos outros eventos onde este lazy foi relacionado
+
+    // SERÁ? Relacionar eventos desta maneira pode gerar muitos loops recorrentes
+    //  Relacionar eventos desta maneira fará com que verificações de associação sejam feitas continuamente
+    //  Alternativa tlvz ruim: E se o evento for uma coisa e as relações dele forem outra coisa? Como dois objetos?
+    //  E se no evento houverem apenas os ids das relações e então o evento relacionado deve ser buscado no objeto de feed?
+    //  E se o conversor de eventos nostr em view model retornar uma lista de view models? Incluindo os eventos lazy load mencionados? Eu preciso de eventos lazy load se não tenho pretensão de relacionar os eventos em objetos?
+
     if (viewModel.reply.replyTo) {
       const replyNote = this.get(viewModel.reply.replyTo.id);
-      replyNote.reply.replies.add(viewModel);
-      this.indexEvent(replyNote);
+
+      if (replyNote) {
+        replyNote.reply.replies.add(viewModel);
+        this.indexEvent(replyNote);
+      }
+    }
+
+    if (viewModel.reply.rootRepling) {
+      const rootReplyNote = this.get(viewModel.reply.rootRepling.id);
+
+      if (rootReplyNote) {
+        this.indexEvent(rootReplyNote);
+      }
+    }
+
+    if (viewModel.reply.replies.size) {
+      viewModel.reply.replies.forEach(replyNote => {
+        replyNote.reply.replies.add(viewModel);
+        this.indexEvent(replyNote);
+      });
+    }
+
+    if (viewModel.reposting?.size) {
+      viewModel.reposting.forEach(replyNote => {
+        replyNote.reply.replies.add(viewModel);
+        this.indexEvent(replyNote);
+      });
+    }
+
+    if (viewModel.reactions) {
+
+    }
+
+    if (viewModel.zaps.size) {
+
+    }
+
+    if (viewModel.reposted.size) {
+
+    }
+
+    if (viewModel.mentioned.size) {
+
     }
 
     // TODO: TODOING: devo incluir aqui a lógica que irá associar os objetos de evento um com os outros, como respostas e talvez também reações
+    //  quais propriedades são relacionadas? reactions, por exemplo
+    //  preciso rodar uma verificação para identificar se outros eventos se relacionam com este?
+    //  vou relacionar este evento com todos os disponíveis do feed, devo registrar em algum lugar caso não haja eventos disponível para associar?
     super.indexEvent(viewModel);
   }
 

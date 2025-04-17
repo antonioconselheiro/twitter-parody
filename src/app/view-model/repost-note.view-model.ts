@@ -1,7 +1,6 @@
 import { ParsedNostrContent } from './context/parsed-nostr-content.interface';
-import { EagerNoteViewModel } from './eager-note.view-model';
-import { LazyNoteViewModel } from './lazy-note.view-model';
 import { NostrViewModelSet } from './nostr-view-model.set';
+import { NoteViewModel } from './note.view-model';
 import { SimpleTextNoteViewModel } from './simple-text-note.view-model';
 
 /**
@@ -19,6 +18,6 @@ export interface RepostNoteViewModel extends Omit<SimpleTextNoteViewModel, 'cont
   /**
    * The reposted event
    */
-  reposting: NostrViewModelSet<EagerNoteViewModel> | NostrViewModelSet<LazyNoteViewModel>;
+  reposting: NostrViewModelSet<NoteViewModel>;
 
 }
