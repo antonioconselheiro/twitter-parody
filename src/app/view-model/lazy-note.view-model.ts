@@ -1,10 +1,9 @@
 import { NostrEventIdViewModel } from './nostr-event-id.view-model';
-import { RelatedContentViewModel } from './related-content.view-model';
 
 /**
  * Represents an event that was referenced but not loaded
  */
-export interface LazyNoteViewModel extends NostrEventIdViewModel, RelatedContentViewModel {
+export interface LazyNoteViewModel extends NostrEventIdViewModel {
 
   author: null;
   event: null;

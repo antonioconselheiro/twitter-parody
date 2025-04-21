@@ -2,6 +2,7 @@ import { HexString, NostrEvent } from '@belomonte/nostr-ngx';
 import { NostrEventIdViewModel } from './nostr-event-id.view-model';
 import { NostrEventViewModel } from './nostr-event.view-model';
 import { NoteReflectionViewModel } from './note-reflection.view-model';
+import { RelatedContentViewModel } from './related-content.view-model';
 
 /**
  * Set of ready to render nostr data.
@@ -20,7 +21,7 @@ export class NostrViewModelSet<
   /**
    * Here is added every event related to the collection
    */
-  protected indexed: { [id: HexString]: GenericViewModel } = {};
+  protected indexed: { [id: HexString]: RelatedContentViewModel<GenericViewModel> } = {};
 
   /**
    * To avoid a loop to each iteration, indexed content is sorted in
@@ -55,14 +56,14 @@ export class NostrViewModelSet<
   override add(value: GenericViewModel): this {
     this.indexEvent(value);
     const indexNotFound = -1;
-    const index = this.sorted.findIndex(id => this.indexed[id].createdAt < value.createdAt);
+    const index = this.sorted.findIndex(id => this.indexed[id].viewModel.createdAt < value.createdAt);
     if (index === indexNotFound) {
       this.sorted.push(value.id);
     } else {
       this.sorted.splice(index, 0, value.id);
     }
 
-    this.iterable = this.sorted.map(id => this.indexed[id]);
+    this.iterable = this.sorted.map(id => this.indexed[id].viewModel);
 
     return this;
   }
@@ -98,7 +99,7 @@ export class NostrViewModelSet<
       valueReflection.createdAt = reflection.createdAt;
     }
 
-    this.indexed[value.id] = value;
+    this.indexed[value.id].viewModel = value;
   }
 
   indexEvents(list: Array<GenericViewModel>): void {
@@ -106,7 +107,7 @@ export class NostrViewModelSet<
   }
 
   get(eventId: HexString): GenericViewModel | undefined {
-    return this.indexed[eventId];
+    return this.indexed[eventId].viewModel;
   }
 
   override delete(value: GenericViewModel): boolean {
@@ -129,7 +130,7 @@ export class NostrViewModelSet<
   }
 
   override values(): IterableIterator<GenericViewModel> {
-    return this.sorted.map(id => this.indexed[id]).values();
+    return this.sorted.map(id => this.indexed[id].viewModel).values();
   }
 
   override forEach(callbackfn: (value: GenericViewModel, value2: GenericViewModel, set: Set<GenericViewModel>) => void, thisArg?: unknown): void {
