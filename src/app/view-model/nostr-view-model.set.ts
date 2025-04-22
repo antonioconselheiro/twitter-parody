@@ -8,9 +8,7 @@ import { RelatedContentViewModel } from './related-content.view-model';
  * Set of ready to render nostr data.
  * Data is added in correct position, sorted by event created timestamp.
  */
-export class NostrViewModelSet<
-  GenericViewModel extends NostrEventIdViewModel | NostrEventViewModel
-> extends Set<GenericViewModel> {
+export class NostrViewModelSet<GenericViewModel extends NostrEventIdViewModel | NostrEventViewModel> {
 
   /**
    * here are available only the events that must be rendered with
@@ -28,11 +26,9 @@ export class NostrViewModelSet<
    * this list each time a new view model is added, allowing iterator
    * look to this property in the set when a iteration is running
    */
-  protected iterable: Array<GenericViewModel> = [];
+  protected iterable: Array<RelatedContentViewModel<GenericViewModel>> = [];
 
   constructor(values?: readonly GenericViewModel[] | null) {
-    super();
-
     if (values) {
       values.forEach(value => this.add(value));
     }
@@ -41,19 +37,19 @@ export class NostrViewModelSet<
   toEventList(): Array<NostrEvent> {
     return this
       .toArray()
-      .map(note => 'event' in note ? note.event : null)
+      .map(related => 'event' in related.viewModel ? related.viewModel.event : null)
       .filter((e: NostrEvent | null): e is NostrEvent => !!e);
   }
 
-  toArray(): Array<GenericViewModel> {
+  toArray(): Array<RelatedContentViewModel<GenericViewModel>> {
     return [...this];
   }
 
-  override[Symbol.iterator](): IterableIterator<GenericViewModel> {
+  [Symbol.iterator](): IterableIterator<RelatedContentViewModel<GenericViewModel>> {
     return this.iterable[Symbol.iterator]();
   }
 
-  override add(value: GenericViewModel): this {
+  add(value: GenericViewModel): this {
     this.indexEvent(value);
     const indexNotFound = -1;
     const index = this.sorted.findIndex(id => this.indexed[id].viewModel.createdAt < value.createdAt);
@@ -63,8 +59,7 @@ export class NostrViewModelSet<
       this.sorted.splice(index, 0, value.id);
     }
 
-    this.iterable = this.sorted.map(id => this.indexed[id].viewModel);
-
+    this.iterable = this.sorted.map(id => this.indexed[id]);
     return this;
   }
 
@@ -90,12 +85,6 @@ export class NostrViewModelSet<
         reflection = value as any as NoteReflectionViewModel;
       }
 
-      Object.keys(valueReflection).forEach(attr => {
-        if (valueReflection[attr] instanceof NostrViewModelSet && reflection[attr] instanceof NostrViewModelSet) {
-          reflection[attr] = valueReflection[attr] = valueReflection[attr].concat(reflection[attr]);
-        }
-      });
-
       valueReflection.createdAt = reflection.createdAt;
     }
 
@@ -110,7 +99,7 @@ export class NostrViewModelSet<
     return this.indexed[eventId].viewModel;
   }
 
-  override delete(value: GenericViewModel): boolean {
+  delete(value: GenericViewModel): boolean {
     const indexNotFound = -1;
     const index = this.sorted.indexOf(value.id);
 
@@ -123,29 +112,38 @@ export class NostrViewModelSet<
     return false;
   }
 
-  override clear(): void {
+  clear(): void {
     this.sorted = [];
     this.indexed = {};
-    super.clear();
   }
 
-  override values(): IterableIterator<GenericViewModel> {
+  values(): IterableIterator<GenericViewModel> {
     return this.sorted.map(id => this.indexed[id].viewModel).values();
   }
 
-  override forEach(callbackfn: (value: GenericViewModel, value2: GenericViewModel, set: Set<GenericViewModel>) => void, thisArg?: unknown): void {
+  forEach(callbackfn: (value: GenericViewModel, value2: GenericViewModel, set: Set<GenericViewModel>) => void, thisArg?: unknown): void {
     this.toArray().forEach((value) => {
       callbackfn.call(thisArg, value, value, this);
     });
   }
 
   concat(combine: NostrViewModelSet<GenericViewModel>): NostrViewModelSet<GenericViewModel> {
-    const merge = new NostrViewModelSet<GenericViewModel>([...combine]);
-    this.toArray().forEach(item => merge.add(item));
-    return merge;
+    const clone = combine.clone();
+    this.toArray().forEach(item => clone.add(item));
+    return clone;
   }
 
-  override get size(): number {
+  clone(): NostrViewModelSet<GenericViewModel> {
+    const generic = new NostrViewModelSet<GenericViewModel>();
+
+    generic.sorted = this.sorted;
+    generic.indexed = this.indexed;
+    generic.iterable = this.iterable;
+
+    return generic;
+  }
+
+  get size(): number {
     return this.sorted.length;
   }
 }
