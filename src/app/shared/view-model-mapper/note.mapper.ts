@@ -66,9 +66,9 @@ export class NoteMapper {
     this.fillReplies(replies, repliesEvents);
 
     return {
-      replyTo,
+      replingTo: replyTo,
       rootRepling,
-      replies,
+      repliedBy: replies,
     };
   }
 

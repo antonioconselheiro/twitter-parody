@@ -23,4 +23,15 @@ export interface LazyNoteViewModel extends NostrEventIdViewModel {
    * Note attached location if g tag is included.
    */
   location: undefined;
+
+  /**
+   * first message from thread
+   */
+  rootRepling?: undefined;
+
+  /**
+   * if this simple text is a reply, this will be
+   * filled with the replied note
+   */
+  replingTo?: undefined;
 }

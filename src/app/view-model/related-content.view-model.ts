@@ -33,9 +33,9 @@ export interface RelatedContentViewModel<GenericViewModel extends NostrEventIdVi
   mentioned: Set<HexString>;
 
   /**
-   * Data about repling and be replied.
+   * List of ids of replies to this event
    */
-  reply: HexString;
+  repliedBy: Set<HexString>;
 
   /**
    * View model where the relationships refer to 

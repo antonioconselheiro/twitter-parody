@@ -2,6 +2,7 @@ import Geohash from 'latlon-geohash';
 import { NoteResourcesContext } from './context/note-resources-context.interface';
 import { ParsedNostrContent } from './context/parsed-nostr-content.interface';
 import { NostrEventViewModel } from './nostr-event.view-model';
+import { HexString } from '@belomonte/nostr-ngx';
 
 /**
  * This interface represents the simple text note
@@ -23,4 +24,15 @@ export interface SimpleTextNoteViewModel extends NostrEventViewModel {
    * Note attached location if g tag is included.
    */
   location?: Geohash.Point;
+
+  /**
+   * first message from thread
+   */
+  readonly rootRepling?: HexString;
+
+  /**
+   * if this simple text is a reply, this will be
+   * filled with the replied note
+   */
+  readonly replingTo?: HexString;
 }

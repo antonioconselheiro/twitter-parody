@@ -50,8 +50,8 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel> {
     //  E se no evento houverem apenas os ids das relações e então o evento relacionado deve ser buscado no objeto de feed?
     //  E se o conversor de eventos nostr em view model retornar uma lista de view models? Incluindo os eventos lazy load mencionados? Eu preciso de eventos lazy load se não tenho pretensão de relacionar os eventos em objetos?
 
-    if (viewModel.reply.replyTo) {
-      const replyNote = this.get(viewModel.reply.replyTo.id);
+    if (viewModel.replingTo) {
+      const replyNote = this.get(viewModel.replingTo);
 
       if (replyNote) {
         replyNote.reply.replies.add(viewModel);
@@ -59,8 +59,8 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel> {
       }
     }
 
-    if (viewModel.reply.rootRepling) {
-      const rootReplyNote = this.get(viewModel.reply.rootRepling.id);
+    if (viewModel.rootRepling) {
+      const rootReplyNote = this.get(viewModel.rootRepling);
 
       if (rootReplyNote) {
         this.indexEvent(rootReplyNote);

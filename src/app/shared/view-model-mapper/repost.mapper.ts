@@ -120,7 +120,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
     const reactions = this.reactionMapper.toViewModel(events);
     const zaps = this.zapMapper.toViewModel(events);
     const author = this.profileProxy.getRawAccount(event.pubkey);
-    const reply: NoteReplyContext = { replies: new NostrViewModelSet<LazyNoteViewModel>() };
+    const reply: NoteReplyContext = { repliedBy: new NostrViewModelSet<LazyNoteViewModel>() };
 
     const note: RepostNoteViewModel = {
       author,

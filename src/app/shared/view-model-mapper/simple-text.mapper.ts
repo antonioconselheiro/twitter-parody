@@ -50,7 +50,7 @@ export class SimpleTextMapper implements SingleViewModelMapper<EagerNoteViewMode
     const reactions = this.reactionMapper.toViewModel(events);
     const zaps = this.zapMapper.toViewModel(events);
     const author = this.profileProxy.getRawAccount(event.pubkey);
-    const reply: NoteReplyContext = { replies: new NostrViewModelSet<LazyNoteViewModel>() };
+    const reply: NoteReplyContext = { repliedBy: new NostrViewModelSet<LazyNoteViewModel>() };
     const relates: Array<HexString> = [];
 
     this.tagHelper.getRelatedEvents(event).forEach(([related]) => relates.push(related));

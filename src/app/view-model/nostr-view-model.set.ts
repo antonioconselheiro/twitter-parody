@@ -1,8 +1,8 @@
 import { HexString, NostrEvent } from '@belomonte/nostr-ngx';
 import { NostrEventIdViewModel } from './nostr-event-id.view-model';
 import { NostrEventViewModel } from './nostr-event.view-model';
-import { NoteReflectionViewModel } from './note-reflection.view-model';
 import { RelatedContentViewModel } from './related-content.view-model';
+import { LazyNoteViewModel } from './lazy-note.view-model';
 
 /**
  * Set of ready to render nostr data.
@@ -14,7 +14,7 @@ export class NostrViewModelSet<GenericViewModel extends NostrEventIdViewModel | 
    * here are available only the events that must be rendered with
    * the ids arranged in order from newest event to oldest
    */
-  protected sorted = new Array<HexString>();
+  protected sortedDisplay = new Array<HexString>();
 
   /**
    * Here is added every event related to the collection
@@ -49,17 +49,20 @@ export class NostrViewModelSet<GenericViewModel extends NostrEventIdViewModel | 
     return this.iterable[Symbol.iterator]();
   }
 
+  /**
+   * will include view model to be displayed 
+   */
   add(value: GenericViewModel): this {
     this.indexEvent(value);
     const indexNotFound = -1;
-    const index = this.sorted.findIndex(id => this.indexed[id].viewModel.createdAt < value.createdAt);
+    const index = this.sortedDisplay.findIndex(id => this.indexed[id].viewModel.createdAt < value.createdAt);
     if (index === indexNotFound) {
-      this.sorted.push(value.id);
+      this.sortedDisplay.push(value.id);
     } else {
-      this.sorted.splice(index, 0, value.id);
+      this.sortedDisplay.splice(index, 0, value.id);
     }
 
-    this.iterable = this.sorted.map(id => this.indexed[id]);
+    this.iterable = this.sortedDisplay.map(id => this.indexed[id]);
     return this;
   }
 
@@ -68,27 +71,15 @@ export class NostrViewModelSet<GenericViewModel extends NostrEventIdViewModel | 
    * exists, and relate to other events in the feed
    */
   indexEvent(value: GenericViewModel): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let reflection: NoteReflectionViewModel = this.get(value.id) as any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let valueReflection: NoteReflectionViewModel = value as any;
+    let relatedContent = this.indexed[value.id];
 
-    //  if the register exists it is merged into a single view model,
-    //  if don't exists, it is included in the right order
-    if (reflection) {
-
-      //  If reflection is lazy load view model (it has -Infinity set as createdAt),
-      //  then it changes of position for the view model, expecting it is a eager
-      //  load view model, but if it isn't eager, but lazy, will have no problem
-      if (!Number.isFinite(valueReflection.createdAt)) {
-        valueReflection = reflection;
-        reflection = value as any as NoteReflectionViewModel;
+    if (relatedContent) {
+      if (!('event' in relatedContent.viewModel)) {
+        relatedContent.viewModel = value;
       }
-
-      valueReflection.createdAt = reflection.createdAt;
+    } else {
+      relatedContent = this.factoryRelatedContentFromViewModel(value);
     }
-
-    this.indexed[value.id].viewModel = value;
   }
 
   indexEvents(list: Array<GenericViewModel>): void {
@@ -101,10 +92,10 @@ export class NostrViewModelSet<GenericViewModel extends NostrEventIdViewModel | 
 
   delete(value: GenericViewModel): boolean {
     const indexNotFound = -1;
-    const index = this.sorted.indexOf(value.id);
+    const index = this.sortedDisplay.indexOf(value.id);
 
     if (index !== indexNotFound) {
-      this.sorted.splice(index, 1);
+      this.sortedDisplay.splice(index, 1);
       delete this.indexed[value.id];
       return true;
     }
@@ -113,37 +104,73 @@ export class NostrViewModelSet<GenericViewModel extends NostrEventIdViewModel | 
   }
 
   clear(): void {
-    this.sorted = [];
+    this.sortedDisplay = [];
     this.indexed = {};
+    this.iterable = [];
   }
 
   values(): IterableIterator<GenericViewModel> {
-    return this.sorted.map(id => this.indexed[id].viewModel).values();
+    return this.sortedDisplay.map(id => this.indexed[id].viewModel).values();
   }
 
-  forEach(callbackfn: (value: GenericViewModel, value2: GenericViewModel, set: Set<GenericViewModel>) => void, thisArg?: unknown): void {
-    this.toArray().forEach((value) => {
-      callbackfn.call(thisArg, value, value, this);
-    });
+  forEach(callbackfn: (value: RelatedContentViewModel<GenericViewModel>, index: number, array: RelatedContentViewModel<GenericViewModel>[]) => void, thisArg?: unknown): void {
+    const me = thisArg || this;
+    this
+      .toArray()
+      .forEach((value, index, arr) => callbackfn.call(me, value, index, arr));
   }
 
-  concat(combine: NostrViewModelSet<GenericViewModel>): NostrViewModelSet<GenericViewModel> {
-    const clone = combine.clone();
-    this.toArray().forEach(item => clone.add(item));
+  concat(concat: NostrViewModelSet<GenericViewModel>): NostrViewModelSet<GenericViewModel> {
+    const clone = concat.clone();
+    //  FIXME: isso obrigará o array de clone recriar todos os objetos de relacionamento da coleção anterior
+    //  Se de alguma maneira os objetos de relacionamento forem clonados e preservados e alimentados, ao invés
+    //  de recriados, então será evitada reexecução de boa quantidade de lógica a cada clonagem
+    this.toArray().forEach(item => clone.add(item.viewModel));
     return clone;
   }
 
   clone(): NostrViewModelSet<GenericViewModel> {
     const generic = new NostrViewModelSet<GenericViewModel>();
 
-    generic.sorted = this.sorted;
-    generic.indexed = this.indexed;
-    generic.iterable = this.iterable;
+    generic.sortedDisplay = (new Array<string>()).concat(this.sortedDisplay);
+    generic.indexed = { ...this.indexed };
+    generic.iterable = (new Array<RelatedContentViewModel<GenericViewModel>>()).concat(this.iterable);
 
     return generic;
   }
 
+  protected factoryRelatedContentFromViewModel(viewModel: GenericViewModel): RelatedContentViewModel<GenericViewModel> {
+    return {
+      mentioned: new Set(),
+      reactions: {},
+      zaps: new Set(),
+      viewModel,
+      reposted: new Set(),
+      repliedBy: new Set()
+    };
+  }
+
+  protected factoryRelatedContentFromHexadecimal(id: HexString): RelatedContentViewModel<LazyNoteViewModel> {
+    return {
+      mentioned: new Set(),
+      reactions: {},
+      zaps: new Set(),
+      viewModel: {
+        id,
+        author: null,
+        event: null,
+        origin: [],
+        content: undefined,
+        media: undefined,
+        location: undefined,
+        createdAt: -Infinity
+      },
+      reposted: new Set(),
+      repliedBy: new Set()
+    };
+  }
+
   get size(): number {
-    return this.sorted.length;
+    return this.sortedDisplay.length;
   }
 }
