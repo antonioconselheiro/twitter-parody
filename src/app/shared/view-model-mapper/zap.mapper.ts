@@ -46,6 +46,7 @@ export class ZapMapper implements SingleViewModelMapper<ZapViewModel> {
       author,
       //  TODO: ideally I should pass relay address from where this event come
       origin: [],
+      relates: this.tagHelper.getRelatedEvents(event).map(([hex]) => hex),
       amount: amountZapped ? Number(amountZapped) : null,
       createdAt: event.created_at
     };

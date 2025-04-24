@@ -2,12 +2,11 @@ import { Inject, Injectable } from '@angular/core';
 import { HexString, NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
-import { NoteReplyContext } from '@view-model/context/note-reply-context.interface';
 import { EagerNoteViewModel } from '@view-model/eager-note.view-model';
 import { LazyNoteViewModel } from '@view-model/lazy-note.view-model';
 import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
-import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
+import { Repost, ShortTextNote } from 'nostr-tools/kinds';
 import { ReactionMapper } from './reaction.mapper';
 import { SimpleTextMapper } from './simple-text.mapper';
 import { SingleViewModelMapper } from './single-view-model.mapper';
@@ -104,23 +103,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
     }
 
     this.tagHelper.getRelatedEvents(event).forEach(([related]) => relates.push(related));
-
-    const events = this.nostrCache.syncQuery([
-      {
-        kinds: [
-          Reaction,
-          Zap
-        ],
-        '#e': [
-          event.id
-        ]
-      }
-    ]);
-
-    const reactions = this.reactionMapper.toViewModel(events);
-    const zaps = this.zapMapper.toViewModel(events);
     const author = this.profileProxy.getRawAccount(event.pubkey);
-    const reply: NoteReplyContext = { repliedBy: new NostrViewModelSet<LazyNoteViewModel>() };
 
     const note: RepostNoteViewModel = {
       author,
@@ -129,9 +112,6 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
       content: this.htmlfier.parse(event.content),
       media: this.htmlfier.extractMedia(event.content),
       reposting,
-      reactions,
-      zaps,
-      reply,
       //  TODO: ideally I should pass relay address from where this event come
       origin: [],
       reposted: new NostrViewModelSet<LazyNoteViewModel>(),

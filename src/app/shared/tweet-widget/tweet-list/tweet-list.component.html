@@ -2,15 +2,15 @@
   <nostr-loading></nostr-loading>
 </div>
 
-<ng-container *ngFor="let tweet of feed; trackBy: trackByTweetId">
-  <ng-container *ngIf="getAccount(tweet.author?.pubkey) as account">
-  <article [class.separator]="!tweet.reposting?.size" class="readTweet">
-    <a *ngIf="tweet.reposted?.size" href="javascript:void(0)" class="retweetOrigin">
+<ng-container *ngFor="let note of feed; trackBy: trackByTweetId">
+  <ng-container *ngIf="getAccount(note.author?.pubkey) as account">
+  <article [class.separator]="!note.reposting?.size" class="readTweet">
+    <a *ngIf="note.reposted?.size" href="javascript:void(0)" class="retweetOrigin">
       {{account.displayName}} has retweeted
     </a>
   
     <div class="tweetStructure">
-        <nostr-profile-picture [account]="account" [verticalConnected]="!!tweet.reposting?.size"></nostr-profile-picture>
+        <nostr-profile-picture [account]="account" [verticalConnected]="!!note.reposting?.size"></nostr-profile-picture>
         <div class="tweetMetadata">
           <header>
             <address *ngIf="account" class="author userInfo">
@@ -21,10 +21,10 @@
               <span *ngIf="account.nip05?.address" class="userNip5">
                 {{account.nip05?.address}}
               </span>
-              <time *ngIf="tweet.createdAt" [attr.datetime]="tweet.createdAt | datetimeIso">{{tweet.createdAt | datetimeText}}</time>
+              <time *ngIf="note.createdAt" [attr.datetime]="note.createdAt | datetimeIso">{{note.createdAt | datetimeText}}</time>
             </address>
     
-            <button #popoverTrigger (click)="openTweetContextMenu(tweet, popoverTrigger)" class="svgButton borderless">
+            <button #popoverTrigger (click)="openTweetContextMenu(note, popoverTrigger)" class="svgButton borderless">
               <nostr-svg-render name="ellipsis"></nostr-svg-render>
             </button>
           </header>
@@ -32,7 +32,7 @@
           <tw-tweet
             class="tweetContent"
             (imgOpen)="onImgOpen($event)"
-            [note]="tweet"
+            [note]="note"
             [showImages]="false"
             [isFull]="false"
           ></tw-tweet>
@@ -44,7 +44,7 @@
             [loading]="false"
           ></tw-tweet-list> -->
     
-          <tw-tweet-button-group *ngIf="!tweet.reposting?.size" [tweet]="tweet"></tw-tweet-button-group>
+          <tw-tweet-button-group *ngIf="!note.reposting?.size" [tweet]="note"></tw-tweet-button-group>
         </div>
       </div>
     </article>

@@ -32,6 +32,7 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record
 
   private toSingleViewModel(event: NostrEvent<Reaction>): ReactionViewModel {
     const reactedTo = this.tagHelper.listIdsFromTag('e', event);
+    const relates = this.tagHelper.getRelatedEvents(event).map(([event]) => event)
     const author = this.profileProxy.getRawAccount(event.pubkey);
 
     return {
@@ -42,6 +43,7 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record
       author,
       //  TODO: ideally I should pass relay address from where this event come
       origin: [],
+      relates,
       createdAt: event.created_at
     };
   }

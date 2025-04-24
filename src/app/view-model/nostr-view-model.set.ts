@@ -9,15 +9,15 @@ import { LazyNoteViewModel } from './lazy-note.view-model';
  * Data is added in correct position, sorted by event created timestamp.
  */
 export class NostrViewModelSet<
-  GenericViewModel extends NostrEventIdViewModel | NostrEventViewModel,
-  IndexableViewModel extends GenericViewModel = GenericViewModel
+  MainViewModel extends IndexableViewModel,
+  IndexableViewModel extends NostrEventIdViewModel | NostrEventViewModel = MainViewModel
 > {
 
   /**
    * here are available only the events that must be rendered with
    * the ids arranged in order from newest event to oldest
    */
-  protected sortedDisplay = new Array<HexString>();
+  protected sortedView = new Array<HexString>();
 
   /**
    * Here is added every event related to the collection
@@ -29,7 +29,7 @@ export class NostrViewModelSet<
    * this list each time a new view model is added, allowing iterator
    * look to this property in the set when a iteration is running
    */
-  protected iterable: Array<RelatedContentViewModel<GenericViewModel>> = [];
+  protected iterable: Array<RelatedContentViewModel<MainViewModel>> = [];
 
   constructor(values?: readonly IndexableViewModel[] | null) {
     if (values) {
@@ -44,11 +44,11 @@ export class NostrViewModelSet<
       .filter((e: NostrEvent | null): e is NostrEvent => !!e);
   }
 
-  toArray(): Array<RelatedContentViewModel<GenericViewModel>> {
+  toArray(): Array<RelatedContentViewModel<MainViewModel>> {
     return [...this];
   }
 
-  [Symbol.iterator](): IterableIterator<RelatedContentViewModel<GenericViewModel>> {
+  [Symbol.iterator](): IterableIterator<RelatedContentViewModel<MainViewModel>> {
     return this.iterable[Symbol.iterator]();
   }
 
@@ -57,21 +57,18 @@ export class NostrViewModelSet<
    */
   add(value: IndexableViewModel): this {
     this.indexEvent(value);
-    const indexNotFound = -1;
-    const index = this.sortedDisplay.findIndex(id => this.indexed[id].viewModel.createdAt < value.createdAt);
-    if (index === indexNotFound) {
-      this.sortedDisplay.push(value.id);
-    } else {
-      this.sortedDisplay.splice(index, 0, value.id);
-    }
-
-    const iterableSortedDisplay = this.sortedDisplay.map(id => this.indexed[id]);
-
-    //  FIXME: será que este é o melhor jeito? muito provável que não seja passado nenhum elemento de tipo incorreto aqui e
-    //  adicionar uma validação traria uma grande execução de lógica a mais desnecessária. Então como está, só dará erro se
-    //  houver manutenção que mude como se preenche o sortedDisplay
-    this.iterable = iterableSortedDisplay as any as Array<RelatedContentViewModel<GenericViewModel>>
+    this.iterable = this.sortedView.map(id => this.indexed[id]).filter((viewing): viewing is RelatedContentViewModel<MainViewModel> => this.isMain(viewing.viewModel));
     return this;
+  }
+
+  protected sortingRule(value: MainViewModel): void {
+    const indexNotFound = -1;
+    const index = this.sortedView.findIndex(id => this.indexed[id].viewModel.createdAt < value.createdAt);
+    if (index === indexNotFound) {
+      this.sortedView.push(value.id);
+    } else {
+      this.sortedView.splice(index, 0, value.id);
+    }
   }
 
   /**
@@ -92,20 +89,28 @@ export class NostrViewModelSet<
     this.indexed[value.id] = relatedContent;
   }
 
-  indexEvents(list: Array<GenericViewModel>): void {
+  indexEvents(list: Array<IndexableViewModel>): void {
     list.forEach(value => this.indexEvent(value));
   }
 
-  get(eventId: HexString): RelatedContentViewModel<GenericViewModel> | undefined {
+  protected isMain(viewModel: MainViewModel | IndexableViewModel): viewModel is MainViewModel {
+    return this.isIndexable(viewModel);
+  }
+
+  protected isIndexable(viewModel: MainViewModel | IndexableViewModel): viewModel is IndexableViewModel {
+    return 'id' in viewModel && 'createdAt' in viewModel;
+  }
+
+  get(eventId: HexString): RelatedContentViewModel<IndexableViewModel> | undefined {
     return this.indexed[eventId];
   }
 
-  delete(value: GenericViewModel): boolean {
+  delete(value: MainViewModel): boolean {
     const indexNotFound = -1;
-    const index = this.sortedDisplay.indexOf(value.id);
+    const index = this.sortedView.indexOf(value.id);
 
     if (index !== indexNotFound) {
-      this.sortedDisplay.splice(index, 1);
+      this.sortedView.splice(index, 1);
       delete this.indexed[value.id];
       return true;
     }
@@ -114,23 +119,23 @@ export class NostrViewModelSet<
   }
 
   clear(): void {
-    this.sortedDisplay = [];
+    this.sortedView = [];
     this.indexed = {};
     this.iterable = [];
   }
 
-  values(): IterableIterator<GenericViewModel> {
-    return this.sortedDisplay.map(id => this.indexed[id].viewModel).values() as any as IterableIterator<GenericViewModel>;
+  values(): IterableIterator<RelatedContentViewModel<MainViewModel>> {
+    return this.iterable.values();
   }
 
-  forEach(callbackfn: (value: RelatedContentViewModel<GenericViewModel>, index: number, array: RelatedContentViewModel<GenericViewModel>[]) => void, thisArg?: unknown): void {
+  forEach(callbackfn: (value: RelatedContentViewModel<MainViewModel>, index: number, array: RelatedContentViewModel<MainViewModel>[]) => void, thisArg?: unknown): void {
     const me = thisArg || this;
     this
       .toArray()
       .forEach((value, index, arr) => callbackfn.call(me, value, index, arr));
   }
 
-  concat(concat: NostrViewModelSet<GenericViewModel>): NostrViewModelSet<GenericViewModel> {
+  concat(concat: NostrViewModelSet<MainViewModel>): NostrViewModelSet<MainViewModel> {
     const clone = concat.clone();
     //  FIXME: isso obrigará o array de clone recriar todos os objetos de relacionamento da coleção anterior
     //  Se de alguma maneira os objetos de relacionamento forem clonados e preservados e alimentados, ao invés
@@ -139,12 +144,12 @@ export class NostrViewModelSet<
     return clone;
   }
 
-  clone(): NostrViewModelSet<GenericViewModel, IndexableViewModel> {
-    const generic = new NostrViewModelSet<GenericViewModel, IndexableViewModel>();
+  clone(): NostrViewModelSet<MainViewModel, IndexableViewModel> {
+    const generic = new NostrViewModelSet<MainViewModel, IndexableViewModel>();
 
-    generic.sortedDisplay = (new Array<string>()).concat(this.sortedDisplay);
+    generic.sortedView = (new Array<string>()).concat(this.sortedView);
     generic.indexed = { ...this.indexed };
-    generic.iterable = (new Array<RelatedContentViewModel<GenericViewModel>>()).concat(this.iterable);
+    generic.iterable = (new Array<RelatedContentViewModel<MainViewModel>>()).concat(this.iterable);
 
     return generic;
   }
@@ -182,6 +187,6 @@ export class NostrViewModelSet<
   }
 
   get size(): number {
-    return this.sortedDisplay.length;
+    return this.sortedView.length;
   }
 }
