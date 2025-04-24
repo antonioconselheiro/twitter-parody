@@ -8,7 +8,10 @@ import { LazyNoteViewModel } from './lazy-note.view-model';
  * Set of ready to render nostr data.
  * Data is added in correct position, sorted by event created timestamp.
  */
-export class NostrViewModelSet<GenericViewModel extends NostrEventIdViewModel | NostrEventViewModel> {
+export class NostrViewModelSet<
+  GenericViewModel extends NostrEventIdViewModel | NostrEventViewModel,
+  IndexableViewModel extends GenericViewModel = GenericViewModel
+> {
 
   /**
    * here are available only the events that must be rendered with
@@ -19,7 +22,7 @@ export class NostrViewModelSet<GenericViewModel extends NostrEventIdViewModel | 
   /**
    * Here is added every event related to the collection
    */
-  protected indexed: { [id: HexString]: RelatedContentViewModel<GenericViewModel> } = {};
+  protected indexed: { [id: HexString]: RelatedContentViewModel<IndexableViewModel> } = {};
 
   /**
    * To avoid a loop to each iteration, indexed content is sorted in
@@ -28,7 +31,7 @@ export class NostrViewModelSet<GenericViewModel extends NostrEventIdViewModel | 
    */
   protected iterable: Array<RelatedContentViewModel<GenericViewModel>> = [];
 
-  constructor(values?: readonly GenericViewModel[] | null) {
+  constructor(values?: readonly IndexableViewModel[] | null) {
     if (values) {
       values.forEach(value => this.add(value));
     }
@@ -52,7 +55,7 @@ export class NostrViewModelSet<GenericViewModel extends NostrEventIdViewModel | 
   /**
    * will include view model to be displayed 
    */
-  add(value: GenericViewModel): this {
+  add(value: IndexableViewModel): this {
     this.indexEvent(value);
     const indexNotFound = -1;
     const index = this.sortedDisplay.findIndex(id => this.indexed[id].viewModel.createdAt < value.createdAt);
@@ -62,7 +65,12 @@ export class NostrViewModelSet<GenericViewModel extends NostrEventIdViewModel | 
       this.sortedDisplay.splice(index, 0, value.id);
     }
 
-    this.iterable = this.sortedDisplay.map(id => this.indexed[id]);
+    const iterableSortedDisplay = this.sortedDisplay.map(id => this.indexed[id]);
+
+    //  FIXME: será que este é o melhor jeito? muito provável que não seja passado nenhum elemento de tipo incorreto aqui e
+    //  adicionar uma validação traria uma grande execução de lógica a mais desnecessária. Então como está, só dará erro se
+    //  houver manutenção que mude como se preenche o sortedDisplay
+    this.iterable = iterableSortedDisplay as any as Array<RelatedContentViewModel<GenericViewModel>>
     return this;
   }
 
@@ -70,7 +78,7 @@ export class NostrViewModelSet<GenericViewModel extends NostrEventIdViewModel | 
    * this method will index the event, or merge if it already
    * exists, and relate to other events in the feed
    */
-  indexEvent(value: GenericViewModel): void {
+  indexEvent(value: IndexableViewModel): void {
     let relatedContent = this.indexed[value.id];
 
     if (relatedContent) {
@@ -80,14 +88,16 @@ export class NostrViewModelSet<GenericViewModel extends NostrEventIdViewModel | 
     } else {
       relatedContent = this.factoryRelatedContentFromViewModel(value);
     }
+
+    this.indexed[value.id] = relatedContent;
   }
 
   indexEvents(list: Array<GenericViewModel>): void {
     list.forEach(value => this.indexEvent(value));
   }
 
-  get(eventId: HexString): GenericViewModel | undefined {
-    return this.indexed[eventId].viewModel;
+  get(eventId: HexString): RelatedContentViewModel<GenericViewModel> | undefined {
+    return this.indexed[eventId];
   }
 
   delete(value: GenericViewModel): boolean {
@@ -110,7 +120,7 @@ export class NostrViewModelSet<GenericViewModel extends NostrEventIdViewModel | 
   }
 
   values(): IterableIterator<GenericViewModel> {
-    return this.sortedDisplay.map(id => this.indexed[id].viewModel).values();
+    return this.sortedDisplay.map(id => this.indexed[id].viewModel).values() as any as IterableIterator<GenericViewModel>;
   }
 
   forEach(callbackfn: (value: RelatedContentViewModel<GenericViewModel>, index: number, array: RelatedContentViewModel<GenericViewModel>[]) => void, thisArg?: unknown): void {
@@ -129,8 +139,8 @@ export class NostrViewModelSet<GenericViewModel extends NostrEventIdViewModel | 
     return clone;
   }
 
-  clone(): NostrViewModelSet<GenericViewModel> {
-    const generic = new NostrViewModelSet<GenericViewModel>();
+  clone(): NostrViewModelSet<GenericViewModel, IndexableViewModel> {
+    const generic = new NostrViewModelSet<GenericViewModel, IndexableViewModel>();
 
     generic.sortedDisplay = (new Array<string>()).concat(this.sortedDisplay);
     generic.indexed = { ...this.indexed };
@@ -139,7 +149,7 @@ export class NostrViewModelSet<GenericViewModel extends NostrEventIdViewModel | 
     return generic;
   }
 
-  protected factoryRelatedContentFromViewModel(viewModel: GenericViewModel): RelatedContentViewModel<GenericViewModel> {
+  protected factoryRelatedContentFromViewModel(viewModel: IndexableViewModel): RelatedContentViewModel<IndexableViewModel> {
     return {
       mentioned: new Set(),
       reactions: {},
@@ -163,7 +173,8 @@ export class NostrViewModelSet<GenericViewModel extends NostrEventIdViewModel | 
         content: undefined,
         media: undefined,
         location: undefined,
-        createdAt: -Infinity
+        createdAt: -Infinity,
+        relates: []
       },
       reposted: new Set(),
       repliedBy: new Set()

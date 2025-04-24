@@ -1,3 +1,4 @@
+import { HexString } from '@belomonte/nostr-ngx';
 import { NostrEventIdViewModel } from './nostr-event-id.view-model';
 
 /**
@@ -34,4 +35,9 @@ export interface LazyNoteViewModel extends NostrEventIdViewModel {
    * filled with the replied note
    */
   replingTo?: undefined;
+
+  /**
+   * Events can be related in many ways, this list should contain all event ids mentioned by this event.
+   */
+  readonly relates: Array<HexString>;
 }
