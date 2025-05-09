@@ -1,7 +1,8 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Account, CurrentAccountObservable } from '@belomonte/nostr-ngx';
+import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Account, CurrentAccountObservable, NOSTR_CACHE_TOKEN, NostrCache } from '@belomonte/nostr-ngx';
 import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
 import { NoteViewModel } from '@view-model/note.view-model';
+import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -20,7 +21,8 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
 
   constructor(
     private profile$: CurrentAccountObservable,
-    private tweetPopoverHandler: TweetContextMenuHandler
+    private tweetPopoverHandler: TweetContextMenuHandler,
+    @Inject(NOSTR_CACHE_TOKEN) private nostrCache: NostrCache
   ) { }
 
   ngOnInit(): void {
@@ -41,9 +43,12 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
     this.tweetPopoverHandler.handleShareOptions({ note, trigger });
   }
 
-  isRetweetedByYou(note: NoteViewModel): boolean {
-    if ('isSimpleRepost' in note && note.isSimpleRepost) {
-      return !![...note.reposted].find(reposted => {
+  isRetweetedByYou(relatedContent: RelatedContentViewModel<NoteViewModel>): boolean {
+    if (relatedContent.viewModel.type === 'repost') {
+      //  TODOING: percebo aqui que para avançar, precisarei deixar indexado no serviço de perfil todos os eventos que este
+      //  usuário ativo acessou, de forma que seja dispensável uma lógica muito profunda para consultar isso, visto que será
+      //  uma consulta recorrente em diferentes implementações
+      return !![...relatedContent.reposted].find(reposted => {
         if (reposted.author && this.profile) {
           return reposted.author.pubkey === this.profile.pubkey;
         }
@@ -52,8 +57,8 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
       });
     }
 
-    if (note.author && this.profile) {
-      return note.author.pubkey === this.profile.pubkey;
+    if (relatedContent.author && this.profile) {
+      return relatedContent.author.pubkey === this.profile.pubkey;
     }
 
     return false;

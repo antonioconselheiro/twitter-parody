@@ -3,15 +3,12 @@ import { HexString, NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGuard, Profi
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { EagerNoteViewModel } from '@view-model/eager-note.view-model';
-import { LazyNoteViewModel } from '@view-model/lazy-note.view-model';
 import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
 import { Repost, ShortTextNote } from 'nostr-tools/kinds';
-import { ReactionMapper } from './reaction.mapper';
 import { SimpleTextMapper } from './simple-text.mapper';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { TagHelper } from './tag.helper';
-import { ZapMapper } from './zap.mapper';
 
 /**
  * 1. A consulta de timeline do usuário representará uma consulta de todos os eventos assinados por
@@ -63,9 +60,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
   constructor(
     private guard: NostrGuard,
     private tagHelper: TagHelper,
-    private zapMapper: ZapMapper,
     private profileProxy: ProfileProxy,
-    private reactionMapper: ReactionMapper,
     private simpleTextMapper: SimpleTextMapper,
     @Inject(HTML_PARSER_TOKEN) private htmlfier: NoteHtmlfier,
     @Inject(NOSTR_CACHE_TOKEN) private nostrCache: NostrCache
@@ -107,6 +102,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
 
     const note: RepostNoteViewModel = {
       author,
+      type: 'repost',
       id: event.id,
       createdAt: event.created_at,
       content: this.htmlfier.parse(event.content),
@@ -114,8 +110,6 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
       reposting,
       //  TODO: ideally I should pass relay address from where this event come
       origin: [],
-      reposted: new NostrViewModelSet<LazyNoteViewModel>(),
-      mentioned: new NostrViewModelSet<LazyNoteViewModel>(),
       event,
       relates
     };

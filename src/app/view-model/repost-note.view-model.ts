@@ -7,7 +7,9 @@ import { SimpleTextNoteViewModel } from './simple-text-note.view-model';
  * This interface represents the repost note
  * with all data ready to render into document
  */
-export interface RepostNoteViewModel extends Omit<SimpleTextNoteViewModel, 'content' | 'reposting'> {
+export interface RepostNoteViewModel extends Omit<SimpleTextNoteViewModel, 'content' | 'reposting' | 'type'> {
+
+  type: 'repost';
 
   /**
    * @optional

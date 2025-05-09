@@ -3,8 +3,6 @@ import { HexString, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nost
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { EagerNoteViewModel } from '@view-model/eager-note.view-model';
-import { LazyNoteViewModel } from '@view-model/lazy-note.view-model';
-import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
 import { ShortTextNote } from 'nostr-tools/kinds';
 import { SingleViewModelMapper } from './single-view-model.mapper';
@@ -35,6 +33,7 @@ export class SimpleTextMapper implements SingleViewModelMapper<EagerNoteViewMode
 
     const note: SimpleTextNoteViewModel = {
       id: event.id,
+      type: 'simple',
       author,
       event,
       createdAt: event.created_at,
@@ -42,8 +41,6 @@ export class SimpleTextMapper implements SingleViewModelMapper<EagerNoteViewMode
       media: this.htmlfier.extractMedia(event.content),
       //  TODO: ideally I should pass relay address from where this event come
       origin: [],
-      reposted: new NostrViewModelSet<LazyNoteViewModel>(),
-      mentioned: new NostrViewModelSet<LazyNoteViewModel>(),
       relates
     };
 

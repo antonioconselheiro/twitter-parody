@@ -8,6 +8,8 @@ import { ZapViewModel } from './zap.view-model';
 
 export class FeedViewModel extends NostrViewModelSet<NoteViewModel, NoteViewModel | ReactionViewModel | ZapViewModel> {
 
+  private readonly indexNotFound = -1;
+
   /**
    * add view model to the feed, if view model is a short text event or a repost, it will be set
    * as a main event of the feed, if your view model is a reply that relates to some main events
@@ -50,6 +52,7 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel, NoteViewMode
       }
 
       relatedContent.reactions[reaction.content].add(reaction.id);
+      relatedContent.reactionsAuthors.push(reaction.author.pubkey);
       this.indexed[relatedContent.viewModel.id] = relatedContent;
     });
   }
@@ -58,6 +61,7 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel, NoteViewMode
     zap.reactedTo.forEach(idHex => {
       const relatedContent = this.get(idHex) || this.factoryRelatedContentFromHexadecimal(idHex);
       relatedContent.zaps.add(zap.id);
+      relatedContent.zapAuthors.push(zap.author.pubkey);
       this.indexed[relatedContent.viewModel.id] = relatedContent;
     });
   }
@@ -66,6 +70,7 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel, NoteViewMode
     if (note.replingTo) {
       const relatedReplingTo = this.get(note.replingTo) || this.factoryRelatedContentFromHexadecimal(note.replingTo);
       relatedReplingTo.repliedBy.add(note.replingTo);
+      relatedReplingTo.repliedByAuthors.push(note.author.pubkey);
       this.indexed[note.replingTo] = relatedReplingTo;
     }
 
@@ -77,6 +82,7 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel, NoteViewMode
   protected factoryLazyNote(idEvent: HexString): LazyNoteViewModel {
     return {
       id: idEvent,
+      type: 'lazy',
       author: null,
       event: null,
       origin: [],
@@ -86,5 +92,41 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel, NoteViewMode
       relates: [],
       createdAt: -Infinity
     };
+  }
+
+  hasReactedBy(idEvent: HexString, pubkey: HexString): boolean {
+    const related = this.get(idEvent);
+    if (related) {
+      return related.reactionsAuthors.indexOf(pubkey) !== this.indexNotFound;
+    }
+
+    return false;
+  }
+
+  hasRepostedBy(idEvent: HexString, pubkey: HexString): boolean {
+    const related = this.get(idEvent);
+    if (related) {
+      return related.repostedAuthors.indexOf(pubkey) !== this.indexNotFound;
+    }
+
+    return false;
+  }
+
+  hasMentionedBy(idEvent: HexString, pubkey: HexString): boolean {
+    const related = this.get(idEvent);
+    if (related) {
+      return related.mentionedAuthors.indexOf(pubkey) !== this.indexNotFound;
+    }
+
+    return false;
+  }
+
+  hasRepliedBy(idEvent: HexString, pubkey: HexString): boolean {
+    const related = this.get(idEvent);
+    if (related) {
+      return related.repliedByAuthors.indexOf(pubkey) !== this.indexNotFound;
+    }
+
+    return false;
   }
 }

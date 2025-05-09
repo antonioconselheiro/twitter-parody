@@ -10,6 +10,8 @@ import { HexString } from '@belomonte/nostr-ngx';
  */
 export interface SimpleTextNoteViewModel extends NostrEventViewModel {
 
+  type: 'simple';
+
   /**
    * Event content, with the raw value and the html parsed value
    */

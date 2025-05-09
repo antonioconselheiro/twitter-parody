@@ -1,8 +1,8 @@
 import { HexString, NostrEvent } from '@belomonte/nostr-ngx';
+import { LazyNoteViewModel } from './lazy-note.view-model';
 import { NostrEventIdViewModel } from './nostr-event-id.view-model';
 import { NostrEventViewModel } from './nostr-event.view-model';
 import { RelatedContentViewModel } from './related-content.view-model';
-import { LazyNoteViewModel } from './lazy-note.view-model';
 
 /**
  * Set of ready to render nostr data.
@@ -37,7 +37,7 @@ export class NostrViewModelSet<
     }
   }
 
-  toEventList(): Array<NostrEvent> {
+  toEventArray(): Array<NostrEvent> {
     return this
       .toArray()
       .map(related => 'event' in related.viewModel ? related.viewModel.event : null)
@@ -157,21 +157,34 @@ export class NostrViewModelSet<
   protected factoryRelatedContentFromViewModel(viewModel: IndexableViewModel): RelatedContentViewModel<IndexableViewModel> {
     return {
       mentioned: new Set(),
+      mentionedAuthors: [],
       reactions: {},
+      reactionsAuthors: [],
       zaps: new Set(),
-      viewModel,
+      zapAuthors: [],
       reposted: new Set(),
-      repliedBy: new Set()
+      repostedAuthors: [],
+      repliedBy: new Set(),
+      repliedByAuthors: [],
+      viewModel
     };
   }
 
   protected factoryRelatedContentFromHexadecimal(id: HexString): RelatedContentViewModel<LazyNoteViewModel> {
     return {
       mentioned: new Set(),
+      mentionedAuthors: [],
       reactions: {},
+      reactionsAuthors: [],
       zaps: new Set(),
+      zapAuthors: [],
+      reposted: new Set(),
+      repostedAuthors: [],
+      repliedBy: new Set(),
+      repliedByAuthors: [],
       viewModel: {
         id,
+        type: 'lazy',
         author: null,
         event: null,
         origin: [],
@@ -180,9 +193,7 @@ export class NostrViewModelSet<
         location: undefined,
         createdAt: -Infinity,
         relates: []
-      },
-      reposted: new Set(),
-      repliedBy: new Set()
+      }
     };
   }
 

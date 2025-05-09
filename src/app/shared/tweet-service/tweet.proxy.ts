@@ -158,13 +158,11 @@ export class TweetProxy {
    * This will load replies, repost, reactions and zaps.
    */
   async loadFeedRelatedContent(feed: FeedViewModel): Promise<FeedViewModel> {
-    const noteList = feed.toArray();
+    const noteList = feed.toEventArray();
     const eventIdList = noteList.map(viewModel => viewModel.id);
     const interactions = await this.tweetNostr.loadRelatedContent(eventIdList);
-    console.info('interactions', JSON.stringify(interactions));
-    console.info('eventIdList', eventIdList);
 
-    return this.feedMapper.patchViewModel(new FeedViewModel(noteList), interactions);
+    return this.feedMapper.patchViewModel(feed, interactions);
   }
 
   /**
@@ -172,7 +170,7 @@ export class TweetProxy {
    * @param feed, listen updates from events on this feed
    */
   listenTimelineUpdates(feed: FeedViewModel): Observable<FeedViewModel> {
-    const eventList = feed.toEventList();
+    const eventList = feed.toEventArray();
     const latestEvent = this.getLatestEvent(eventList);
 
     return this.tweetNostr
@@ -193,20 +191,8 @@ export class TweetProxy {
    * @returns the older event in the list or undefined if the list has no items
    */
   getOlderEvent(feed: FeedViewModel): NostrEvent | undefined {
-    const olderEvent = feed
-      .toArray()
-      .map(view => view.event)
-      .reduce((event1, event2) => {
-        if (!event2 && !event1) {
-          return null;
-        } else if (!event1) {
-          return event2;
-        } else if (!event2) {
-          return event1;
-        }
-
-        return event2.created_at > event1.created_at ? event1 : event2;
-      });
+    const olderEvent = feed.toEventArray()
+      .reduce((event1, event2) => event2.created_at > event1.created_at ? event1 : event2);
 
     return olderEvent || undefined;
   }

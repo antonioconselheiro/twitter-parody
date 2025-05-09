@@ -6,6 +6,8 @@ import { NostrEventIdViewModel } from './nostr-event-id.view-model';
  */
 export interface LazyNoteViewModel extends NostrEventIdViewModel {
 
+  type: 'lazy';
+
   author: null;
   event: null;
   origin: Array<WebSocket['url']>;
