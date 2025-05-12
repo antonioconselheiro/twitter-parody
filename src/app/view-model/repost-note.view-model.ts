@@ -1,5 +1,4 @@
 import { ParsedNostrContent } from './context/parsed-nostr-content.interface';
-import { NostrViewModelSet } from './nostr-view-model.set';
 import { NoteViewModel } from './note.view-model';
 import { SimpleTextNoteViewModel } from './simple-text-note.view-model';
 
@@ -7,7 +6,7 @@ import { SimpleTextNoteViewModel } from './simple-text-note.view-model';
  * This interface represents the repost note
  * with all data ready to render into document
  */
-export interface RepostNoteViewModel extends Omit<SimpleTextNoteViewModel, 'content' | 'reposting' | 'type'> {
+export interface RepostNoteViewModel extends Omit<SimpleTextNoteViewModel, 'content' | 'type' | 'reposting'> {
 
   type: 'repost';
 
@@ -18,8 +17,10 @@ export interface RepostNoteViewModel extends Omit<SimpleTextNoteViewModel, 'cont
   content?: ParsedNostrContent;
 
   /**
-   * The reposted event
+   * The reposted event.
+   * If the repost is referenced by a serialized event, the note will be an eager loaded object,
+   * If the repost is one or more hex id of events, the notes will be lazy loaded objects.
    */
-  reposting: NostrViewModelSet<NoteViewModel>;
+  reposting: Array<NoteViewModel>;
 
 }

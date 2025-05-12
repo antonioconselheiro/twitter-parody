@@ -75,7 +75,7 @@ export class NostrViewModelSet<
    * this method will index the event, or merge if it already
    * exists, and relate to other events in the feed
    */
-  indexEvent(value: IndexableViewModel): void {
+  indexEvent(value: IndexableViewModel): RelatedContentViewModel<IndexableViewModel> {
     let relatedContent = this.indexed[value.id];
 
     if (relatedContent) {
@@ -87,6 +87,7 @@ export class NostrViewModelSet<
     }
 
     this.indexed[value.id] = relatedContent;
+    return relatedContent;
   }
 
   indexEvents(list: Array<IndexableViewModel>): void {

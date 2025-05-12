@@ -37,4 +37,6 @@ export interface SimpleTextNoteViewModel extends NostrEventViewModel {
    * filled with the replied note
    */
   readonly replingTo?: HexString;
+
+  readonly reposting?: undefined;
 }

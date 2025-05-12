@@ -5,6 +5,7 @@ import { NostrViewModelSet } from './nostr-view-model.set';
 import { NoteViewModel } from './note.view-model';
 import { ReactionViewModel } from './reaction.view-model';
 import { ZapViewModel } from './zap.view-model';
+import { RelatedContentViewModel } from './related-content.view-model';
 
 export class FeedViewModel extends NostrViewModelSet<NoteViewModel, NoteViewModel | ReactionViewModel | ZapViewModel> {
 
@@ -32,9 +33,12 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel, NoteViewMode
    * the object and, if no eager event is found a lazy event is created using
    * only the id and the relations will be registred on it
    */
-  // eslint-disable-next-line complexity
-  override indexEvent(viewModel: NoteViewModel | ReactionViewModel | ZapViewModel): void {
-    super.indexEvent(viewModel);
+  override indexEvent(viewModel: NoteViewModel): RelatedContentViewModel<NoteViewModel>;
+  override indexEvent(viewModel: ReactionViewModel): RelatedContentViewModel<ReactionViewModel>;
+  override indexEvent(viewModel: ZapViewModel): RelatedContentViewModel<ZapViewModel>;
+  override indexEvent(viewModel: NoteViewModel | ReactionViewModel | ZapViewModel): RelatedContentViewModel<NoteViewModel | ReactionViewModel | ZapViewModel>;
+  override indexEvent(viewModel: NoteViewModel | ReactionViewModel | ZapViewModel): RelatedContentViewModel<NoteViewModel | ReactionViewModel | ZapViewModel> {
+    const related = super.indexEvent(viewModel);
     if (ViewModelGuard.isReactionViewModel(viewModel)) {
       this.indexReaction(viewModel);
     } else if (ViewModelGuard.isZapViewModel(viewModel)) {
@@ -42,6 +46,8 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel, NoteViewMode
     } else if (ViewModelGuard.isNoteViewModel(viewModel)) {
       this.indexNote(viewModel);
     }
+
+    return related;
   }
 
   private indexReaction(reaction: ReactionViewModel): void {
@@ -74,9 +80,12 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel, NoteViewMode
       this.indexed[note.replingTo] = relatedReplingTo;
     }
 
+    if (note.reposting) {
+      note.reposting.forEach(relatedNote => this.indexEvent(relatedNote));
+    }
+
     // FIXME: se um dia eu pretender indexar o root reply será neste método que farei
     //  mas por hora não vejo aplicação prática se não relatorização
-
   }
 
   protected factoryLazyNote(idEvent: HexString): LazyNoteViewModel {

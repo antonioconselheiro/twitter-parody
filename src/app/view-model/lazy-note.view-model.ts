@@ -38,6 +38,8 @@ export interface LazyNoteViewModel extends NostrEventIdViewModel {
    */
   replingTo?: undefined;
 
+  reposting?: undefined;
+
   /**
    * Events can be related in many ways, this list should contain all event ids mentioned by this event.
    */
