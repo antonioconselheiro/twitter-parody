@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NoteViewModel } from '@view-model/note.view-model';
+import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 import { TweetImageViewing } from '../tweet-img-viewing.interface';
 
 @Component({
@@ -16,16 +17,22 @@ export class TweetComponent {
   isFull = false;
 
   @Input()
-  note: NoteViewModel | null = null;
+  tweet: RelatedContentViewModel<NoteViewModel> | null = null;
 
   @Output()
   imgOpen = new EventEmitter<TweetImageViewing | null>();
 
   showMoreTextButton(): boolean {
-    const smallViewLength = String(this.note?.content?.smallView || '').length
-    const fullViewLength = String(this.note?.content?.fullView || '').length;
+    const content = this.tweet?.viewModel.content;
 
-    return smallViewLength !== fullViewLength;
+    if (content) {
+      const smallViewLength = String(content.smallView || '').length
+      const fullViewLength = String(content.fullView || '').length;
+
+      return smallViewLength !== fullViewLength;
+    }
+
+    return false;
   }
 
   getImages(): [string, string?][] {
@@ -33,7 +40,7 @@ export class TweetComponent {
     let currentImage!: [string, string?];
 
     new Array<string>()
-      .concat(this.note?.media?.imageList || [])
+      .concat(this.tweet?.viewModel.media?.imageList || [])
       .forEach((image, index) => {
         const pair = 2;
         if (index % pair === 0) {
@@ -47,7 +54,10 @@ export class TweetComponent {
     return images;
   }
 
-  getVideoUrl(note: NoteViewModel): string {
-    return 'media' in note && note.media && note.media.videoList[0] || '';
+  getVideoUrl(tweet: RelatedContentViewModel<NoteViewModel> | null): string {
+    return tweet &&
+      'media' in tweet.viewModel &&
+      tweet.viewModel.media &&
+      tweet.viewModel.media.videoList[0] || '';
   }
 }

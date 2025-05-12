@@ -4,6 +4,7 @@ import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.han
 import { FeedViewModel } from '@view-model/feed.view-model';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { TweetImageViewing } from '../tweet-img-viewing.interface';
+import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 
 @Component({
   selector: 'tw-tweet-list',
@@ -13,7 +14,7 @@ import { TweetImageViewing } from '../tweet-img-viewing.interface';
 export class TweetListComponent {
 
   @Input()
-  root: NoteViewModel | null = null;
+  root: RelatedContentViewModel<NoteViewModel> | null = null;
 
   @Input()
   feed: FeedViewModel | null = null;
@@ -40,8 +41,8 @@ export class TweetListComponent {
     this.tweetPopoverHandler.handleContextMenu({ note, trigger });
   }
 
-  trackByTweetId(i: number, tweet: NoteViewModel): string {
-    return tweet.id;
+  trackByTweetId(i: number, related: RelatedContentViewModel<NoteViewModel>): string {
+    return related.viewModel.id;
   }
 
   onImgOpen(viewing: TweetImageViewing | null): void {

@@ -157,8 +157,6 @@ export class NostrViewModelSet<
 
   protected factoryRelatedContentFromViewModel(viewModel: IndexableViewModel): RelatedContentViewModel<IndexableViewModel> {
     return {
-      mentioned: new Set(),
-      mentionedAuthors: [],
       reactions: {},
       reactionsAuthors: [],
       zaps: new Set(),
@@ -173,8 +171,6 @@ export class NostrViewModelSet<
 
   protected factoryRelatedContentFromHexadecimal(id: HexString): RelatedContentViewModel<LazyNoteViewModel> {
     return {
-      mentioned: new Set(),
-      mentionedAuthors: [],
       reactions: {},
       reactionsAuthors: [],
       zaps: new Set(),

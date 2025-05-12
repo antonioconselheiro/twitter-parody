@@ -1,6 +1,7 @@
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { FeedViewModel } from '@view-model/feed.view-model';
 import { NoteViewModel } from '@view-model/note.view-model';
+import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 
 @Component({
   selector: 'tw-tweet-image-viewer',
@@ -10,7 +11,7 @@ import { NoteViewModel } from '@view-model/note.view-model';
 export class TweetImageViewerComponent {
 
   @Input()
-  root: NoteViewModel | null = null;
+  root: RelatedContentViewModel<NoteViewModel> | null = null;
 
   @Input()
   feed: FeedViewModel | null = null;
@@ -24,7 +25,7 @@ export class TweetImageViewerComponent {
   showTweets = true;
 
   private getImageList(): string[] {
-    return this.root?.media?.imageList || [];
+    return this.root?.viewModel.media?.imageList || [];
   }
 
   private getIndexFromImageList(activeImage: string): number {

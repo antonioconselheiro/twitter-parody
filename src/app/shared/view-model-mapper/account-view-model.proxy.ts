@@ -13,10 +13,10 @@ export class AccountViewModelProxy {
   ) { }
 
   async loadViewModelAccounts(feed: FeedViewModel): Promise<void> {
-    for await (const note of feed) {
-      if (!this.accountGuard.isRenderableGroup(note.author)) {
-        if (note.author) {
-          await this.profileProxy.loadAccount(note.author.pubkey, 'essential');
+    for await (const related of feed) {
+      if (!this.accountGuard.isRenderableGroup(related.viewModel.author)) {
+        if (related.viewModel.author) {
+          await this.profileProxy.loadAccount(related.viewModel.author.pubkey, 'essential');
         }
       }
     }

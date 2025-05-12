@@ -42,17 +42,6 @@ export interface RelatedContentViewModel<GenericViewModel extends NostrEventIdVi
   repostedAuthors: Array<HexString>;
 
   /**
-   * Set of each view model that mentioned this event.
-   * It is considered a mention if it include an additional commentary from the user who shared it.
-   */
-  mentioned: Set<HexString>;
-
-  /**
-   * Authors of mentions to this note 
-   */
-  mentionedAuthors: Array<HexString>;
-
-  /**
    * List of ids of replies to this event
    */
   repliedBy: Set<HexString>;

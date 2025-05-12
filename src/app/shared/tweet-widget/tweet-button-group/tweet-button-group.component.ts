@@ -15,7 +15,7 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
 
   @Input()
-  tweet: NoteViewModel | null = null;
+  tweet: RelatedContentViewModel<NoteViewModel> | null = null;
 
   profile: Account | null = null;
 
@@ -39,7 +39,7 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
     }));
   }
 
-  openTweetShareOptions(note: NoteViewModel, trigger: HTMLElement): void {
+  openTweetShareOptions(note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement): void {
     this.tweetPopoverHandler.handleShareOptions({ note, trigger });
   }
 
@@ -57,14 +57,14 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
       });
     }
 
-    if (relatedContent.author && this.profile) {
-      return relatedContent.author.pubkey === this.profile.pubkey;
+    if (relatedContent.viewModel.author && this.profile) {
+      return relatedContent.viewModel.author.pubkey === this.profile.pubkey;
     }
 
     return false;
   }
 
-  isLikedByYou(tweet: NoteViewModel): boolean {
+  isLikedByYou(tweet: RelatedContentViewModel<NoteViewModel>): boolean {
     const flatArraySize = 2;
     let reactions = Object
       .values(tweet.reactions);
@@ -80,11 +80,11 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
       .find(reaction => reaction.author.pubkey === this.profile?.pubkey);
   }
 
-  getRetweetedLength(tweet: NoteViewModel): number {
+  getRetweetedLength(tweet: RelatedContentViewModel<NoteViewModel>): number {
     return tweet.reposted?.size || 0;
   }
 
-  getTweetReactionsLength(tweet?: NoteViewModel | null): number {
+  getTweetReactionsLength(tweet?: RelatedContentViewModel<NoteViewModel> | null): number {
     return Object
       .values(tweet?.reactions || {})
       .map(set => set.size)

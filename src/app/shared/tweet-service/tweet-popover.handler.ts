@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NoteViewModel } from '@view-model/note.view-model';
+import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -7,15 +8,15 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class TweetContextMenuHandler {
 
-  readonly contextMenu = new BehaviorSubject<{ note: NoteViewModel, trigger: HTMLElement } | null>(null);
-  readonly shareMenu = new BehaviorSubject<{ note: NoteViewModel, trigger: HTMLElement } | null>(null);
+  readonly contextMenu = new BehaviorSubject<{ note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement } | null>(null);
+  readonly shareMenu = new BehaviorSubject<{ note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement } | null>(null);
 
-  handleContextMenu(agreggator: { note: NoteViewModel, trigger: HTMLElement }): void {
+  handleContextMenu(agreggator: { note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement }): void {
     this.contextMenu.next(agreggator);
     this.shareMenu.next(null);
   }
 
-  handleShareOptions(agreggator: { note: NoteViewModel, trigger: HTMLElement }): void {
+  handleShareOptions(agreggator: { note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement }): void {
     this.contextMenu.next(null);
     this.shareMenu.next(agreggator);
   }

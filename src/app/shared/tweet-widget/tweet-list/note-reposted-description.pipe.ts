@@ -56,7 +56,7 @@ export class NoteRepostedDescriptionPipe implements PipeTransform {
 
   private getAccounts(noteSet: NostrViewModelSet<NoteViewModel>, feedPublisherAccount: HexString | undefined, howManyShow: number): Array<AccountRenderable> {
     const accounts: Array<AccountRenderable> = [];
-    const noteList = [...noteSet].filter(note => note.author);
+    const noteList = [...noteSet].filter(note => note.viewModel.author).map(related => related.viewModel);
 
     if (feedPublisherAccount) {
       const feedPublisherReposted = this.findAuthor(noteList, feedPublisherAccount);

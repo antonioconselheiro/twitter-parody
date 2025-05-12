@@ -81,11 +81,12 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel, NoteViewMode
     }
 
     if (note.reposting) {
-      note.reposting.forEach(relatedNote => this.indexEvent(relatedNote));
+      note.reposting.forEach(repostedNote => {
+        const relatedReposted = this.indexEvent(repostedNote);
+        relatedReposted.repostedAuthors.push(note.author.pubkey);
+        relatedReposted.reposted.add(note.id);
+      });
     }
-
-    // FIXME: se um dia eu pretender indexar o root reply será neste método que farei
-    //  mas por hora não vejo aplicação prática se não relatorização
   }
 
   protected factoryLazyNote(idEvent: HexString): LazyNoteViewModel {
@@ -103,6 +104,9 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel, NoteViewMode
     };
   }
 
+  /**
+   * check if event was reacted by some pubkey
+   */
   hasReactedBy(idEvent: HexString, pubkey: HexString): boolean {
     const related = this.get(idEvent);
     if (related) {
@@ -112,6 +116,9 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel, NoteViewMode
     return false;
   }
 
+  /**
+   * check if event was reposted or mentioned by some pubkey
+   */
   hasRepostedBy(idEvent: HexString, pubkey: HexString): boolean {
     const related = this.get(idEvent);
     if (related) {
@@ -121,15 +128,9 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel, NoteViewMode
     return false;
   }
 
-  hasMentionedBy(idEvent: HexString, pubkey: HexString): boolean {
-    const related = this.get(idEvent);
-    if (related) {
-      return related.mentionedAuthors.indexOf(pubkey) !== this.indexNotFound;
-    }
-
-    return false;
-  }
-
+  /**
+   * check if event was replied by some pubkey
+   */
   hasRepliedBy(idEvent: HexString, pubkey: HexString): boolean {
     const related = this.get(idEvent);
     if (related) {

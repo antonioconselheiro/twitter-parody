@@ -1,7 +1,7 @@
 <ng-container *ngIf="tweet">
   <button type="button" class="svgButton borderless">
     <nostr-svg-render name="readTweet/reply"></nostr-svg-render>
-    <span class="amount">{{tweet.reply.replies.size || 0 | amount}}</span>
+    <span class="amount">{{tweet.repliedBy.size || 0 | amount}}</span>
   </button>
   <button [class.active]="isRetweetedByYou(tweet)" type="button" class="svgButton iconRetweet borderless">
     <nostr-svg-render class="iconRetweet" name="readTweet/retweet"></nostr-svg-render>
