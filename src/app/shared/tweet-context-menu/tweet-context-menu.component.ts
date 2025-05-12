@@ -4,6 +4,7 @@ import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.han
 import { NoteViewModel } from '@view-model/note.view-model';
 import { AbstractContextMenuComponent } from './abstract-context-menu.component';
 import { Observable } from 'rxjs';
+import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 
 @Component({
   selector: 'tw-tweet-context-menu',
@@ -15,7 +16,7 @@ export class TweetContextMenuComponent extends AbstractContextMenuComponent impl
   @ViewChild('tweetActions', { read: PopoverComponent })
   popover?: PopoverComponent;
 
-  protected handler!: Observable<{ note: NoteViewModel; trigger: HTMLElement; } | null>;
+  protected handler!: Observable<{ note: RelatedContentViewModel<NoteViewModel>; trigger: HTMLElement; } | null>;
 
   constructor(
     elementRef: ElementRef<HTMLElement>,

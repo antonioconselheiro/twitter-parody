@@ -45,12 +45,9 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
 
   isRetweetedByYou(relatedContent: RelatedContentViewModel<NoteViewModel>): boolean {
     if (relatedContent.viewModel.type === 'repost') {
-      //  TODOING: percebo aqui que para avançar, precisarei deixar indexado no serviço de perfil todos os eventos que este
-      //  usuário ativo acessou, de forma que seja dispensável uma lógica muito profunda para consultar isso, visto que será
-      //  uma consulta recorrente em diferentes implementações
-      return !![...relatedContent.reposted].find(reposted => {
-        if (reposted.author && this.profile) {
-          return reposted.author.pubkey === this.profile.pubkey;
+      return !![...relatedContent.repostedAuthors].find(reposterPubkey => {
+        if (reposterPubkey && this.profile) {
+          return reposterPubkey === this.profile.pubkey;
         }
 
         return false;
@@ -65,19 +62,13 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   }
 
   isLikedByYou(tweet: RelatedContentViewModel<NoteViewModel>): boolean {
-    const flatArraySize = 2;
-    let reactions = Object
-      .values(tweet.reactions);
-
-    if (tweet.reposted) {
-      reactions = Object
-        .values([...tweet.reposted || []][0]?.reactions || {});
+    const profile = this.profile;
+    if (profile) {
+      const find = tweet.reactionsAuthors.find(author => author === profile.pubkey);
+      return !!find;
     }
 
-    return !!reactions
-      .map(reactions => [...reactions])
-      .flat(flatArraySize)
-      .find(reaction => reaction.author.pubkey === this.profile?.pubkey);
+    return false;
   }
 
   getRetweetedLength(tweet: RelatedContentViewModel<NoteViewModel>): number {

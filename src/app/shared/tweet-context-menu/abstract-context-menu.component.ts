@@ -2,6 +2,7 @@ import { Directive, ElementRef, OnDestroy, OnInit } from "@angular/core";
 import { PopoverComponent } from "@shared/popover-widget/popover.component";
 import { TweetContextMenuHandler } from "@shared/tweet-service/tweet-popover.handler";
 import { NoteViewModel } from "@view-model/note.view-model";
+import { RelatedContentViewModel } from "@view-model/related-content.view-model";
 import { Observable, Subscription } from "rxjs";
 
 @Directive()
@@ -14,7 +15,7 @@ export abstract class AbstractContextMenuComponent implements OnInit, OnDestroy 
 
   abstract popover?: PopoverComponent;
   protected abstract handler: Observable<{
-    note: NoteViewModel;
+    note: RelatedContentViewModel<NoteViewModel>;
     trigger: HTMLElement;
   } | null>;
 
