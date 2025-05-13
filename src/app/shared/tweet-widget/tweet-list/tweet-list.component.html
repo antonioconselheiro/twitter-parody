@@ -24,7 +24,7 @@
               <time *ngIf="related.viewModel.createdAt" [attr.datetime]="related.viewModel.createdAt | datetimeIso">{{related.viewModel.createdAt | datetimeText}}</time>
             </address>
     
-            <button #popoverTrigger (click)="openTweetContextMenu(related.viewModel, popoverTrigger)" class="svgButton borderless">
+            <button #popoverTrigger (click)="openTweetContextMenu(related, popoverTrigger)" class="svgButton borderless">
               <nostr-svg-render name="ellipsis"></nostr-svg-render>
             </button>
           </header>

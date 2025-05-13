@@ -3,7 +3,6 @@ import { HexString, NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGuard, Profi
 import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
 import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { EagerNoteViewModel } from '@view-model/eager-note.view-model';
-import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
 import { Repost, ShortTextNote } from 'nostr-tools/kinds';
 import { SimpleTextMapper } from './simple-text.mapper';
@@ -72,7 +71,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
     const content = event.content || '';
     const relates: Array<HexString> = [];
     const contentEvent = this.extractNostrEvent(content);
-    const reposting = new NostrViewModelSet<EagerNoteViewModel>();
+    const reposting = new Array<EagerNoteViewModel>();
 
     if (contentEvent) {
       let retweeted: EagerNoteViewModel | null;
@@ -80,10 +79,10 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
       if (this.guard.isKind(contentEvent, Repost)) {
         //  there is no way to get infinity recursively, this was a stringified json
         retweeted = this.toViewModel(contentEvent);
-        reposting.add(retweeted);
+        reposting.push(retweeted);
       } else if (this.guard.isKind(contentEvent, ShortTextNote)) {
         retweeted = this.simpleTextMapper.toViewModel(contentEvent);
-        reposting.add(retweeted);
+        reposting.push(retweeted);
       }
 
     } else {
@@ -92,7 +91,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
         const retweeted = this.nostrCache.get(idEvent);
         if (retweeted) {
           const viewModel = this.toViewModel(retweeted);
-          reposting.add(viewModel);
+          reposting.push(viewModel);
         }
       }
     }

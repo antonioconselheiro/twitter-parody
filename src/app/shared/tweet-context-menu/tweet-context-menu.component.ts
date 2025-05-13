@@ -16,7 +16,10 @@ export class TweetContextMenuComponent extends AbstractContextMenuComponent impl
   @ViewChild('tweetActions', { read: PopoverComponent })
   popover?: PopoverComponent;
 
-  protected handler!: Observable<{ note: RelatedContentViewModel<NoteViewModel>; trigger: HTMLElement; } | null>;
+  protected handler!: Observable<{
+    note: RelatedContentViewModel<NoteViewModel>;
+    trigger: HTMLElement;
+  } | null>;
 
   constructor(
     elementRef: ElementRef<HTMLElement>,
@@ -32,42 +35,42 @@ export class TweetContextMenuComponent extends AbstractContextMenuComponent impl
     super.ngOnInit();
   }
 
-  delete(note: NoteViewModel): void {
+  delete(note: RelatedContentViewModel<NoteViewModel>): void {
     note;
     return;
   }
 
-  pin(note: NoteViewModel): void {
+  pin(note: RelatedContentViewModel<NoteViewModel>): void {
     note;
     return;
   }
 
-  toggleFollowUser(note: NoteViewModel): void {
+  toggleFollowUser(note: RelatedContentViewModel<NoteViewModel>): void {
     note;
     return;
   }
 
-  manageUserInLists(note: NoteViewModel): void {
+  manageUserInLists(note: RelatedContentViewModel<NoteViewModel>): void {
     note;
     return;
   }
 
-  silenceUser(note: NoteViewModel): void {
+  silenceUser(note: RelatedContentViewModel<NoteViewModel>): void {
     note;
     return;
   }
 
-  blockUser(note: NoteViewModel): void {
+  blockUser(note: RelatedContentViewModel<NoteViewModel>): void {
     note;
     return;
   }
 
-  reportUser(note: NoteViewModel): void {
+  reportUser(note: RelatedContentViewModel<NoteViewModel>): void {
     note;
     return;
   }
 
-  eventDetails(note: NoteViewModel): void {
+  eventDetails(note: RelatedContentViewModel<NoteViewModel>): void {
     note;
     return;
   }

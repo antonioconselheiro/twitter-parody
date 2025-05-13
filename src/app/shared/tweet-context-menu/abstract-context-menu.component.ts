@@ -11,7 +11,7 @@ export abstract class AbstractContextMenuComponent implements OnInit, OnDestroy 
   protected subscriptions = new Subscription();
 
   contextMenuPosition: number | null = null;
-  note: NoteViewModel | null = null;
+  note: RelatedContentViewModel<NoteViewModel> | null = null;
 
   abstract popover?: PopoverComponent;
   protected abstract handler: Observable<{
@@ -38,7 +38,7 @@ export abstract class AbstractContextMenuComponent implements OnInit, OnDestroy 
     ));
   }
 
-  private setPopoverState(aggregator: { note: NoteViewModel, trigger: HTMLElement } | null): void {
+  private setPopoverState(aggregator: { note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement } | null): void {
     if (!this.popover) {
       return;
     }

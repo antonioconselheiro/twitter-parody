@@ -37,8 +37,8 @@ export class TweetListComponent {
     return this.profileProxy.getAccount(pubkey);
   }
 
-  openTweetContextMenu(note: NoteViewModel, trigger: HTMLElement): void {
-    this.tweetPopoverHandler.handleContextMenu({ note, trigger });
+  openTweetContextMenu(tweet: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement): void {
+    this.tweetPopoverHandler.handleContextMenu({ note: tweet, trigger });
   }
 
   trackByTweetId(i: number, related: RelatedContentViewModel<NoteViewModel>): string {
