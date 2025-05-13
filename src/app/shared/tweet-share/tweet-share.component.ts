@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { NoteEvent } from '@shared/event/note.event';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { AbstractContextMenuComponent } from '@shared/tweet-context-menu/abstract-context-menu.component';
 import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
 import { NoteViewModel } from '@view-model/note.view-model';
-import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -16,7 +16,7 @@ export class TweetShareComponent extends AbstractContextMenuComponent implements
   @ViewChild('tweetShare', { read: PopoverComponent })
   popover?: PopoverComponent;
 
-  protected handler!: Observable<{ note: RelatedContentViewModel<NoteViewModel>; trigger: HTMLElement; } | null>;
+  protected handler!: Observable<NoteEvent | null>;
 
   constructor(
     elementRef: ElementRef<HTMLElement>,

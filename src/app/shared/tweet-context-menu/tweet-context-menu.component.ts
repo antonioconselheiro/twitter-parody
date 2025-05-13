@@ -1,10 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { NoteEvent } from '@shared/event/note.event';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
 import { NoteViewModel } from '@view-model/note.view-model';
-import { AbstractContextMenuComponent } from './abstract-context-menu.component';
-import { Observable } from 'rxjs';
 import { RelatedContentViewModel } from '@view-model/related-content.view-model';
+import { Observable } from 'rxjs';
+import { AbstractContextMenuComponent } from './abstract-context-menu.component';
 
 @Component({
   selector: 'tw-tweet-context-menu',
@@ -16,10 +17,7 @@ export class TweetContextMenuComponent extends AbstractContextMenuComponent impl
   @ViewChild('tweetActions', { read: PopoverComponent })
   popover?: PopoverComponent;
 
-  protected handler!: Observable<{
-    note: RelatedContentViewModel<NoteViewModel>;
-    trigger: HTMLElement;
-  } | null>;
+  protected handler!: Observable<NoteEvent | null>;
 
   constructor(
     elementRef: ElementRef<HTMLElement>,

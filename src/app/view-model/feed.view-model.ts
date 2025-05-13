@@ -83,8 +83,8 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel, NoteViewMode
     if (note.reposting) {
       note.reposting.forEach(repostedNote => {
         const relatedReposted = this.indexEvent(repostedNote);
-        relatedReposted.repostedAuthors.push(note.author.pubkey);
         relatedReposted.reposted.add(note.id);
+        relatedReposted.repostedAuthors.push(note.author.pubkey);
       });
     }
   }

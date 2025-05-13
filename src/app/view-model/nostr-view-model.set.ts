@@ -31,7 +31,7 @@ export class NostrViewModelSet<
    */
   protected iterable: Array<RelatedContentViewModel<MainViewModel>> = [];
 
-  constructor(values?: readonly IndexableViewModel[] | null) {
+  constructor(values?: readonly MainViewModel[] | null) {
     if (values) {
       values.forEach(value => this.add(value));
     }
@@ -55,13 +55,28 @@ export class NostrViewModelSet<
   /**
    * will include view model to be displayed 
    */
-  add(value: IndexableViewModel): this {
+  add(value: MainViewModel): this {
     this.indexEvent(value);
-    this.iterable = this.sortedView.map(id => this.indexed[id]).filter((viewing): viewing is RelatedContentViewModel<MainViewModel> => this.isMain(viewing.viewModel));
+    this.addOrderly(value);
+    this.syncIterable();
     return this;
   }
 
-  protected sortingRule(value: MainViewModel): void {
+  /**
+   * Must return negative if A comes before B,
+   * must return positive if B comes before A,
+   * and 0 if they are equal.
+   * 
+   * This implementation sort from the newer to the older.
+   *
+   * @param a 
+   * @param b 
+   */
+  protected sortBy(a: MainViewModel, b: MainViewModel): number {
+    return a.createdAt - b.createdAt;
+  }
+
+  protected addOrderly(value: MainViewModel): void {
     const indexNotFound = -1;
     const index = this.sortedView.findIndex(id => this.indexed[id].viewModel.createdAt < value.createdAt);
     if (index === indexNotFound) {
@@ -69,6 +84,13 @@ export class NostrViewModelSet<
     } else {
       this.sortedView.splice(index, 0, value.id);
     }
+  }
+
+  /**
+   * Syncronize sorted view into each collection addition or remotion to avoid need to sync to each loop
+   */
+  protected syncIterable(): void {
+    this.iterable = this.sortedView.map(id => this.indexed[id]).filter((viewing): viewing is RelatedContentViewModel<MainViewModel> => this.isMain(viewing.viewModel));
   }
 
   /**

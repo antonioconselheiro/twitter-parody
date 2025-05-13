@@ -2,6 +2,6 @@
   "workbench.colorTheme": "Lilac Cherry Blossom (Dark)",
   "editor.tabSize": 2,
   "prettier.singleQuote": true,
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
   "remote.forwardOnOpen": false
 }
