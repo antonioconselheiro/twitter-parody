@@ -44,6 +44,12 @@ export class NostrViewModelSet<
       .filter((e: NostrEvent | null): e is NostrEvent => !!e);
   }
 
+  toEventIdArray(): Array<HexString> {
+    return this
+      .toEventArray()
+      .map(event => event.id)
+  }
+
   toArray(): Array<RelatedContentViewModel<MainViewModel>> {
     return [...this];
   }
@@ -56,7 +62,7 @@ export class NostrViewModelSet<
    * will include view model to be displayed 
    */
   add(value: MainViewModel): this {
-    this.indexEvent(value);
+    this.index(value);
     this.addOrderly(value);
     this.syncIterable();
     return this;
@@ -120,7 +126,7 @@ export class NostrViewModelSet<
    * this method will index the event, or merge if it already
    * exists, and relate to other events in the feed
    */
-  indexEvent(value: IndexableViewModel): RelatedContentViewModel<IndexableViewModel> {
+  index(value: IndexableViewModel): RelatedContentViewModel<IndexableViewModel> {
     let relatedContent = this.indexed[value.id];
 
     if (relatedContent) {
@@ -136,7 +142,7 @@ export class NostrViewModelSet<
   }
 
   indexEvents(list: Array<IndexableViewModel>): void {
-    list.forEach(value => this.indexEvent(value));
+    list.forEach(value => this.index(value));
   }
 
   protected isMain(viewModel: MainViewModel | IndexableViewModel): viewModel is MainViewModel {

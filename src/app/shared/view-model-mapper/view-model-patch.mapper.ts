@@ -10,4 +10,9 @@ export interface ViewModelPatch<ViewModelData> {
    * add relationed data to view model
    */
   patchViewModel(viewModel: ViewModelData, events: Array<NostrEvent>): ViewModelData;
+
+  /**
+   * index relationed data to view model
+   */
+  indexViewModel(viewModel: ViewModelData, events: Array<NostrEvent>): ViewModelData;
 }

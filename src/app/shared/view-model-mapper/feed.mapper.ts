@@ -44,7 +44,7 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
 
   //  FIXME: split into minor methods
   // eslint-disable-next-line complexity
-  private toViewModelCollection(events: Array<NostrEvent>, feed = new FeedViewModel()): FeedViewModel {
+  private toViewModelCollection(events: Array<NostrEvent>, feed = new FeedViewModel(), indexOnly = false): FeedViewModel {
     for (const event of events) {
       let viewModel: EagerNoteViewModel | ReactionViewModel | null = null;
       if (this.guard.isKind(event, Repost) || this.guard.isSerializedNostrEvent(event.content)) {
@@ -58,7 +58,11 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
       }
 
       if (viewModel) {
-        feed.add(viewModel);
+        if (indexOnly) {
+          feed.index(viewModel);
+        } else {
+          feed.add(viewModel);
+        }
       }
     }
 
@@ -67,5 +71,9 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
 
   patchViewModel(feed: FeedViewModel, events: Array<NostrEvent>): FeedViewModel {
     return this.toViewModelCollection(events, feed);
+  }
+
+  indexViewModel(feed: FeedViewModel, events: Array<NostrEvent>): FeedViewModel {
+    return this.toViewModelCollection(events, feed, true);
   }
 }
