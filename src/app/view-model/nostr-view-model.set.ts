@@ -72,17 +72,36 @@ export class NostrViewModelSet<
    * @param a 
    * @param b 
    */
-  protected sortBy(a: MainViewModel, b: MainViewModel): number {
+  protected sortingRule(a: MainViewModel, b: MainViewModel): number {
     return a.createdAt - b.createdAt;
   }
 
   protected addOrderly(value: MainViewModel): void {
-    const indexNotFound = -1;
-    const index = this.sortedView.findIndex(id => this.indexed[id].viewModel.createdAt < value.createdAt);
-    if (index === indexNotFound) {
-      this.sortedView.push(value.id);
-    } else {
-      this.sortedView.splice(index, 0, value.id);
+    const index = this.findIndexForViewModel(value);
+    this.sortedView.splice(index, 0, value.id);
+  }
+
+  private findIndexForViewModel(viewModel: MainViewModel, sortedView?: string[]): number {
+    const middle = 2;
+    sortedView = sortedView || this.sortedView;
+    
+    if (sortedView.length === 0) {
+      return 0;
+    }
+
+    const middleIndex = Math.floor(sortedView.length / middle);
+    const middleViewModel = this.indexed[this.sortedView[middleIndex]];
+    const decision = this.sortingRule(middleViewModel.viewModel as MainViewModel, viewModel);
+
+    if (decision === 0) {
+      return middleIndex;
+    }
+
+    const listClone = new Array<string>().concat(sortedView);
+    if (decision > 0) { // positive
+      return this.findIndexForViewModel(viewModel, listClone.splice(0, middleIndex)) + middleIndex;
+    } else { // negative
+      return this.findIndexForViewModel(viewModel, listClone.splice(middleIndex));
     }
   }
 
