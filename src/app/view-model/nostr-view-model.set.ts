@@ -67,13 +67,13 @@ export class NostrViewModelSet<
    * must return positive if B comes before A,
    * and 0 if they are equal.
    * 
-   * This implementation sort from the newer to the older.
+   * This implementation sort from the newer first to the older last.
    *
    * @param a 
    * @param b 
    */
   protected sortingRule(a: MainViewModel, b: MainViewModel): number {
-    return a.createdAt - b.createdAt;
+    return b.createdAt - a.createdAt;
   }
 
   protected addOrderly(value: MainViewModel): void {
@@ -87,11 +87,15 @@ export class NostrViewModelSet<
     
     if (sortedView.length === 0) {
       return 0;
+    } else if (sortedView.length === 1) {
+      const onlyViewModel = this.indexed[sortedView[0]].viewModel as MainViewModel;
+      const result = this.sortingRule(viewModel, onlyViewModel);
+      return result <= 0 ? 0 : 1;
     }
 
-    const middleIndex = Math.floor(sortedView.length / middle);
+    const middleIndex = Math.ceil(sortedView.length / middle);
     const middleViewModel = this.indexed[this.sortedView[middleIndex]];
-    const decision = this.sortingRule(middleViewModel.viewModel as MainViewModel, viewModel);
+    const decision = this.sortingRule(viewModel, middleViewModel.viewModel as MainViewModel);
 
     if (decision === 0) {
       return middleIndex;

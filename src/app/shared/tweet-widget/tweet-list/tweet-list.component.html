@@ -3,7 +3,6 @@
 </div>
 
 <ng-container *ngFor="let related of feed; trackBy: trackByTweetId">
-  {{related|json}}
   <ng-container *ngIf="getAccount(related.viewModel.author?.pubkey) as account">
   <article [class.separator]="!related.reposting?.size" class="readTweet">
     <a *ngIf="related.reposted?.size" href="javascript:void(0)" class="retweetOrigin">

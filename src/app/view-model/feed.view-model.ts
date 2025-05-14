@@ -4,8 +4,8 @@ import { LazyNoteViewModel } from './lazy-note.view-model';
 import { NostrViewModelSet } from './nostr-view-model.set';
 import { NoteViewModel } from './note.view-model';
 import { ReactionViewModel } from './reaction.view-model';
-import { ZapViewModel } from './zap.view-model';
 import { RelatedContentViewModel } from './related-content.view-model';
+import { ZapViewModel } from './zap.view-model';
 
 export class FeedViewModel extends NostrViewModelSet<NoteViewModel, NoteViewModel | ReactionViewModel | ZapViewModel> {
 
