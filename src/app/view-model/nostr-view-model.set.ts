@@ -84,19 +84,20 @@ export class NostrViewModelSet<
 
   protected addOrderly(value: MainViewModel): void {
     const index = this.findIndexForViewModel(value);
+    //  insere id na lista no index correto
     this.sortedView.splice(index, 0, value.id);
   }
 
-  private findIndexForViewModel(viewModel: MainViewModel, sortedView?: string[]): number {
+  private findIndexForViewModel(viewModel: MainViewModel, sortedView?: Array<HexString>): number {
     const middle = 2;
     sortedView = sortedView || this.sortedView;
-    
+
     if (sortedView.length === 0) {
       return 0;
     } else if (sortedView.length === 1) {
       const onlyViewModel = this.indexed[sortedView[0]].viewModel as MainViewModel;
       const result = this.sortingRule(viewModel, onlyViewModel);
-      return result <= 0 ? 0 : 1;
+      return result < 0 ? 0 : 1;
     }
 
     const middleIndex = Math.ceil(sortedView.length / middle);
@@ -108,9 +109,9 @@ export class NostrViewModelSet<
     }
 
     const listClone = new Array<string>().concat(sortedView);
-    if (decision > 0) { // positive
+    if (decision > 0) { // positive, A goes after B
       return this.findIndexForViewModel(viewModel, listClone.splice(0, middleIndex)) + middleIndex;
-    } else { // negative
+    } else { // negative, A goes before B
       return this.findIndexForViewModel(viewModel, listClone.splice(middleIndex));
     }
   }

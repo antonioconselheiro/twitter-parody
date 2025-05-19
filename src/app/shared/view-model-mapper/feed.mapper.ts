@@ -58,7 +58,7 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
       }
 
       if (viewModel) {
-        if (indexOnly) {
+        if (indexOnly) { // will only index, do not add
           feed.index(viewModel);
         } else {
           feed.add(viewModel);
