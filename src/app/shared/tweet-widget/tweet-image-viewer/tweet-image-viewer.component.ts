@@ -25,7 +25,8 @@ export class TweetImageViewerComponent {
   showTweets = true;
 
   private getImageList(): string[] {
-    return this.root?.viewModel.media?.imageList || [];
+    // FIXME: return this.root?.viewModel.media?.imageList || [];
+    return [];
   }
 
   private getIndexFromImageList(activeImage: string): number {

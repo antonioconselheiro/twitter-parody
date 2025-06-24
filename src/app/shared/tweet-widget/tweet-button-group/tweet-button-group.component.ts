@@ -11,13 +11,13 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./tweet-button-group.component.scss']
 })
 export class TweetButtonGroupComponent implements OnInit, OnDestroy {
-
-  subscriptions = new Subscription();
-
+  
   @Input()
   tweet: RelatedContentViewModel<NoteViewModel> | null = null;
-
+  
   profile: Account | null = null;
+  
+  subscriptions = new Subscription();
 
   constructor(
     private profile$: CurrentAccountObservable,
@@ -44,7 +44,9 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   }
 
   isRetweetedByYou(relatedContent: RelatedContentViewModel<NoteViewModel>): boolean {
-    if (relatedContent.viewModel.type === 'repost') {
+    if (relatedContent.viewModel.type === 'repost' && this.profile) {
+      relatedContent.repostedAuthors.indexOf(this.profile.pubkey)
+
       return !![...relatedContent.repostedAuthors].find(reposterPubkey => {
         if (reposterPubkey && this.profile) {
           return reposterPubkey === this.profile.pubkey;

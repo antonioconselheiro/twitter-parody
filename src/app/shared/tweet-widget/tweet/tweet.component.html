@@ -1,30 +1,36 @@
 <ng-container *ngIf="tweet">
 
-  <ng-container *ngIf="isFull">
-    <span [innerHTML]="tweet.viewModel.content?.fullView | async"></span>
-  </ng-container>
-  <ng-container *ngIf="!isFull">
-    <span [innerHTML]="tweet.viewModel.content?.smallView | async"></span>
+  <ng-container *ngIf="tweet.viewModel.content">
+    <ng-container *ngFor="let segment of tweet.viewModel.content">
+      <span *ngIf="segment.type === 'text'">{{segment.value}}</span>
+
+      <a *ngIf="segment.type === 'link'">{{segment.value}}</a>
+
+      <a *ngIf="segment.type === 'relay'">{{segment.value}}</a>
+
+      <a *ngIf="segment.type === 'note'">{{segment.value}}</a>
+
+      <a *ngIf="segment.type === 'event'">{{segment.value}}</a>
+
+      <a *ngIf="segment.type === 'npub'">{{segment.value}}</a>
+
+      <a *ngIf="segment.type === 'nprofile'">{{segment.value}}</a>
+
+      <a *ngIf="segment.type === 'hashtag'">{{segment.value}}</a>
+
+      <video *ngIf="segment.type === 'video'" class="bordered" controls>
+        <source [src]="segment.value" type="video/mp4" />
+      </video>
+
+      <div
+        *ngIf="segment.type === 'image'"
+        class="img"
+        (click)="imgOpen.next({ note: tweet, img: segment.value })"
+        [style.background-image]="'url(' + (segment.value | proxifyImage) + ')'"
+      ></div>
+
+    </ng-container>
     <a role="button" class="rawLink" *ngIf="showMoreTextButton()">Show more</a>
   </ng-container>
 
-  <video class="bordered" *ngIf="tweet.viewModel.media?.videoList?.length" controls>
-    <source [src]="getVideoUrl(tweet)" type="video/mp4" />
-  </video>
-
-  <figure *ngIf="getImages().length && showImages">
-    <div
-      *ngFor="let touple of getImages()"
-      class="imgWrapper"
-    >
-    <ng-container *ngFor="let img of touple">
-      <div
-        *ngIf="img"
-        class="img"
-        (click)="imgOpen.next({ note: tweet, img })"
-        [style.background-image]="'url(' + (img | proxifyImage) + ')'"
-      ></div>
-    </ng-container>
-    </div>
-  </figure>
 </ng-container>

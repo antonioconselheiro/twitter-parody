@@ -2,39 +2,19 @@
   display: block;
 }
 
-figure {
-  height: 290px;
-  display: flex;
-  border-radius: 15px;
-  overflow: hidden;
-  border: 1px solid var(--separator);
-  width: calc(100% - 6px);
-  margin: 0 auto;
+.img {
+  flex: 1 1 0;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  border: 1px solid var(--base);
 
-  &.focus {
-    outline: 3px solid var(--primary);
+  &:not(:last-child) {
+    background-size: 100% auto;
   }
 
-  > .imgWrapper {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 0;
-
-    > .img {
-      flex: 1 1 0;
-      background-position: center;
-      background-size: contain;
-      background-repeat: no-repeat;
-      border: 1px solid var(--base);
-
-      &:not(:last-child) {
-        background-size: 100% auto;
-      }
-
-      + .img {
-        background-size: 100% auto;
-      }
-    }
+  + .img {
+    background-size: 100% auto;
   }
 }
 

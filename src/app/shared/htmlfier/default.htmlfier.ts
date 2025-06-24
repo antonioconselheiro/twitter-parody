@@ -1,36 +1,30 @@
 import { Injectable } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 import { NostrConverter, ProfileCache } from '@belomonte/nostr-ngx';
-import { UrlUtil } from '@shared/util/url.service';
-import { NoteHtmlfier } from './note-htmlfier.interface';
 import { NoteResourcesContext } from '@view-model/context/note-resources-context.interface';
-import { NPub } from 'nostr-tools/nip19';
 import { ParsedNostrContent } from '@view-model/context/parsed-nostr-content.interface';
+import { NPub } from 'nostr-tools/nip19';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DefaultHtmlfier implements NoteHtmlfier {
+export class DefaultHtmlfier {
 
   constructor(
-    private urlUtil: UrlUtil,
     private nostrConverter: NostrConverter,
     private profileCache: ProfileCache
   ) { }
 
   safify(content: string): SafeHtml {
     content = this.stripTags(content);
-    const { hyperlinks, imageList, videoList } = this.extractMedia(content);
+    const { hyperlinks } = this.extractMedia(content);
     content = this.htmlfyLink(content, hyperlinks);
     content = this.htmlfyHashtag(content);
     content = this.htmlfyMention(content);
     content = this.htmlfyParagraph(content);
-
-    const midiaMetadata = new Array<string>()
-      .concat(videoList)
-      .concat(imageList)
-      .filter((has): has is string => !!has);
-    content = this.stripMetadata(content, midiaMetadata);
+    content = this.htmlfyImage(content);
+    content = this.htmlfyVideo(content);
+    content = this.stripMetadata(content);
 
     return content;
   }
@@ -50,7 +44,7 @@ export class DefaultHtmlfier implements NoteHtmlfier {
    */
   extractMedia(content: string): NoteResourcesContext {
     const links = this.extractUrls(content);
-    const isImageRegex = /\.(png|jpg|jpeg|gif|svg|webp)$|^data:/;
+    const isImageRegex = /|^data:/;
     const isVideoRegex = /\.(mp4)$/;
 
     const imageList = new Array<string>();
@@ -120,6 +114,24 @@ export class DefaultHtmlfier implements NoteHtmlfier {
     return matriz;
   }
 
+  private htmlfyImage(content: string): string {
+    content = content
+      .replace(
+        /(\bhttps:\/\/[^"\s]+\.(png|jpg|jpeg|gif|svg|webp)\b)/g,
+        `<div class="img" style="background-image:url('$1')"></div>`
+      );
+      console.info(`<div class="img" style="background-image:url('$1')"></div>`, content);
+      return content;
+  }
+
+  private htmlfyVideo(content: string): string {
+    return content
+      .replace(
+        /(\bhttps:\/\/[^"\s]+\.(mp4|avi)\b)/g,
+        `<video class="bordered" controls><source src="$1" type="video/mp4" /></video>`
+      );
+  }
+
   private htmlfyLink(content: string, links: string[]): string {
     links.forEach(link => {
       const linkRegex = this.regexFromLink(link);
@@ -175,8 +187,8 @@ export class DefaultHtmlfier implements NoteHtmlfier {
       .join('');
   }
 
-  private stripMetadata(content: string, midiaMetadata: string[]): string {
-    midiaMetadata.forEach(img => content = content.replace(this.urlUtil.regexFromLink(img), ''));
+  private stripMetadata(content: string): string {
+    // midiaMetadata.forEach(img => content = content.replace(this.urlUtil.regexFromLink(img), ''));
     const nostrMetadataMatcher = /nostr:[^ ]+/g;
     content = content.replace(nostrMetadataMatcher, '');
     return content;

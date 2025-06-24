@@ -1,10 +1,9 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HexString, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
-import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
-import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { EagerNoteViewModel } from '@view-model/eager-note.view-model';
 import { SimpleTextNoteViewModel } from '@view-model/simple-text-note.view-model';
 import { ShortTextNote } from 'nostr-tools/kinds';
+import { NoteContentMapper } from './note-content.mapper';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { TagHelper } from './tag.helper';
 
@@ -14,7 +13,7 @@ import { TagHelper } from './tag.helper';
 export class SimpleTextMapper implements SingleViewModelMapper<EagerNoteViewModel> {
 
   constructor(
-    @Inject(HTML_PARSER_TOKEN) private htmlfier: NoteHtmlfier,
+    private noteContentMapper: NoteContentMapper,
     private profileProxy: ProfileProxy,
     private tagHelper: TagHelper,
     private guard: NostrGuard
@@ -37,8 +36,7 @@ export class SimpleTextMapper implements SingleViewModelMapper<EagerNoteViewMode
       author,
       event,
       createdAt: event.created_at,
-      content: this.htmlfier.parse(event.content),
-      media: this.htmlfier.extractMedia(event.content),
+      content: this.noteContentMapper.toViewModel(event.content),
       //  TODO: ideally I should pass relay address from where this event come
       origin: [],
       relates

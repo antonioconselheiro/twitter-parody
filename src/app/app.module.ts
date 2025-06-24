@@ -22,6 +22,7 @@ import { TimelineModule } from './pages/timeline/timeline.module';
 import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.module';
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
 import { TweetShareModule } from '@shared/tweet-share/tweet-share.module';
+import { ViewModelMapperModule } from '@shared/view-model-mapper/view-model-mapper.module';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { TweetShareModule } from '@shared/tweet-share/tweet-share.module';
     UtilModule,
     ProfileModule,
     NoteHtmlfierModule,
+    ViewModelMapperModule,
 
     //  context menu widgets
     TweetShareModule,

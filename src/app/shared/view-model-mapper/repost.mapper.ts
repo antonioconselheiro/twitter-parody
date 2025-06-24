@@ -1,10 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
 import { HexString, NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
-import { HTML_PARSER_TOKEN } from '@shared/htmlfier/html-parser.token';
-import { NoteHtmlfier } from '@shared/htmlfier/note-htmlfier.interface';
 import { EagerNoteViewModel } from '@view-model/eager-note.view-model';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
 import { Repost, ShortTextNote } from 'nostr-tools/kinds';
+import { NoteContentMapper } from './note-content.mapper';
 import { SimpleTextMapper } from './simple-text.mapper';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { TagHelper } from './tag.helper';
@@ -61,7 +60,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
     private tagHelper: TagHelper,
     private profileProxy: ProfileProxy,
     private simpleTextMapper: SimpleTextMapper,
-    @Inject(HTML_PARSER_TOKEN) private htmlfier: NoteHtmlfier,
+    private noteContentMapper: NoteContentMapper,
     @Inject(NOSTR_CACHE_TOKEN) private nostrCache: NostrCache
   ) { }
 
@@ -104,8 +103,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
       type: 'repost',
       id: event.id,
       createdAt: event.created_at,
-      content: this.htmlfier.parse(event.content),
-      media: this.htmlfier.extractMedia(event.content),
+      content: this.noteContentMapper.toViewModel(event.content),
       reposting,
       //  TODO: ideally I should pass relay address from where this event come
       origin: [],

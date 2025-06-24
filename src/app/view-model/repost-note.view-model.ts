@@ -1,4 +1,4 @@
-import { ParsedNostrContent } from './context/parsed-nostr-content.interface';
+import { NoteContentViewModel } from './context/note-content.view-model';
 import { NoteViewModel } from './note.view-model';
 import { SimpleTextNoteViewModel } from './simple-text-note.view-model';
 
@@ -14,7 +14,7 @@ export interface RepostNoteViewModel extends Omit<SimpleTextNoteViewModel, 'cont
    * @optional
    * Event content, with the raw value and the html parsed value
    */
-  content?: ParsedNostrContent;
+  content?: NoteContentViewModel;
 
   /**
    * The reposted event.

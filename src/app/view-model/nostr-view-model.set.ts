@@ -89,12 +89,12 @@ export class NostrViewModelSet<
   }
 
   private findIndexForViewModel(viewModel: MainViewModel, sortedView?: Array<HexString>): number {
-    const middle = 2;
+    const alone = 1, middle = 2;
     sortedView = sortedView || this.sortedView;
 
     if (sortedView.length === 0) {
-      return 0;
-    } else if (sortedView.length === 1) {
+      return sortedView.length;
+    } else if (sortedView.length === alone) {
       const onlyViewModel = this.indexed[sortedView[0]].viewModel as MainViewModel;
       const result = this.sortingRule(viewModel, onlyViewModel);
       return result < 0 ? 0 : 1;
@@ -104,6 +104,7 @@ export class NostrViewModelSet<
     const middleViewModel = this.indexed[this.sortedView[middleIndex]];
     const decision = this.sortingRule(viewModel, middleViewModel.viewModel as MainViewModel);
 
+    //  just fitted, neither negative than positive
     if (decision === 0) {
       return middleIndex;
     }
