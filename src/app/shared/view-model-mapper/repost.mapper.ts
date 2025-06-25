@@ -67,9 +67,9 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
   //  FIXME: refactor this into minor methods
   // eslint-disable-next-line complexity
   toViewModel(event: NostrEvent): RepostNoteViewModel {
-    const content = event.content || '';
+    const eventContent = event.content || '';
     const relates: Array<HexString> = [];
-    const contentEvent = this.extractNostrEvent(content);
+    const contentEvent = this.extractNostrEvent(eventContent);
     const reposting = new Array<EagerNoteViewModel>();
 
     if (contentEvent) {
@@ -97,17 +97,27 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
 
     this.tagHelper.getRelatedEvents(event).forEach(([related]) => relates.push(related));
     const author = this.profileProxy.getRawAccount(event.pubkey);
+    const content = this.noteContentMapper.toViewModel(event.content);
+    const images = content
+      .filter(segment => segment.type === 'image')
+      .map(segment => segment.value);
+
+    const videos = content
+      .filter(segment => segment.type === 'video')
+      .map(segment => segment.value);
 
     const note: RepostNoteViewModel = {
-      author,
-      type: 'repost',
       id: event.id,
+      type: 'repost',
+      author,
+      event,
       createdAt: event.created_at,
-      content: this.noteContentMapper.toViewModel(event.content),
+      content,
+      images,
+      videos,
       reposting,
       //  TODO: ideally I should pass relay address from where this event come
       origin: [],
-      event,
       relates
     };
 

@@ -18,9 +18,14 @@ export interface LazyNoteViewModel extends NostrEventIdViewModel {
   content: undefined;
 
   /**
-   * Hyperlinks and multimidia related to the note.
+   * Image urls if has any
    */
-  media: undefined;
+  images: string[];
+
+    /**
+   * Video urls if has any
+   */
+  videos: string[];
 
   /**
    * Note attached location if g tag is included.

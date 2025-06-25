@@ -17,6 +17,16 @@ export interface SimpleTextNoteViewModel extends NostrEventViewModel {
   content: NoteContentViewModel;
 
   /**
+   * Image urls if has any
+   */
+  images: string[];
+
+  /**
+   * Video urls if has any
+   */
+  videos: string[];
+
+  /**
    * Note attached location if g tag is included.
    */
   location?: Geohash.Point;

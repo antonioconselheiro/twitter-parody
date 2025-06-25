@@ -10,8 +10,8 @@ export class ProxifyImagePipe implements PipeTransform {
   private readonly safeOrigins = [
     'https://imgur.com/',
     'https://i.imgur.com/',
-    'https://imgproxy.iris.to/',
-    'https://m.primal.net/'
+    'https://m.primal.net/',
+    'https://nostr.build/'
   ];
 
   constructor(
@@ -21,6 +21,7 @@ export class ProxifyImagePipe implements PipeTransform {
   transform(src: string): SafeHtml {
     const isSecureOrigin = this.urlUtil.regexFromLinks(this.safeOrigins);
     if (!isSecureOrigin.test(src)) {
+      //  FIXME: tornar proxy configurável pelo usuário
       return `https://imgproxy.iris.to/insecure/plain/${src}`;
     }
 
