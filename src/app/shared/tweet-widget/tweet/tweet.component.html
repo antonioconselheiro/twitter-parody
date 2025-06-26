@@ -1,9 +1,9 @@
 <ng-container *ngIf="tweet">
 
   @if (tweet.viewModel.content) {
-    
-    @if (isFull) {
-      @for (segment of tweet.viewModel.content; track $index) {
+    @let maxLength = defineSummaryLength(tweet.viewModel.content);
+    @for (segment of tweet.viewModel.content; track $index) {
+      @if (shouldShowSegment($index, maxLength)) {
         @switch(segment.type) {
           @case('text') {
             {{segment.value}}
@@ -52,8 +52,9 @@
           }
         }
       }
-    } @else {
-      {{resumedTweetText(tweet)}}
+    }
+
+    @if (!isFull) {
       @if (tweet.viewModel.videos.length) {
         <video class="bordered" controls>
           <source [src]="tweet.viewModel.videos[0]" [type]="getMimeType(tweet.viewModel.videos[0])" />
@@ -79,7 +80,7 @@
 
     <a role="button" class="rawLink" *ngIf="displayShowMoreButton()">Show more</a>
   } @else {
-    
+    <!-- representar evento de lazy load -->
   }
 
 </ng-container>

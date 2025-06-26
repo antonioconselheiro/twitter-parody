@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 import { TweetImageViewing } from '../tweet-img-viewing.interface';
+import { NoteContentViewModel } from '@view-model/context/note-content.view-model';
 
 @Component({
   selector: 'tw-tweet',
@@ -18,10 +19,6 @@ export class TweetComponent {
 
   @Output()
   imgOpen = new EventEmitter<TweetImageViewing | null>();
-
-  resumedTweetText(tweet: RelatedContentViewModel<NoteViewModel>): string {
-
-  }
 
   getMimeType(url: string): string {
     if (/\.mp4$/.test(url)) {
@@ -61,6 +58,23 @@ export class TweetComponent {
 
   getVideoUrl(tweet: RelatedContentViewModel<NoteViewModel> | null): string {
     return tweet && tweet.viewModel.videos[0] || '';
+  }
+
+  shouldShowSegment(index: number, maxLength: number): boolean {
+    return !this.isFull && index < maxLength;
+  }
+
+  defineSummaryLength(content: NoteContentViewModel): number {
+    let summaryLength = 0;
+    while (['video', 'image'].includes(content[summaryLength].type)) {
+      summaryLength++;
+    }
+
+    while (!['video', 'image'].includes(content[summaryLength].type)) {
+      summaryLength++;
+    }
+
+    return summaryLength;
   }
 
 }
