@@ -25,7 +25,7 @@ figure {
   overflow: hidden;
   border: 1px solid var(--separator);
   width: calc(100% - 6px);
-  margin: 0 auto;
+  margin: 1rem auto 0;
 
   &.focus {
     outline: 3px solid var(--primary);
@@ -60,4 +60,8 @@ video {
   display: block;
   width: 99%;
   border-radius: 15px;
+}
+
+.showMore {
+  margin-top: 1rem;
 }

@@ -96,8 +96,9 @@ export class FeedViewModel extends NostrViewModelSet<NoteViewModel, NoteViewMode
       author: null,
       event: null,
       origin: [],
+      images: [],
+      videos: [],
       content: undefined,
-      media: undefined,
       location: undefined,
       relates: [],
       createdAt: -Infinity
