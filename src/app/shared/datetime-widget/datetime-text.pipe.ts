@@ -16,16 +16,11 @@ export class DatetimeTextPipe implements PipeTransform {
   private readonly hoursFormat = this.minutesFormat * this.hoursInDay;
 
   transform(value: number): string {
-    const milliseconds = 1000;
-    const valueInMilliseconds = (value * milliseconds)
+    const valueInMilliseconds = (value * this.millisecondsInSecond)
     const currentTime = new Date();
     const difference = currentTime.getTime() - valueInMilliseconds;
 
-    if (difference < this.secondsFormat) {
-      return this.fewSecondsAgo(valueInMilliseconds);
-    } else if (difference < this.minutesFormat) {
-      return this.fewMinutesAgo(valueInMilliseconds);
-    } else if (difference < this.hoursFormat) {
+    if (difference < this.hoursFormat) {
       return this.fewHoursAgo(valueInMilliseconds);
     } else {
       const valueDate = new Date(valueInMilliseconds);
@@ -37,16 +32,8 @@ export class DatetimeTextPipe implements PipeTransform {
     }
   }
 
-  private fewSecondsAgo(timestamp: number): string {
-    return moment(timestamp).startOf('minutes').fromNow();
-  }
-
-  private fewMinutesAgo(timestamp: number): string {
-    return moment(timestamp).startOf('hour').fromNow();
-  }
-
   private fewHoursAgo(timestamp: number): string {
-    return moment(timestamp).startOf('day').fromNow();
+    return moment(timestamp).fromNow();
   }
 
   private daysAgo(timestamp: number): string {
@@ -56,5 +43,4 @@ export class DatetimeTextPipe implements PipeTransform {
   private yearsAgo(timestamp: number): string {
     return moment(timestamp).format('ll');
   }
-
 }
