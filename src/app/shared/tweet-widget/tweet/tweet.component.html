@@ -5,10 +5,28 @@
     {{account.displayName}} has retweeted
   </a>
 
-  <div class="tweetStructure">
-    <nostr-profile-picture [account]="account" [verticalConnected]="!!tweet.reposting?.size"></nostr-profile-picture>
+  <div [class.small]="!isFull" class="tweetStructure">
+    <header class="fullHeader">
+      <nostr-profile-picture [account]="account"></nostr-profile-picture>
+
+      @if (isFull) {
+        <address *ngIf="account" class="author">
+          <span class="userName">
+            {{account.displayName}}
+            <span *ngIf="account.nip05?.valid" class="userVerified"></span>
+          </span>
+          <span *ngIf="account.nip05?.address" class="userNip5">
+            {{account.nip05?.address}}
+          </span>
+        </address>
+  
+        <button #popoverTrigger (click)="openTweetContextMenu(tweet, popoverTrigger)" class="svgButton borderless">
+          <nostr-svg-render name="ellipsis"></nostr-svg-render>
+        </button>
+      }
+    </header>
     <div class="tweetMetadata">
-      <header>
+      <header class="smallHeader" *ngIf="!isFull">
         <address *ngIf="account" class="author userInfo">
           <span class="userName">
             {{account.displayName}}
@@ -17,7 +35,7 @@
           <span *ngIf="account.nip05?.address" class="userNip5">
             {{account.nip05?.address}}
           </span>
-          <time *ngIf="!isFull && tweet.viewModel.createdAt" [attr.datetime]="tweet.viewModel.createdAt | datetimeIso">{{tweet.viewModel.createdAt | datetimeSmall}}</time>
+          <time *ngIf="tweet.viewModel.createdAt" [attr.datetime]="tweet.viewModel.createdAt | datetimeIso">{{tweet.viewModel.createdAt | datetimeSmall}}</time>
         </address>
 
         <button #popoverTrigger (click)="openTweetContextMenu(tweet, popoverTrigger)" class="svgButton borderless">
@@ -27,6 +45,7 @@
 
       <tw-tweet-content
         class="tweetContent"
+        [class.isFull]="isFull"
         [tweet]="tweet"
         [isFull]="isFull"
         (imgOpen)="onImgOpen($event)"

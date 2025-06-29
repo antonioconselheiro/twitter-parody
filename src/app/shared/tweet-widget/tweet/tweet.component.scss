@@ -34,7 +34,25 @@
   }
 
   .tweetStructure {
-    display: flex;
+    &.small {
+      display: flex;
+    }
+
+    header.fullHeader {
+      display: flex;
+      align-items: center;
+
+      > nostr-profile-picture {
+        flex: 0 0 40px;
+        align-self: flex-start;
+      }
+
+      address.author {
+        flex: 1 1 0px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
 
     .tweetMetadata {
       display: flex;
@@ -42,12 +60,16 @@
       overflow: hidden;
       width: 100%;
 
+      .isFull {
+        margin-left: 1rem
+      }
+
       .retweetContent {
         border-radius: 15px;
         margin-top: .75rem;
       }
 
-      header {
+      header.smallHeader {
         display: flex;
         position: relative;
         justify-content: space-between;
@@ -69,8 +91,6 @@
           }
 
           time {
-            color: var(--lowestContrast);
-
             &::before {
               content: '·';
               margin-left: .25rem;
@@ -93,4 +113,8 @@
       }
     }
   }
+}
+
+time {
+  color: var(--lowestContrast);
 }
