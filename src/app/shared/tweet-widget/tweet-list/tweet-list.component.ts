@@ -3,6 +3,8 @@ import { FeedViewModel } from '@view-model/feed.view-model';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 import { TweetImageViewing } from '../tweet-img-viewing.interface';
+import { Account, HexString, ProfileProxy } from '@belomonte/nostr-ngx';
+import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
 
 @Component({
   selector: 'tw-tweet-list',
@@ -22,8 +24,25 @@ export class TweetListComponent {
 
   viewing: TweetImageViewing | null = null;
 
+  constructor(
+    private profileProxy: ProfileProxy,
+    private tweetPopoverHandler: TweetContextMenuHandler
+  ) {}
+
   trackByTweetId(i: number, related: RelatedContentViewModel<NoteViewModel>): string {
     return related.viewModel.id;
+  }
+
+  openTweetContextMenu(tweet: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement): void {
+    this.tweetPopoverHandler.handleContextMenu({ note: tweet, trigger });
+  }
+
+  getAccount(pubkey: HexString | undefined): Account | null {
+    if (!pubkey) {
+      return null;
+    }
+
+    return this.profileProxy.getAccount(pubkey);
   }
 
   onImgOpen(viewing: TweetImageViewing | null): void {

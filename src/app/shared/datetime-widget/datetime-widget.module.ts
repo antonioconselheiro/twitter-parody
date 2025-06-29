@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatetimeIsoPipe } from './datetime-iso.pipe';
+import { DatetimeSmallPipe } from './datetime-small.pipe';
 import { DatetimeTextPipe } from './datetime-text.pipe';
 
 @NgModule({
   declarations: [
     DatetimeIsoPipe,
+    DatetimeSmallPipe,
     DatetimeTextPipe
   ],
   imports: [
@@ -13,6 +15,7 @@ import { DatetimeTextPipe } from './datetime-text.pipe';
   ],
   exports: [
     DatetimeIsoPipe,
+    DatetimeSmallPipe,
     DatetimeTextPipe
   ]
 })

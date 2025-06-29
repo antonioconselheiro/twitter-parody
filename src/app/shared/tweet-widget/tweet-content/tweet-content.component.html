@@ -80,7 +80,9 @@
           </div>
         </figure>
       }
-    } 
+    }
+
+    <time *ngIf="isFull && tweet.viewModel.createdAt" [attr.datetime]="tweet.viewModel.createdAt | datetimeIso">{{tweet.viewModel.createdAt | datetimeText}}</time>
 
     <a role="button" class="rawLink showMore" *ngIf="displayShowMoreButton()">Show more</a>
   } @else {

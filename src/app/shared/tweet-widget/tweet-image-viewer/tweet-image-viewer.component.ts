@@ -11,7 +11,7 @@ import { RelatedContentViewModel } from '@view-model/related-content.view-model'
 export class TweetImageViewerComponent {
 
   @Input()
-  note: RelatedContentViewModel<NoteViewModel> | null = null;
+  tweet: RelatedContentViewModel<NoteViewModel> | null = null;
 
   @Input()
   activeImage = '';

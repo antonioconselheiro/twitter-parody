@@ -12,11 +12,14 @@ import { TweetImageViewing } from '../tweet-img-viewing.interface';
 })
 export class TweetComponent {
 
+  @Output()
+  imgOpen = new EventEmitter<TweetImageViewing | null>();
+  
   @Input()
   tweet!: RelatedContentViewModel<NoteViewModel>;
 
-  @Output()
-  imgOpen = new EventEmitter<TweetImageViewing | null>();
+  @Input()
+  isFull = false;
 
   constructor(
     private profileProxy: ProfileProxy,

@@ -1,7 +1,7 @@
 @let account = getAccount(tweet.viewModel.author?.pubkey);
 
 <article class="readTweet separator">
-  <a *ngIf="tweet.reposted?.size && account" href="javascript:void(0)" class="retweetOrigin">
+  <a *ngIf="!isFull && tweet.reposted?.size && account" href="javascript:void(0)" class="retweetOrigin">
     {{account.displayName}} has retweeted
   </a>
 
@@ -17,7 +17,7 @@
           <span *ngIf="account.nip05?.address" class="userNip5">
             {{account.nip05?.address}}
           </span>
-          <time *ngIf="tweet.viewModel.createdAt" [attr.datetime]="tweet.viewModel.createdAt | datetimeIso">{{tweet.viewModel.createdAt | datetimeText}}</time>
+          <time *ngIf="!isFull && tweet.viewModel.createdAt" [attr.datetime]="tweet.viewModel.createdAt | datetimeIso">{{tweet.viewModel.createdAt | datetimeSmall}}</time>
         </address>
 
         <button #popoverTrigger (click)="openTweetContextMenu(tweet, popoverTrigger)" class="svgButton borderless">
@@ -27,11 +27,12 @@
 
       <tw-tweet-content
         class="tweetContent"
-        (imgOpen)="onImgOpen($event)"
         [tweet]="tweet"
+        [isFull]="isFull"
+        (imgOpen)="onImgOpen($event)"
       ></tw-tweet-content>
 
-      <tw-tweet-button-group *ngIf="!tweet.reposting?.size" [tweet]="tweet"></tw-tweet-button-group>
+      <tw-tweet-button-group [tweet]="tweet"></tw-tweet-button-group>
     </div>
   </div>
 </article>
