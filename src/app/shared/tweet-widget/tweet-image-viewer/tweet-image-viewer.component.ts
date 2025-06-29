@@ -11,16 +11,15 @@ import { RelatedContentViewModel } from '@view-model/related-content.view-model'
 export class TweetImageViewerComponent {
 
   @Input()
-  root: RelatedContentViewModel<NoteViewModel> | null = null;
-
-  @Input()
-  feed: FeedViewModel | null = null;
+  note: RelatedContentViewModel<NoteViewModel> | null = null;
 
   @Input()
   activeImage = '';
 
   @Output()
   closeEvent = new EventEmitter<void>();
+
+  feed: FeedViewModel | null = null;
 
   showTweets = true;
 

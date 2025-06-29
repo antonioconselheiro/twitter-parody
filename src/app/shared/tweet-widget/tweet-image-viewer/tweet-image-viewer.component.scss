@@ -47,23 +47,17 @@
         background-color: var(--highContrast);
       }
     }
-
-    &.iconClose {
-      top: 0;
+  
+    &.dockedLeft {
       left: 0;
     }
   
-    &.iconLeft {
-      left: 0;
-    }
-  
-    &.iconRight {
+    &.dockedRight {
       right: 0;
     }
 
-    &.tweetsController {
+    &.dockedTop {
       top: 0;
-      right: 0;
     }
   }
 

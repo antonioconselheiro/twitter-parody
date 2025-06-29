@@ -1,0 +1,91 @@
+<ng-container *ngIf="tweet">
+
+  @if (tweet.viewModel.content) {
+    @let maxLength = defineSummaryLength(tweet.viewModel.content);
+    @for (segment of tweet.viewModel.content; track $index) {
+      @if (shouldShowSegment($index, maxLength)) {
+        @switch(segment.type) {
+          @case('text') {
+            {{segment.value}}
+          }
+  
+          @case('link') {
+            <a>{{segment.value}}</a>
+          }
+  
+          @case('relay') {
+            <a>{{segment.value}}</a>
+          }
+  
+          @case('note') {
+            <a>{{segment.value}}</a>
+          }
+  
+          @case('event') {
+            <a>{{segment.value}}</a>
+          }
+  
+          @case('npub') {
+            <a>{{segment.value}}</a>
+          }
+  
+          @case('nprofile') {
+            <a>{{segment.value}}</a>
+          }
+  
+          @case('hashtag') {
+            <a>{{segment.value}}</a>
+          }
+  
+          @case('video') {
+            <video class="bordered" controls>
+              <source [src]="segment.value" [type]="getMimeType(segment.value)" />
+            </video>
+          }
+  
+          @case('image') {
+            <figure>
+              <div class="imgWrapper">
+                <div
+                  class="img"
+                  (click)="imgOpen.next({ note: tweet, img: segment.value })"
+                  [style.background-image]="'url(' + (segment.value | proxifyImage) + ')'"
+                ></div>
+              </div>
+            </figure>
+          }
+        }
+      }
+    }
+
+    @if (!isFull) {
+      @if (tweet.viewModel.videos.length) {
+        <video class="bordered" controls>
+          <source [src]="tweet.viewModel.videos[0]" [type]="getMimeType(tweet.viewModel.videos[0])" />
+        </video>
+      } @else if (tweet.viewModel.images.length) {
+        <figure *ngIf="getImages().length">
+          <div
+            *ngFor="let touple of getImages()"
+            class="imgWrapper"
+          >
+            <ng-container *ngFor="let img of touple">
+              <div
+                *ngIf="img"
+                class="img"
+                (click)="imgOpen.next({ note: tweet, img })"
+                [style.background-image]="'url(' + (img | proxifyImage) + ')'"
+              ></div>
+            </ng-container>
+          </div>
+        </figure>
+      }
+    } 
+
+    <a role="button" class="rawLink showMore" *ngIf="displayShowMoreButton()">Show more</a>
+  } @else {
+    <span>event not loaded</span>
+    <!-- representar evento de lazy load -->
+  }
+
+</ng-container>

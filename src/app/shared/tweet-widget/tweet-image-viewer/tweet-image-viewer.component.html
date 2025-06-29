@@ -1,13 +1,13 @@
 <div [class.full]="!showTweets" class="mainImage">
-  <button (click)="close()" title="close" type="button" class="svgButton">
+  <button (click)="close()" title="close" type="button" class="svgButton dockedTop dockedLeft">
     <nostr-svg-render name="close"></nostr-svg-render>
   </button>
 
-  <button *ngIf="hasPreviousImage()" (click)="showPreviousImage()" title="show previous image" type="button" class="svgButton">
+  <button *ngIf="hasPreviousImage()" (click)="showPreviousImage()" title="show previous image" type="button" class="svgButton dockedLeft">
     <nostr-svg-render name="left"></nostr-svg-render>
   </button>
 
-  <button *ngIf="hasNextImage()" (click)="showNextImage()" title="show next image" type="button" class="svgButton">
+  <button *ngIf="hasNextImage()" (click)="showNextImage()" title="show next image" type="button" class="svgButton dockedRight">
     <nostr-svg-render name="right"></nostr-svg-render>
   </button>
 
@@ -15,7 +15,7 @@
     type="button"
     [attr.title]="showTweets ? 'hide tweets' : 'show tweets'"
     (click)="showTweets = !showTweets"
-    class="tweetsController svgButton"
+    class="svgButton dockedTop dockedRight"
   >
     <nostr-svg-render [name]="showTweets ? 'arrow/doubleRight' : 'arrow/doubleLeft'"></nostr-svg-render>
   </button>
@@ -23,5 +23,5 @@
   <img [src]="activeImage" />
 </div>
 <div [class.hide]="!showTweets" class="tweetSidebar">
-  <tw-tweet-list [root]="root" [feed]="feed"></tw-tweet-list>
+  <!-- <tw-tweet-list [root]="note" [feed]="feed"></tw-tweet-list> -->
 </div>

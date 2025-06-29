@@ -1,87 +1,37 @@
-<ng-container *ngIf="tweet">
+{{let account = getAccount(note.viewModel.author?.pubkey)}}
 
-  @if (tweet.viewModel.content) {
-    @let maxLength = defineSummaryLength(tweet.viewModel.content);
-    @for (segment of tweet.viewModel.content; track $index) {
-      @if (shouldShowSegment($index, maxLength)) {
-        @switch(segment.type) {
-          @case('text') {
-            {{segment.value}}
-          }
-  
-          @case('link') {
-            <a>{{segment.value}}</a>
-          }
-  
-          @case('relay') {
-            <a>{{segment.value}}</a>
-          }
-  
-          @case('note') {
-            <a>{{segment.value}}</a>
-          }
-  
-          @case('event') {
-            <a>{{segment.value}}</a>
-          }
-  
-          @case('npub') {
-            <a>{{segment.value}}</a>
-          }
-  
-          @case('nprofile') {
-            <a>{{segment.value}}</a>
-          }
-  
-          @case('hashtag') {
-            <a>{{segment.value}}</a>
-          }
-  
-          @case('video') {
-            <video class="bordered" controls>
-              <source [src]="segment.value" [type]="getMimeType(segment.value)" />
-            </video>
-          }
-  
-          @case('image') {
-            <div
-              class="img"
-              (click)="imgOpen.next({ note: tweet, img: segment.value })"
-              [style.background-image]="'url(' + (segment.value | proxifyImage) + ')'"
-            ></div>
-          }
-        }
-      }
-    }
+<article class="readTweet separator">
+  <a *ngIf="note.reposted?.size" href="javascript:void(0)" class="retweetOrigin">
+    {{account.displayName}} has retweeted
+  </a>
 
-    @if (!isFull) {
-      @if (tweet.viewModel.videos.length) {
-        <video class="bordered" controls>
-          <source [src]="tweet.viewModel.videos[0]" [type]="getMimeType(tweet.viewModel.videos[0])" />
-        </video>
-      } @else if (tweet.viewModel.images.length) {
-        <figure *ngIf="getImages().length">
-          <div
-            *ngFor="let touple of getImages()"
-            class="imgWrapper"
-          >
-            <ng-container *ngFor="let img of touple">
-              <div
-                *ngIf="img"
-                class="img"
-                (click)="imgOpen.next({ note: tweet, img })"
-                [style.background-image]="'url(' + (img | proxifyImage) + ')'"
-              ></div>
-            </ng-container>
-          </div>
-        </figure>
-      }
-    } 
+  <div class="tweetStructure">
+    <nostr-profile-picture [account]="account" [verticalConnected]="!!note.reposting?.size"></nostr-profile-picture>
+    <div class="tweetMetadata">
+      <header>
+        <address *ngIf="account" class="author userInfo">
+          <span class="userName">
+            {{account.displayName}}
+            <span *ngIf="account.nip05?.valid" class="userVerified"></span>
+          </span>
+          <span *ngIf="account.nip05?.address" class="userNip5">
+            {{account.nip05?.address}}
+          </span>
+          <time *ngIf="note.viewModel.createdAt" [attr.datetime]="note.viewModel.createdAt | datetimeIso">{{note.viewModel.createdAt | datetimeText}}</time>
+        </address>
 
-    <a role="button" class="rawLink showMore" *ngIf="displayShowMoreButton()">Show more</a>
-  } @else {
-    <span>event not loaded</span>
-    <!-- representar evento de lazy load -->
-  }
+        <button #popoverTrigger (click)="openTweetContextMenu(note, popoverTrigger)" class="svgButton borderless">
+          <nostr-svg-render name="ellipsis"></nostr-svg-render>
+        </button>
+      </header>
 
-</ng-container>
+      <tw-tweet-content
+        class="tweetContent"
+        (imgOpen)="onImgOpen($event)"
+        [tweet]="note"
+      ></tw-tweet-content>
+
+      <tw-tweet-button-group *ngIf="!note.reposting?.size" [tweet]="note"></tw-tweet-button-group>
+    </div>
+  </div>
+</article>
