@@ -115,6 +115,12 @@
   }
 }
 
+.author.userInfo.isFull {
+  font-style: normal;
+  display: flex;
+  flex-direction: column;
+}
+
 time {
   color: var(--lowestContrast);
 }

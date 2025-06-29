@@ -10,7 +10,7 @@
       <nostr-profile-picture [account]="account"></nostr-profile-picture>
 
       @if (isFull) {
-        <address *ngIf="account" class="author">
+        <address *ngIf="account" class="author userInfo isFull">
           <span class="userName">
             {{account.displayName}}
             <span *ngIf="account.nip05?.valid" class="userVerified"></span>
