@@ -1,7 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Account, HexString, ProfileProxy } from '@belomonte/nostr-ngx';
+import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { RelatedContentViewModel } from '@view-model/related-content.view-model';
+import { TweetImageViewing } from '../tweet-img-viewing.interface';
 
 @Component({
   selector: 'tw-tweet',
@@ -11,11 +13,23 @@ import { RelatedContentViewModel } from '@view-model/related-content.view-model'
 export class TweetComponent {
 
   @Input()
-  tweet: RelatedContentViewModel<NoteViewModel> | null = null;
+  tweet!: RelatedContentViewModel<NoteViewModel>;
+
+  @Output()
+  imgOpen = new EventEmitter<TweetImageViewing | null>();
 
   constructor(
-    private profileProxy: ProfileProxy
+    private profileProxy: ProfileProxy,
+    private tweetPopoverHandler: TweetContextMenuHandler
   ) { }
+
+  openTweetContextMenu(tweet: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement): void {
+    this.tweetPopoverHandler.handleContextMenu({ note: tweet, trigger });
+  }
+
+  onImgOpen(img: TweetImageViewing | null): void {
+    this.imgOpen.next(img);
+  }
 
   getAccount(pubkey: HexString | undefined): Account | null {
     if (!pubkey) {

@@ -41,8 +41,7 @@ import { TweetComponent } from './tweet/tweet.component';
     DatetimeWidgetModule,
     FormsModule,
     SvgLoaderModule,
-    LoadingWidgetModule,
-    TweetComponent
+    LoadingWidgetModule
 ],
   exports: [
     TweetListComponent,

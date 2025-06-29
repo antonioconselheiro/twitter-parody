@@ -1,12 +1,12 @@
-{{let account = getAccount(note.viewModel.author?.pubkey)}}
+@let account = getAccount(tweet.viewModel.author?.pubkey);
 
 <article class="readTweet separator">
-  <a *ngIf="note.reposted?.size" href="javascript:void(0)" class="retweetOrigin">
+  <a *ngIf="tweet.reposted?.size && account" href="javascript:void(0)" class="retweetOrigin">
     {{account.displayName}} has retweeted
   </a>
 
   <div class="tweetStructure">
-    <nostr-profile-picture [account]="account" [verticalConnected]="!!note.reposting?.size"></nostr-profile-picture>
+    <nostr-profile-picture [account]="account" [verticalConnected]="!!tweet.reposting?.size"></nostr-profile-picture>
     <div class="tweetMetadata">
       <header>
         <address *ngIf="account" class="author userInfo">
@@ -17,10 +17,10 @@
           <span *ngIf="account.nip05?.address" class="userNip5">
             {{account.nip05?.address}}
           </span>
-          <time *ngIf="note.viewModel.createdAt" [attr.datetime]="note.viewModel.createdAt | datetimeIso">{{note.viewModel.createdAt | datetimeText}}</time>
+          <time *ngIf="tweet.viewModel.createdAt" [attr.datetime]="tweet.viewModel.createdAt | datetimeIso">{{tweet.viewModel.createdAt | datetimeText}}</time>
         </address>
 
-        <button #popoverTrigger (click)="openTweetContextMenu(note, popoverTrigger)" class="svgButton borderless">
+        <button #popoverTrigger (click)="openTweetContextMenu(tweet, popoverTrigger)" class="svgButton borderless">
           <nostr-svg-render name="ellipsis"></nostr-svg-render>
         </button>
       </header>
@@ -28,10 +28,10 @@
       <tw-tweet-content
         class="tweetContent"
         (imgOpen)="onImgOpen($event)"
-        [tweet]="note"
+        [tweet]="tweet"
       ></tw-tweet-content>
 
-      <tw-tweet-button-group *ngIf="!note.reposting?.size" [tweet]="note"></tw-tweet-button-group>
+      <tw-tweet-button-group *ngIf="!tweet.reposting?.size" [tweet]="tweet"></tw-tweet-button-group>
     </div>
   </div>
 </article>
