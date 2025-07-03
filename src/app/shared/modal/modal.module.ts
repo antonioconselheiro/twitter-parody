@@ -6,6 +6,7 @@ import { ModalService } from './modal.service';
 import { MainModalComponent } from './main-modal/main-modal.component';
 import { AsyncModalModule } from '@belomonte/async-modal-ngx';
 import { SvgLoaderModule } from '@shared/svg-loader/svg-loader.module';
+import { SubscribeToContinueComponent } from './subscribe-to-continue/subscribe-to-continue.component';
 
 @NgModule({
   imports: [
@@ -16,12 +17,14 @@ import { SvgLoaderModule } from '@shared/svg-loader/svg-loader.module';
   declarations: [
     AlertComponent,
     ModalConfirmComponent,
-    MainModalComponent
+    MainModalComponent,
+    SubscribeToContinueComponent
   ],
   exports: [
     AlertComponent,
     ModalConfirmComponent,
-    MainModalComponent
+    MainModalComponent,
+    SubscribeToContinueComponent
   ],
   providers: [
     ModalService

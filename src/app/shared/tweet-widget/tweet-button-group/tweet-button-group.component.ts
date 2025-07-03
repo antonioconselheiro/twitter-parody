@@ -1,5 +1,5 @@
-import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { Account, CurrentAccountObservable, NOSTR_CACHE_TOKEN, NostrCache } from '@belomonte/nostr-ngx';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Account, CurrentProfileObservable } from '@belomonte/nostr-ngx';
 import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { RelatedContentViewModel } from '@view-model/related-content.view-model';
@@ -20,9 +20,8 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
 
   constructor(
-    private profile$: CurrentAccountObservable,
-    private tweetPopoverHandler: TweetContextMenuHandler,
-    @Inject(NOSTR_CACHE_TOKEN) private nostrCache: NostrCache
+    private profile$: CurrentProfileObservable,
+    private tweetPopoverHandler: TweetContextMenuHandler
   ) { }
 
   ngOnInit(): void {

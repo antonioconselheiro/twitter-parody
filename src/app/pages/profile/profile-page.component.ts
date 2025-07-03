@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AccountComplete, AccountSession, CurrentAccountObservable } from '@belomonte/nostr-ngx';
+import { AccountComplete, AccountSession, CurrentProfileObservable } from '@belomonte/nostr-ngx';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
 import { TweetProxy } from '@shared/tweet-service/tweet.proxy';
 import { FeedViewModel } from '@view-model/feed.view-model';
@@ -25,7 +25,7 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private profile$: CurrentAccountObservable,
+    private profile$: CurrentProfileObservable,
     private tweetProxy: TweetProxy,
     private router: Router
   ) {

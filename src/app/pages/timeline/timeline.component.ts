@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AccountRenderable, CurrentAccountObservable } from '@belomonte/nostr-ngx';
+import { AccountRenderable, CurrentProfileObservable } from '@belomonte/nostr-ngx';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
 import { MenuSidebarMobileObservable } from '@shared/menu-sidebar/menu-sidebar-mobile/menu-sidebar-mobile.observable';
 import { Subscription } from 'rxjs';
@@ -18,7 +18,7 @@ export class TimelineComponent extends AbstractEntitledComponent implements OnIn
 
   constructor(
     private menuSidebarMobile$: MenuSidebarMobileObservable,
-    private profile$: CurrentAccountObservable
+    private profile$: CurrentProfileObservable
   ) {
     super();
   }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CurrentAccountObservable } from '@belomonte/nostr-ngx';
+import { CurrentProfileObservable } from '@belomonte/nostr-ngx';
 import { AuthModalComponent } from '@shared/auth-modal/auth-modal.component';
 import { ModalService } from '@shared/modal/modal.service';
 
@@ -8,7 +8,7 @@ export class MenuSidebarService {
 
   constructor(
     private modalService: ModalService,
-    private profiles$: CurrentAccountObservable
+    private profiles$: CurrentProfileObservable
   ) { }
 
   onProfileButtonClick(): void {

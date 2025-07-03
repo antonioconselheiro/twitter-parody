@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { AccountGuard, AccountRenderable, CurrentAccountObservable, HexString } from '@belomonte/nostr-ngx';
+import { AccountGuard, AccountRenderable, CurrentProfileObservable, HexString } from '@belomonte/nostr-ngx';
 import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 import { NoteViewModel } from '@view-model/note.view-model';
 
@@ -17,7 +17,7 @@ export class NoteRepostedDescriptionPipe implements PipeTransform {
 
   constructor(
     private accountGuard: AccountGuard,
-    private currentAccount$: CurrentAccountObservable
+    private currentAccount$: CurrentProfileObservable
   ) { }
 
   transform(noteSet: NostrViewModelSet<NoteViewModel>, feedPublisherAccount: HexString | undefined, howManyShow = 1, showAmount = false): string {
