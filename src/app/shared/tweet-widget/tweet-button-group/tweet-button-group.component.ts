@@ -1,5 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ModalBuilder } from '@belomonte/async-modal-ngx';
 import { Account, CurrentProfileObservable } from '@belomonte/nostr-ngx';
+import { SubscribeToContinueComponent } from '@shared/modal/subscribe-to-continue/subscribe-to-continue.component';
 import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { RelatedContentViewModel } from '@view-model/related-content.view-model';
@@ -38,7 +40,34 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
     }));
   }
 
-  openTweetShareOptions(note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement): void {
+  onClickReply(note: RelatedContentViewModel<NoteViewModel>): void {
+    new ModalBuilder(SubscribeToContinueComponent)
+      .setData({
+        message: 'Login with a Nostr account to reply',
+        icon: 'reply'
+      })
+      .build();
+  }
+
+  onClickRetweet(note: RelatedContentViewModel<NoteViewModel>): void {
+    new ModalBuilder(SubscribeToContinueComponent)
+      .setData({
+        message: 'Login with a Nostr account to retweet',
+        icon: 'share'
+      })
+      .build();
+  }
+
+  onClickReact(note: RelatedContentViewModel<NoteViewModel>): void {
+    new ModalBuilder(SubscribeToContinueComponent)
+      .setData({
+        message: 'Login with a Nostr account to react',
+        icon: 'react'
+      })
+      .build();
+  }
+
+  onClickShareOptions(note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement): void {
     this.tweetPopoverHandler.handleShareOptions({ note, trigger });
   }
 

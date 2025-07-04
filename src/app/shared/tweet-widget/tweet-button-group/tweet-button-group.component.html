@@ -1,17 +1,17 @@
 <ng-container *ngIf="tweet">
-  <button type="button" class="svgButton borderless">
+  <button (click)="onClickReply(tweet)" type="button" class="svgButton borderless">
     <nostr-svg-render name="readTweet/reply"></nostr-svg-render>
     <span class="amount">{{tweet.repliedBy.size || 0 | amount}}</span>
   </button>
-  <button [class.active]="isRetweetedByYou(tweet)" type="button" class="svgButton iconRetweet borderless">
+  <button (click)="onClickRetweet(tweet)" [class.active]="isRetweetedByYou(tweet)" type="button" class="svgButton iconRetweet borderless">
     <nostr-svg-render class="iconRetweet" name="readTweet/retweet"></nostr-svg-render>
     <span class="amount">{{getRetweetedLength(tweet) | amount}}</span>
   </button>
-  <button [class.active]="isLikedByYou(tweet)" type="button" class="svgButton iconLike borderless">
+  <button (click)="onClickReact(tweet)" [class.active]="isLikedByYou(tweet)" type="button" class="svgButton iconLike borderless">
     <nostr-svg-render class="iconLike" name="readTweet/like"></nostr-svg-render>
     <span class="amount">{{getTweetReactionsLength(tweet) | amount}}</span>
   </button>
-  <button #shareButton (click)="openTweetShareOptions(tweet, shareButton)" type="button" class="svgButton borderless">
+  <button #shareButton (click)="onClickShareOptions(tweet, shareButton)" type="button" class="svgButton borderless">
     <nostr-svg-render name="readTweet/share"></nostr-svg-render>
   </button>
 </ng-container>

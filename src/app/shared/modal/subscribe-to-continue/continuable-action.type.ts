@@ -1,1 +1,1 @@
-export type ContinuableActionType = 'react' | 'like' | 'reply';
+export type ContinuableActionType = 'react' | 'share' | 'reply';

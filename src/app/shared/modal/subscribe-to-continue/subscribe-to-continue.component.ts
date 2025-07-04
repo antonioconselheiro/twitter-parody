@@ -20,6 +20,12 @@ export class SubscribeToContinueComponent extends ModalableDirective<SubscribeTo
   message = this.defaultMessage;
   icon: ContinuableActionType | null = null;
 
+  readonly iconsRecord: { [action in ContinuableActionType & '']: string } = {
+    react: 'readTweet/likeActive',
+    reply: 'readTweet/replyActive',
+    share: 'readTweet/retweetActive'
+  };
+
   override onInjectData(data: SubscribeToContinueEntryType | null): void {
     if (data) {
       if (data.message) {

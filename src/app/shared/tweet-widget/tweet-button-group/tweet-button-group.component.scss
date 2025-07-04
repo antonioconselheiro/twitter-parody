@@ -13,9 +13,12 @@
 
 button.svgButton::ng-deep {
   > .amount {
+    position: absolute;
     white-space: nowrap;
     color: var(--lowContrast);
     font-size: 12px;
+    left: 2rem;
+    top: 30%;
   }
 
   &.iconRetweet {
