@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { TweetContextMenuHandler } from './tweet-popover.handler';
 import { TweetNostr } from './tweet.nostr';
 import { TweetProxy } from './tweet.proxy';
+import { TweetInteractFactory } from './tweet-interact.factory';
 
 @NgModule({
   imports: [
@@ -11,6 +12,7 @@ import { TweetProxy } from './tweet.proxy';
   providers: [
     TweetProxy,
     TweetNostr,
+    TweetInteractFactory,
     TweetContextMenuHandler
   ]
 })

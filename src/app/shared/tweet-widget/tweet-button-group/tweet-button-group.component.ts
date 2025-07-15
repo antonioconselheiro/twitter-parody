@@ -2,10 +2,11 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ModalBuilder } from '@belomonte/async-modal-ngx';
 import { Account, CurrentProfileObservable } from '@belomonte/nostr-ngx';
 import { SubscribeToContinueComponent } from '@shared/modal/subscribe-to-continue/subscribe-to-continue.component';
+import { SubscribeToContinueEntryType } from '@shared/modal/subscribe-to-continue/subscribe-to-continue.entry-type';
 import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { RelatedContentViewModel } from '@view-model/related-content.view-model';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'tw-tweet-button-group',
@@ -41,29 +42,41 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   }
 
   onClickReply(note: RelatedContentViewModel<NoteViewModel>): void {
-    new ModalBuilder(SubscribeToContinueComponent)
-      .setData({
+    if (this.profile) {
+
+    } else {
+      this.showLoginModal({
         message: 'Login with a Nostr account to reply',
         icon: 'reply'
-      })
-      .build();
+      });
+    }
   }
 
   onClickRetweet(note: RelatedContentViewModel<NoteViewModel>): void {
-    new ModalBuilder(SubscribeToContinueComponent)
-      .setData({
+    if (this.profile) {
+
+    } else {
+      this.showLoginModal({
         message: 'Login with a Nostr account to retweet',
         icon: 'share'
-      })
-      .build();
+      });
+    }
   }
 
   onClickReact(note: RelatedContentViewModel<NoteViewModel>): void {
-    new ModalBuilder(SubscribeToContinueComponent)
-      .setData({
+    if (this.profile) {
+
+    } else {
+      this.showLoginModal({
         message: 'Login with a Nostr account to react',
         icon: 'react'
-      })
+      });
+    }
+  }
+
+  private showLoginModal(params: SubscribeToContinueEntryType): Observable<void> {
+    return new ModalBuilder(SubscribeToContinueComponent)
+      .setData(params)
       .build();
   }
 
