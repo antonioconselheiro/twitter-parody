@@ -5,7 +5,7 @@ import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.han
 import { NoteViewModel } from '@view-model/note.view-model';
 import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 import { Observable } from 'rxjs';
-import { AbstractContextMenuComponent } from './abstract-context-menu.component';
+import { AbstractContextMenuComponent } from '../abstract-context-menu.component';
 
 @Component({
   selector: 'tw-tweet-context-menu',

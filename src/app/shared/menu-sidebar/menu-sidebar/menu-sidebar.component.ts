@@ -4,7 +4,7 @@ import { ModalService } from '@belomonte/async-modal-ngx';
 import { CredentialHandlerService } from '@belomonte/nostr-gui-ngx';
 import { Account, AccountSession, CurrentProfileObservable } from '@belomonte/nostr-ngx';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
-import { CompositeTweetPopoverComponent } from '@shared/tweet-widget/composite-tweet-popover/composite-tweet-popover.component';
+import { ModalCompositeTweetComponent } from '@shared/tweet-widget/modal-composite-tweet/modal-composite-tweet.component';
 import { Subscription } from 'rxjs';
 import { MenuActiveObservable } from '../menu-active.observable';
 import { MenuType } from '../menu-type.enum';
@@ -87,7 +87,7 @@ export class MenuSidebarComponent implements OnInit, OnDestroy {
 
   openTweetCompose(): void {
     this.modalService
-      .createModal(CompositeTweetPopoverComponent)
+      .createModal(ModalCompositeTweetComponent)
       .setBindToRoute(this.router)
       .build();
   }

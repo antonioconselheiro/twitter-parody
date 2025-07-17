@@ -34,10 +34,6 @@ export class TweetInteractFactory {
     return Promise.resolve(this.nostrSigner.signEvent(retweetEvent));
   }
 
-  createRetweetWithComments(comment: string): Promise<NostrEvent> {
-
-  }
-
   createReply(event: NostrEvent<number>, comment: string): Promise<NostrEvent> {
     const replyEvent: NostrRawEvent = {
       kind: kinds.Repost,

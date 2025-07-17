@@ -1,17 +1,17 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AbstractContextMenuComponent } from '@shared/context-menu/abstract-context-menu.component';
 import { NoteEvent } from '@shared/event/note.event';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
-import { AbstractContextMenuComponent } from '@shared/tweet-context-menu/abstract-context-menu.component';
 import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'tw-tweet-share',
-  templateUrl: './tweet-share.component.html',
-  styleUrl: './tweet-share.component.scss'
+  selector: 'tw-tweet-share-context-menu',
+  templateUrl: './tweet-share-context-menu.component.html',
+  styleUrl: './tweet-share-context-menu.component.scss'
 })
-export class TweetShareComponent extends AbstractContextMenuComponent implements OnInit {
+export class TweetShareContextMenuComponent extends AbstractContextMenuComponent implements OnInit {
 
   @ViewChild('tweetShare', { read: PopoverComponent })
   popover?: PopoverComponent;

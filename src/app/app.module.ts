@@ -6,8 +6,8 @@ import { FloatingChatModule } from '@shared/floating-chat/floating-chat.module';
 import { NoteHtmlfierModule } from '@shared/htmlfier/note-htmlfier.module';
 import { ModalModule } from '@shared/modal/modal.module';
 import { ThemeModule } from '@shared/theme/theme.module';
-import { TweetContextMenuModule } from '@shared/tweet-context-menu/tweet-context-menu.module';
 import { UtilModule } from '@shared/util/util.module';
+import { ViewModelMapperModule } from '@shared/view-model-mapper/view-model-mapper.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BookmarksModule } from './pages/bookmarks/bookmarks.module';
@@ -21,8 +21,8 @@ import { ProfilePageModule } from './pages/profile/profile-page.module';
 import { TimelineModule } from './pages/timeline/timeline.module';
 import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.module';
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
-import { TweetShareModule } from '@shared/tweet-share/tweet-share.module';
-import { ViewModelMapperModule } from '@shared/view-model-mapper/view-model-mapper.module';
+import { TweetShareContextMenuModule } from '@shared/context-menu/tweet-share-context-menu/tweet-share-context-menu.module';
+import { TweetContextMenuModule } from '@shared/context-menu/tweet-context-menu/tweet-context-menu.module';
 
 @NgModule({
   declarations: [
@@ -67,8 +67,9 @@ import { ViewModelMapperModule } from '@shared/view-model-mapper/view-model-mapp
     NoteHtmlfierModule,
     ViewModelMapperModule,
 
+
     //  context menu widgets
-    TweetShareModule,
+    TweetShareContextMenuModule,
     TweetContextMenuModule,
 
     //  other widgets
