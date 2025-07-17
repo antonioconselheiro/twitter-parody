@@ -1,0 +1,12 @@
+<tw-popover class="tweetShare" [selfCloseOnOutClick]="true" #tweetShare [style.top.px]="contextMenuPosition">
+  <ul *ngIf="note" class="popoverList">
+    <li (click)="retweet(note)" role="button">
+      <nostr-svg-render class="inlineIcon" name="readTweet/retweet"></nostr-svg-render>
+      Retweet
+    </li>
+    <li (click)="retweetWithComment(note)" role="button">
+      <nostr-svg-render class="inlineIcon" name="readTweet/retweetWithComment"></nostr-svg-render>
+      Comment
+    </li>
+  </ul>
+</tw-popover>

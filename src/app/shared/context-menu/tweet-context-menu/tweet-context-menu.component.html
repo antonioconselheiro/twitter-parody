@@ -1,5 +1,5 @@
 <tw-popover class="tweetContextMenu" [selfCloseOnOutClick]="true" #tweetActions [style.top.px]="contextMenuPosition">
-  <ul  *ngIf="note" class="popoverList">
+  <ul *ngIf="note" class="popoverList">
     <li (click)="delete(note)" role="button">
       <nostr-svg-render class="inlineIcon" name="readTweet/options/unfollow"></nostr-svg-render>
       Delete
