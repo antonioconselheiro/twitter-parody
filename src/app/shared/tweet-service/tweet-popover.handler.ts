@@ -8,21 +8,31 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class TweetContextMenuHandler {
 
-  readonly contextMenu = new BehaviorSubject<{ note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement } | null>(null);
+  readonly optionsMenu = new BehaviorSubject<{ note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement } | null>(null);
+  readonly retweetMenu = new BehaviorSubject<{ note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement } | null>(null);
   readonly shareMenu = new BehaviorSubject<{ note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement } | null>(null);
 
-  handleContextMenu(agreggator: { note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement }): void {
-    this.contextMenu.next(agreggator);
+  handleOptionsContextMenu(agreggator: { note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement }): void {
+    this.optionsMenu.next(agreggator);
     this.shareMenu.next(null);
+    this.retweetMenu.next(null);
   }
 
-  handleShareOptions(agreggator: { note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement }): void {
-    this.contextMenu.next(null);
+  handleRetweetContextMenu(agreggator: { note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement }): void {
+    this.optionsMenu.next(null);
+    this.shareMenu.next(null);
+    this.retweetMenu.next(agreggator);
+  }
+
+  handleShareContextMenu(agreggator: { note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement }): void {
+    this.optionsMenu.next(null);
     this.shareMenu.next(agreggator);
+    this.retweetMenu.next(null);
   }
 
   close(): void {
-    this.contextMenu.next(null);
+    this.optionsMenu.next(null);
     this.shareMenu.next(null);
+    this.retweetMenu.next(null);
   }
 }

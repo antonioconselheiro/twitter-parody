@@ -27,7 +27,7 @@ export class TweetComponent {
   ) { }
 
   openTweetContextMenu(tweet: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement): void {
-    this.tweetPopoverHandler.handleContextMenu({ note: tweet, trigger });
+    this.tweetPopoverHandler.handleOptionsContextMenu({ note: tweet, trigger });
   }
 
   onImgOpen(img: TweetImageViewing | null): void {

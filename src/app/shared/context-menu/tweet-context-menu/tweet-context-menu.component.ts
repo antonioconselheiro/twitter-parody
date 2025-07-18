@@ -28,7 +28,7 @@ export class TweetContextMenuComponent extends AbstractContextMenuComponent impl
 
   override ngOnInit(): void {
     this.handler = this.tweetPopoverHandler
-      .contextMenu
+      .optionsMenu
       .asObservable();
     super.ngOnInit();
   }

@@ -3,7 +3,7 @@
     <nostr-svg-render name="readTweet/reply"></nostr-svg-render>
     <span class="amount">{{tweet.repliedBy.size || 0 | amount}}</span>
   </button>
-  <button (click)="onClickRetweet(tweet)" [class.active]="isRetweetedByYou(tweet)" type="button" class="svgButton iconRetweet borderless">
+  <button #retweetButton (click)="onClickRetweet(tweet, retweetButton)" [class.active]="isRetweetedByYou(tweet)" type="button" class="svgButton iconRetweet borderless">
     <nostr-svg-render class="iconRetweet" name="readTweet/retweet"></nostr-svg-render>
     <span class="amount">{{getRetweetedLength(tweet) | amount}}</span>
   </button>

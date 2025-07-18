@@ -11,7 +11,7 @@ export abstract class AbstractContextMenuComponent implements OnInit, OnDestroy 
 
   protected subscriptions = new Subscription();
 
-  contextMenuPosition: number | null = null;
+  triggerPosition: { top: number, left: number } | null = null;
   note: RelatedContentViewModel<NoteViewModel> | null = null;
 
   abstract popover?: PopoverComponent;
@@ -45,7 +45,9 @@ export abstract class AbstractContextMenuComponent implements OnInit, OnDestroy 
       const triggerRect = aggregator.trigger.getBoundingClientRect();
       const thisRect = this.elementRef.nativeElement.getBoundingClientRect();
       const negative = -1;
-      this.contextMenuPosition = (thisRect.top * negative) + triggerRect.top;
+      const top = (thisRect.top * negative) + triggerRect.top;
+      const left = (thisRect.left * negative) + triggerRect.left;
+      this.triggerPosition = { top, left };
       this.popover.show();
       this.note = aggregator.note;
 

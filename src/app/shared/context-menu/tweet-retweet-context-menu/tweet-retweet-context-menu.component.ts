@@ -14,7 +14,7 @@ import { AbstractContextMenuComponent } from '../abstract-context-menu.component
 })
 export class TweetRetweetContextMenuComponent extends AbstractContextMenuComponent implements OnInit {
 
-  @ViewChild('tweetShare', { read: PopoverComponent })
+  @ViewChild('tweetRetweet', { read: PopoverComponent })
   popover?: PopoverComponent;
 
   protected handler!: Observable<NoteEvent | null>;
@@ -28,7 +28,7 @@ export class TweetRetweetContextMenuComponent extends AbstractContextMenuCompone
 
   override ngOnInit(): void {
     this.handler = this.tweetPopoverHandler
-      .shareMenu
+      .retweetMenu
       .asObservable();
     super.ngOnInit();
   }

@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CameraModule, CredentialManagerWidgetModule, LoadingWidgetModule } from '@belomonte/nostr-gui-ngx';
 import { IdbNCacheModule, NostrModule, ProfileModule } from '@belomonte/nostr-ngx';
+import { TweetContextMenuModule } from '@shared/context-menu/tweet-context-menu/tweet-context-menu.module';
+import { TweetRetweetContextMenuModule } from '@shared/context-menu/tweet-retweet-context-menu/tweet-retweet-context-menu.module';
+import { TweetShareContextMenuModule } from '@shared/context-menu/tweet-share-context-menu/tweet-share-context-menu.module';
 import { FloatingChatModule } from '@shared/floating-chat/floating-chat.module';
 import { NoteHtmlfierModule } from '@shared/htmlfier/note-htmlfier.module';
 import { ModalModule } from '@shared/modal/modal.module';
@@ -21,8 +24,6 @@ import { ProfilePageModule } from './pages/profile/profile-page.module';
 import { TimelineModule } from './pages/timeline/timeline.module';
 import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.module';
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
-import { TweetShareContextMenuModule } from '@shared/context-menu/tweet-share-context-menu/tweet-share-context-menu.module';
-import { TweetContextMenuModule } from '@shared/context-menu/tweet-context-menu/tweet-context-menu.module';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { TweetContextMenuModule } from '@shared/context-menu/tweet-context-menu/
 
 
     //  context menu widgets
+    TweetRetweetContextMenuModule,
     TweetShareContextMenuModule,
     TweetContextMenuModule,
 

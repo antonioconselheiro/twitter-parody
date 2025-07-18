@@ -34,7 +34,7 @@ export class TweetListComponent {
   }
 
   openTweetContextMenu(tweet: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement): void {
-    this.tweetPopoverHandler.handleContextMenu({ note: tweet, trigger });
+    this.tweetPopoverHandler.handleOptionsContextMenu({ note: tweet, trigger });
   }
 
   getAccount(pubkey: HexString | undefined): Account | null {

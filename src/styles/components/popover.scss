@@ -25,8 +25,9 @@
   transition: .3s opacity;
   background-color: var(--base);
   border-radius: 15px;
-  position: fixed;
+  position: absolute;
   z-index: 40;
+  min-width: 150px;
   padding: 13px 0;
   box-shadow: var(--baseActive) 0px 0px 15px, var(--baseActive) 0px 0px 3px 1px;
 
@@ -103,6 +104,7 @@ ul.popoverList {
     font-weight: bold;
     align-items: center;
     display: flex;
+    white-space: nowrap;
 
     .inlineIcon {
       margin-right: .5rem;
