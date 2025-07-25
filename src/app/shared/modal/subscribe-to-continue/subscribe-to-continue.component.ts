@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ModalableDirective } from '@belomonte/async-modal-ngx';
 import { Subject } from 'rxjs';
 import { ContinuableActionType } from './continuable-action.type';
+import { ContinuableRecordType } from './continuable-record.type';
 import { SubscribeToContinueEntryType } from './subscribe-to-continue.entry-type';
 
 @Component({
@@ -12,7 +13,7 @@ import { SubscribeToContinueEntryType } from './subscribe-to-continue.entry-type
 export class SubscribeToContinueComponent extends ModalableDirective<SubscribeToContinueEntryType, void> {
 
   readonly defaultTitle = 'Enter to continue';
-  readonly defaultMessage = 'Login with a Nostr account to continue';
+  readonly defaultMessage = 'Login with a nostr account to continue';
 
   response = new Subject<void>();
   
@@ -20,10 +21,19 @@ export class SubscribeToContinueComponent extends ModalableDirective<SubscribeTo
   message = this.defaultMessage;
   icon: ContinuableActionType | null = null;
 
-  readonly iconsRecord: { [action in ContinuableActionType & '']: string } = {
-    react: 'readTweet/likeActive',
-    reply: 'readTweet/replyActive',
-    share: 'readTweet/retweetActive'
+  readonly iconsRecord: ContinuableRecordType = {
+    react: {
+      icon: 'readTweet/likeActive',
+      cssClass: 'icon like'
+    },
+    reply: {
+      icon: 'readTweet/replyActive',
+      cssClass: 'icon reply'
+    },
+    share: {
+      icon: 'readTweet/retweetActive',
+      cssClass: 'icon retweet'
+    }
   };
 
   override onInjectData(data: SubscribeToContinueEntryType | null): void {

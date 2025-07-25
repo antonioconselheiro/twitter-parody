@@ -1,11 +1,13 @@
 @if (icon) {
-  <nostr-svg-render class="icon" [name]="icon"></nostr-svg-render>
+  <nostr-svg-render [class]="iconsRecord[icon].cssClass" [name]="iconsRecord[icon].icon"></nostr-svg-render>
 } @else {
-  <img alt="twitter" title="twitter" src="/assets/logo/dark-logo.png" />
+  <img alt="twitter" title="twitter" class="twitter" src="/assets/logo/dark-logo.png" />
 }
 
 <h2 class="title">{{title}}</h2>
-<p>{{message}}</p>
+<p class="message">{{message}}</p>
 
-<button type="button" class="button">Login</button>
-<button type="button" class="button secondary">Create account</button>
+<div class="buttons">
+  <button type="button" class="button">Login</button>
+  <button type="button" class="button secondary">Create account</button>
+</div>

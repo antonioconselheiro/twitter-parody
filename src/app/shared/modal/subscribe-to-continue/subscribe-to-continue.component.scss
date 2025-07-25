@@ -1,0 +1,35 @@
+:host {
+  padding: 0 5rem 4rem;
+  display: block;
+}
+
+.icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 3rem;
+
+  &.reply {
+    color: var(--imgButtonDefault);
+  }
+
+  &.like {
+    color: var(--imgButtonLike);
+  }
+  
+  &.retweet {
+    color: var(--imgButtonRetweet);
+  }
+}
+
+.message {
+  color: var(--lowContrast);
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+
+  > button {
+    margin: .5rem 0;
+  }
+}

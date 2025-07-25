@@ -14,7 +14,7 @@ import { Observable, Subscription } from 'rxjs';
   styleUrls: ['./tweet-button-group.component.scss']
 })
 export class TweetButtonGroupComponent implements OnInit, OnDestroy {
-  
+
   @Input()
   tweet: RelatedContentViewModel<NoteViewModel> | null = null;
   
@@ -53,14 +53,14 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   }
 
   onClickRetweet(note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement): void {
-    //if (this.profile) {
+    if (this.profile) {
       this.tweetPopoverHandler.handleRetweetContextMenu({ note, trigger });
-    //} else {
-    //  this.showLoginModal({
-    //    message: 'Login with a Nostr account to retweet',
-    //    icon: 'share'
-    //  });
-    //}
+    } else {
+      this.showLoginModal({
+        message: 'Login with a nostr account to retweet',
+        icon: 'share'
+      });
+    }
   }
 
   onClickReact(note: RelatedContentViewModel<NoteViewModel>): void {
@@ -68,7 +68,7 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
 
     } else {
       this.showLoginModal({
-        message: 'Login with a Nostr account to react',
+        message: 'Login with a nostr account to react',
         icon: 'react'
       });
     }

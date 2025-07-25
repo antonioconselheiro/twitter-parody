@@ -1,4 +1,4 @@
-import { Component, HostBinding, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, HostBinding, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ModalBuilder, ModalOutletComponent } from '@belomonte/async-modal-ngx';
 import { Subscription } from 'rxjs';
 
@@ -11,6 +11,9 @@ export class MainModalComponent implements OnInit, OnDestroy {
   
   @ViewChild(ModalOutletComponent)
   modal!: ModalOutletComponent;
+
+  @Input()
+  name = 'mainModal';
   
   title = '';
 
@@ -18,7 +21,7 @@ export class MainModalComponent implements OnInit, OnDestroy {
 
   @HostBinding('style.display')
   get display(): string {
-    return this.isOpen ? 'block' : 'none';
+    return this.isOpen ? 'flex' : 'none';
   }
 
   private subscriptions = new Subscription();
