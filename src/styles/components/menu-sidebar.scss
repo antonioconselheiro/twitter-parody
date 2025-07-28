@@ -158,13 +158,15 @@ nav.menuSidebar {
   min-width: var(--menuSidebarProfileMinWidth);
   transition: background-color .3s;
 
-  &:hover,
-  &:focus {
-    background-color: var(--baseHover);
-  }
+  &:not(:has(.active)) {
+    &:hover,
+    &:focus {
+      background-color: var(--baseHover);
+    }
 
-  &:active {
-    background-color: var(--baseActive);
+    &:active {
+      background-color: var(--baseActive);
+    }
   }
 
   .userInfo {

@@ -5,9 +5,9 @@ import { MenuSidebarMobileObservable } from '@shared/menu-sidebar/menu-sidebar-m
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'tw-timeline',
-  templateUrl: './timeline.component.html',
-  styleUrls: ['./timeline.component.scss']
+  selector: 'tw-timeline-page',
+  templateUrl: './timeline-page.component.html',
+  styleUrls: ['./timeline-page.component.scss']
 })
 export class TimelineComponent extends AbstractEntitledComponent implements OnInit, OnDestroy {
 

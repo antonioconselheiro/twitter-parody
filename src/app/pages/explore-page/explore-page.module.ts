@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MessagesComponent } from './messages.component';
+import { ExplorePageComponent } from './explore-page.component';
 
 @NgModule({
   declarations: [
-    MessagesComponent
+    ExplorePageComponent
   ],
   imports: [
     CommonModule
   ],
   exports: [
-    MessagesComponent
+    ExplorePageComponent
   ]
 })
-export class MessagesModule { }
+export class ExplorePageModule { }

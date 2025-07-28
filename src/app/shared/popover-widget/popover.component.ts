@@ -16,7 +16,7 @@ export class PopoverComponent {
   disablePopover = true;
 
   @Input()
-  selfCloseOnOutClick = false;
+  selfCloseOnOutClick = true;
 
   constructor(
     private el: ElementRef

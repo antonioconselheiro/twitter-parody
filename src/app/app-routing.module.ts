@@ -1,16 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { BookmarksComponent } from './pages/bookmarks/bookmarks.component';
-import { ExploreComponent } from './pages/explore/explore.component';
-import { ListsComponent } from './pages/lists/lists.component';
-import { MessagesComponent } from './pages/messages/messages.component';
-import { NotificationsComponent } from './pages/notifications/notifications.component';
-import { ProfilePageComponent } from './pages/profile/profile-page.component';
-import { TimelineComponent } from './pages/timeline/timeline.component';
-import { accountResolverFn } from './pages/profile/profile.resolve-fn';
+import { BookmarksPageComponent } from './pages/bookmarks-page/bookmarks-page.component';
+import { ExplorePageComponent } from './pages/explore-page/explore-page.component';
+import { ListsPageComponent } from './pages/lists-page/lists-page.component';
+import { MessagesPageComponent } from './pages/messages-page/messages-page.component';
+import { NotificationsPageComponent } from './pages/notifications-page/notifications-page.component';
+import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
+import { TimelineComponent } from './pages/timeline-page/timeline-page.component';
+import { accountResolverFn } from './pages/profile-page/profile.resolve-fn';
 import { menuActiveResolverFn } from '@shared/menu-sidebar/menu-active.resolve-fn';
 import { MenuType } from '@shared/menu-sidebar/menu-type.enum';
-import { CommunitiesComponent } from './pages/communities/communities.component';
+import { CommunitiesPageComponent } from './pages/communities-page/communities-page.component';
+import { EventPageComponent } from './pages/event-page/event-page.component';
 
 const routes: Routes = [
   {
@@ -26,7 +27,7 @@ const routes: Routes = [
 
   {
     path: 'bookmarks',
-    component: BookmarksComponent,
+    component: BookmarksPageComponent,
     resolve: {
       menu: menuActiveResolverFn
     },
@@ -37,7 +38,7 @@ const routes: Routes = [
 
   {
     path: 'communities',
-    component: CommunitiesComponent,
+    component: CommunitiesPageComponent,
     resolve: {
       menu: menuActiveResolverFn
     },
@@ -48,7 +49,7 @@ const routes: Routes = [
 
   {
     path: 'lists',
-    component: ListsComponent,
+    component: ListsPageComponent,
     resolve: {
       menu: menuActiveResolverFn
     },
@@ -71,8 +72,21 @@ const routes: Routes = [
   },
 
   {
+    path: 'e/:nevent',
+    component: EventPageComponent,
+    runGuardsAndResolvers: 'pathParamsChange',
+    resolve: {
+      account: accountResolverFn,
+      menu: menuActiveResolverFn
+    },
+    data: {
+      menu: MenuType.PROFILE
+    }
+  },
+
+  {
     path: 'notifications',
-    component: NotificationsComponent,
+    component: NotificationsPageComponent,
     resolve: {
       menu: menuActiveResolverFn
     },
@@ -83,7 +97,7 @@ const routes: Routes = [
 
   {
     path: 'explore',
-    component: ExploreComponent,
+    component: ExplorePageComponent,
     resolve: {
       menu: menuActiveResolverFn
     },
@@ -94,7 +108,7 @@ const routes: Routes = [
 
   {
     path: 'messages',
-    component: MessagesComponent,
+    component: MessagesPageComponent,
     resolve: {
       menu: menuActiveResolverFn
     },

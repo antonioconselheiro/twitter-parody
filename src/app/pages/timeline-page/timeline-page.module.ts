@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { TimelineComponent } from './timeline.component';
+import { TimelineComponent } from './timeline-page.component';
 import { TweetWidgetModule } from '@shared/tweet-widget/tweet-widget.module';
 import { ProfileWidgetModule } from '@belomonte/nostr-gui-ngx';
 

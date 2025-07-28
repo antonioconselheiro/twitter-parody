@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NetworkComponent } from './network.component';
+import { BookmarksPageComponent } from './bookmarks-page.component';
 
 @NgModule({
   declarations: [
-    NetworkComponent
+    BookmarksPageComponent
   ],
   imports: [
     CommonModule
   ],
   exports: [
-    NetworkComponent
+    BookmarksPageComponent
   ]
 })
-export class NetworkModule { }
+export class BookmarksPageModule { }

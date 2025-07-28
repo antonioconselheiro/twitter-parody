@@ -13,15 +13,15 @@ import { UtilModule } from '@shared/util/util.module';
 import { ViewModelMapperModule } from '@shared/view-model-mapper/view-model-mapper.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BookmarksModule } from './pages/bookmarks/bookmarks.module';
-import { CommunitiesModule } from './pages/communities/communities.module';
-import { ExploreModule } from './pages/explore/explore.module';
-import { ListsModule } from './pages/lists/lists.module';
-import { MessagesModule } from './pages/messages/messages.module';
-import { NetworkModule } from './pages/network/network.module';
-import { NotificationsModule } from './pages/notifications/notifications.module';
-import { ProfilePageModule } from './pages/profile/profile-page.module';
-import { TimelineModule } from './pages/timeline/timeline.module';
+import { BookmarksPageModule } from './pages/bookmarks-page/bookmarks-page.module';
+import { CommunitiesPageModule } from './pages/communities-page/communities-page.module';
+import { ExplorePageModule } from './pages/explore-page/explore-page.module';
+import { ListsPageModule } from './pages/lists-page/lists-page.module';
+import { MessagesPageModule } from './pages/messages-page/messages-page.module';
+import { NetworkPageModule } from './pages/network-page/network-page.module';
+import { NotificationsPageModule } from './pages/notifications-page/notifications-page.module';
+import { ProfilePageModule } from './pages/profile-page/profile-page.module';
+import { TimelineModule } from './pages/timeline-page/timeline-page.module';
 import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.module';
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
 
@@ -53,14 +53,14 @@ import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
 
     // pages eager loaded module
     TimelineModule,
-    NotificationsModule,
-    BookmarksModule,
-    NetworkModule,
-    MessagesModule,
-    ExploreModule,
+    NotificationsPageModule,
+    BookmarksPageModule,
+    NetworkPageModule,
+    MessagesPageModule,
+    ExplorePageModule,
     ProfilePageModule,
-    ListsModule,
-    CommunitiesModule,
+    ListsPageModule,
+    CommunitiesPageModule,
 
     //  shared service module
     UtilModule,

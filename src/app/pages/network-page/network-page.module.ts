@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CommunitiesComponent } from './communities.component';
+import { NetworkPageComponent } from './network-page.component';
 
 @NgModule({
   declarations: [
-    CommunitiesComponent
+    NetworkPageComponent
   ],
   imports: [
     CommonModule
   ],
   exports: [
-    CommunitiesComponent
+    NetworkPageComponent
   ]
 })
-export class CommunitiesModule { }
+export class NetworkPageModule { }
