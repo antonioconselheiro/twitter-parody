@@ -24,6 +24,7 @@ import { ProfilePageModule } from './pages/profile-page/profile-page.module';
 import { TimelineModule } from './pages/timeline-page/timeline-page.module';
 import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.module';
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
+import { EventPageModule } from './pages/event-page/event-page.module';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
     MessagesPageModule,
     ExplorePageModule,
     ProfilePageModule,
+    EventPageModule,
     ListsPageModule,
     CommunitiesPageModule,
 

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { TweetContextMenuHandler } from './tweet-popover.handler';
 import { TweetNostr } from './tweet.nostr';
-import { TweetProxy } from './tweet.proxy';
+import { TimelineProxy } from './timeline.proxy';
 import { TweetInteractFactory } from './tweet-interact.factory';
 
 @NgModule({
@@ -10,7 +10,7 @@ import { TweetInteractFactory } from './tweet-interact.factory';
     CommonModule
   ],
   providers: [
-    TweetProxy,
+    TimelineProxy,
     TweetNostr,
     TweetInteractFactory,
     TweetContextMenuHandler

@@ -7,11 +7,12 @@ import { MessagesPageComponent } from './pages/messages-page/messages-page.compo
 import { NotificationsPageComponent } from './pages/notifications-page/notifications-page.component';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 import { TimelineComponent } from './pages/timeline-page/timeline-page.component';
-import { accountResolverFn } from './pages/profile-page/profile.resolve-fn';
+import { profileResolverFn } from './pages/profile-page/profile.resolve-fn';
 import { menuActiveResolverFn } from '@shared/menu-sidebar/menu-active.resolve-fn';
 import { MenuType } from '@shared/menu-sidebar/menu-type.enum';
 import { CommunitiesPageComponent } from './pages/communities-page/communities-page.component';
 import { EventPageComponent } from './pages/event-page/event-page.component';
+import { eventResolverFn } from './pages/event-page/event-resolve-fn';
 
 const routes: Routes = [
   {
@@ -63,12 +64,22 @@ const routes: Routes = [
     component: ProfilePageComponent,
     runGuardsAndResolvers: 'pathParamsChange',
     resolve: {
-      account: accountResolverFn,
+      account: profileResolverFn,
       menu: menuActiveResolverFn
     },
     data: {
       menu: MenuType.PROFILE
-    }
+    },
+    children: [
+      {
+        path: 'e/:nevent',
+        component: EventPageComponent,
+        runGuardsAndResolvers: 'pathParamsChange',
+        resolve: {
+          event: eventResolverFn
+        }
+      }
+    ]
   },
 
   {
@@ -76,11 +87,10 @@ const routes: Routes = [
     component: EventPageComponent,
     runGuardsAndResolvers: 'pathParamsChange',
     resolve: {
-      account: accountResolverFn,
       menu: menuActiveResolverFn
     },
     data: {
-      menu: MenuType.PROFILE
+      menu: null
     }
   },
 
