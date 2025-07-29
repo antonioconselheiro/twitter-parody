@@ -128,6 +128,60 @@ const routes: Routes = [
   },
 
   {
+    matcher: consumed => {
+      if (consumed.length === 1 && /^nprofile1/.test(consumed[0].path)) {
+        return {
+          consumed,
+          posParams: {
+            nprofile: consumed[0]
+          }
+        };
+      }
+
+      return null;
+    },
+    component: ProfilePageComponent
+  },
+
+  {
+    matcher: consumed => {
+      if (consumed.length === 1 && /^nevent1/.test(consumed[0].path)) {
+        return { consumed };
+      }
+
+      return null;
+    },
+    component: EventPageComponent
+  },
+
+  {
+    matcher: consumed => {
+      if (consumed.length === 1 && /^npub1/.test(consumed[0].path)) {
+        return {
+          consumed,
+          posParams: {
+            npub: consumed[0]
+          }
+        };
+      }
+
+      return null;
+    },
+    component: ProfilePageComponent
+  },
+
+  {
+    matcher: consumed => {
+      if (consumed.length === 1 && /^note1/.test(consumed[0].path)) {
+        return { consumed };
+      }
+
+      return null;
+    },
+    component: EventPageComponent
+  },
+
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'

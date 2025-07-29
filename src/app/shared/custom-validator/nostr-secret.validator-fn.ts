@@ -10,7 +10,7 @@ export function nostrSecretValidatorFactory(): ValidatorFn {
     }
 
     try {
-      const { type } = nip19.decode(control.value);
+      const { type } = nip19.decode(String(control.value));
 
       if (type === 'npub') {
         return {

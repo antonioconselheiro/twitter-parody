@@ -128,7 +128,7 @@ export class TimelineProxy {
     subject?: Subject<FeedViewModel> | number,
     olderEventCreatedAt?: number
   ): Promise<FeedViewModel> {
-    const mainNotes = await this.tweetNostr.listUserNotes(pubkey, pageSize, olderEventCreatedAt);
+    const mainNotes = await this.tweetNostr.listUserTweets(pubkey, pageSize, olderEventCreatedAt);
     let feed = await this.feedMapper.toViewModel(mainNotes);
     await this.accountViewModelProxy.loadViewModelAccounts(feed);
 

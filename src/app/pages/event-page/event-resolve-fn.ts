@@ -4,4 +4,4 @@ import { TweetProxy } from "@shared/tweet-service/tweet.proxy";
 import { NostrEventViewModel } from "@view-model/nostr-event.view-model";
 
 export const eventResolverFn: ResolveFn<NostrEventViewModel> =
-    (route: ActivatedRouteSnapshot) => inject(TweetProxy).loadTweet(route.params['nevent']);
+  (route: ActivatedRouteSnapshot) => inject(TweetProxy).loadTweet(route.params['nevent']);

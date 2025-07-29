@@ -1,6 +1,6 @@
+import { Filter } from 'nostr-tools';
 import { Injectable } from '@angular/core';
 import { HexString, NostrEvent, NostrPool } from '@belomonte/nostr-ngx';
-import { Filter } from 'nostr-tools';
 import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
 import { debounceTime, map, Observable, scan } from 'rxjs';
 
@@ -13,10 +13,23 @@ export class TweetNostr {
     private npool: NostrPool
   ) { }
 
+  loadTweet(id: HexString): Promise<NostrEvent> {
+    const filter: Filter = {
+      ids: [ id ],
+      kinds: [
+        ShortTextNote,
+        Repost
+      ],
+      limit: 1
+    };
+
+    return this.npool.query([filter]).then(([event]) => event);
+  }
+
   /**
    * List nostr events published by a pubkey
    */
-  listUserNotes(pubkey: HexString, pageSize = 10, olderEventCreatedAt?: number): Promise<Array<NostrEvent>> {
+  listUserTweets(pubkey: HexString, pageSize = 10, olderEventCreatedAt?: number): Promise<Array<NostrEvent>> {
     const filter: Filter = {
       kinds: [
         ShortTextNote,
