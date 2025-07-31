@@ -5,12 +5,16 @@ import { TweetNostr } from './tweet.nostr';
 import { TimelineProxy } from './timeline.proxy';
 import { TweetInteractFactory } from './tweet-interact.factory';
 import { TweetProxy } from './tweet.proxy';
+import { FeedNostr } from './feed.nostr';
+import { FeedProxy } from './feed.proxy';
 
 @NgModule({
   imports: [
     CommonModule
   ],
   providers: [
+    FeedProxy,
+    FeedNostr,
     TweetProxy,
     TweetNostr,
     TimelineProxy,

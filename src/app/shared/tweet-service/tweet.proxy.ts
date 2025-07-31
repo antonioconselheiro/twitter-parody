@@ -1,12 +1,26 @@
 import { Injectable } from "@angular/core";
-import { EagerNoteViewModel } from "@view-model/eager-note.view-model";
-import { NEvent } from "nostr-tools/nip19";
+import { HexString } from "@belomonte/nostr-ngx";
+import { AccountViewModelProxy } from "@shared/view-model-mapper/account-view-model.proxy";
+import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
+import { NoteViewModel } from "@view-model/note.view-model";
+import { TweetNostr } from "./tweet.nostr";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TweetProxy {
-  loadTweet(nevent: NEvent): Promise<EagerNoteViewModel> {
 
+  constructor(
+    private accountViewModelProxy: AccountViewModelProxy,
+    private tweetNostr: TweetNostr,
+    private feedMapper: FeedMapper
+  ) { }
+
+  loadTweet(event: HexString): Promise<NoteViewModel | null> {
+    return this.tweetNostr
+      .loadTweet(event)
+      .then(event => this.feedMapper.toViewModel(event));
   }
+
+
 }

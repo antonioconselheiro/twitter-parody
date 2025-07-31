@@ -1,22 +1,32 @@
-import { Injectable } from "@angular/core";
-import { HexString, NostrEvent } from "@belomonte/nostr-ngx";
-import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
-import { FeedViewModel } from "@view-model/feed.view-model";
-import { Repost, ShortTextNote } from 'nostr-tools/kinds';
-import { map, Observable, Subject } from "rxjs";
-import { FeedProxy } from "./feed.proxy";
-import { TweetNostr } from "./tweet.nostr";
+import { Injectable } from '@angular/core';
+import { AccountViewModelProxy } from '@shared/view-model-mapper/account-view-model.proxy';
+import { FeedMapper } from '@shared/view-model-mapper/feed.mapper';
+import { FeedViewModel } from '@view-model/feed.view-model';
+import { Filter, NostrEvent } from 'nostr-tools';
+import { Observable, Subject } from 'rxjs';
+import { FeedNostr } from './feed.nostr';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TimelineProxy {
+export class FeedProxy {
 
   constructor(
-    private tweetNostr: TweetNostr,
+    private accountViewModelProxy: AccountViewModelProxy,
     private feedMapper: FeedMapper,
-    private feedProxy: FeedProxy
+    private feedNostr: FeedNostr
   ) { }
+
+  /**
+   * Load events related to events from list given as argument.
+   * This will load replies, repost, reactions and zaps.
+   */
+  async loadFeedRelatedContent(feed: FeedViewModel): Promise<FeedViewModel> {
+    const eventIdList = feed.toEventIdArray();
+    const interactions = await this.feedNostr.loadRelatedContent(eventIdList);
+
+    return this.feedMapper.indexViewModel(feed, interactions);
+  }
 
   /**
    * loads a page of notes written by a chosen user.
@@ -30,9 +40,9 @@ export class TimelineProxy {
    *
    * @returns list of notes cast into view model
    */
-  loadTimeline(pubkey: HexString, pageSize = 10): Observable<FeedViewModel> {
+  loadFeed(filter: Omit<Filter, 'limit'>, pageSize = 10): Observable<FeedViewModel> {
     const subject = new Subject<FeedViewModel>();
-    void this.loadTimelinePageFromPubkey(pubkey, pageSize, subject)
+    void this.loadFeedPage(filter, pageSize, subject)
       .then(() => subject.complete());
 
     return subject.asObservable();
@@ -45,7 +55,7 @@ export class TimelineProxy {
    * @param olderNote, the older nostr event from the timeline
    * @param pageSize, notes per page, default to 10
    */
-  loadTimelineNextPage(pubkey: HexString, olderNote: NostrEvent, pageSize?: number): Promise<FeedViewModel>;
+  loadFeedNextPage(filter: Omit<Filter, 'limit'>, olderNote: NostrEvent, pageSize?: number): Promise<FeedViewModel>;
 
   /**
    * Loads the next page relative to a user's timeline or a user's event, the event
@@ -54,7 +64,7 @@ export class TimelineProxy {
    * @param timeline, the whole timeline to extract the older nostr event
    * @param pageSize, notes per page, default to 10
    */
-  loadTimelineNextPage(pubkey: HexString, timeline: FeedViewModel, pageSize?: number): Promise<FeedViewModel>;
+  loadFeedNextPage(filter: Omit<Filter, 'limit'>, timeline: FeedViewModel, pageSize?: number): Promise<FeedViewModel>;
 
   /**
    * Loads the next page relative to a user's timeline or a user's event, the event
@@ -63,17 +73,20 @@ export class TimelineProxy {
    * @param olderNoteOrTimeline, the older nostr event from the timeline or the whole timeline to extract the older nostr event
    * @param pageSize, notes per page, default to 10
    */
-  loadTimelineNextPage(pubkey: HexString, olderNoteOrTimeline: FeedViewModel | NostrEvent, pageSize?: number): Promise<FeedViewModel>;
-  loadTimelineNextPage(pubkey: HexString, olderNoteOrTimeline: FeedViewModel | NostrEvent, pageSize = 10): Promise<FeedViewModel> {
-    return this.feedProxy.loadFeedNextPage({
-      kinds: [
-        ShortTextNote,
-        Repost
-      ],
-      authors: [
-        pubkey
-      ]
-    }, olderNoteOrTimeline, pageSize);
+  loadFeedNextPage(filter: Omit<Filter, 'limit'>, olderNoteOrTimeline: FeedViewModel | NostrEvent, pageSize?: number): Promise<FeedViewModel>;
+  loadFeedNextPage(filter: Omit<Filter, 'limit'>, olderNoteOrTimeline: FeedViewModel | NostrEvent, pageSize = 10): Promise<FeedViewModel> {
+    let olderNote: NostrEvent | undefined;
+    if (olderNoteOrTimeline instanceof FeedViewModel) {
+      olderNote = this.getOlderEvent(olderNoteOrTimeline);
+    } else {
+      olderNote = olderNoteOrTimeline;
+    }
+
+    if (!olderNote) {
+      return this.loadFeedPage(filter, pageSize);
+    }
+
+    return this.loadFeedPage(filter, pageSize, olderNote.created_at);
   }
 
   /**
@@ -84,8 +97,8 @@ export class TimelineProxy {
    * @param olderEventCreatedAt, optional created_at property from the older event from the feed, the events will be loaded since this time
    * @returns the requested page
    */
-  async loadTimelinePageFromPubkey(
-    pubkey: HexString,
+  async loadFeedPage(
+    filter: Omit<Filter, 'limit'>,
     pageSize?: number,
     olderEventCreatedAt?: number
   ): Promise<FeedViewModel>;
@@ -98,8 +111,8 @@ export class TimelineProxy {
    * @param subject, optional Subject to emit events while they are loading () 
    * @returns the requested page
    */
-  async loadTimelinePageFromPubkey(
-    pubkey: HexString,
+  async loadFeedPage(
+    filter: Omit<Filter, 'limit'>,
     pageSize?: number,
     subject?: Subject<FeedViewModel>
   ): Promise<FeedViewModel>;
@@ -113,41 +126,35 @@ export class TimelineProxy {
    * @param olderEventCreatedAt, optional created_at property from the older event from the feed, the events will be loaded since this time
    * @returns the requested page
    */
-  async loadTimelinePageFromPubkey(
-    pubkey: HexString,
+  async loadFeedPage(
+    filter: Omit<Filter, 'limit'>,
     pageSize?: number,
     subject?: Subject<FeedViewModel>,
     olderEventCreatedAt?: number
   ): Promise<FeedViewModel>;
 
-  async loadTimelinePageFromPubkey(
-    pubkey: HexString,
+  async loadFeedPage(
+    filter: Omit<Filter, 'limit'>,
     pageSize?: number,
     subject?: Subject<FeedViewModel> | number,
     olderEventCreatedAt?: number
   ): Promise<FeedViewModel> {
-    return this.feedProxy.loadFeedPage({
-      kinds: [
-        ShortTextNote,
-        Repost
-      ],
-      authors: [
-        pubkey
-      ]
-    }, pageSize, subject, olderEventCreatedAt);
-  }
+    const mainNotes = await this.feedNostr.listTweets(filter, pageSize, olderEventCreatedAt);
+    let feed = await this.feedMapper.toViewModel(mainNotes);
+    await this.accountViewModelProxy.loadViewModelAccounts(feed);
 
-  /**
-   * Subscribe to listen updates about reposts, reactions and zaps of a feed (group of notes)
-   * @param feed, listen updates from events on this feed
-   */
-  listenTimelineUpdates(feed: FeedViewModel): Observable<FeedViewModel> {
-    const eventList = feed.toEventArray();
-    const latestEvent = this.getLatestEvent(eventList);
+    //  fix 'subject' variable name to 'olderEventCreatedAt' to help method signature overiding
+    if (typeof subject === 'number') {
+      olderEventCreatedAt = subject;
+      subject = undefined;
+    }
 
-    return this.feedProxy
-      .listenTimelineUpdates(eventList, latestEvent)
-      .pipe(map(events => this.feedMapper.patchViewModel(feed, events)));
+    feed = await this.loadFeedRelatedContent(feed);
+    if (subject) {
+      subject.next(feed);
+    }
+
+    return Promise.resolve(feed);
   }
 
   /**
