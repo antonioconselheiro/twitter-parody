@@ -52,7 +52,7 @@ export class FeedNostr {
    * @param latestEvent
    * the newer event of the feed, it can be a short text note, a repost note, a reaction or a zap 
    */
-  listenFeedRelatedContentUpdates(feed: Array<NostrEvent>, latestEvent?: NostrEvent): Observable<Array<NostrEvent>> {
+  listenFeedUpdates(feed: Array<NostrEvent>, latestEvent?: NostrEvent): Observable<Array<NostrEvent>> {
     const ids = feed.map(event => event.id);
     const filter: Omit<Filter, 'limit'> = {
       ids,

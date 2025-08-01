@@ -138,6 +138,13 @@ export class FeedProxy {
     pageSize?: number,
     subject?: Subject<FeedViewModel> | number,
     olderEventCreatedAt?: number
+  ): Promise<FeedViewModel>;
+
+  async loadFeedPage(
+    filter: Omit<Filter, 'limit'>,
+    pageSize?: number,
+    subject?: Subject<FeedViewModel> | number,
+    olderEventCreatedAt?: number
   ): Promise<FeedViewModel> {
     const mainNotes = await this.feedNostr.listTweets(filter, pageSize, olderEventCreatedAt);
     let feed = await this.feedMapper.toViewModel(mainNotes);

@@ -4,8 +4,8 @@ import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
 import { FeedViewModel } from "@view-model/feed.view-model";
 import { Repost, ShortTextNote } from 'nostr-tools/kinds';
 import { map, Observable, Subject } from "rxjs";
+import { FeedNostr } from "./feed.nostr";
 import { FeedProxy } from "./feed.proxy";
-import { TweetNostr } from "./tweet.nostr";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ import { TweetNostr } from "./tweet.nostr";
 export class TimelineProxy {
 
   constructor(
-    private tweetNostr: TweetNostr,
+    private feedNostr: FeedNostr,
     private feedMapper: FeedMapper,
     private feedProxy: FeedProxy
   ) { }
@@ -145,8 +145,8 @@ export class TimelineProxy {
     const eventList = feed.toEventArray();
     const latestEvent = this.getLatestEvent(eventList);
 
-    return this.feedProxy
-      .listenTimelineUpdates(eventList, latestEvent)
+    return this.feedNostr
+      .listenFeedUpdates(eventList, latestEvent)
       .pipe(map(events => this.feedMapper.patchViewModel(feed, events)));
   }
 
