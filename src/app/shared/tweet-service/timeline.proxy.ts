@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HexString, NostrEvent } from "@belomonte/nostr-ngx";
+import { AccountViewModelProxy } from "@shared/view-model-mapper/account-view-model.proxy";
 import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
 import { FeedViewModel } from "@view-model/feed.view-model";
 import { Repost, ShortTextNote } from 'nostr-tools/kinds';
@@ -10,13 +11,15 @@ import { FeedProxy } from "./feed.proxy";
 @Injectable({
   providedIn: 'root'
 })
-export class TimelineProxy {
+export class TimelineProxy extends FeedProxy {
 
   constructor(
-    private feedNostr: FeedNostr,
-    private feedMapper: FeedMapper,
-    private feedProxy: FeedProxy
-  ) { }
+    protected accountViewModelProxy: AccountViewModelProxy,
+    protected feedMapper: FeedMapper,
+    protected feedNostr: FeedNostr
+  ) {
+    super();
+  }
 
   /**
    * loads a page of notes written by a chosen user.
@@ -65,7 +68,7 @@ export class TimelineProxy {
    */
   loadTimelineNextPage(pubkey: HexString, olderNoteOrTimeline: FeedViewModel | NostrEvent, pageSize?: number): Promise<FeedViewModel>;
   loadTimelineNextPage(pubkey: HexString, olderNoteOrTimeline: FeedViewModel | NostrEvent, pageSize = 10): Promise<FeedViewModel> {
-    return this.feedProxy.loadFeedNextPage({
+    return this.loadFeedNextPage({
       kinds: [
         ShortTextNote,
         Repost
@@ -126,7 +129,7 @@ export class TimelineProxy {
     subject?: Subject<FeedViewModel> | number,
     olderEventCreatedAt?: number
   ): Promise<FeedViewModel> {
-    return this.feedProxy.loadFeedPage({
+    return this.loadFeedPage({
       kinds: [
         ShortTextNote,
         Repost
@@ -148,24 +151,5 @@ export class TimelineProxy {
     return this.feedNostr
       .listenFeedUpdates(eventList, latestEvent)
       .pipe(map(events => this.feedMapper.patchViewModel(feed, events)));
-  }
-
-  /**
-   * return the newer event into a given list
-   * @returns the newer event in the list or undefined if the list has no items
-   */
-  getLatestEvent(eventList: Array<NostrEvent>): NostrEvent | undefined {
-    return eventList.reduce((event1, event2) => event2.created_at > event1.created_at ? event2 : event1);
-  }
-
-  /**
-   * return the older event into a given list
-   * @returns the older event in the list or undefined if the list has no items
-   */
-  getOlderEvent(feed: FeedViewModel): NostrEvent | undefined {
-    const olderEvent = feed.toEventArray()
-      .reduce((event1, event2) => event2.created_at > event1.created_at ? event1 : event2);
-
-    return olderEvent || undefined;
   }
 }

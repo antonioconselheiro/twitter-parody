@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { AccountViewModelProxy } from '@shared/view-model-mapper/account-view-model.proxy';
 import { FeedMapper } from '@shared/view-model-mapper/feed.mapper';
 import { FeedViewModel } from '@view-model/feed.view-model';
@@ -6,16 +5,11 @@ import { Filter, NostrEvent } from 'nostr-tools';
 import { Observable, Subject } from 'rxjs';
 import { FeedNostr } from './feed.nostr';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class FeedProxy {
+export abstract class FeedProxy {
 
-  constructor(
-    private accountViewModelProxy: AccountViewModelProxy,
-    private feedMapper: FeedMapper,
-    private feedNostr: FeedNostr
-  ) { }
+  protected abstract accountViewModelProxy: AccountViewModelProxy;
+  protected abstract feedMapper: FeedMapper;
+  protected abstract feedNostr: FeedNostr;
 
   /**
    * Load events related to events from list given as argument.
@@ -122,7 +116,7 @@ export class FeedProxy {
    *
    * @param pubkey, chosen user's pubkey
    * @param pageSize, notes per page, default to 10
-   * @param subject, optional Subject to emit events while they are loading () 
+   * @param subject, optional Subject to emit events while they are loading
    * @param olderEventCreatedAt, optional created_at property from the older event from the feed, the events will be loaded since this time
    * @returns the requested page
    */

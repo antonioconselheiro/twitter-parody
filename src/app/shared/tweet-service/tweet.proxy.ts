@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { HexString } from "@belomonte/nostr-ngx";
-import { AccountViewModelProxy } from "@shared/view-model-mapper/account-view-model.proxy";
 import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
 import { NoteViewModel } from "@view-model/note.view-model";
 import { TweetNostr } from "./tweet.nostr";
@@ -11,7 +10,6 @@ import { TweetNostr } from "./tweet.nostr";
 export class TweetProxy {
 
   constructor(
-    private accountViewModelProxy: AccountViewModelProxy,
     private tweetNostr: TweetNostr,
     private feedMapper: FeedMapper
   ) { }

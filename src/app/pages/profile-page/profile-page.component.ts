@@ -25,8 +25,8 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private timelineProxy: TimelineProxy,
     private profile$: CurrentProfileObservable,
-    private tweetProxy: TimelineProxy,
     private router: Router
   ) {
     super();
@@ -73,7 +73,7 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
     this.viewing = account;
     this.loading = true;
     if (account) {
-      this.tweetProxy
+      this.timelineProxy
         .loadTimeline(account.pubkey)
         .subscribe(feed => {
           this.loading = false;
