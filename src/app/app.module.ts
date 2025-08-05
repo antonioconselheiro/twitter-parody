@@ -15,16 +15,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BookmarksPageModule } from './pages/bookmarks-page/bookmarks-page.module';
 import { CommunitiesPageModule } from './pages/communities-page/communities-page.module';
+import { EventPageModule } from './pages/event-page/event-page.module';
 import { ExplorePageModule } from './pages/explore-page/explore-page.module';
 import { ListsPageModule } from './pages/lists-page/lists-page.module';
 import { MessagesPageModule } from './pages/messages-page/messages-page.module';
 import { NetworkPageModule } from './pages/network-page/network-page.module';
 import { NotificationsPageModule } from './pages/notifications-page/notifications-page.module';
 import { ProfilePageModule } from './pages/profile-page/profile-page.module';
+import { RelayPageModule } from './pages/relay-page/relay-page.module';
 import { TimelineModule } from './pages/timeline-page/timeline-page.module';
 import { ExploreSidebarModule } from './shared/explore-sidebar/explore-sidebar.module';
 import { MenuSidebarModule } from './shared/menu-sidebar/menu-sidebar.module';
-import { EventPageModule } from './pages/event-page/event-page.module';
 
 @NgModule({
   declarations: [
@@ -63,13 +64,13 @@ import { EventPageModule } from './pages/event-page/event-page.module';
     EventPageModule,
     ListsPageModule,
     CommunitiesPageModule,
+    RelayPageModule,
 
     //  shared service module
     UtilModule,
     ProfileModule,
     NoteHtmlfierModule,
     ViewModelMapperModule,
-
 
     //  context menu widgets
     TweetRetweetContextMenuModule,

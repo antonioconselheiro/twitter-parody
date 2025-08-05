@@ -7,12 +7,12 @@ import { BookmarksPageComponent } from './pages/bookmarks-page/bookmarks-page.co
 import { CommunitiesPageComponent } from './pages/communities-page/communities-page.component';
 import { EventPageComponent } from './pages/event-page/event-page.component';
 import { neventResolverFn } from './pages/event-page/nevent-resolve-fn';
-import { nip05ResolverFn } from './pages/event-page/nip05.resolver-fn';
 import { noteResolverFn } from './pages/event-page/note.resolve-fn';
 import { ExplorePageComponent } from './pages/explore-page/explore-page.component';
 import { ListsPageComponent } from './pages/lists-page/lists-page.component';
 import { MessagesPageComponent } from './pages/messages-page/messages-page.component';
 import { NotificationsPageComponent } from './pages/notifications-page/notifications-page.component';
+import { nip05ResolverFn } from './pages/profile-page/nip05.resolver-fn';
 import { nprofileResolverFn } from './pages/profile-page/nprofile.resolve-fn';
 import { npubResolverFn } from './pages/profile-page/npub.resolve-fn';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';

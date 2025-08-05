@@ -2,6 +2,9 @@ import { UrlMatchResult, UrlSegment } from "@angular/router";
 import { NIP05_REGEX } from "nostr-tools/nip05";
 
 export class AppRoutingMatcher {
+
+  static readonly relayRegex = /^wss:\/\/[^?]+/;
+
   static routingMatch(consumed: UrlSegment[], prefix: string): UrlMatchResult | null {
     if (consumed.length === 1 && new RegExp(`^${prefix}1`).test(consumed[0].path)) {
       return {
