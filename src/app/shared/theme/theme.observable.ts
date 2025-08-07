@@ -28,10 +28,10 @@ export class ThemeObservable extends BehaviorSubject<Theme> {
   }
 
   private init(): void {
-    this.bindProfileSubscription();
+    this.listenProfileSubscription();
   }
 
-  private bindProfileSubscription(): void {
+  private listenProfileSubscription(): void {
     this.profile$.subscribe({
       next: profile => this.next(this.themeFromProfile(profile?.metadata))
     });

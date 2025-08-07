@@ -18,10 +18,10 @@ export class AppComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.bindThemes();
+    this.listenThemes();
   }
 
-  private bindThemes(): void {
+  private listenThemes(): void {
     this.subscriptions.add(this.theme$.subscribe({
       next: theme => this.setCurrentTheme(theme)
     }));

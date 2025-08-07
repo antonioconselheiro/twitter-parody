@@ -33,10 +33,11 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
   }
 
   override ngOnInit(): void {
-    this.loadAccountFeed(this.activatedRoute.snapshot.data['profile']);
-    this.bindAuthenticatedProfileSubscription();
+    debugger;
+    //this.loadAccountFeed(this.activatedRoute.snapshot.data['profile']);
+    this.listenAuthenticatedProfileSubscription();
     this.getAccountFromActivatedRoute();
-    this.bindViewingProfile();
+    this.listenUrlPathParams();
 
     super.ngOnInit();
   }
@@ -53,13 +54,13 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
     }
   }
 
-  private bindAuthenticatedProfileSubscription(): void {
+  private listenAuthenticatedProfileSubscription(): void {
     this.subscriptions.add(this.profile$.subscribe({
       next: account => this.authenticated = account
     }));
   }
 
-  private bindViewingProfile(): void {
+  private listenUrlPathParams(): void {
     this.subscriptions.add(this.activatedRoute.data.subscribe({
       next: ({ account }) => {
         this.feed = null;

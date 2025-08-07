@@ -25,10 +25,10 @@ export class TimelineComponent extends AbstractEntitledComponent implements OnIn
 
   override ngOnInit(): void {
     super.ngOnInit();
-    this.bindProfileSubscription();
+    this.listenProfileSubscription();
   }
 
-  private bindProfileSubscription(): void {
+  private listenProfileSubscription(): void {
     this.subscriptions.add(this.profile$.subscribe({
       next: account => this.account = account
     }));

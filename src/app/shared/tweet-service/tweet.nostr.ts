@@ -34,4 +34,17 @@ export class TweetNostr extends FeedProxy {
     return this.npool.query([filter]).then(([event]) => event);
   }
 
+  loadFeedUntilTweet(pubkey: HexString, event: HexString): Promise<NostrEvent[]> {
+    const filter: Filter = {
+      ids: [ event ],
+      authors: [ pubkey ],
+      kinds: [
+        ShortTextNote,
+        Repost
+      ]
+    };
+
+    return this.npool.query([filter])
+  }
+
 }

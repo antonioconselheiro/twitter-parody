@@ -28,14 +28,14 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.bindProfileSubscription();
+    this.listenProfileSubscription();
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
-  private bindProfileSubscription(): void {
+  private listenProfileSubscription(): void {
     this.subscriptions.add(this.profile$.subscribe({
       next: profile => this.profile = profile
     }));

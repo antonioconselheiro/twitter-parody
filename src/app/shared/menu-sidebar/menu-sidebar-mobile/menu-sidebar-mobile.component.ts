@@ -34,24 +34,24 @@ export class MenuSidebarMobileComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.bindProfileSubscription();
-    this.bindMenuShowingSubscription();
-    this.bindMenuActiveSubscription();
+    this.listenProfileSubscription();
+    this.listenMenuShowingSubscription();
+    this.listenMenuActiveSubscription();
   }
 
-  private bindMenuShowingSubscription(): void {
+  private listenMenuShowingSubscription(): void {
     this.subscriptions.add(this.menuSidebarMobile$.subscribe({
       next: show => this.showing = show
     }));
   }
 
-  private bindProfileSubscription(): void {
+  private listenProfileSubscription(): void {
     this.subscriptions.add(this.profile$.subscribe(
       account => this.account = account
     ));
   }
 
-  private bindMenuActiveSubscription(): void {
+  private listenMenuActiveSubscription(): void {
     this.subscriptions.add(this.menuActive$.subscribe(
       menu => this.menuActive = menu
     ));

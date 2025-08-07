@@ -24,10 +24,10 @@ export class MobileBottomNavigationComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.bindMenuActiveSubscription();
+    this.listenMenuActiveSubscription();
   }
 
-  private bindMenuActiveSubscription(): void {
+  private listenMenuActiveSubscription(): void {
     this.subscriptions.add(this.menuActive$.subscribe(
       menu => this.menuActive = menu
     ));
