@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { NoteContentViewModel } from '@view-model/context/note-content.view-model';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 import { TweetImageViewing } from '../tweet-img-viewing.interface';
-import { NoteContentViewModel } from '@view-model/context/note-content.view-model';
+import { SummarizedTweetContentViewModel } from './summarized-tweet-content.view-model';
+import { TweetContentService } from './tweet-content.service';
 
 @Component({
   selector: 'tw-tweet-content',
@@ -20,6 +22,38 @@ export class TweetContentComponent {
   @Output()
   imgOpen = new EventEmitter<TweetImageViewing | null>();
 
+  constructor(
+    private tweetContentService: TweetContentService
+  ) { }
+
+  displayShowMoreButton(): boolean {
+    //  FIXME: revisar implementação de como será decidido quando este botão será exibido
+    return true;
+  }
+
+  summarizeTweet(note: RelatedContentViewModel<NoteViewModel>): SummarizedTweetContentViewModel {
+    return this.tweetContentService.summarizeTweet(note);
+  }
+
+  getSegments(tweetSummarized: SummarizedTweetContentViewModel, isFull: boolean): NoteContentViewModel {
+    if (isFull) {
+      return tweetSummarized.note.viewModel.content || [];
+    } else {
+      return tweetSummarized.summarized;
+    }
+  }
+
+  getFirstVideoUrl(tweet: RelatedContentViewModel<NoteViewModel> | null): string {
+    if (tweet) {
+      const content = tweet.viewModel.media
+        .filter(media => media.type === 'video')
+        .map(media => media.value) || [];
+      return content[0] || '';
+    }
+
+    return '';
+  }
+
   getMimeType(url: string): string {
     if (/\.mp4$/.test(url)) {
       return 'video/mp4';
@@ -32,44 +66,6 @@ export class TweetContentComponent {
     return '';
   }
 
-  displayShowMoreButton(): boolean {
-    //  FIXME: revisar implementação de como será decidido quando este botão será exibido
-    return true;
-  }
-
-  getImages(tweet: RelatedContentViewModel<NoteViewModel> | null): [string, string?][] {
-    const images: [string, string?][] = [];
-    let currentImage!: [string, string?];
-
-    const content = tweet?.viewModel.media
-      .filter(media => media.type === 'image')
-      .map(media => media.value) || [];
-
-    content
-      .forEach((image, index) => {
-        const pair = 2;
-        if (index % pair === 0) {
-          currentImage = [image];
-          images.push(currentImage);
-        } else {
-          currentImage.push(image);
-        }
-      });
-
-    return images;
-  }
-
-  getVideoUrl(tweet: RelatedContentViewModel<NoteViewModel> | null): string {
-    if (tweet) {
-      const content = tweet.viewModel.media
-        .filter(media => media.type === 'video')
-        .map(media => media.value) || [];
-      return content[0] || '';
-    }
-
-    return '';
-  }
-
   shouldShowSegment(index: number, maxLength: number): boolean {
     if (this.isFull) {
       return true;
@@ -77,18 +73,4 @@ export class TweetContentComponent {
       return index < maxLength;
     }
   }
-
-  defineSummaryLength(content: NoteContentViewModel): number {
-    let summaryLength = 0;
-    while (['video', 'image'].includes(content[summaryLength].type)) {
-      summaryLength++;
-    }
-
-    while (!['video', 'image'].includes(content[summaryLength].type)) {
-      summaryLength++;
-    }
-
-    return summaryLength;
-  }
-
 }

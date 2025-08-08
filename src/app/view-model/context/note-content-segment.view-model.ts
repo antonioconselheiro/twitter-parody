@@ -5,4 +5,5 @@ export type NoteContentSegmentViewModel = { type: 'note', value: Note } |
   {type: 'event', value: NEvent } |
   {type: 'npub', value: NPub } |
   {type: 'nprofile', value: NProfile } |
-  {type: NoteContentSegmentType, value: string };
+  {type: NoteContentSegmentType, value: string } |
+  {type: 'summarized', value: string, original: NoteContentSegmentViewModel };

@@ -1,63 +1,61 @@
 @if (tweet && tweet.viewModel.content) {
-  @let maxLength = defineSummaryLength(tweet.viewModel.content);
-  @for (segment of tweet.viewModel.content; track $index) {
-    @if (shouldShowSegment($index, maxLength)) {
-      @switch(segment.type) {
-        @case('text') {
-          {{segment.value}}
-        }
+  @let tweetSummarized = summarizeTweet(tweet);
+  @for (segment of getSegments(tweetSummarized, isFull); track $index) {
+    @switch(segment.type) {
+      @case('text') {
+        {{segment.value}}
+      }
 
-        @case('link') {
-          <a>{{segment.value}}</a>
-        }
+      @case('link') {
+        <a>{{segment.value}}</a>
+      }
 
-        @case('relay') {
-          <a>{{segment.value}}</a>
-        }
+      @case('relay') {
+        <a>{{segment.value}}</a>
+      }
 
-        @case('note') {
-          <a>{{segment.value}}</a>
-        }
+      @case('note') {
+        <a>{{segment.value}}</a>
+      }
 
-        @case('event') {
-          <a>{{segment.value}}</a>
-        }
+      @case('event') {
+        <a>{{segment.value}}</a>
+      }
 
-        @case('npub') {
-          <a>{{segment.value}}</a>
-        }
+      @case('npub') {
+        <a>{{segment.value}}</a>
+      }
 
-        @case('nprofile') {
-          <a>{{segment.value}}</a>
-        }
+      @case('nprofile') {
+        <a>{{segment.value}}</a>
+      }
 
-        @case('hashtag') {
-          <a>{{segment.value}}</a>
-        }
+      @case('hashtag') {
+        <a>{{segment.value}}</a>
+      }
 
-        @case('video') {
-          <video class="bordered" controls>
-            <source [src]="segment.value" [type]="getMimeType(segment.value)" />
-          </video>
-        }
+      @case('video') {
+        <video class="bordered" controls>
+          <source [src]="segment.value" [type]="getMimeType(segment.value)" />
+        </video>
+      }
 
-        @case('image') {
-          <figure>
-            <div class="imgWrapper">
-              <div
-                class="img"
-                (click)="imgOpen.next({ note: tweet, img: segment.value })"
-                [style.background-image]="'url(' + (segment.value | proxifyImage) + ')'"
-              ></div>
-            </div>
-          </figure>
-        }
+      @case('image') {
+        <figure>
+          <div class="imgWrapper">
+            <div
+              class="img"
+              (click)="imgOpen.next({ note: tweet, img: segment.value })"
+              [style.background-image]="'url(' + (segment.value | proxifyImage) + ')'"
+            ></div>
+          </div>
+        </figure>
       }
     }
   }
 
   @if (!isFull) {
-    @let videoUrl = getVideoUrl(tweet);
+    @let videoUrl = getFirstVideoUrl(tweet);
     @let images = getImages(tweet);
 
     @if (videoUrl) {
