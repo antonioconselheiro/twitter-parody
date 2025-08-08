@@ -55,17 +55,14 @@
   }
 
   @if (!isFull) {
-    @let videoUrl = getFirstVideoUrl(tweet);
-    @let images = getImages(tweet);
-
-    @if (videoUrl) {
+    @if (tweetSummarized.videoUrl) {
       <video class="bordered" controls>
-        <source [src]="videoUrl" [type]="getMimeType(videoUrl)" />
+        <source [src]="tweetSummarized.videoUrl" [type]="getMimeType(tweetSummarized.videoUrl)" />
       </video>
-    } @else if (images.length) {
-      <figure *ngIf="images.length">
+    } @else if (tweetSummarized.images.length) {
+      <figure *ngIf="tweetSummarized.images.length">
         <div
-          *ngFor="let touple of images"
+          *ngFor="let touple of tweetSummarized.images"
           class="imgWrapper"
         >
           <ng-container *ngFor="let img of touple">
@@ -83,7 +80,13 @@
 
   <time *ngIf="isFull && tweet.viewModel.createdAt" [attr.datetime]="tweet.viewModel.createdAt | datetimeIso">{{tweet.viewModel.createdAt | datetimeText}}</time>
 
-  <a role="button" class="rawLink showMore" *ngIf="displayShowMoreButton()">Show more</a>
+  @if (tweetSummarized.showSummarized) {
+    @if (isFull) {
+      <a role="button" class="rawLink showMore" (click)="isFull = true">Show less</a>
+    } @else {
+      <a role="button" class="rawLink showMore" (click)="isFull = false">Show more</a>
+    }
+  }
 } @else {
   <span>event not loaded</span>
   <!-- representar evento de lazy load -->

@@ -14,6 +14,7 @@ export class TweetContentService {
 
     return {
       showSummarized,
+      videoUrl: this.getVideoUrl(note),
       images: this.getImages(note),
       summarized,
       note
@@ -70,6 +71,13 @@ export class TweetContentService {
       showSummarized,
       summarized: summarizedContent
     };
+  }
+
+  private getVideoUrl(tweet: RelatedContentViewModel<NoteViewModel> | null): string | null {
+    return tweet?.viewModel.media
+      .filter(media => media.type === 'video')
+      .map(media => media.value)
+      .shift() || null;
   }
 
   private getImages(tweet: RelatedContentViewModel<NoteViewModel> | null): [string, string?][] {

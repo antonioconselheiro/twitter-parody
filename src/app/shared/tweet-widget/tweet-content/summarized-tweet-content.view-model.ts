@@ -4,6 +4,7 @@ import { RelatedContentViewModel } from "@view-model/related-content.view-model"
 
 export interface SummarizedTweetContentViewModel {
   showSummarized: boolean;
+  videoUrl: string | null;
   images: [string, string?][];
   summarized: NoteContentViewModel;
   note: RelatedContentViewModel<NoteViewModel>;
