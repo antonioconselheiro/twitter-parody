@@ -30,13 +30,8 @@ export class SimpleTextMapper implements SingleViewModelMapper<EagerNoteViewMode
     const relates: Array<HexString> = [];
     this.tagHelper.getRelatedEvents(event).forEach(([related]) => relates.push(related));
     const content = this.noteContentMapper.toViewModel(event.content);
-    const images = content
-      .filter(segment => segment.type === 'image')
-      .map(segment => segment.value);
-
-    const videos = content
-      .filter(segment => segment.type === 'video')
-      .map(segment => segment.value);
+    const media = content
+      .filter(segment => segment.type === 'image' || segment.type === 'video');
 
     const note: SimpleTextNoteViewModel = {
       id: event.id,
@@ -45,8 +40,7 @@ export class SimpleTextMapper implements SingleViewModelMapper<EagerNoteViewMode
       event,
       createdAt: event.created_at,
       content,
-      images,
-      videos,
+      media,
       //  TODO: ideally I should pass relay address from where this event come
       origin: [],
       relates

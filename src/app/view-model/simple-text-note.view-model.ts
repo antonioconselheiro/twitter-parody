@@ -2,6 +2,7 @@ import { HexString } from '@belomonte/nostr-ngx';
 import Geohash from 'latlon-geohash';
 import { NostrEventViewModel } from './nostr-event.view-model';
 import { NoteContentViewModel } from './context/note-content.view-model';
+import { NoteContentSegmentViewModel } from './context/note-content-segment.view-model';
 
 /**
  * This interface represents the simple text note
@@ -19,12 +20,7 @@ export interface SimpleTextNoteViewModel extends NostrEventViewModel {
   /**
    * Image urls if has any
    */
-  images: string[];
-
-  /**
-   * Video urls if has any
-   */
-  videos: string[];
+  media: NoteContentSegmentViewModel[];
 
   /**
    * Note attached location if g tag is included.

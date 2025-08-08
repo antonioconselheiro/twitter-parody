@@ -57,14 +57,17 @@
   }
 
   @if (!isFull) {
-    @if (tweet.viewModel.videos.length) {
+    @let videoUrl = getVideoUrl(tweet);
+    @let images = getImages(tweet);
+
+    @if (videoUrl) {
       <video class="bordered" controls>
-        <source [src]="tweet.viewModel.videos[0]" [type]="getMimeType(tweet.viewModel.videos[0])" />
+        <source [src]="videoUrl" [type]="getMimeType(videoUrl)" />
       </video>
-    } @else if (tweet.viewModel.images.length) {
-      <figure *ngIf="getImages().length">
+    } @else if (images.length) {
+      <figure *ngIf="images.length">
         <div
-          *ngFor="let touple of getImages()"
+          *ngFor="let touple of images"
           class="imgWrapper"
         >
           <ng-container *ngFor="let img of touple">

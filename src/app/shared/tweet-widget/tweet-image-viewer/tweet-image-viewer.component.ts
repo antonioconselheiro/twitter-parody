@@ -14,7 +14,7 @@ export class TweetImageViewerComponent {
   tweet: RelatedContentViewModel<NoteViewModel> | null = null;
 
   @Input()
-  activeImage = '';
+  activeImage = 0;
 
   @Output()
   closeEvent = new EventEmitter<void>();
@@ -24,35 +24,26 @@ export class TweetImageViewerComponent {
   showTweets = true;
 
   private getImageList(): string[] {
-    // FIXME: return this.root?.viewModel.media?.imageList || [];
-    return [];
-  }
-
-  private getIndexFromImageList(activeImage: string): number {
-    return this.getImageList().indexOf(activeImage);
+    return this.tweet?.viewModel.media
+      .filter(segment => segment.type === 'image')
+      .map(segment => segment.value) || [];
   }
 
   hasPreviousImage(): boolean {
-    const indexOf = this.getIndexFromImageList(this.activeImage);
-    return ![0, 0 - 1].includes(indexOf);
+    return ![0, 0 - 1].includes(this.activeImage);
   }
 
   hasNextImage(): boolean {
-    const indexOf = this.getIndexFromImageList(this.activeImage);
     const lastItem = this.getImageList().length || 0;
-    return ![lastItem, lastItem - 1, 0 - 1].includes(indexOf);
+    return ![lastItem, lastItem - 1, 0 - 1].includes(this.activeImage);
   }
 
   showPreviousImage(): void {
-    const currentIndexOf = this.getIndexFromImageList(this.activeImage);
-    const imgList = this.getImageList();
-    this.activeImage = imgList[currentIndexOf - 1] || this.activeImage || '';
+    this.activeImage = this.activeImage - 1;
   }
 
   showNextImage(): void {
-    const currentIndexOf = this.getIndexFromImageList(this.activeImage);
-    const imgList = this.getImageList();
-    this.activeImage = imgList[currentIndexOf + 1] || this.activeImage || '';
+    this.activeImage = this.activeImage + 1;
   }
 
   @HostListener('document:keydown.escape')

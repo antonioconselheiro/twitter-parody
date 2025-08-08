@@ -23,6 +23,7 @@ export class TweetListComponent {
   loading = true;
 
   viewing: TweetImageViewing | null = null;
+  activeViewingImage = 0;
 
   constructor(
     private profileProxy: ProfileProxy,

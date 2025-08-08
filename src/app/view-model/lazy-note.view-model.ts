@@ -1,5 +1,6 @@
 import { HexString } from '@belomonte/nostr-ngx';
 import { NostrEventIdViewModel } from './nostr-event-id.view-model';
+import { NoteContentSegmentViewModel } from './context/note-content-segment.view-model';
 
 /**
  * Represents an event that was referenced but not loaded
@@ -20,12 +21,7 @@ export interface LazyNoteViewModel extends NostrEventIdViewModel {
   /**
    * Image urls if has any
    */
-  images: string[];
-
-    /**
-   * Video urls if has any
-   */
-  videos: string[];
+  media: NoteContentSegmentViewModel[];
 
   /**
    * Note attached location if g tag is included.

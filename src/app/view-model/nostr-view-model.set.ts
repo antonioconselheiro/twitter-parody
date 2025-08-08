@@ -239,8 +239,7 @@ export class NostrViewModelSet<
         event: null,
         origin: [],
         content: undefined,
-        images: [],
-        videos: [],
+        media: [],
         location: undefined,
         createdAt: -Infinity,
         relates: []

@@ -37,11 +37,14 @@ export class TweetContentComponent {
     return true;
   }
 
-  getImages(): [string, string?][] {
+  getImages(tweet: RelatedContentViewModel<NoteViewModel> | null): [string, string?][] {
     const images: [string, string?][] = [];
     let currentImage!: [string, string?];
 
-    const content = this.tweet?.viewModel.images || [];
+    const content = tweet?.viewModel.media
+      .filter(media => media.type === 'image')
+      .map(media => media.value) || [];
+
     content
       .forEach((image, index) => {
         const pair = 2;
@@ -57,7 +60,14 @@ export class TweetContentComponent {
   }
 
   getVideoUrl(tweet: RelatedContentViewModel<NoteViewModel> | null): string {
-    return tweet && tweet.viewModel.videos[0] || '';
+    if (tweet) {
+      const content = tweet.viewModel.media
+        .filter(media => media.type === 'video')
+        .map(media => media.value) || [];
+      return content[0] || '';
+    }
+
+    return '';
   }
 
   shouldShowSegment(index: number, maxLength: number): boolean {
