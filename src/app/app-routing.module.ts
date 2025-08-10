@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { menuActiveResolverFn } from '@shared/menu-sidebar/menu-active.resolve-fn';
 import { MenuType } from '@shared/menu-sidebar/menu-type.enum';
-import { neventAccountResolveFn } from '@shared/resolve/nevent-account.resolve-fn';
+import { accountResolveFn } from '@shared/resolve/account.resolve-fn';
+import { eventResolveFn } from '@shared/resolve/event.resolve-fn';
 import { AppRoutingMatcher } from './app-routing.matcher';
 import { BookmarksPageComponent } from './pages/bookmarks-page/bookmarks-page.component';
 import { CommunitiesPageComponent } from './pages/communities-page/communities-page.component';
@@ -13,11 +14,7 @@ import { MessagesPageComponent } from './pages/messages-page/messages-page.compo
 import { NotificationsPageComponent } from './pages/notifications-page/notifications-page.component';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 import { TimelineComponent } from './pages/timeline-page/timeline-page.component';
-import { neventResolveFn } from './shared/resolve/nevent.resolve-fn';
 import { nip05ResolveFn } from './shared/resolve/nip05.resolve-fn';
-import { noteResolveFn } from './shared/resolve/note.resolve-fn';
-import { nprofileResolveFn } from './shared/resolve/nprofile.resolve-fn';
-import { npubResolveFn } from './shared/resolve/npub.resolve-fn';
 
 const routes: Routes = [
   {
@@ -65,41 +62,6 @@ const routes: Routes = [
   },
 
   {
-    path: 'p/:npub',
-    component: ProfilePageComponent,
-    runGuardsAndResolvers: 'pathParamsChange',
-    resolve: {
-      account: npubResolveFn,
-      menu: menuActiveResolverFn
-    },
-    data: {
-      menu: MenuType.PROFILE
-    },
-    children: [
-      {
-        path: 'e/:nevent',
-        component: EventPageComponent,
-        runGuardsAndResolvers: 'pathParamsChange',
-        resolve: {
-          event: neventResolveFn
-        }
-      }
-    ]
-  },
-
-  {
-    path: 'e/:nevent',
-    component: EventPageComponent,
-    runGuardsAndResolvers: 'pathParamsChange',
-    resolve: {
-      menu: menuActiveResolverFn
-    },
-    data: {
-      menu: null
-    }
-  },
-
-  {
     path: 'notifications',
     component: NotificationsPageComponent,
     resolve: {
@@ -137,7 +99,7 @@ const routes: Routes = [
     component: ProfilePageComponent,
     runGuardsAndResolvers: 'pathParamsChange',
     data: {
-      menu: null
+      menu: MenuType.PROFILE
     },
     resolve: {
       account: nip05ResolveFn
@@ -149,10 +111,10 @@ const routes: Routes = [
     component: ProfilePageComponent,
     runGuardsAndResolvers: 'pathParamsChange',
     data: {
-      menu: null
+      menu: MenuType.PROFILE
     },
     resolve: {
-      account: nprofileResolveFn
+      account: accountResolveFn
     }
   },
 
@@ -161,10 +123,10 @@ const routes: Routes = [
     component: ProfilePageComponent,
     runGuardsAndResolvers: 'pathParamsChange',
     data: {
-      menu: null
+      menu: MenuType.PROFILE
     },
     resolve: {
-      account: npubResolveFn
+      account: accountResolveFn
     }
   },
 
@@ -176,8 +138,8 @@ const routes: Routes = [
       menu: null
     },
     resolve: {
-      account: neventAccountResolveFn,
-      event: neventResolveFn
+      account: accountResolveFn,
+      event: eventResolveFn
     }
   },
 
@@ -189,48 +151,9 @@ const routes: Routes = [
       menu: null
     },
     resolve: {
-      event: noteResolveFn
+      event: eventResolveFn
     }
   },
-
-  /**{
-    matcher: consumed => AppRoutingMatcher.imageViewingRoutingMatch(consumed, 'nprofile', 'note'),
-    component: ProfilePageComponent,
-    runGuardsAndResolvers: 'pathParamsChange',
-    data: {
-      menu: null
-    },
-    resolve: {
-      account: nprofileResolveFn,
-      event: noteResolveFn
-    }
-  },
-
-  {
-    matcher: consumed => AppRoutingMatcher.imageViewingRoutingMatch(consumed, 'npub', 'note'),
-    component: ProfilePageComponent,
-    runGuardsAndResolvers: 'pathParamsChange',
-    data: {
-      menu: null
-    },
-    resolve: {
-      account: npubResolveFn,
-      event: noteResolveFn
-    }
-  },
-
-  {
-    matcher: consumed => AppRoutingMatcher.nip05ImageViewingRoutingMatch(consumed, 'note'),
-    component: ProfilePageComponent,
-    runGuardsAndResolvers: 'pathParamsChange',
-    data: {
-      menu: null
-    },
-    resolve: {
-      account: nip05ResolveFn,
-      event: noteResolveFn
-    }
-  }, */
 
   {
     path: '',
