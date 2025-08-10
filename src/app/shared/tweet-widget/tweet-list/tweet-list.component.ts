@@ -47,6 +47,7 @@ export class TweetListComponent {
   }
 
   onImgOpen(viewing: TweetImageViewing | null): void {
+    debugger;
     this.viewing = viewing;
   }
 }

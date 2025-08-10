@@ -1,9 +1,23 @@
-import { Note, NEvent, NPub, NProfile } from 'nostr-tools/nip19';
-import { NoteContentSegmentType } from './note-content-segment.type';
+import { NoteContentEventSegment } from './note-content-event.segment';
+import { NoteContentHashtagSegment } from './note-content-hashtag.segment';
+import { NoteContentImageSegment } from './note-content-image.segment';
+import { NoteContentLinkSegment } from './note-content-link.segment';
+import { NoteContentNoteSegment } from './note-content-note.segment';
+import { NoteContentNprofileSegment } from './note-content-nprofile.segment';
+import { NoteContentNpubSegment } from './note-content-npub.segment';
+import { NoteContentRelaySegment } from './note-content-relay.segment';
+import { NoteContentSummarizedSegment } from './note-content-summarized.segment';
+import { NoteContentTextSegment } from './note-content-text.segment';
+import { NoteContentVideoSegment } from './note-content-video.segment';
 
-export type NoteContentSegmentViewModel = { type: 'note', value: Note } |
-  {type: 'event', value: NEvent } |
-  {type: 'npub', value: NPub } |
-  {type: 'nprofile', value: NProfile } |
-  {type: NoteContentSegmentType, value: string } |
-  {type: 'summarized', value: string, original: NoteContentSegmentViewModel };
+export type NoteContentSegmentViewModel = NoteContentNoteSegment |
+  NoteContentEventSegment |
+  NoteContentNpubSegment |
+  NoteContentNprofileSegment |
+  NoteContentImageSegment |
+  NoteContentVideoSegment |
+  NoteContentTextSegment |
+  NoteContentLinkSegment |
+  NoteContentRelaySegment |
+  NoteContentHashtagSegment |
+  NoteContentSummarizedSegment;

@@ -26,8 +26,8 @@ export class TweetContentComponent {
     private tweetContentService: TweetContentService
   ) { }
 
-  summarizeTweet(note: RelatedContentViewModel<NoteViewModel>): SummarizedTweetContentViewModel {
-    return this.tweetContentService.summarizeTweet(note);
+  summarizeTweet(tweet: RelatedContentViewModel<NoteViewModel>): SummarizedTweetContentViewModel {
+    return this.tweetContentService.summarizeTweet(tweet);
   }
 
   getSegments(tweetSummarized: SummarizedTweetContentViewModel, isFull: boolean): NoteContentViewModel {
@@ -59,13 +59,5 @@ export class TweetContentComponent {
     }
 
     return '';
-  }
-
-  shouldShowSegment(index: number, maxLength: number): boolean {
-    if (this.isFull) {
-      return true;
-    } else {
-      return index < maxLength;
-    }
   }
 }

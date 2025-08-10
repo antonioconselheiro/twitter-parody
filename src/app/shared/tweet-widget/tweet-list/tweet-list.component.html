@@ -10,7 +10,7 @@
 
 <tw-tweet-image-viewer
   *ngIf="viewing"
-  [tweet]="viewing.note"
+  [tweet]="viewing.tweet"
   [activeImage]="activeViewingImage"
   (closeEvent)="viewing = null"
 ></tw-tweet-image-viewer>

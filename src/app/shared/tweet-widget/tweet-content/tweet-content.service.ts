@@ -3,6 +3,7 @@ import { NoteContentViewModel } from '@view-model/context/note-content.view-mode
 import { NoteViewModel } from '@view-model/note.view-model';
 import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 import { SummarizedTweetContentViewModel } from './summarized-tweet-content.view-model';
+import { TweetMediaContentViewModel } from './tweet-media-content.view-model';
 
 @Injectable({
   providedIn: 'root'
@@ -80,22 +81,27 @@ export class TweetContentService {
       .shift() || null;
   }
 
-  private getImages(tweet: RelatedContentViewModel<NoteViewModel> | null): [string, string?][] {
-    const images: [string, string?][] = [];
-    let currentImage!: [string, string?];
+  private getImages(tweet: RelatedContentViewModel<NoteViewModel> | null): [TweetMediaContentViewModel, TweetMediaContentViewModel?][] {
+    const images: [TweetMediaContentViewModel, TweetMediaContentViewModel?][] = [];
+    let currentImage!: [TweetMediaContentViewModel, TweetMediaContentViewModel?];
 
     const content = tweet?.viewModel.media
-      .filter(media => media.type === 'image')
-      .map(media => media.value) || [];
+      .filter(media => media.type === 'image') || [];
 
     content
       .forEach((image, index) => {
         const pair = 2;
         if (index % pair === 0) {
-          currentImage = [image];
+          currentImage = [{
+            value: image.value,
+            position: image.position
+          }];
           images.push(currentImage);
         } else {
-          currentImage.push(image);
+          currentImage.push({
+            value: image.value,
+            position: image.position
+          });
         }
       });
 

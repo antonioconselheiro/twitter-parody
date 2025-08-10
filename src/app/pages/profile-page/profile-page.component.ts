@@ -60,11 +60,12 @@ export class ProfilePageComponent extends AbstractEntitledComponent implements O
 
   private listenUrlPathParams(): void {
     this.subscriptions.add(this.activatedRoute.data.subscribe({
-      next: (params) => {
+      next: (params: { account?: AccountComplete }) => {
         this.feed = null;
-        document.body.scrollTo(0, 0);
-        //  FIXME: 
-        this.loadAccountFeed((params as any).account);
+        if (params.account) {
+          document.body.scrollTo(0, 0);
+          this.loadAccountFeed(params.account);
+        }
       }
     }));
   }
