@@ -1,34 +1,36 @@
 <tw-popover class="tweetContextMenu" [selfCloseOnOutClick]="true" #tweetActions [style.top.px]="triggerPosition?.top" [style.left.px]="triggerPosition?.left">
-  <ul *ngIf="note" class="popoverList">
-    <li (click)="delete(note)" role="button">
+  <ul *ngIf="tweet" class="popoverList">
+    <li (click)="delete(tweet)" role="button">
       <nostr-svg-render class="inlineIcon" name="readTweet/options/unfollow"></nostr-svg-render>
       Delete
     </li>
-    <li (click)="pin(note)" role="button">
+    <li (click)="pin(tweet)" role="button">
       <nostr-svg-render class="inlineIcon" name="readTweet/options/pinTweet"></nostr-svg-render>
       Pin to your Profile
     </li>
-    <li (click)="toggleFollowUser(note)" role="button">
-      <nostr-svg-render class="inlineIcon" name="readTweet/options/unfollow"></nostr-svg-render>
-      Unfollow &#64;name
-    </li>
-    <li (click)="manageUserInLists(note)" role="button">
-      <nostr-svg-render class="inlineIcon" name="readTweet/options/addList"></nostr-svg-render>
-      Add/Remove &#64;name from Lists
-    </li>
-    <li (click)="silenceUser(note)" role="button">
-      <nostr-svg-render class="inlineIcon" name="readTweet/options/silence"></nostr-svg-render>
-      Silence &#64;name
-    </li>
-    <li (click)="blockUser(note)" role="button">
-      <nostr-svg-render class="inlineIcon" name="readTweet/options/block"></nostr-svg-render>
-      Block &#64;name
-    </li>
-    <li (click)="reportUser(note)" role="button">
-      <nostr-svg-render class="inlineIcon" name="readTweet/options/report"></nostr-svg-render>
-      Report &#64;name
-    </li>
-    <li (click)="eventDetails(note)" role="button">
+    @if (account) {
+      <li (click)="toggleFollowUser(account)" role="button">
+        <nostr-svg-render class="inlineIcon" name="readTweet/options/unfollow"></nostr-svg-render>
+        Unfollow &#64;{{account.displayName}}
+      </li>
+      <li (click)="manageUserInLists(account)" role="button">
+        <nostr-svg-render class="inlineIcon" name="readTweet/options/addList"></nostr-svg-render>
+        Add/Remove &#64;{{account.displayName}} from Lists
+      </li>
+      <li (click)="silenceUser(account)" role="button">
+        <nostr-svg-render class="inlineIcon" name="readTweet/options/silence"></nostr-svg-render>
+        Silence &#64;{{account.displayName}}
+      </li>
+      <li (click)="blockUser(account)" role="button">
+        <nostr-svg-render class="inlineIcon" name="readTweet/options/block"></nostr-svg-render>
+        Block &#64;{{account.displayName}}
+      </li>
+      <li (click)="reportUser(account)" role="button">
+        <nostr-svg-render class="inlineIcon" name="readTweet/options/report"></nostr-svg-render>
+        Report &#64;{{account.displayName}}
+      </li>
+    }
+    <li (click)="eventDetails(tweet)" role="button">
       <nostr-svg-render class="inlineIcon" name="readTweet/view"></nostr-svg-render>
       Event detail
     </li>

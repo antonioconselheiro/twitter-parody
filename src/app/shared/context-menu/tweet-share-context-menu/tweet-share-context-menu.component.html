@@ -1,14 +1,14 @@
 <tw-popover class="tweetShare" [selfCloseOnOutClick]="true" #tweetShare [style.top.px]="triggerPosition?.top" [style.left.px]="triggerPosition?.left">
-  <ul *ngIf="note" class="popoverList">
-    <li (click)="copyLink(note)" role="button">
+  <ul *ngIf="tweet" class="popoverList">
+    <li (click)="copyLink(tweet)" role="button">
       <nostr-svg-render class="inlineIcon" name="link"></nostr-svg-render>
       Copy link
     </li>
-    <li (click)="sendPrivateMessage(note)" role="button">
+    <li (click)="sendPrivateMessage(tweet)" role="button">
       <nostr-svg-render class="inlineIcon" name="chat/newMessage"></nostr-svg-render>
       Send by Private Message
     </li>
-    <li (click)="bookmarket(note)" role="button">
+    <li (click)="bookmarket(tweet)" role="button">
       <nostr-svg-render class="inlineIcon" name="readTweet/options/addBookmark"></nostr-svg-render>
       Bookmark Tweet
     </li>

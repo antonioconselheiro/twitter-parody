@@ -54,7 +54,7 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
 
   onClickRetweet(note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement): void {
     if (this.profile) {
-      this.tweetPopoverHandler.handleRetweetContextMenu({ note, trigger });
+      this.tweetPopoverHandler.handleRetweetContextMenu({ tweet: note, trigger });
     } else {
       this.showLoginModal({
         message: 'Login with a nostr account to retweet',
@@ -81,7 +81,7 @@ export class TweetButtonGroupComponent implements OnInit, OnDestroy {
   }
 
   onClickShareOptions(note: RelatedContentViewModel<NoteViewModel>, trigger: HTMLElement): void {
-    this.tweetPopoverHandler.handleShareContextMenu({ note, trigger });
+    this.tweetPopoverHandler.handleShareContextMenu({ tweet: note, trigger });
   }
 
   isRetweetedByYou(relatedContent: RelatedContentViewModel<NoteViewModel>): boolean {

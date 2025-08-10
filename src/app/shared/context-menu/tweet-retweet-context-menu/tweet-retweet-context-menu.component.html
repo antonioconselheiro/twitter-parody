@@ -1,10 +1,10 @@
 <tw-popover [selfCloseOnOutClick]="true" #tweetRetweet [style.top.px]="triggerPosition?.top" [style.left.px]="triggerPosition?.left">
-  <ul *ngIf="note" class="popoverList">
-    <li (click)="retweet(note)" role="button">
+  <ul *ngIf="tweet" class="popoverList">
+    <li (click)="retweet(tweet)" role="button">
       <nostr-svg-render class="inlineIcon" name="readTweet/retweet"></nostr-svg-render>
       Retweet
     </li>
-    <li (click)="retweetWithComment(note)" role="button">
+    <li (click)="retweetWithComment(tweet)" role="button">
       <nostr-svg-render class="inlineIcon" name="readTweet/retweetWithComment"></nostr-svg-render>
       Comment
     </li>

@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NoteEvent } from '@shared/event/note.event';
+import { Account, ProfileProxy } from '@belomonte/nostr-ngx';
+import { TweetEvent } from '@shared/event/tweet.event';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
 import { NoteViewModel } from '@view-model/note.view-model';
@@ -17,13 +18,14 @@ export class TweetContextMenuComponent extends AbstractContextMenuComponent impl
   @ViewChild('tweetActions', { read: PopoverComponent })
   popover?: PopoverComponent;
 
-  protected handler!: Observable<NoteEvent | null>;
+  protected handler!: Observable<TweetEvent | null>;
 
   constructor(
+    profileProxy: ProfileProxy,
     elementRef: ElementRef<HTMLElement>,
     tweetPopoverHandler: TweetContextMenuHandler
   ) {
-    super(elementRef, tweetPopoverHandler);
+    super(profileProxy, elementRef, tweetPopoverHandler);
   }
 
   override ngOnInit(): void {
@@ -33,43 +35,43 @@ export class TweetContextMenuComponent extends AbstractContextMenuComponent impl
     super.ngOnInit();
   }
 
-  delete(note: RelatedContentViewModel<NoteViewModel>): void {
-    note;
+  delete(tweet: RelatedContentViewModel<NoteViewModel>): void {
+    tweet;
     return;
   }
 
-  pin(note: RelatedContentViewModel<NoteViewModel>): void {
-    note;
+  pin(tweet: RelatedContentViewModel<NoteViewModel>): void {
+    tweet;
     return;
   }
 
-  toggleFollowUser(note: RelatedContentViewModel<NoteViewModel>): void {
-    note;
+  toggleFollowUser(account: Account): void {
+    account;
     return;
   }
 
-  manageUserInLists(note: RelatedContentViewModel<NoteViewModel>): void {
-    note;
+  manageUserInLists(account: Account): void {
+    account;
     return;
   }
 
-  silenceUser(note: RelatedContentViewModel<NoteViewModel>): void {
-    note;
+  silenceUser(account: Account): void {
+    account;
     return;
   }
 
-  blockUser(note: RelatedContentViewModel<NoteViewModel>): void {
-    note;
+  blockUser(account: Account): void {
+    account;
     return;
   }
 
-  reportUser(note: RelatedContentViewModel<NoteViewModel>): void {
-    note;
+  reportUser(account: Account): void {
+    account;
     return;
   }
 
-  eventDetails(note: RelatedContentViewModel<NoteViewModel>): void {
-    note;
+  eventDetails(tweet: RelatedContentViewModel<NoteViewModel>): void {
+    tweet;
     return;
   }
 }

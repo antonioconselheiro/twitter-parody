@@ -26,11 +26,6 @@ export class TweetContentComponent {
     private tweetContentService: TweetContentService
   ) { }
 
-  displayShowMoreButton(): boolean {
-    //  FIXME: revisar implementação de como será decidido quando este botão será exibido
-    return true;
-  }
-
   summarizeTweet(note: RelatedContentViewModel<NoteViewModel>): SummarizedTweetContentViewModel {
     return this.tweetContentService.summarizeTweet(note);
   }

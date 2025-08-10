@@ -1,11 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NoteEvent } from '@shared/event/note.event';
+import { TweetEvent } from '@shared/event/tweet.event';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 import { Observable } from 'rxjs';
 import { AbstractContextMenuComponent } from '../abstract-context-menu.component';
+import { ProfileProxy } from '@belomonte/nostr-ngx';
 
 @Component({
   selector: 'tw-tweet-retweet-context-menu',
@@ -17,13 +18,14 @@ export class TweetRetweetContextMenuComponent extends AbstractContextMenuCompone
   @ViewChild('tweetRetweet', { read: PopoverComponent })
   popover?: PopoverComponent;
 
-  protected handler!: Observable<NoteEvent | null>;
+  protected handler!: Observable<TweetEvent | null>;
 
   constructor(
+    profileProxy: ProfileProxy,
     elementRef: ElementRef<HTMLElement>,
     tweetPopoverHandler: TweetContextMenuHandler
   ) {
-    super(elementRef, tweetPopoverHandler);
+    super(profileProxy, elementRef, tweetPopoverHandler);
   }
 
   override ngOnInit(): void {
@@ -33,13 +35,13 @@ export class TweetRetweetContextMenuComponent extends AbstractContextMenuCompone
     super.ngOnInit();
   }
 
-  retweet(note: RelatedContentViewModel<NoteViewModel>): void {
-    note;
+  retweet(tweet: RelatedContentViewModel<NoteViewModel>): void {
+    tweet;
     return;
   }
 
-  retweetWithComment(note: RelatedContentViewModel<NoteViewModel>): void {
-    note;
+  retweetWithComment(tweet: RelatedContentViewModel<NoteViewModel>): void {
+    tweet;
     return;
   }
 }

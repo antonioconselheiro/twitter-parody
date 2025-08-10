@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ProfileProxy } from '@belomonte/nostr-ngx';
 import { AbstractContextMenuComponent } from '@shared/context-menu/abstract-context-menu.component';
-import { NoteEvent } from '@shared/event/note.event';
+import { TweetEvent } from '@shared/event/tweet.event';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
 import { NoteViewModel } from '@view-model/note.view-model';
@@ -17,13 +18,14 @@ export class TweetShareContextMenuComponent extends AbstractContextMenuComponent
   @ViewChild('tweetShare', { read: PopoverComponent })
   popover?: PopoverComponent;
 
-  protected handler!: Observable<NoteEvent | null>;
+  protected handler!: Observable<TweetEvent | null>;
 
   constructor(
+    profileProxy: ProfileProxy,
     elementRef: ElementRef<HTMLElement>,
     tweetPopoverHandler: TweetContextMenuHandler
   ) {
-    super(elementRef, tweetPopoverHandler);
+    super(profileProxy, elementRef, tweetPopoverHandler);
   }
 
   override ngOnInit(): void {
@@ -33,18 +35,18 @@ export class TweetShareContextMenuComponent extends AbstractContextMenuComponent
     super.ngOnInit();
   }
 
-  copyLink(note: RelatedContentViewModel<NoteViewModel>): void {
-    note;
+  copyLink(tweet: RelatedContentViewModel<NoteViewModel>): void {
+    tweet;
     return;
   }
 
-  sendPrivateMessage(note: RelatedContentViewModel<NoteViewModel>): void {
-    note;
+  sendPrivateMessage(tweet: RelatedContentViewModel<NoteViewModel>): void {
+    tweet;
     return;
   }
 
-  bookmarket(note: RelatedContentViewModel<NoteViewModel>): void {
-    note;
+  bookmarket(tweet: RelatedContentViewModel<NoteViewModel>): void {
+    tweet;
     return;
   }
 }

@@ -60,7 +60,7 @@ export class TweetContentService {
     }
 
     if (
-      summaryAmount < maxLength ||
+      summaryAmount > maxLength ||
       videoAmount > maxVideo ||
       imageAmount > maxImages
     ) {
