@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FeedViewModel } from '@view-model/feed.view-model';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { RelatedContentViewModel } from '@view-model/related-content.view-model';
@@ -22,6 +22,9 @@ export class TweetListComponent {
   @Input()
   loading = true;
 
+  @Output()
+  imgOpen = new EventEmitter<TweetImageViewing | null>();
+
   viewing: TweetImageViewing | null = null;
   activeViewingImage = 0;
 
@@ -44,10 +47,5 @@ export class TweetListComponent {
     }
 
     return this.profileProxy.getAccount(pubkey);
-  }
-
-  onImgOpen(viewing: TweetImageViewing | null): void {
-    debugger;
-    this.viewing = viewing;
   }
 }

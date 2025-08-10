@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
+import { TweetMediaContentViewModel } from '@shared/tweet-widget/tweet-content/tweet-media-content.view-model';
 import { UrlUtil } from '@shared/util/url.service';
 
 @Pipe({
@@ -18,14 +19,14 @@ export class ProxifyImagePipe implements PipeTransform {
     private urlUtil: UrlUtil
   ) {}
 
-  transform(src: string): SafeHtml {
+  transform(src: TweetMediaContentViewModel): SafeHtml {
     const isSecureOrigin = this.urlUtil.regexFromLinks(this.safeOrigins);
-    if (!isSecureOrigin.test(src)) {
+    if (!isSecureOrigin.test(src.value)) {
       //  FIXME: tornar proxy configurável pelo usuário
-      return `https://imgproxy.iris.to/insecure/plain/${src}`;
+      return `https://imgproxy.iris.to/insecure/plain/${src.value}`;
     }
 
-    return src;
+    return src.value;
   }
 
 }

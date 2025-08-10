@@ -46,7 +46,7 @@
             <div
               class="img"
               (click)="imgOpen.next({ tweet, media: segment.position })"
-              [style.background-image]="'url(' + (segment.value | proxifyImage) + ')'"
+              [style.background-image]="'url(' + (segment | proxifyImage) + ')'"
             ></div>
           </div>
         </figure>
@@ -69,7 +69,7 @@
             <div
               *ngIf="img"
               class="img"
-              (click)="imgOpen.next({ tweet, media: segment.position })"
+              (click)="imgOpen.next({ tweet, media: img.position })"
               [style.background-image]="'url(' + (img | proxifyImage) + ')'"
             ></div>
           </ng-container>

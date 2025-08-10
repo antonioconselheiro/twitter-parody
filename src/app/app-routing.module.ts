@@ -15,6 +15,7 @@ import { NotificationsPageComponent } from './pages/notifications-page/notificat
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 import { TimelineComponent } from './pages/timeline-page/timeline-page.component';
 import { nip05ResolveFn } from './shared/resolve/nip05.resolve-fn';
+import { TweetImageViewerComponent } from '@shared/tweet-widget/tweet-image-viewer/tweet-image-viewer.component';
 
 const routes: Routes = [
   {
@@ -103,7 +104,14 @@ const routes: Routes = [
     },
     resolve: {
       account: nip05ResolveFn
-    }
+    },
+    children: [
+      {
+        matcher: consumed => AppRoutingMatcher.routingImageMatch(consumed),
+        component: TweetImageViewerComponent,
+        runGuardsAndResolvers: 'pathParamsChange'
+      }
+    ]
   },
 
   {
@@ -115,7 +123,14 @@ const routes: Routes = [
     },
     resolve: {
       account: accountResolveFn
-    }
+    },
+    children: [
+      {
+        matcher: consumed => AppRoutingMatcher.routingImageMatch(consumed),
+        component: TweetImageViewerComponent,
+        runGuardsAndResolvers: 'pathParamsChange'
+      }
+    ]
   },
 
   {
@@ -127,7 +142,14 @@ const routes: Routes = [
     },
     resolve: {
       account: accountResolveFn
-    }
+    },
+    children: [
+      {
+        matcher: consumed => AppRoutingMatcher.routingImageMatch(consumed),
+        component: TweetImageViewerComponent,
+        runGuardsAndResolvers: 'pathParamsChange'
+      }
+    ]
   },
 
   {
@@ -140,7 +162,14 @@ const routes: Routes = [
     resolve: {
       account: accountResolveFn,
       event: eventResolveFn
-    }
+    },
+    children: [
+      {
+        matcher: consumed => AppRoutingMatcher.routingImageMatch(consumed),
+        component: TweetImageViewerComponent,
+        runGuardsAndResolvers: 'pathParamsChange'
+      }
+    ]
   },
 
   {
@@ -152,7 +181,14 @@ const routes: Routes = [
     },
     resolve: {
       event: eventResolveFn
-    }
+    },
+    children: [
+      {
+        matcher: consumed => AppRoutingMatcher.routingImageMatch(consumed),
+        component: TweetImageViewerComponent,
+        runGuardsAndResolvers: 'pathParamsChange'
+      }
+    ]
   },
 
   {

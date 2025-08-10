@@ -33,10 +33,12 @@ export class NoteContentMapper {
     'hashtag': this.readHashtag
   };
 
+  // eslint-disable-next-line complexity
   toViewModel(content: string): NoteContentViewModel {
     const iterable = new IterableString(content);
     const eventContent: NoteContentViewModel = [];
     const keys = Object.keys(this.regexRecord) as Array<keyof typeof this.regexRecord>;
+    let mediaPosition = 0;
 
     do {
       let loopFilled = false;
@@ -44,7 +46,13 @@ export class NoteContentMapper {
         const regex = this.regexRecord[key];
         const segment = iterable.addCursor(regex);
         if (segment) {
-          eventContent.push({ type: key, value: segment });
+          if (key === 'video' || key === 'image') {
+            eventContent.push({ type: key, value: segment, position: mediaPosition++ });
+          } else {
+            //  FIXME: o segment foi validado o formato via regex, entretanto a tipagem não reconheceu isso
+            //  preciso imaginar uma forma criativa de resolver esta questão de tipagem
+            eventContent.push({ type: key, value: segment as any });
+          }
           loopFilled = true;
 
           const whitespace = iterable.addCursor(this.readWhitespace, this.dontAutoTrim);
