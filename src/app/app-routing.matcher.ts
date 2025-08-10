@@ -5,6 +5,10 @@ import { NIP05_REGEX } from "nostr-tools/nip05";
 export class AppRoutingMatcher {
 
   static routingMatchNote(consumed: UrlSegment[]): UrlMatchResult | null {
+    if (!consumed.length) {
+      return null;
+    }
+
     if (consumed.length === 1 && /^note1/.test(consumed[0].path)) {
       const { data } = nip19.decode(consumed[0].path);
       if (typeof data === 'string') {
@@ -26,6 +30,10 @@ export class AppRoutingMatcher {
   }
 
   static routingMatchNoteImage(consumed: UrlSegment[]): UrlMatchResult | null {
+    if (!consumed.length) {
+      return null;
+    }
+
     const staticImgKeywordIndex = 1;
     const imageViewingIndex = 2;
 
@@ -64,6 +72,10 @@ export class AppRoutingMatcher {
   }
 
   static routingMatchNevent(consumed: UrlSegment[]): UrlMatchResult | null {
+    if (!consumed.length) {
+      return null;
+    }
+
     if (consumed.length === 1 && /^nevent1/.test(consumed[0].path)) {
       const { data } = nip19.decode(consumed[0].path);
 
@@ -95,6 +107,9 @@ export class AppRoutingMatcher {
 
   // eslint-disable-next-line complexity
   static routingMatchNeventImage(consumed: UrlSegment[]): UrlMatchResult | null {
+    if (!consumed.length) {
+      return null;
+    }
     const staticImgKeywordIndex = 1;
     const imageViewingIndex = 2;
 
@@ -139,6 +154,9 @@ export class AppRoutingMatcher {
   }
 
   static routingMatchNprofile(consumed: UrlSegment[]): UrlMatchResult | null {
+    if (!consumed.length) {
+      return null;
+    }
     const profileIndex = 0;
 
     if (/^nprofile1/.test(consumed[profileIndex].path)) {
@@ -169,6 +187,9 @@ export class AppRoutingMatcher {
   }
 
   static routingMatchNpub(consumed: UrlSegment[]): UrlMatchResult | null {
+    if (!consumed.length) {
+      return null;
+    }
     const profileIndex = 0;
 
     if (/^npub1/.test(consumed[profileIndex].path)) {
@@ -194,6 +215,10 @@ export class AppRoutingMatcher {
   }
 
   static routingMatchNip05(consumed: UrlSegment[]): UrlMatchResult | null {
+    if (!consumed.length) {
+      return null;
+    }
+
     const profileIndex = 0;
     const posParams: {
       [name: string]: UrlSegment;
