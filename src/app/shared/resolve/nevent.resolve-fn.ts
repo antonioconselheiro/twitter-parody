@@ -4,4 +4,7 @@ import { TweetProxy } from "@shared/tweet-service/tweet.proxy";
 import { NoteViewModel } from "@view-model/note.view-model";
 
 export const neventResolveFn: ResolveFn<NoteViewModel | null> =
-  (route: ActivatedRouteSnapshot) => inject(TweetProxy).loadTweet(route.params['nevent']);
+  (route: ActivatedRouteSnapshot) => {
+    debugger;
+    return inject(TweetProxy).loadTweet(route.params['nevent'])
+  };

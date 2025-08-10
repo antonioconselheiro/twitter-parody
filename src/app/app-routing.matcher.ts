@@ -1,81 +1,238 @@
 import { UrlMatchResult, UrlSegment } from "@angular/router";
+import { nip19 } from "nostr-tools";
 import { NIP05_REGEX } from "nostr-tools/nip05";
 
 export class AppRoutingMatcher {
 
-  private static readonly profileIndex = 0;
-  private static readonly staticImgKeywordIndex = 1;
-  private static readonly eventIndex = 2;
-  private static readonly imageViewingIndex = 3;
-  private static readonly imageViewingAmount = 4;
+  static routingMatchNote(consumed: UrlSegment[]): UrlMatchResult | null {
+    if (consumed.length === 1 && /^note1/.test(consumed[0].path)) {
+      const { data } = nip19.decode(consumed[0].path);
+      if (typeof data === 'string') {
+        const eventSegment = new UrlSegment(data, {});
+        const posParams: {
+          [name: string]: UrlSegment;
+        } = {
+          'event': eventSegment
+        };
 
-  static routingMatch(consumed: UrlSegment[], prefix: string): UrlMatchResult | null {
-    if (consumed.length === 1 && new RegExp(`^${prefix}1`).test(consumed[0].path)) {
-      return {
-        consumed,
-        posParams: {
-          [prefix]: consumed[0]
-        }
-      };
+        return {
+          consumed,
+          posParams
+        };
+      }
     }
 
     return null;
   }
 
-  static nip05RoutingMatch(consumed: UrlSegment[]): UrlMatchResult | null {
-    if (consumed.length === 1 && NIP05_REGEX.test(consumed[0].path)) {
-      return {
-        consumed,
-        posParams: {
-          'nip05': consumed[0]
-        }
-      };
-    }
+  static routingMatchNoteImage(consumed: UrlSegment[]): UrlMatchResult | null {
+    const staticImgKeywordIndex = 1;
+    const imageViewingIndex = 2;
 
-    return null;
-  }
-
-  static imageViewingRoutingMatch(consumed: UrlSegment[], prefixProfile: string, prefixEvent: string): UrlMatchResult | null {
-    const imageIndex = Number(consumed[AppRoutingMatcher.imageViewingIndex].path);
     if (
-      consumed.length === AppRoutingMatcher.imageViewingAmount &&
-      new RegExp(`^${prefixProfile}1`).test(consumed[AppRoutingMatcher.profileIndex].path) &&
-      consumed[AppRoutingMatcher.staticImgKeywordIndex].path === 'img' &&
-      new RegExp(`^${prefixEvent}1`).test(consumed[AppRoutingMatcher.eventIndex].path) &&
+      !consumed[staticImgKeywordIndex] ||
+      !consumed[imageViewingIndex]
+    ) {
+      return null;
+    }
+
+    const imageIndex = Number(consumed[imageViewingIndex].path);
+    if (
+      /^note1/.test(consumed[0].path) &&
+      consumed[staticImgKeywordIndex].path === 'img' &&
       !isNaN(imageIndex)
     ) {
+      const { data } = nip19.decode(consumed[0].path);
+      if (typeof data === 'string') {
+        const eventSegment = new UrlSegment(data, {});
+        const imageIndexSegment = new UrlSegment(String(imageIndex), {});
+        const posParams: {
+          [name: string]: UrlSegment;
+        } = {
+          'event': eventSegment,
+          'img': imageIndexSegment
+        };
+
+        return {
+          consumed,
+          posParams
+        };
+      }
+    }
+
+    return null;
+  }
+
+  static routingMatchNevent(consumed: UrlSegment[]): UrlMatchResult | null {
+    if (consumed.length === 1 && /^nevent1/.test(consumed[0].path)) {
+      const { data } = nip19.decode(consumed[0].path);
+
+      if (data instanceof Object && 'relays' in data && 'id' in data && 'author' in data) {
+        const eventSegment = new UrlSegment(data.id, {});
+        const posParams: {
+          [name: string]: UrlSegment;
+        } = {
+          'event': eventSegment
+        };
+
+        if (data.author) {
+          posParams['pubkey'] = new UrlSegment(data.author, {});
+        }
+
+        if (data.relays) {
+          posParams['relays'] = new UrlSegment(data.relays.join(';'), {});
+        }
+
+        return {
+          consumed,
+          posParams
+        };
+      }
+    }
+
+    return null;
+  }
+
+  // eslint-disable-next-line complexity
+  static routingMatchNeventImage(consumed: UrlSegment[]): UrlMatchResult | null {
+    const staticImgKeywordIndex = 1;
+    const imageViewingIndex = 2;
+
+    if (/^nevent1/.test(consumed[0].path)) {
+      const { data } = nip19.decode(consumed[0].path);
+
+      const imageIndex = Number(consumed[imageViewingIndex].path);
+      if (
+        data instanceof Object &&
+        'relays' in data &&
+        'id' in data &&
+        'author' in data &&
+        consumed[staticImgKeywordIndex].path === 'img' &&
+        !isNaN(imageIndex)
+      ) {
+        const eventSegment = new UrlSegment(data.id, {});
+        const imageIndexSegment = new UrlSegment(String(imageIndex), {});
+
+        const posParams: {
+          [name: string]: UrlSegment;
+        } = {
+          'event': eventSegment,
+          'img': imageIndexSegment
+        };
+
+        if (data.author) {
+          posParams['pubkey'] = new UrlSegment(data.author, {});
+        }
+
+        if (data.relays) {
+          posParams['relays'] = new UrlSegment(data.relays.join(';'), {});
+        }
+
+        return {
+          consumed,
+          posParams
+        };
+      }
+    }
+
+    return null;
+  }
+
+  static routingMatchNprofile(consumed: UrlSegment[]): UrlMatchResult | null {
+    const profileIndex = 0;
+
+    if (/^nprofile1/.test(consumed[profileIndex].path)) {
+      const { data } = nip19.decode(consumed[profileIndex].path);
+
+      if (data instanceof Object && 'relays' in data && 'pubkey' in data) {
+        const eventSegment = new UrlSegment(data.pubkey, {});
+        const posParams: {
+          [name: string]: UrlSegment;
+        } = {
+          'pubkey': eventSegment
+        };
+
+        if (data.relays) {
+          posParams['relays'] = new UrlSegment(data.relays.join(';'), {});
+        }
+
+        AppRoutingMatcher.routingImageMatch(consumed, posParams);
+
+        return {
+          consumed,
+          posParams
+        };
+      }
+    }
+
+    return null;
+  }
+
+  static routingMatchNpub(consumed: UrlSegment[]): UrlMatchResult | null {
+    const profileIndex = 0;
+
+    if (/^npub1/.test(consumed[profileIndex].path)) {
+      const { data } = nip19.decode(consumed[profileIndex].path);
+      if (typeof data === 'string') {
+        const authorSegment = new UrlSegment(data, {});
+        const posParams: {
+          [name: string]: UrlSegment;
+        } = {
+          'pubkey': authorSegment
+        };
+
+        AppRoutingMatcher.routingImageMatch(consumed, posParams);
+
+        return {
+          consumed,
+          posParams
+        };
+      }
+    }
+
+    return null;
+  }
+
+  static routingMatchNip05(consumed: UrlSegment[]): UrlMatchResult | null {
+    const profileIndex = 0;
+    const posParams: {
+      [name: string]: UrlSegment;
+    } = {};
+
+    if (NIP05_REGEX.test(consumed[profileIndex].path)) {
+      posParams['nip05'] = consumed[profileIndex];
+      AppRoutingMatcher.routingImageMatch(consumed, posParams);
+
       return {
         consumed,
-        posParams: {
-          [prefixProfile]: consumed[AppRoutingMatcher.profileIndex],
-          [prefixEvent]: consumed[AppRoutingMatcher.eventIndex],
-          'img': consumed[AppRoutingMatcher.imageViewingIndex]
-        }
+        posParams
       };
     }
 
     return null;
   }
 
-  static nip05ImageViewingRoutingMatch(consumed: UrlSegment[], prefixEvent: string): UrlMatchResult | null {
-    const imageIndex = Number(consumed[AppRoutingMatcher.imageViewingIndex].path);
-    if (
-      consumed.length === AppRoutingMatcher.imageViewingAmount &&
-      NIP05_REGEX.test(consumed[AppRoutingMatcher.profileIndex].path) &&
-      consumed[AppRoutingMatcher.staticImgKeywordIndex].path === 'img' &&
-      new RegExp(`^${prefixEvent}1`).test(consumed[AppRoutingMatcher.eventIndex].path) &&
-      !isNaN(imageIndex)
-    ) {
-      return {
-        consumed,
-        posParams: {
-          'nip05': consumed[AppRoutingMatcher.profileIndex],
-          [prefixEvent]: consumed[AppRoutingMatcher.eventIndex],
-          'img': consumed[AppRoutingMatcher.imageViewingIndex]
-        }
-      };
-    }
+  static routingImageMatch(consumed: UrlSegment[], posParams: {
+    [name: string]: UrlSegment;
+  }): void {
+    const noteIndex = 1,
+      staticImgKeywordIndex = 2,
+      imageViewingIndex = 3;
 
-    return null;
+    if (consumed[noteIndex] && /^note1/.test(consumed[noteIndex].path)) {
+      const { data } = nip19.decode(consumed[noteIndex].path);
+      if (typeof data === 'string') {
+        posParams['event'] = new UrlSegment(data, {});
+      }
+
+      if (
+        consumed[staticImgKeywordIndex] &&
+        consumed[imageViewingIndex] &&
+        consumed[staticImgKeywordIndex].path === 'img' &&
+        /^\d+$/.test(consumed[imageViewingIndex].path)
+      ) {
+        posParams['img'] = new UrlSegment(consumed[imageViewingIndex].path, {});
+      }
+    }
   }
 }

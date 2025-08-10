@@ -7,6 +7,7 @@ import { NoteViewModel } from "@view-model/note.view-model";
 import { FeedNostr } from "./feed.nostr";
 import { FeedProxy } from "./feed.proxy";
 import { TweetNostr } from "./tweet.nostr";
+import { nip19 } from "nostr-tools";
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,8 @@ export class TweetProxy  extends FeedProxy {
   }
 
   loadTweet(event: HexString): Promise<NoteViewModel | null> {
+    const t = nip19.decode(event);
+    debugger;
     return this.tweetNostr
       .loadTweet(event)
       .then(event => this.feedMapper.toViewModel(event));

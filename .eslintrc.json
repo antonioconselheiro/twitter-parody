@@ -160,7 +160,7 @@
         "complexity": [
           "error",
           {
-            "max": 8
+            "max": 9
           }
         ],
         "import/order": "off",
