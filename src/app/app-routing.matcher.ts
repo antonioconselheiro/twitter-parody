@@ -142,10 +142,10 @@ export class AppRoutingMatcher {
     return null;
   }
 
-  static routingImageMatch(consumed: UrlSegment[]): UrlMatchResult | null {
+  static routingImageMatch(consumed: UrlSegment[], baseIndex = 1): UrlMatchResult | null {
     const posParams: { [name: string]: UrlSegment; } = { };
-    const staticImgKeywordIndex = 2,
-      imageViewingIndex = 3;
+    const staticImgKeywordIndex = baseIndex + 1,
+      imageViewingIndex = staticImgKeywordIndex + 1;
 
     if (
       consumed[staticImgKeywordIndex] &&
@@ -164,3 +164,22 @@ export class AppRoutingMatcher {
     return null;
   }
 }
+
+
+// /<note>
+// /<note>/img/<img>
+// 
+// /<nevent>
+// /<nevent>/img/<img>
+// 
+// /<nprofile>
+// /<npub>
+// /<nip05>
+// 
+// /<nprofile>/<note>
+// /<npub>/<note>
+// /<nip05>/<note>
+// 
+// /<nprofile>/<note>/img/<img>
+// /<npub>/<note>/img/<img>
+// /<nip05>/<note>/img/<img>

@@ -1,5 +1,6 @@
 import { AccountRaw, HexString, NostrEvent } from "@belomonte/nostr-ngx";
 import { NostrEventIdViewModel } from "./nostr-event-id.view-model";
+import { Note, NEvent } from 'nostr-tools/nip19';
 
 /**
  * properties that all ready to render nostr event will bring
@@ -13,12 +14,17 @@ export interface NostrEventViewModel extends NostrEventIdViewModel {
 
   //  TODO: study how render it using angular date pipe and internacionalization
   //  TODO: in long term, include time2blocks alternative
+  //  TODO: include lunar calendary
   /**
    * Event creation date in unix timestamp
    */
   readonly createdAt: number;
 
   readonly event: NostrEvent;
+
+  readonly nevent: NEvent;
+
+  readonly note: Note;
 
   /**
    * relays where this event was found

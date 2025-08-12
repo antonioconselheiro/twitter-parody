@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
 import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
+import { RelayDomain } from '@view-model/relay-domain.type';
 import { ZapViewModel } from '@view-model/zap.view-model';
 import { Zap } from 'nostr-tools/kinds';
 import { SingleViewModelMapper } from './single-view-model.mapper';
@@ -17,21 +18,21 @@ export class ZapMapper implements SingleViewModelMapper<ZapViewModel> {
     private guard: NostrGuard
   ) { }
 
-  toViewModel(event: NostrEvent): ZapViewModel | null;
-  toViewModel(event: NostrEvent<Zap>): ZapViewModel;
-  toViewModel(event: Array<NostrEvent>): NostrViewModelSet<ZapViewModel>;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): ZapViewModel | NostrViewModelSet<ZapViewModel> | null;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): ZapViewModel | NostrViewModelSet<ZapViewModel> | null {
+  toViewModel(event: NostrEvent, origin: Array<RelayDomain>): ZapViewModel | null;
+  toViewModel(event: NostrEvent<Zap>, origin: Array<RelayDomain>): ZapViewModel;
+  toViewModel(event: Array<NostrEvent>, origin: Array<RelayDomain>): NostrViewModelSet<ZapViewModel>;
+  toViewModel(event: NostrEvent | Array<NostrEvent>, origin: Array<RelayDomain>): ZapViewModel | NostrViewModelSet<ZapViewModel> | null;
+  toViewModel(event: NostrEvent | Array<NostrEvent>, origin: Array<RelayDomain>): ZapViewModel | NostrViewModelSet<ZapViewModel> | null {
     if (event instanceof Array) {
-      return this.toViewModelCollection(event);
+      return this.toViewModelCollection(event, origin);
     } else if (this.guard.isKind(event, Zap)) {
-      return this.toSingleViewModel(event);
+      return this.toSingleViewModel(event, origin);
     }
 
     return null;
   }
 
-  private toSingleViewModel(event: NostrEvent<Zap>): ZapViewModel {
+  private toSingleViewModel(event: NostrEvent<Zap>, origin: Array<RelayDomain>): ZapViewModel {
     const reactedTo = this.tagHelper.listIdsFromTag('e', event);
 
     // TODO: validate zap data with zod
@@ -44,20 +45,19 @@ export class ZapMapper implements SingleViewModelMapper<ZapViewModel> {
       content: event.content,
       reactedTo,
       author,
-      //  TODO: ideally I should pass relay address from where this event come
-      origin: [],
+      origin,
       relates: this.tagHelper.getRelatedEvents(event).map(([hex]) => hex),
       amount: amountZapped ? Number(amountZapped) : null,
       createdAt: event.created_at
     };
   }
 
-  private toViewModelCollection(events: Array<NostrEvent>): NostrViewModelSet<ZapViewModel> {
+  private toViewModelCollection(events: Array<NostrEvent>, origin: Array<RelayDomain>): NostrViewModelSet<ZapViewModel> {
     const zapSet = new NostrViewModelSet<ZapViewModel>();
 
     for (const event of events) {
       if (this.guard.isKind(event, Zap)) {
-        const viewModel = this.toSingleViewModel(event);
+        const viewModel = this.toSingleViewModel(event, origin);
         zapSet.add(viewModel);
       }
     }

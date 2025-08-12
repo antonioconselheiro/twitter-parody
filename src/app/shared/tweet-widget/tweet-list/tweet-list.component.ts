@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Account, HexString, ProfileProxy } from '@belomonte/nostr-ngx';
+import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
 import { FeedViewModel } from '@view-model/feed.view-model';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 import { TweetImageViewing } from '../tweet-img-viewing.interface';
-import { Account, HexString, ProfileProxy } from '@belomonte/nostr-ngx';
-import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'tw-tweet-list',
@@ -22,13 +23,12 @@ export class TweetListComponent {
   @Input()
   loading = true;
 
-  @Output()
-  imgOpen = new EventEmitter<TweetImageViewing | null>();
-
   viewing: TweetImageViewing | null = null;
   activeViewingImage = 0;
 
   constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private profileProxy: ProfileProxy,
     private tweetPopoverHandler: TweetContextMenuHandler
   ) {}
@@ -47,5 +47,14 @@ export class TweetListComponent {
     }
 
     return this.profileProxy.getAccount(pubkey);
+  }
+
+  async onImageOpen(viewing: TweetImageViewing | null): Promise<void> {
+    debugger;
+    if (viewing) {
+      await this.router.navigate([ 'img', viewing.media ], {
+        relativeTo: this.activatedRoute
+      });
+    }
   }
 }

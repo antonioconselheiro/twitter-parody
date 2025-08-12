@@ -13,7 +13,7 @@ import { TweetImageViewing } from '../tweet-img-viewing.interface';
 export class TweetComponent {
 
   @Output()
-  imgOpen = new EventEmitter<TweetImageViewing | null>();
+  imageOpen = new EventEmitter<TweetImageViewing | null>();
   
   @Input()
   tweet!: RelatedContentViewModel<NoteViewModel>;
@@ -30,8 +30,8 @@ export class TweetComponent {
     this.tweetPopoverHandler.handleOptionsContextMenu({ tweet, trigger });
   }
 
-  onImgOpen(img: TweetImageViewing | null): void {
-    this.imgOpen.next(img);
+  onImageOpen(img: TweetImageViewing | null): void {
+    this.imageOpen.next(img);
   }
 
   getAccount(pubkey: HexString | undefined): Account | null {

@@ -5,6 +5,7 @@ import { ReactionViewModel } from '@view-model/reaction.view-model';
 import { Reaction } from 'nostr-tools/kinds';
 import { TagHelper } from './tag.helper';
 import { ViewModelMapper } from './view-model.mapper';
+import { RelayDomain } from '@view-model/relay-domain.type';
 
 @Injectable({
   providedIn: 'root'
@@ -17,20 +18,20 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record
     private guard: NostrGuard
   ) { }
 
-  toViewModel(event: NostrEvent): ReactionViewModel | null;
-  toViewModel(event: NostrEvent<Reaction>): ReactionViewModel;
-  toViewModel(events: Array<NostrEvent>): Record<string, NostrViewModelSet<ReactionViewModel>>;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): ReactionViewModel | Record<string, NostrViewModelSet<ReactionViewModel>> | null {
+  toViewModel(event: NostrEvent, origin: Array<RelayDomain>): ReactionViewModel | null;
+  toViewModel(event: NostrEvent<Reaction>, origin: Array<RelayDomain>): ReactionViewModel;
+  toViewModel(events: Array<NostrEvent>, origin: Array<RelayDomain>): Record<string, NostrViewModelSet<ReactionViewModel>>;
+  toViewModel(event: NostrEvent | Array<NostrEvent>, origin: Array<RelayDomain>): ReactionViewModel | Record<string, NostrViewModelSet<ReactionViewModel>> | null {
     if (event instanceof Array) {
-      return this.toViewModelCollection(event);
+      return this.toViewModelCollection(event, origin);
     } else if (this.guard.isKind(event, Reaction)) {
-      return this.toSingleViewModel(event);
+      return this.toSingleViewModel(event, origin);
     }
 
     return null;
   }
 
-  private toSingleViewModel(event: NostrEvent<Reaction>): ReactionViewModel {
+  private toSingleViewModel(event: NostrEvent<Reaction>, origin: Array<RelayDomain>): ReactionViewModel {
     const reactedTo = this.tagHelper.listIdsFromTag('e', event);
     const relates = this.tagHelper.getRelatedEvents(event).map(([event]) => event)
     const author = this.profileProxy.getRawAccount(event.pubkey);
@@ -41,20 +42,19 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record
       reactedTo,
       event,
       author,
-      //  TODO: ideally I should pass relay address from where this event come
-      origin: [],
+      origin,
       relates,
       createdAt: event.created_at
     };
   }
 
-  private toViewModelCollection(events: Array<NostrEvent>): Record<string, NostrViewModelSet<ReactionViewModel>> {
+  private toViewModelCollection(events: Array<NostrEvent>, origin: Array<RelayDomain>): Record<string, NostrViewModelSet<ReactionViewModel>> {
     const reactionRecord: Record<string, NostrViewModelSet<ReactionViewModel>> = {};
 
     for (const event of events) {
       if (this.guard.isKind(event, Reaction)) {
         const sortedSet = reactionRecord[event.content] || new NostrViewModelSet<ReactionViewModel>();
-        const viewModel = this.toSingleViewModel(event);
+        const viewModel = this.toSingleViewModel(event, origin);
         sortedSet.add(viewModel);
       }
     }

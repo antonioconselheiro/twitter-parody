@@ -1,9 +1,9 @@
-<tw-tweet *ngIf="root" [tweet]="root" [isFull]="true" (imgOpen)="imgOpen.next($event)"></tw-tweet> 
+<tw-tweet *ngIf="root" [tweet]="root" [isFull]="true" (imageOpen)="onImageOpen($event)"></tw-tweet> 
 
 <div *ngIf="loading && !feed" class="separator timelineLoading">
   <nostr-loading></nostr-loading>
 </div>
 
 <ng-container *ngFor="let tweet of feed; trackBy: trackByTweetId">
-  <tw-tweet (imgOpen)="imgOpen.next($event)" [tweet]="tweet"></tw-tweet>
+  <tw-tweet (imageOpen)="onImageOpen($event)" [tweet]="tweet"></tw-tweet>
 </ng-container>

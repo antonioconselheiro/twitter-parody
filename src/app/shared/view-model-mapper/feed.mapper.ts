@@ -4,6 +4,7 @@ import { EagerNoteViewModel } from '@view-model/eager-note.view-model';
 import { FeedViewModel } from '@view-model/feed.view-model';
 import { NoteViewModel } from '@view-model/note.view-model';
 import { ReactionViewModel } from '@view-model/reaction.view-model';
+import { RelayDomain } from '@view-model/relay-domain.type';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
 import { Reaction, Repost, ShortTextNote, Zap } from 'nostr-tools/kinds';
 import { ReactionMapper } from './reaction.mapper';
@@ -26,17 +27,17 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
     private zapMapper: ZapMapper
   ) { }
 
-  toViewModel(event: Array<NostrEvent>): FeedViewModel;
-  toViewModel(event: NostrEvent<ShortTextNote>): NoteViewModel;
-  toViewModel(event: NostrEvent<Repost>): RepostNoteViewModel;
-  toViewModel(event: NostrEvent): NoteViewModel | null;
-  toViewModel(event: NostrEvent | Array<NostrEvent>): NoteViewModel | FeedViewModel | null {
+  toViewModel(event: Array<NostrEvent>, origin: Array<RelayDomain>): FeedViewModel;
+  toViewModel(event: NostrEvent<ShortTextNote>, origin: Array<RelayDomain>): NoteViewModel;
+  toViewModel(event: NostrEvent<Repost>, origin: Array<RelayDomain>): RepostNoteViewModel;
+  toViewModel(event: NostrEvent, origin: Array<RelayDomain>): NoteViewModel | null;
+  toViewModel(event: NostrEvent | Array<NostrEvent>, origin: Array<RelayDomain>): NoteViewModel | FeedViewModel | null {
     if (event instanceof Array) {
-      return this.toViewModelCollection(event);
+      return this.toViewModelCollection(event, origin);
     } else if (this.guard.isKind(event, ShortTextNote)) {
-      return this.simpleTextMapper.toViewModel(event);
+      return this.simpleTextMapper.toViewModel(event, origin);
     } else if (this.guard.isKind(event, Repost)) {
-      return this.repostMapper.toViewModel(event);
+      return this.repostMapper.toViewModel(event, origin);
     }
 
     return null;
@@ -44,17 +45,17 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
 
   //  FIXME: split into minor methods
   // eslint-disable-next-line complexity
-  private toViewModelCollection(events: Array<NostrEvent>, feed = new FeedViewModel(), indexOnly = false): FeedViewModel {
+  private toViewModelCollection(events: Array<NostrEvent>, origin: Array<RelayDomain>, feed = new FeedViewModel(), indexOnly = false): FeedViewModel {
     for (const event of events) {
       let viewModel: EagerNoteViewModel | ReactionViewModel | null = null;
       if (this.guard.isKind(event, Repost) || this.guard.isSerializedNostrEvent(event.content)) {
-        viewModel = this.repostMapper.toViewModel(event);
+        viewModel = this.repostMapper.toViewModel(event, origin);
       } else if (this.guard.isKind(event, ShortTextNote)) {
-        viewModel = this.simpleTextMapper.toViewModel(event);
+        viewModel = this.simpleTextMapper.toViewModel(event, origin);
       } else if (this.guard.isKind(event, Reaction)) {
-        viewModel = this.reactionMapper.toViewModel(event);
+        viewModel = this.reactionMapper.toViewModel(event, origin);
       } else if (this.guard.isKind(event, Zap)) {
-        viewModel = this.zapMapper.toViewModel(event);
+        viewModel = this.zapMapper.toViewModel(event, origin);
       }
 
       if (viewModel) {
@@ -69,11 +70,11 @@ export class FeedMapper implements ViewModelMapper<NoteViewModel, FeedViewModel>
     return feed;
   }
 
-  patchViewModel(feed: FeedViewModel, events: Array<NostrEvent>): FeedViewModel {
-    return this.toViewModelCollection(events, feed);
+  patchViewModel(feed: FeedViewModel, events: Array<NostrEvent>, origin: Array<RelayDomain>): FeedViewModel {
+    return this.toViewModelCollection(events, origin, feed);
   }
 
-  indexViewModel(feed: FeedViewModel, events: Array<NostrEvent>): FeedViewModel {
-    return this.toViewModelCollection(events, feed, true);
+  indexViewModel(feed: FeedViewModel, events: Array<NostrEvent>, origin: Array<RelayDomain>): FeedViewModel {
+    return this.toViewModelCollection(events, origin, feed, true);
   }
 }

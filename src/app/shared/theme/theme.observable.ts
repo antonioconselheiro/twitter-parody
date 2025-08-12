@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { CurrentProfileObservable } from '@belomonte/nostr-ngx';
+import { CurrentProfileObservable, NostrMetadata } from '@belomonte/nostr-ngx';
 import { BehaviorSubject } from 'rxjs';
 import { Theme } from './theme.interface';
-import { NostrMetadata } from '@nostrify/nostrify';
 
 @Injectable({
   providedIn: 'root'

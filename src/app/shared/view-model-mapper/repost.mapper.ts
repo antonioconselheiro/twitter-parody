@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { HexString, NOSTR_CACHE_TOKEN, NostrCache, NostrEvent, NostrGuard, ProfileProxy } from '@belomonte/nostr-ngx';
 import { EagerNoteViewModel } from '@view-model/eager-note.view-model';
+import { RelayDomain } from '@view-model/relay-domain.type';
 import { RepostNoteViewModel } from '@view-model/repost-note.view-model';
 import { Repost, ShortTextNote } from 'nostr-tools/kinds';
 import { NoteContentMapper } from './note-content.mapper';
@@ -66,7 +67,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
 
   //  FIXME: refactor this into minor methods
   // eslint-disable-next-line complexity
-  toViewModel(event: NostrEvent): RepostNoteViewModel {
+  toViewModel(event: NostrEvent, origin: Array<RelayDomain>): RepostNoteViewModel {
     const eventContent = event.content || '';
     const relates: Array<HexString> = [];
     const contentEvent = this.extractNostrEvent(eventContent);
@@ -77,10 +78,10 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
       relates.push(contentEvent.id);
       if (this.guard.isKind(contentEvent, Repost)) {
         //  there is no way to get infinity recursively, this was a stringified json
-        retweeted = this.toViewModel(contentEvent);
+        retweeted = this.toViewModel(contentEvent, origin);
         reposting.push(retweeted);
       } else if (this.guard.isKind(contentEvent, ShortTextNote)) {
-        retweeted = this.simpleTextMapper.toViewModel(contentEvent);
+        retweeted = this.simpleTextMapper.toViewModel(contentEvent, origin);
         reposting.push(retweeted);
       }
 
@@ -89,7 +90,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
       for (const idEvent of mentions) {
         const retweeted = this.nostrCache.get(idEvent);
         if (retweeted) {
-          const viewModel = this.toViewModel(retweeted);
+          const viewModel = this.toViewModel(retweeted, origin);
           reposting.push(viewModel);
         }
       }
@@ -110,8 +111,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
       content,
       media,
       reposting,
-      //  TODO: ideally I should pass relay address from where this event come
-      origin: [],
+      origin,
       relates
     };
 

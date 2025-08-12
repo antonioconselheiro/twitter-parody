@@ -6,6 +6,7 @@ import { ShortTextNote } from 'nostr-tools/kinds';
 import { NoteContentMapper } from './note-content.mapper';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { TagHelper } from './tag.helper';
+import { RelayDomain } from '@view-model/relay-domain.type';
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +20,9 @@ export class SimpleTextMapper implements SingleViewModelMapper<EagerNoteViewMode
     private guard: NostrGuard
   ) { }
 
-  toViewModel(event: NostrEvent<ShortTextNote>): EagerNoteViewModel;
-  toViewModel(event: NostrEvent): EagerNoteViewModel | null;
-  toViewModel(event: NostrEvent): EagerNoteViewModel | null {
+  toViewModel(event: NostrEvent<ShortTextNote>, origin: Array<RelayDomain>): EagerNoteViewModel;
+  toViewModel(event: NostrEvent, origin: Array<RelayDomain>): EagerNoteViewModel | null;
+  toViewModel(event: NostrEvent, origin: Array<RelayDomain>): EagerNoteViewModel | null {
     if (!this.guard.isKind(event, ShortTextNote)) {
       return null;
     }
@@ -41,8 +42,7 @@ export class SimpleTextMapper implements SingleViewModelMapper<EagerNoteViewMode
       createdAt: event.created_at,
       content,
       media,
-      //  TODO: ideally I should pass relay address from where this event come
-      origin: [],
+      origin,
       relates
     };
 

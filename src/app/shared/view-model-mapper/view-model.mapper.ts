@@ -2,6 +2,7 @@ import { NostrEvent } from '@belomonte/nostr-ngx';
 import { NostrEventIdViewModel } from '@view-model/nostr-event-id.view-model';
 import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
 import { SingleViewModelMapper } from './single-view-model.mapper';
+import { RelayDomain } from '@view-model/relay-domain.type';
 
 /**
  * NostrEvent Mapper to ViewModel.
@@ -16,11 +17,11 @@ export interface ViewModelMapper<
   /**
    * cast a nostr event into ready to render data
    */
-  toViewModel(event: NostrEvent): ViewModelData;
+  toViewModel(event: NostrEvent, origin: Array<RelayDomain>): ViewModelData;
 
   /**
    * cast a list of nostr events into ready to render data
    */
-  toViewModel(events: Array<NostrEvent>): ViewModelList;
+  toViewModel(events: Array<NostrEvent>, origin: Array<RelayDomain>): ViewModelList;
 
 }

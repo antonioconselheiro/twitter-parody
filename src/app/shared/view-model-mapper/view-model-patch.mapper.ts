@@ -1,4 +1,5 @@
 import { NostrEvent } from "@belomonte/nostr-ngx";
+import { RelayDomain } from "@view-model/relay-domain.type";
 
 /**
  * Service implement this to indicate that there is a way
@@ -9,10 +10,10 @@ export interface ViewModelPatch<ViewModelData> {
   /**
    * add relationed data to view model
    */
-  patchViewModel(viewModel: ViewModelData, events: Array<NostrEvent>): ViewModelData;
+  patchViewModel(viewModel: ViewModelData, events: Array<NostrEvent>, origin: Array<RelayDomain>): ViewModelData;
 
   /**
    * index relationed data to view model
    */
-  indexViewModel(viewModel: ViewModelData, events: Array<NostrEvent>): ViewModelData;
+  indexViewModel(viewModel: ViewModelData, events: Array<NostrEvent>, origin: Array<RelayDomain>): ViewModelData;
 }
