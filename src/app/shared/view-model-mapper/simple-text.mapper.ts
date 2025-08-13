@@ -7,6 +7,7 @@ import { NoteContentMapper } from './note-content.mapper';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { TagHelper } from './tag.helper';
 import { RelayDomain } from '@view-model/relay-domain.type';
+import { nip19 } from 'nostr-tools';
 
 @Injectable({
   providedIn: 'root'
@@ -34,8 +35,18 @@ export class SimpleTextMapper implements SingleViewModelMapper<EagerNoteViewMode
     const media = content
       .filter(segment => segment.type === 'image' || segment.type === 'video');
 
-    const note: SimpleTextNoteViewModel = {
+    const note = nip19.noteEncode(event.id);
+    const nevent = nip19.neventEncode({
       id: event.id,
+      author: event.pubkey,
+      kind: event.kind,
+      relays: origin
+    });
+
+    const simpleText: SimpleTextNoteViewModel = {
+      id: event.id,
+      note,
+      nevent,
       type: 'simple',
       author,
       event,
@@ -46,6 +57,6 @@ export class SimpleTextMapper implements SingleViewModelMapper<EagerNoteViewMode
       relates
     };
 
-    return note;
+    return simpleText;
   }
 }

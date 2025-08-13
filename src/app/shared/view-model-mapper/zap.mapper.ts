@@ -6,6 +6,7 @@ import { ZapViewModel } from '@view-model/zap.view-model';
 import { Zap } from 'nostr-tools/kinds';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { TagHelper } from './tag.helper';
+import { nip19 } from 'nostr-tools';
 
 @Injectable({
   providedIn: 'root'
@@ -35,12 +36,21 @@ export class ZapMapper implements SingleViewModelMapper<ZapViewModel> {
   private toSingleViewModel(event: NostrEvent<Zap>, origin: Array<RelayDomain>): ZapViewModel {
     const reactedTo = this.tagHelper.listIdsFromTag('e', event);
 
-    // TODO: validate zap data with zod
+    // TODO: validate zap data
     const amountZapped = this.tagHelper.getTagValueByType('amount', event);
     const author = this.profileProxy.getRawAccount(event.pubkey);
+    const note = nip19.noteEncode(event.id);
+    const nevent = nip19.neventEncode({
+      id: event.id,
+      author: event.pubkey,
+      kind: event.kind,
+      relays: origin
+    });
 
     return {
       id: event.id,
+      nevent,
+      note,
       event,
       content: event.content,
       reactedTo,

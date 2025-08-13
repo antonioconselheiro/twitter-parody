@@ -6,6 +6,7 @@ import { Reaction } from 'nostr-tools/kinds';
 import { TagHelper } from './tag.helper';
 import { ViewModelMapper } from './view-model.mapper';
 import { RelayDomain } from '@view-model/relay-domain.type';
+import { nip19 } from 'nostr-tools';
 
 @Injectable({
   providedIn: 'root'
@@ -36,8 +37,18 @@ export class ReactionMapper implements ViewModelMapper<ReactionViewModel, Record
     const relates = this.tagHelper.getRelatedEvents(event).map(([event]) => event)
     const author = this.profileProxy.getRawAccount(event.pubkey);
 
+    const note = nip19.noteEncode(event.id);
+    const nevent = nip19.neventEncode({
+      id: event.id,
+      author: event.pubkey,
+      kind: event.kind,
+      relays: origin
+    });
+
     return {
       id: event.id,
+      note,
+      nevent,
       content: event.content,
       reactedTo,
       event,

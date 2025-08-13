@@ -8,6 +8,7 @@ import { NoteContentMapper } from './note-content.mapper';
 import { SimpleTextMapper } from './simple-text.mapper';
 import { SingleViewModelMapper } from './single-view-model.mapper';
 import { TagHelper } from './tag.helper';
+import { nip19 } from 'nostr-tools';
 
 /**
  * 1. A consulta de timeline do usuário representará uma consulta de todos os eventos assinados por
@@ -102,8 +103,18 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
     const media = content
       .filter(segment => segment.type === 'image' || segment.type === 'video');
 
-    const note: RepostNoteViewModel = {
+    const note = nip19.noteEncode(event.id);
+    const nevent = nip19.neventEncode({
       id: event.id,
+      author: event.pubkey,
+      kind: event.kind,
+      relays: origin
+    });
+
+    const repost: RepostNoteViewModel = {
+      id: event.id,
+      note,
+      nevent,
       type: 'repost',
       author,
       event,
@@ -115,7 +126,7 @@ export class RepostMapper implements SingleViewModelMapper<RepostNoteViewModel> 
       relates
     };
 
-    return note;
+    return repost;
   }
 
   private extractNostrEvent(content: object | string): NostrEvent | false {
