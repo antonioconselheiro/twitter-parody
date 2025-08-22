@@ -1,1 +1,0 @@
-export type NoteContentSegmentType = 'text' | 'image' | 'video' | 'link' | 'relay' | 'note' | 'event' | 'npub' | 'nprofile' | 'hashtag';
