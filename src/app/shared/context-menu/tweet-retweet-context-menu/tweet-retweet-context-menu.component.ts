@@ -2,11 +2,9 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { TweetEvent } from '@shared/event/tweet.event';
 import { PopoverComponent } from '@shared/popover-widget/popover.component';
 import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
-import { NoteViewModel } from '@view-model/note.view-model';
-import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 import { Observable } from 'rxjs';
 import { AbstractContextMenuComponent } from '../abstract-context-menu.component';
-import { ProfileProxy } from '@belomonte/nostr-ngx';
+import { NoteViewModel, ProfileProxy, RelatedContentViewModel } from '@belomonte/nostr-ngx';
 
 @Component({
   selector: 'tw-tweet-retweet-context-menu',

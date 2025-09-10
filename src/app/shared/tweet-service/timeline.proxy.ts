@@ -1,8 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HexString, NostrEvent } from "@belomonte/nostr-ngx";
-import { AccountViewModelProxy } from "@shared/view-model-mapper/account-view-model.proxy";
-import { FeedMapper } from "@shared/view-model-mapper/feed.mapper";
-import { FeedViewModel } from "@view-model/feed.view-model";
+import { AccountViewModelProxy, FeedMapper, FeedViewModel, HexString, NostrEvent } from "@belomonte/nostr-ngx";
 import { Repost, ShortTextNote } from 'nostr-tools/kinds';
 import { map, Observable, Subject } from "rxjs";
 import { FeedNostr } from "./feed.nostr";

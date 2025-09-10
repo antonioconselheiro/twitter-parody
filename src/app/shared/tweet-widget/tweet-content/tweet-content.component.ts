@@ -1,10 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { NoteContentViewModel } from '@view-model/context/note-content.view-model';
-import { NoteViewModel } from '@view-model/note.view-model';
-import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 import { TweetImageViewing } from '../tweet-img-viewing.interface';
 import { SummarizedTweetContentViewModel } from './summarized-tweet-content.view-model';
 import { TweetContentService } from './tweet-content.service';
+import { RelatedContentViewModel, NoteViewModel, NoteContentViewModel } from '@belomonte/nostr-ngx';
 
 @Component({
   selector: 'tw-tweet-content',

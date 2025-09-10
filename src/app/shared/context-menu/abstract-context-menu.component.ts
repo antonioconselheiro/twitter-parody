@@ -1,10 +1,8 @@
 import { Directive, ElementRef, OnDestroy, OnInit } from "@angular/core";
-import { Account, HexString, ProfileProxy } from "@belomonte/nostr-ngx";
+import { Account, HexString, NoteViewModel, ProfileProxy, RelatedContentViewModel } from "@belomonte/nostr-ngx";
 import { TweetEvent } from "@shared/event/tweet.event";
 import { PopoverComponent } from "@shared/popover-widget/popover.component";
 import { TweetContextMenuHandler } from "@shared/tweet-service/tweet-popover.handler";
-import { NoteViewModel } from "@view-model/note.view-model";
-import { RelatedContentViewModel } from "@view-model/related-content.view-model";
 import { Observable, Subscription } from "rxjs";
 
 @Directive()

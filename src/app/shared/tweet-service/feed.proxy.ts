@@ -1,6 +1,4 @@
-import { AccountViewModelProxy } from '@shared/view-model-mapper/account-view-model.proxy';
-import { FeedMapper } from '@shared/view-model-mapper/feed.mapper';
-import { FeedViewModel } from '@view-model/feed.view-model';
+import { AccountViewModelProxy, FeedMapper, FeedViewModel } from '@belomonte/nostr-ngx';
 import { Filter, NostrEvent } from 'nostr-tools';
 import { Observable, Subject } from 'rxjs';
 import { FeedNostr } from './feed.nostr';

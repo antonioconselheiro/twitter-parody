@@ -1,8 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Account, HexString, ProfileProxy } from '@belomonte/nostr-ngx';
+import { Account, HexString, ProfileProxy, NoteViewModel, RelatedContentViewModel } from '@belomonte/nostr-ngx';
 import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
-import { NoteViewModel } from '@view-model/note.view-model';
-import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 import { TweetImageViewing } from '../tweet-img-viewing.interface';
 
 @Component({

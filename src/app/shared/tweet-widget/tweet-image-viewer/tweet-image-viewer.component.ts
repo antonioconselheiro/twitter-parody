@@ -1,7 +1,6 @@
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
-import { FeedViewModel } from '@view-model/feed.view-model';
-import { NoteViewModel } from '@view-model/note.view-model';
-import { RelatedContentViewModel } from '@view-model/related-content.view-model';
+import { RelatedContentViewModel, NoteViewModel, FeedViewModel } from '@belomonte/nostr-ngx';
+
 
 @Component({
   selector: 'tw-tweet-image-viewer',

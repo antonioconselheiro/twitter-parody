@@ -1,7 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { AccountGuard, AccountRenderable, CurrentProfileObservable, HexString } from '@belomonte/nostr-ngx';
-import { NostrViewModelSet } from '@view-model/nostr-view-model.set';
-import { NoteViewModel } from '@view-model/note.view-model';
+import { AccountGuard, AccountRenderable, CurrentProfileObservable, HexString, NostrViewModelSet, NoteViewModel } from '@belomonte/nostr-ngx';
 
 /**
  * FIXME: Aqui me parece um local que talvez eu deva cobrir com teste unitários, são objetos sendo transformados em string,

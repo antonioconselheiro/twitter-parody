@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
+import { FeedViewModel } from '@belomonte/nostr-ngx';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
-import { FeedViewModel } from '@view-model/feed.view-model';
 
 @Component({
   selector: 'tw-event-page',

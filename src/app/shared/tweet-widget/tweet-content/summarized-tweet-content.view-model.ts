@@ -1,6 +1,4 @@
-import { NoteContentViewModel } from "@view-model/context/note-content.view-model";
-import { NoteViewModel } from "@view-model/note.view-model";
-import { RelatedContentViewModel } from "@view-model/related-content.view-model";
+import { NoteContentViewModel, RelatedContentViewModel, NoteViewModel } from "@belomonte/nostr-ngx";
 import { TweetMediaContentViewModel } from "./tweet-media-content.view-model";
 
 export interface SummarizedTweetContentViewModel {

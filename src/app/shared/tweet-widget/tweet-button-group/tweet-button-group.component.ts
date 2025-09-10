@@ -1,11 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ModalBuilder } from '@belomonte/async-modal-ngx';
-import { Account, CurrentProfileObservable } from '@belomonte/nostr-ngx';
+import { Account, CurrentProfileObservable, NoteViewModel, RelatedContentViewModel } from '@belomonte/nostr-ngx';
 import { SubscribeToContinueComponent } from '@shared/modal/subscribe-to-continue/subscribe-to-continue.component';
 import { SubscribeToContinueEntryType } from '@shared/modal/subscribe-to-continue/subscribe-to-continue.entry-type';
 import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
-import { NoteViewModel } from '@view-model/note.view-model';
-import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 import { Observable, Subscription } from 'rxjs';
 
 @Component({

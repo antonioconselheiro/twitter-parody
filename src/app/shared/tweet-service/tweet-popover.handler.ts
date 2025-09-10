@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NoteViewModel } from '@view-model/note.view-model';
-import { RelatedContentViewModel } from '@view-model/related-content.view-model';
+import { RelatedContentViewModel, NoteViewModel } from '@belomonte/nostr-ngx';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({

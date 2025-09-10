@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HexString, NostrEvent, NostrPool } from '@belomonte/nostr-ngx';
-import { AccountViewModelProxy } from '@shared/view-model-mapper/account-view-model.proxy';
-import { FeedMapper } from '@shared/view-model-mapper/feed.mapper';
+import { AccountViewModelProxy, FeedMapper, HexString, NostrEventWithRelays, NostrPool } from '@belomonte/nostr-ngx';
 import { Filter } from 'nostr-tools';
 import { Repost, ShortTextNote } from 'nostr-tools/kinds';
 import { FeedNostr } from './feed.nostr';
@@ -13,7 +11,7 @@ import { FeedProxy } from './feed.proxy';
 export class TweetNostr extends FeedProxy {
 
   constructor(
-    private npool: NostrPool,
+    private nostrPool: NostrPool,
     protected accountViewModelProxy: AccountViewModelProxy,
     protected feedMapper: FeedMapper,
     protected feedNostr: FeedNostr
@@ -21,7 +19,7 @@ export class TweetNostr extends FeedProxy {
     super();
   }
 
-  loadTweet(event: HexString): Promise<NostrEvent> {
+  loadTweet(event: HexString): Promise<NostrEventWithRelays> {
     const filter: Filter = {
       ids: [ event ],
       kinds: [
@@ -31,10 +29,10 @@ export class TweetNostr extends FeedProxy {
       limit: 1
     };
 
-    return this.npool.query([filter]).then(([event]) => event);
+    return this.nostrPool.query([filter]).then(([event]) => event);
   }
 
-  loadFeedUntilTweet(pubkey: HexString, event: HexString): Promise<NostrEvent[]> {
+  loadFeedUntilTweet(pubkey: HexString, event: HexString): Promise<NostrEventWithRelays[]> {
     const filter: Filter = {
       ids: [ event ],
       authors: [ pubkey ],
@@ -44,7 +42,7 @@ export class TweetNostr extends FeedProxy {
       ]
     };
 
-    return this.npool.query([filter])
+    return this.nostrPool.query([filter])
   }
 
 }

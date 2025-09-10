@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AccountComplete, AccountSession, CurrentProfileObservable } from '@belomonte/nostr-ngx';
+import { AccountComplete, AccountSession, CurrentProfileObservable, FeedViewModel } from '@belomonte/nostr-ngx';
 import { AbstractEntitledComponent } from '@shared/abstract-entitled/abstract-entitled.component';
 import { TimelineProxy } from '@shared/tweet-service/timeline.proxy';
-import { FeedViewModel } from '@view-model/feed.view-model';
 import { Subscription } from 'rxjs';
 
 @Component({

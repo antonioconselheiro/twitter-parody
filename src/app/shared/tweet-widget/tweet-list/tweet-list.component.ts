@@ -1,9 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Account, HexString, ProfileProxy } from '@belomonte/nostr-ngx';
+import { Account, FeedViewModel, HexString, NoteViewModel, ProfileProxy, RelatedContentViewModel } from '@belomonte/nostr-ngx';
 import { TweetContextMenuHandler } from '@shared/tweet-service/tweet-popover.handler';
-import { FeedViewModel } from '@view-model/feed.view-model';
-import { NoteViewModel } from '@view-model/note.view-model';
-import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 import { TweetImageViewing } from '../tweet-img-viewing.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -50,7 +47,6 @@ export class TweetListComponent {
   }
 
   async onImageOpen(viewing: TweetImageViewing | null): Promise<void> {
-    debugger;
     if (viewing) {
       await this.router.navigate([ 'img', viewing.media ], {
         relativeTo: this.activatedRoute

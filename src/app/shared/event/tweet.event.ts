@@ -1,5 +1,4 @@
-import { NoteViewModel } from '@view-model/note.view-model';
-import { RelatedContentViewModel } from '@view-model/related-content.view-model';
+import { RelatedContentViewModel, NoteViewModel } from "@belomonte/nostr-ngx";
 
 export interface TweetEvent {
   tweet: RelatedContentViewModel<NoteViewModel>;

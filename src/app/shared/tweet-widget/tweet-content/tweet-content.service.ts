@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { NoteContentViewModel } from '@view-model/context/note-content.view-model';
-import { NoteViewModel } from '@view-model/note.view-model';
-import { RelatedContentViewModel } from '@view-model/related-content.view-model';
 import { SummarizedTweetContentViewModel } from './summarized-tweet-content.view-model';
 import { TweetMediaContentViewModel } from './tweet-media-content.view-model';
+import { NoteContentViewModel, NoteViewModel, RelatedContentViewModel } from '@belomonte/nostr-ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +20,6 @@ export class TweetContentService {
     };
   }
 
-  // eslint-disable-next-line complexity
   private summarizedContent(note: RelatedContentViewModel<NoteViewModel>): {
     showSummarized: boolean,
     summarized: NoteContentViewModel
