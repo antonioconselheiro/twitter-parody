@@ -138,7 +138,9 @@ export abstract class FeedProxy {
     subject?: Subject<FeedViewModel> | number,
     olderEventCreatedAt?: number
   ): Promise<FeedViewModel> {
+    console.info('loadPage', filter);
     const mainNotes = await this.feedNostr.listTweets(filter, pageSize, olderEventCreatedAt);
+    console.info('loadedPage', mainNotes);
     let feed = await this.feedMapper.toViewModel(mainNotes);
     await this.accountViewModelProxy.loadViewModelAccounts(feed);
 

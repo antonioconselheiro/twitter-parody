@@ -150,10 +150,10 @@ export class AppRoutingMatcher {
     if (
       consumed[staticImgKeywordIndex] &&
       consumed[imageViewingIndex] &&
-      consumed[staticImgKeywordIndex].path === 'img' &&
+      consumed[staticImgKeywordIndex].path === 'media' &&
       /^\d+$/.test(consumed[imageViewingIndex].path)
     ) {
-      posParams['img'] = new UrlSegment(consumed[imageViewingIndex].path, {});
+      posParams['media'] = new UrlSegment(consumed[imageViewingIndex].path, {});
 
       return {
         consumed,

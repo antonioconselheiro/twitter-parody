@@ -22,6 +22,7 @@ export class TweetListComponent {
 
   viewing: TweetImageViewing | null = null;
   activeViewingImage = 0;
+  private readonly indexNotFound = -1;
 
   constructor(
     private router: Router,
@@ -48,8 +49,15 @@ export class TweetListComponent {
 
   async onImageOpen(viewing: TweetImageViewing | null): Promise<void> {
     if (viewing) {
-      await this.router.navigate([ 'img', viewing.media ], {
-        relativeTo: this.activatedRoute
+      let segments = this.activatedRoute.snapshot.url.map(segment => segment.path);
+      const mediaIndex = segments.indexOf('media');
+      if (mediaIndex !== this.indexNotFound) {
+        segments = segments.splice(0, mediaIndex - 1);
+      }
+
+      await this.router.navigate([ ...segments, viewing.tweet.viewModel.id, 'media', viewing.media ], {
+        relativeTo: this.activatedRoute.root,
+        replaceUrl: true
       });
     }
   }
